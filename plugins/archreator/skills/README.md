@@ -1,6 +1,6 @@
 # Skills
 
-_[← Repository README](../../README.md)_
+_[← Repository README](../../../README.md)_
 
 The fourteen skills that are the archreator method. Claude Code picks them
 up automatically from their `description:` frontmatter — you don't invoke
@@ -10,10 +10,11 @@ Skill folders carry a **role prefix** so the grouping is visible on a plain
 folder listing: nested folders would hide skills from the plugin loader, so
 the grouping lives in the file name instead.
 
-This folder is also the root of the **`archreator` plugin** — its manifest
-is [`.claude/.claude-plugin/plugin.json`](../.claude-plugin/plugin.json),
+This folder sits inside the **`archreator` plugin**, whose root is
+`plugins/archreator/` — its manifest is
+[`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json),
 and the marketplace that publishes it is
-[`.claude-plugin/marketplace.json`](../../.claude-plugin/marketplace.json)
+[`.claude-plugin/marketplace.json`](../../../.claude-plugin/marketplace.json)
 at the repository root.
 
 **A skill only links to files inside this folder.** Installing the plugin
@@ -21,6 +22,12 @@ copies its directory to a cache, so a relative link out of it resolves to
 nothing for anyone who installed rather than cloned. Skills refer to a
 consuming project's documents by naming the path in a code span —
 `` `architecture/README.md` `` — which reads correctly on both paths.
+
+**This page is the catalogue.** It is the only one — the rest of the
+repository links here rather than restating it. The one deliberate copy is
+the table in [`templates/CLAUDE.md`](../templates/CLAUDE.md), which
+lands in a project that cannot link back to this repository at all; change
+a row here and change it there in the same commit.
 
 ## Core — the process spine
 

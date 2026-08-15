@@ -1,12 +1,12 @@
 <!--
-  PR TEMPLATE LAYOUT — why there are two template files in two places:
-  GitHub auto-fills a PR body from ONE default template, which must live at
-  .github/pull_request_template.md (this file). Named alternates for the
-  "choose a template" flow must live in the .github/PULL_REQUEST_TEMPLATE/
-  directory — hence the bug-fix template at
-  .github/PULL_REQUEST_TEMPLATE/bugfix.md, selected via ?template=bugfix.md.
-  The split is required by GitHub, not an oversight. Which one to use:
-  CONTRIBUTING.md and the core-pr-description skill.
+  PR TEMPLATE LAYOUT — GitHub auto-fills a PR body from ONE default
+  template, which must live at .github/pull_request_template.md (this file).
+  This repository uses that single default for every kind of change; a pure
+  bug fix fills the same body with what broke, the root cause, and the fix.
+  If named alternates are ever added for the "choose a template" flow, they
+  must live in a .github/PULL_REQUEST_TEMPLATE/ directory and are selected
+  via ?template=<name>.md. How to fill this in: CONTRIBUTING.md and the
+  core-pr-description skill.
 -->
 <!--
   Describe the WHOLE branch, not just the latest commit:
@@ -25,8 +25,9 @@
      https://github.com/roanboc/architecture-archreator — usually under
      product-archreator/architecture/scope/. Its Approvals table records
      the gates the change passed (Gate 2 at minimum for any change in
-     documented behavior). If this is a bug fix with no documented
-     behavior change, use the bug-fix template instead. -->
+     documented behavior). A change with no documented behavior change —
+     a bug fix, a packaging or CI change — states "no scope document"
+     here with the reason. -->
 
 ## What changed here
 
@@ -42,8 +43,8 @@
 <!-- What was run and what happened: -->
 
 ```
-python3 .claude/templates/scripts/check_links.py
-python3 .claude/templates/scripts/check_model.py
+python3 plugins/archreator/templates/scripts/check_links.py
+python3 plugins/archreator/templates/scripts/check_model.py
 ```
 
 ## Out of scope / follow-ups

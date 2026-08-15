@@ -15,8 +15,7 @@ the project intends to model itself, and hands off to discovery. Everything
 after that is the normal `core-architecture-first-change` process — there is no separate
 "template mode" to graduate out of.
 
-The scaffold ships beside the skills, at `.claude/templates/` inside the
-plugin. Nothing is inherited by cloning, so nothing has to be pruned
+The scaffold ships beside the skills, at `templates/` inside the plugin. Nothing is inherited by cloning, so nothing has to be pruned
 afterwards: the project gets exactly the empty model, and the method stays
 where it was installed.
 
@@ -61,7 +60,7 @@ Requester already approved.
 
 ## Step 2 — Emit the scaffold, then make it this project
 
-**First, copy the scaffold** from `.claude/templates/` in the plugin into
+**First, copy the scaffold** from `templates/` in the plugin into
 the project root. It holds `CLAUDE.md`, `README.md`, `architecture/` — with
 `architecture/scope/` and `architecture/decisions/` inside it — and
 `scripts/`, the two validators that keep the model honest. An empty model
@@ -136,7 +135,7 @@ is still unbuilt. Say so, and offer to open it as the next initiative.
 - `CLAUDE.md` and `README.md` contain no `<placeholder>` markers, and
   `CLAUDE.md` declares the modeling depth.
 - The documentation language is decided and recorded.
-- The scaffold has been copied out of `.claude/templates/` and the optional files
+- The scaffold has been copied out of the plugin's `templates/` and the optional files
   are kept or deleted deliberately.
 - Every layer README's table says either what exists or "not started".
 - Scope document `1_...md` exists and is indexed.

@@ -453,7 +453,8 @@ for.
   you are about to restate a table or diagram, link instead.
 - When renaming or moving a doc, grep the whole repo for the old path and
   fix every reference in the same change.
-- **Skill files are the exception: they link only within `.claude/skills/`.**
+- **Skill files are the exception: they link only within the plugin's own
+  `skills/` directory.**
   A skill points at a consuming project's documents by naming the path in a
   code span — `` `architecture/README.md` § Modeling depth `` — never as a
   relative link. Skills ship as a plugin, and installing one copies its

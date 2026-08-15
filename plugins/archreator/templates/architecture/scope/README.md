@@ -29,12 +29,12 @@ folders are numbered in:
    placeholders, or the change adds/modifies a stakeholder, driver, goal,
    or principle, the initiative becomes **strategy discovery** first — a
    docs-only, question-driven initiative ending at **Gate 1 — Strategy**
-   approval (see `.claude/skills/discover-strategy/`); implementation
+   approval (see the `discover-strategy` skill); implementation
    follows as a separate initiative. If the subject is an **organization**
    rather than an application, the walk starts one layer earlier, at
    [0_business-design](../0_business-design/README.md) — the value
    proposition and business model canvases, approved at **Gate 0 —
-   Business model** (see `.claude/skills/discover-operating-model/`)
+   Business model** (see the `discover-operating-model` skill)
    before layers 1–2 are derived from them.
 2. **Document the scope.** Add the next-numbered file to this folder
    describing plateaus, work packages, in/out of scope, gaps, and gate
@@ -46,16 +46,16 @@ folders are numbered in:
    scope document's Approvals table — who approved, when, and what was
    shown, with `N/A — <why>` for the gates that didn't apply. Which gate
    applies to which initiative is defined in exactly one place,
-   `.claude/skills/core-architecture-first-change/` § The gates, which also says **where**
+   the `core-architecture-first-change` skill § The gates, which also says **where**
    an approval can be granted — the conversation, or a reply on the pull
    request for a Requester who doesn't work in a terminal.
 4. **Implement.** Only then write the code, keeping the scope document and
    EA docs in sync with what is actually delivered.
 
-Agent guidance for this process lives in `.claude/skills/core-architecture-first-change/`,
-`.claude/skills/discover-strategy/`, and `.claude/skills/core-scope-doc/`; PR
-descriptions follow `.github/pull_request_template.md` (see
-`.claude/skills/core-pr-description/`) and must cover the whole branch.
+Agent guidance for this process lives in the `core-architecture-first-change`,
+`discover-strategy`, and `core-scope-doc` skills; PR descriptions follow
+`.github/pull_request_template.md` (see the `core-pr-description` skill) and
+must cover the whole branch.
 
 If the project needs a single running index of adopted interpretations that
 still need sign-off from a stakeholder who can't be consulted synchronously,
