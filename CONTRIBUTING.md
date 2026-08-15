@@ -1,205 +1,77 @@
 # Contributing
 
-## The working method: EA first
+Contributions to **archreator itself** — changes to the skills, the
+scaffold, the documentation, or the plugin manifests in this repository.
+For an explanation of the method that these files publish, see
+[`docs/method.md`](./docs/method.md); for using it in your own project, see
+[`docs/adopting.md`](./docs/adopting.md).
 
-This repo practices **architecture-first development**: strategy and
-business architecture are validated before information, application, and
-technology — and all of it before code. The full process is described in
-[architecture/scope/README.md](./.claude/skills/project-bootstrap/templates/architecture/scope/README.md); in short, for any change in
-requirements:
+## What kind of change is this?
 
-0. **Know the depth you're working at.** `CLAUDE.md` declares the project's
-   [modeling depth](./.claude/skills/project-bootstrap/templates/architecture/README.md#modeling-depth) — one application
-   (1), one organization (2), or several business lines each modeled as a
-   [domain](./.claude/skills/project-bootstrap/templates/architecture/domains/README.md) (3). It decides how much of the
-   ladder below applies and which gates you'll pass. At Depth 3, also name
-   which domain owns the change, and whether it touches another domain's
-   exposed services — if it does, that domain's Requester approves too.
-1. **Align the EA** — walk [architecture/](./.claude/skills/project-bootstrap/templates/architecture/README.md) top-down
-   (`1_strategy` → `5_technology`), updating the affected documents. If
-   the strategy layer is still template placeholders, or the change shifts
-   the strategy itself (a new/changed stakeholder, driver, goal, or
-   principle), the initiative becomes **strategy discovery** first — a
-   docs-only, question-driven initiative ending at **Gate 1 — Strategy**
-   (see the `strategy-discovery` skill); implementation follows as a
-   separate initiative. If the subject is an **organization** rather than
-   an application, it starts one step earlier still, at
-   [`0_business-design/`](./.claude/skills/project-bootstrap/templates/architecture/0_business-design/README.md) — a value
-   proposition canvas per segment and a business model canvas per product,
-   approved at **Gate 0 — Business model**, from which the strategy and
-   business layers are then derived (see the `operating-model-discovery`
-   skill).
-2. **Document the scope** — add the next-numbered initiative document to
-   [architecture/scope/](./.claude/skills/project-bootstrap/templates/architecture/scope/README.md).
-3. **Pass the gates** — before any code, the requester approves the
-   strategy, business, and information changes (**Gate 2 — Business**),
-   and chooses whether to also review the solution design before it is
-   coded (**Gate 3 — Solution design**, optional, aimed at technically
-   inclined requesters). Approvals are recorded in the scope document's
-   Approvals table.
-4. **Implement** — keeping docs and code in sync in the same change set.
+| Kind | Where the record lives |
+| ---- | ---------------------- |
+| **A change to the method** — new skill, new rule, changed convention, a scaffold refactor | A numbered scope document in [`architecture-archreator`](https://github.com/roanboc/architecture-archreator) under `product-archreator/architecture/scope/`, plus the corresponding change here |
+| **A bug fix** with no documented behavior change — a broken link, a typo, a validator false positive | Straight to a PR here; the bug-fix template covers it |
+| **A docs improvement** to the guidance under `docs/` or `site/` | A PR here; short scope note in the PR body if the doc changes what the method claims |
+| **A packaging or CI change** — plugin manifest, workflows, `.github/` | A PR here |
 
-Bug fixes that change no documented behavior can go straight to step 4 —
-they pass no gates. Agent-oriented guidance for the same process lives in
-`.claude/skills/`.
+The split reflects federation. This repository holds *the method as it
+ships*; the sibling repository holds *the models that describe why the
+method is what it is*. A method change without a scope document is a
+change without a rationale — the rationale lives where the model does.
 
-## Actors in this process
+## The method governs itself
 
-The process has three roles. Nothing here assumes a human fills the middle
-one — an AI agent (e.g. Claude Code, guided by `.claude/skills/`) and a
-person follow exactly the same steps, in the same order, against the same
-documents:
+Method changes run through the same gates the method makes downstream
+projects run through. In practice:
 
-- **Requester** — whoever wants something to change: a stakeholder, a
-  product owner, a bug reporter. Presents a requirement or a problem, not a
-  solution or a diff — and **grants the gate approvals**: the business
-  model (Gate 0, when an organization is being modeled), the strategy
-  (Gate 1, when discovery is triggered), the strategy/business/information
-  changes before any code (Gate 2), and optionally the solution design
-  (Gate 3). Business sign-off precedes development, the way a business
-  reference group approves before building starts.
-- **Agent** — whoever executes the process: a contributor or an AI agent.
-  Walks the EA layers, stops at each gate until the requester approves,
-  writes the scope document, implements, verifies alignment, and opens the
-  PR. "Agent" here names the role, not a specific tool — the process
-  doesn't change based on who or what fills it.
-- **Reviewer** — approves or requests changes on the PR, confirms any open
-  questions the requester needed to weigh in on, checks that the gate
-  approvals this change required are recorded in the scope document, and
-  merges.
+- **Gate 2 — Business** applies to every change that alters documented
+  behavior — every one that touches a skill body, a rule, or the scaffold.
+  It is granted in the sibling repository's scope document, then
+  implemented here.
+- **Gate 1 — Strategy** applies when the change adds or shifts a
+  Stakeholder, Driver, Goal, or Principle of the method itself.
+- **Gate 3 — Solution design** is the Requester's option at Gate 2.
 
-## Process flow
+Pure bug fixes skip the gates, per the method's own rule.
 
-How a requirement gets from "someone wants a change" to "merged," and
-where each actor's responsibility starts and ends:
+## Working locally
 
-```mermaid
-flowchart TD
-  subgraph REQ["Requester"]
-    req(["Presents a requirement or reports a problem"])
-    gate0{"Gate 0 — approve the business model?"}
-    gate1{"Gate 1 — approve the strategy?"}
-    gate2{"Gate 2 — approve strategy, business, information? Review the solution design too?"}
-    gate3{"Gate 3 — approve the solution design?"}
-  end
+Both validators must be green before pushing; CI runs the same:
 
-  subgraph AGENT["Agent (person or AI)"]
-    depth["Confirm the modeling depth and say it out loud; at Depth 3, locate the domain"]
-    assess["Assess 1_strategy against the change"]
-    canvases["Operating-model discovery — value proposition + business model canvases, docs-only (operating-model-discovery skill)"]
-    discovery["Strategy discovery — question-driven, docs-only (strategy-discovery skill)"]
-    dscope["Draft scope document architecture/scope/N_*.md"]
-    nextinit["Offer the implementation initiative that triggered discovery"]
-    conflict{"Contradicts an existing Principle?"}
-    bugfix{"Pure bug fix — no documented behavior changes?"}
-    walk23["Align 2_business and 3_information"]
-    scopedoc["Draft scope document architecture/scope/N_*.md"]
-    walk45["Align 4_application and 5_technology"]
-    implement["Implement, keeping EA + scope docs true to the code"]
-    verify["Verify alignment (architecture-first-change, step 7)"]
-    openpr["Open PR — default or bugfix template"]
-    address["Address review feedback"]
-  end
-
-  subgraph REV["Reviewer"]
-    review{"Approve?"}
-  end
-
-  stop[["Stop — surface the conflict to the requester instead of proceeding"]]
-  merged(["Merged"])
-
-  req --> depth --> assess
-  assess -->|the subject is an organization, not an app| canvases
-  canvases --> dscope
-  dscope --> gate0
-  gate0 -- changes requested --> canvases
-  gate0 -- "approved (recorded in scope doc)" --> discovery
-  assess -->|strategy is placeholders, or the change shifts it| discovery
-  discovery --> dscope
-  dscope --> gate1
-  gate1 -- changes requested --> discovery
-  gate1 -- "approved (recorded in scope doc)" --> verify
-  verify -.->|docs-only initiative| nextinit
-  nextinit -.->|implementation follows as a new initiative| req
-  assess --> conflict
-  conflict -- yes --> stop
-  stop -.->|requester decides how to resolve it| req
-  conflict -- no --> bugfix
-  bugfix -- yes --> implement
-  bugfix -- no --> walk23 --> scopedoc --> gate2
-  gate2 -- changes requested --> walk23
-  gate2 -- "approved (recorded in scope doc)" --> walk45
-  walk45 -->|Gate 3 requested at Gate 2| gate3
-  gate3 -- changes requested --> walk45
-  gate3 -- "approved (recorded in scope doc)" --> implement
-  walk45 -->|Gate 3 not requested| implement
-  implement --> verify --> openpr --> review
-  review -- changes requested --> address --> openpr
-  review -- approved --> merged
+```bash
+python3 .claude/templates/scripts/check_links.py    # relative links and HTML anchors resolve
+python3 .claude/templates/scripts/check_model.py    # element-ID references resolve
 ```
 
-Every arrow into the Agent subgraph is a decision the agent makes
-explicitly and records — a "no change" verdict on an EA layer, a "pure bug
-fix, no scope document" statement, a gate approval written into the scope
-document's Approvals table, an open question logged for the requester —
-never a silent skip. See `architecture-first-change` for the full step-by-step
-version of this same flow, `strategy-discovery` for the discovery branch,
-and `operating-model-discovery` for the company track that precedes it.
+The scripts live under `.claude/templates/` because they ship with the scaffold —
+the same scripts land in every project the method emits. Running them from
+the root of this repository is a smoke test: since there is no
+`architecture/` folder here, `check_model.py` reports the scaffold as
+having no elements and passes trivially, while `check_links.py` checks the
+docs, the scaffold, and the site.
 
 ## Pull requests
 
-Pull requests use one of two templates, chosen by what kind of change this
-is:
+Two templates, chosen by the kind of change:
 
-- **`.github/pull_request_template.md`** (default) — for anything that adds
-  or changes documented behavior. The body links the scope document, gives
-  every EA layer a verdict, and describes **all** changes on the branch
+- **[`.github/pull_request_template.md`](./.github/pull_request_template.md)**
+  (default) — for method or docs changes. The body links the scope
+  document in the sibling repository (if the change needed one), gives
+  every affected surface a verdict, and describes the whole branch
   (`git diff main...HEAD`), not just the latest commit.
-- **`.github/PULL_REQUEST_TEMPLATE/bugfix.md`** — for pure bug fixes that
-  change no documented behavior: what broke, the root cause, the fix, and
-  the regression coverage added, instead of a scope document and EA table.
-  Pick it explicitly when opening the PR (GitHub's "Preview" template
-  picker, or `?template=bugfix.md` on the compare URL); if the fix turns
-  out to touch documented behavior after all, use the default template
-  instead.
+- **[`.github/PULL_REQUEST_TEMPLATE/bugfix.md`](./.github/PULL_REQUEST_TEMPLATE/bugfix.md)**
+  — for pure bug fixes: what broke, the root cause, the fix, and any
+  regression coverage.
 
-Either way, the description is kept updated as the branch grows — see the
-`pr-description` skill.
+The [`core-pr-description`](./.claude/skills/core-pr-description/SKILL.md)
+skill picks the template and keeps the body current.
 
-## Development workflow
+## Conventions
 
-<!--
-  TEMPLATE — replace with the project's real workflow once a stack is
-  chosen. Keep the shape: an install step, a dev-loop command, and the
-  exact commands CI runs (so a contributor can reproduce a CI failure
-  locally verbatim). For example:
-
-  ```bash
-  npm install
-  npm run dev
-  ```
-
-  Before pushing (CI runs exactly these):
-
-  ```bash
-  npm run lint && npm run typecheck && npm test && npm run build
-  ```
--->
-
-## Definition of done
-
-A change is done when:
-
-- the project's verification commands (lint, typecheck, tests, build, or
-  whatever this stack defines) pass;
-- the affected EA documents ([architecture/](./.claude/skills/project-bootstrap/templates/architecture/README.md)) still
-  describe the system as it now is — services, rules, data objects, and
-  their realizations (or explicit "Pending") are up to date;
-- the initiative's scope document reflects what was actually delivered,
-  and its Approvals table records every gate the change required (Gate 2
-  at minimum for any change in documented behavior; Gate 1 for a
-  strategy-discovery initiative; Gate 0 and Gate 1 for an operating-model
-  discovery; Gate 3 if the requester opted in);
-- cross-links resolve and diagrams render;
-- any new interpretation of a requirement is recorded as an open question
-  with its adopted interpretation (see the `scope-doc` skill).
+- **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, …).
+- **Documentation language:** English.
+- **Skill folder names** carry a role prefix (`core-*`, `discover-*`,
+  `doc-*`, `flow-*`) — see [`.claude/skills/README.md`](./.claude/skills/README.md).
+- **A merged scope document is a historical record** — link targets get
+  repaired when files move; the words never change (`RULE6`).

@@ -6,7 +6,7 @@
   directory — hence the bug-fix template at
   .github/PULL_REQUEST_TEMPLATE/bugfix.md, selected via ?template=bugfix.md.
   The split is required by GitHub, not an oversight. Which one to use:
-  CONTRIBUTING.md and the pr-description skill.
+  CONTRIBUTING.md and the core-pr-description skill.
 -->
 <!--
   Describe the WHOLE branch, not just the latest commit:
@@ -21,36 +21,32 @@
 
 ## Scope document
 
-<!-- Link the initiative's architecture/scope/N_*.md (added or updated in this PR),
-     or state "pure bug fix — no scope document" and why. Its Approvals
-     table records the gates this branch passed (Gate 2 at minimum for any
-     change in documented behavior). -->
+<!-- Link the initiative's scope document in the sibling repository,
+     https://github.com/roanboc/architecture-archreator — usually under
+     product-archreator/architecture/scope/. Its Approvals table records
+     the gates the change passed (Gate 2 at minimum for any change in
+     documented behavior). If this is a bug fix with no documented
+     behavior change, use the bug-fix template instead. -->
 
-## EA layers touched
+## What changed here
 
-<!-- Mirror the scope document's alignment table; "no change" is a valid,
-     explicit verdict for a layer. -->
+<!-- Group by surface. Every commit's work must be represented. -->
 
-| Layer         | Impact |
-| ------------- | ------ |
-| 0_business-design |    |
-| 1_strategy    |        |
-| 2_business    |        |
-| 3_information |        |
-| 4_application |        |
-| 5_technology  |        |
-
-## Changes
-
-<!-- Everything on the branch, grouped by work package or area — every
-     commit's work must be represented here. -->
+- **Skills** — which SKILL.md files, what changed in each
+- **Scaffold** — anything under templates/
+- **Docs / site** — under docs/ or site/
+- **Plugin package / CI** — manifests under .claude-plugin/, workflows
 
 ## Verification
 
-<!-- What was run and what happened: lint / typecheck / tests / build,
-     plus any manual or end-to-end checks. -->
+<!-- What was run and what happened: -->
+
+```
+python3 .claude/templates/scripts/check_links.py
+python3 .claude/templates/scripts/check_model.py
+```
 
 ## Out of scope / follow-ups
 
-<!-- Deliberate exclusions and the gaps they leave (mirror the scope
-     document's gap notes). -->
+<!-- Deliberate exclusions and the gaps they leave — mirror the scope
+     document's gap notes. -->
