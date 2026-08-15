@@ -12,8 +12,8 @@ Folders and files carry a numeric prefix giving the order in which they are
 assessed. **Any change in requirements is aligned through these layers in
 this order — strategy first, technology last — and captured in a
 [scope document](./scope/README.md) before implementation starts** (see
-[CONTRIBUTING.md](https://github.com/roanboc/archreator/blob/main/CONTRIBUTING.md) and the `core-architecture-first-change` skill in
-`.claude/skills/`).
+[CONTRIBUTING.md](https://github.com/roanboc/archreator/blob/main/CONTRIBUTING.md) and the
+`core-architecture-first-change` skill).
 
 ## Layers, in assessment order
 

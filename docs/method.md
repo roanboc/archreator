@@ -145,7 +145,7 @@ Approvals table, an open question logged for the Requester — never a silent
 skip.
 
 The step-by-step version of this same flow lives in the
-[`core-architecture-first-change` skill](../.claude/skills/core-architecture-first-change/SKILL.md).
+[`core-architecture-first-change` skill](../plugins/archreator/skills/core-architecture-first-change/SKILL.md).
 
 ## Where the model lives
 
@@ -154,11 +154,11 @@ carries a short ID — a type prefix and an integer, like `G1`, `CAP3`,
 `BSVC2` — and the whole set is grounded: every element names the code
 artifact, page, or written procedure that realizes it, or is explicitly
 marked "Pending — future initiative". Two validators in
-[`.claude/templates/scripts/`](../.claude/templates/scripts/) enforce that references
+[`plugins/archreator/templates/scripts/`](../plugins/archreator/templates/scripts/) enforce that references
 resolve and no identifier is reused.
 
-The scaffold at [`.claude/templates/`](../.claude/templates/README.md) has every layer
+The scaffold at [`plugins/archreator/templates/`](../plugins/archreator/templates/README.md) has every layer
 README ready to fill in. The full conventions — numbering, ArchiMate on
 Mermaid, colour ramps, actor kinds — are in
-[`.claude/templates/architecture/README.md`](../.claude/templates/architecture/README.md)
-and in the [`core-architecture-doc-style` skill](../.claude/skills/core-architecture-doc-style/SKILL.md).
+[`plugins/archreator/templates/architecture/README.md`](../plugins/archreator/templates/architecture/README.md)
+and in the [`core-architecture-doc-style` skill](../plugins/archreator/skills/core-architecture-doc-style/SKILL.md).

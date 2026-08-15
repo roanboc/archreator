@@ -11,7 +11,7 @@ For an explanation of the method that these files publish, see
 | Kind | Where the record lives |
 | ---- | ---------------------- |
 | **A change to the method** — new skill, new rule, changed convention, a scaffold refactor | A numbered scope document in [`architecture-archreator`](https://github.com/roanboc/architecture-archreator) under `product-archreator/architecture/scope/`, plus the corresponding change here |
-| **A bug fix** with no documented behavior change — a broken link, a typo, a validator false positive | Straight to a PR here; the bug-fix template covers it |
+| **A bug fix** with no documented behavior change — a broken link, a typo, a validator false positive | Straight to a PR here; say what broke, the root cause, and the fix |
 | **A docs improvement** to the guidance under `docs/` or `site/` | A PR here; short scope note in the PR body if the doc changes what the method claims |
 | **A packaging or CI change** — plugin manifest, workflows, `.github/` | A PR here |
 
@@ -40,11 +40,11 @@ Pure bug fixes skip the gates, per the method's own rule.
 Both validators must be green before pushing; CI runs the same:
 
 ```bash
-python3 .claude/templates/scripts/check_links.py    # relative links and HTML anchors resolve
-python3 .claude/templates/scripts/check_model.py    # element-ID references resolve
+python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
+python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve
 ```
 
-The scripts live under `.claude/templates/` because they ship with the scaffold —
+The scripts live under `plugins/archreator/templates/` because they ship with the scaffold —
 the same scripts land in every project the method emits. Running them from
 the root of this repository is a smoke test: since there is no
 `architecture/` folder here, `check_model.py` reports the scaffold as
@@ -53,25 +53,21 @@ docs, the scaffold, and the site.
 
 ## Pull requests
 
-Two templates, chosen by the kind of change:
+One template for every change:
+**[`.github/pull_request_template.md`](./.github/pull_request_template.md)**.
+The body links the scope document in the sibling repository (if the change
+needed one), gives every affected surface a verdict, and describes the whole
+branch (`git diff main...HEAD`), not just the latest commit. For a pure bug
+fix, say what broke, the root cause, the fix, and any regression coverage.
 
-- **[`.github/pull_request_template.md`](./.github/pull_request_template.md)**
-  (default) — for method or docs changes. The body links the scope
-  document in the sibling repository (if the change needed one), gives
-  every affected surface a verdict, and describes the whole branch
-  (`git diff main...HEAD`), not just the latest commit.
-- **[`.github/PULL_REQUEST_TEMPLATE/bugfix.md`](./.github/PULL_REQUEST_TEMPLATE/bugfix.md)**
-  — for pure bug fixes: what broke, the root cause, the fix, and any
-  regression coverage.
-
-The [`core-pr-description`](./.claude/skills/core-pr-description/SKILL.md)
-skill picks the template and keeps the body current.
+The [`core-pr-description`](./plugins/archreator/skills/core-pr-description/SKILL.md)
+skill keeps the body current.
 
 ## Conventions
 
 - **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - **Documentation language:** English.
 - **Skill folder names** carry a role prefix (`core-*`, `discover-*`,
-  `doc-*`, `flow-*`) — see [`.claude/skills/README.md`](./.claude/skills/README.md).
+  `doc-*`, `flow-*`) — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
 - **A merged scope document is a historical record** — link targets get
   repaired when files move; the words never change (`RULE6`).

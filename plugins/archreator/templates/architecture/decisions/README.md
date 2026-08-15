@@ -16,7 +16,7 @@ the alternative?" — most often an AI actor's autonomy level or decision
 rights (see `core-architecture-doc-style`'s actor notation in
 [docs/ea/2_business/](../2_business/README.md)).
 
-Agent guidance: `.claude/skills/doc-decision-record/`.
+Agent guidance: the `doc-decision-record` skill.
 
 ## Index
 

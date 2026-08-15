@@ -20,12 +20,12 @@ a named escalation path.
 ## What this repository is
 
 - **Fourteen Claude Code skills** — the method itself, grouped by role
-  under [`.claude/skills/`](./.claude/skills/README.md).
+  under [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md).
 - **A scaffold** — the empty project a new adopter starts from, at
-  [`.claude/templates/`](./.claude/templates/README.md), copied by the
+  [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md), copied by the
   `core-project-bootstrap` skill.
 - **A plugin package** — the manifests at
-  [`.claude/.claude-plugin/plugin.json`](./.claude/.claude-plugin/plugin.json)
+  [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json)
   and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
   that publish it to the Claude Code plugin marketplace.
 - **The docs and the site** — plain-English explanation under
@@ -41,20 +41,19 @@ No application code. No worked models — those live in the sibling repo.
 /plugin install archreator@archreator
 ```
 
-Then just say what you want to model. The `core-project-bootstrap` skill
-takes it from there: it asks what the project is, picks a modeling depth,
-tells you which one it picked, and writes the scaffold into your
-repository.
+Then just say what you want to model — the `core-project-bootstrap` skill
+takes it from there.
 
-Prefer a fresh repo? Clone the scaffold from
-[`.claude/templates/`](./.claude/templates/README.md) into a new project.
+Prefer to clone the scaffold instead of installing? Both routes, and what
+each one lands in your project, are in
+[`docs/adopting.md`](./docs/adopting.md).
 
 ## Where to go from here
 
 | To understand | Read |
 | ------------- | ---- |
 | **What the method does and how** | [`docs/method.md`](./docs/method.md) — the process, the layers, the loop |
-| **What each skill is for** | [`docs/skills.md`](./docs/skills.md) · [`.claude/skills/README.md`](./.claude/skills/README.md) |
+| **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, grouped by role |
 | **How to adopt it in your own project** | [`docs/adopting.md`](./docs/adopting.md) |
 | **What a filled-in model looks like** | [`architecture-archreator`](https://github.com/roanboc/architecture-archreator) |
 | **How to contribute to this repository** | [`CONTRIBUTING.md`](./CONTRIBUTING.md) |

@@ -38,7 +38,8 @@ Deliberately not checked:
 
 - `architecture/scope/`, `architecture/decisions/`, `architecture/reviews/` and `architecture/engagements/` inside
   `architecture/`, and anything outside `architecture/` entirely, per above.
-- `.claude/skills/` — skill files carry illustrative IDs inside templates
+- The scaffold under `templates/` — its layer READMEs and the skill files
+  beside them carry illustrative IDs inside templates
   (`BSVC1`, `SALES.BSVC3`, `RULE7`); validating the documentation of the
   convention would fail on itself.
 - A project whose `architecture/` defines no elements — an unfilled scaffold,
@@ -173,7 +174,7 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
         path
         for path in sorted(model_root.rglob("*.md"))
         if ".git" not in path.parts
-        and ".claude" not in path.parts
+        and "templates" not in path.parts
         and not (NARRATIVE & set(path.relative_to(model_root).parts))
     ]
 

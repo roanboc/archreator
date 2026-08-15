@@ -21,12 +21,12 @@ repository.
 
 **The plugin ships two things.** The skills — which do not touch your files
 until you ask them to — and the scaffold under
-[`.claude/templates/`](../.claude/templates/README.md), which `core-project-bootstrap`
+[`plugins/archreator/templates/`](../plugins/archreator/templates/README.md), which `core-project-bootstrap`
 copies into your project. Nothing else lands.
 
 ## Option B — clone the scaffold directly
 
-Copy [`.claude/templates/`](../.claude/templates/README.md) into a new repository. It holds:
+Copy [`plugins/archreator/templates/`](../plugins/archreator/templates/README.md) into a new repository. It holds:
 
 - `CLAUDE.md` and `README.md` — placeholders you'll fill in when the
   bootstrap skill runs
@@ -42,13 +42,13 @@ the skill do it.
 Three things ship in this repo with different lifecycles, and only one of
 them stays in sync automatically:
 
-- **The skills**, at `.claude/skills/*/`, come with the plugin and update
+- **The skills**, at `plugins/archreator/skills/*/`, come with the plugin and update
   when you run `/plugin update archreator@archreator`.
-- **The scaffold**, at `.claude/templates/`, is copied *once* into your project by
+- **The scaffold**, at `plugins/archreator/templates/`, is copied *once* into your project by
   `core-project-bootstrap`. It does not update afterwards, because a
   scaffold that changed under a project would rewrite documents the
   Requester already approved.
-- **The scaffold's own scripts** in `.claude/templates/scripts/` land in your
+- **The scaffold's own scripts** in `plugins/archreator/templates/scripts/` land in your
   project's `scripts/`. They are the same on both sides; if the method's
   validators change, copy the updated files across.
 
@@ -59,7 +59,8 @@ project like any other: assessed, approved at Gate 2, and applied by hand.
 ## Reading order
 
 - Understand what changes: [`docs/method.md`](./method.md)
-- See what each skill is for: [`docs/skills.md`](./skills.md)
+- See what each skill is for:
+  [`plugins/archreator/skills/README.md`](../plugins/archreator/skills/README.md)
 - See it applied to a real organization:
   [`architecture-archreator`](https://github.com/roanboc/architecture-archreator)
 

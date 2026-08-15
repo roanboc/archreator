@@ -9,10 +9,10 @@ worked examples of the method applied to real organizations live in
 
 | Path | What it holds |
 | ---- | ------------- |
-| [`.claude/skills/`](./.claude/skills/README.md) | The fourteen skills that are the method, grouped by role — `core-*` (the spine), `discover-*` (question-driven), `doc-*` (state management), `flow-*` (situational) |
-| [`.claude/.claude-plugin/plugin.json`](./.claude/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
-| [`.claude/templates/`](./.claude/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `core-project-bootstrap` |
-| [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, the skill catalogue, how to adopt it |
+| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, grouped by role — `core-*` (the spine), `discover-*` (question-driven), `doc-*` (state management), `flow-*` (situational) |
+| [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
+| [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `core-project-bootstrap` |
+| [`docs/`](./docs/method.md) | The method explained in plain English — how the process works and how to adopt it. The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The one-page public site, deployed to <https://roanboc.github.io/archreator/> |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
 
@@ -40,8 +40,8 @@ platforms are additive — each adds a manifest, none forks the method.
 ## Commands
 
 ```bash
-python3 .claude/templates/scripts/check_links.py    # relative links and HTML anchors resolve
-python3 .claude/templates/scripts/check_model.py    # element-ID references resolve, per project
+python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
+python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve, per project
 ```
 
 Both must be green before pushing; CI runs the same on the scaffold as any
@@ -52,5 +52,5 @@ downstream project runs on its own model.
 - Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - Documentation language: **English**.
 - The skill catalogue and its groups live in
-  [`.claude/skills/README.md`](./.claude/skills/README.md); the deeper
+  [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md); the deeper
   explanation of the method lives under [`docs/`](./docs/method.md).

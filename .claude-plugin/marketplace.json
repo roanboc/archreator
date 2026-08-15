@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "archreator",
-      "source": "./.claude",
+      "source": "./plugins/archreator",
       "description": "Enterprise-architecture-first development with human approval gates: model an organization or an application through numbered ArchiMate layers, stop at explicit Requester gates before any code, and record every initiative in a scope document."
     }
   ]
