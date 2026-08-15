@@ -1,7 +1,7 @@
 <!--
   Bug-fix template — the named alternate in .github/PULL_REQUEST_TEMPLATE/.
   It does NOT auto-fill; open the PR with ?template=bugfix.md (or let the
-  pr-description skill pick it). GitHub requires named alternates to live in
+  core-pr-description skill pick it). GitHub requires named alternates to live in
   this directory while the auto-filled default lives at
   .github/pull_request_template.md — that's why the two sit in different
   places.
@@ -49,4 +49,4 @@
 <!-- Confirm this changes no documented behavior: "pure bug fix — no scope
      document." If implementing the fix turned out to require a documented
      behavior change after all, this isn't a pure bug fix — switch to the
-     default PR template and follow the architecture-first-change process instead. -->
+     default PR template and follow the core-architecture-first-change process instead. -->
