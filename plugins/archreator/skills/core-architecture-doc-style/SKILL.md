@@ -1,6 +1,6 @@
 ---
 name: core-architecture-doc-style
-description: Use when creating or editing any document under architecture/ — numbering, ArchiMate-on-Mermaid notation, grounding rules, and link conventions for this repo's documentation.
+description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions for this repo's documentation.
 ---
 
 # EA documentation style
@@ -83,9 +83,11 @@ destroys.
 
 ## Element IDs
 
-Every element carries a short **ID**: a type prefix followed by an integer,
+Every element carries a short **ID**: a type prefix followed by a number,
 no separator — `G1`, `CAP3`, `PROD2`. IDs are how one document refers to an
-element in another without restating it.
+element in another without restating it. An element inside a leveled
+catalogue extends its parent's ID instead of starting a new number —
+`CAP3.2` — see § Levels number hierarchically.
 
 An element is **defined** in one of exactly two shapes, and `check_model.py`
 recognizes both:
@@ -116,10 +118,53 @@ identifiers.
 
 Rules: an ID is assigned once and **never reused** after the element is
 removed (a dangling reference should fail loudly, not silently point at
-something else); numbering is per prefix, not global; and an element's ID
-never changes when it is renamed. Referencing an element in prose or a
-table cell means writing its ID — `relieves GAIN2` — not repeating its
-description.
+something else); numbering is per prefix, not global — and per parent inside
+a leveled catalogue; and an element's ID never changes when it is renamed.
+Referencing an element in prose or a table cell means writing its ID —
+`relieves GAIN2` — not repeating its description.
+
+### Levels number hierarchically
+
+**An element that decomposes carries its parent's ID plus its own number,
+joined by a dot.** Capabilities, processes and products are the usual cases;
+any catalogue with levels behaves the same way.
+
+| Level | Capability | Process | Product |
+| ----- | ---------- | ------- | ------- |
+| **1** | `CAP1` | `BPROC1` | `PROD1` |
+| **2** | `CAP1.2` | `BPROC1.3` | `PROD1.2` |
+| **3** | `CAP1.2.1` | `BPROC1.3.4` | — |
+
+The last segment is numbered **per parent, not across the level**: the second
+child of `CAP1` is `CAP1.2` and the second child of `CAP2` is `CAP2.2`. So
+the identifier states where the element sits in the tree, and a reader meeting
+`BPROC1.3.4` in a technology document knows which macro process it belongs to
+without opening the catalogue.
+
+Two consequences, and they are most of the point:
+
+- **The ID carries the parent, so the table drops its parent column.** A
+  `Parent` column beside `CAP1.2` restates what the identifier already says,
+  which is `P3` broken inside a single row. A column naming what a parent is
+  *composed of* survives, because it carries the children's **names**, which
+  no identifier holds.
+- **A level is not a type.** `CAP1.2` is a Capability exactly as `CAP1` is.
+  The dot says where it sits, not what it is, and every rule about prefixes,
+  glyphs and colours applies to it unchanged.
+
+**Only decomposition is written this way** — a whole-part hierarchy whose
+child is a finer-grained element of the same type. Every other relationship
+stays a column or an edge: a process realizing a service, a capability using
+a resource, a product tier refining its enterprise parent. An identifier can
+encode one tree, so it encodes the one the catalogue is organised by.
+
+**Moving an element under a different parent changes its ID.** That is what a
+meaningful identifier costs, and it is paid like any other removal: before the
+gate that approves the element, renumber it; afterwards, retire the old ID and
+define the element under its new parent, with the Retired row naming the ID
+that replaced it (§ Never-reused starts at the gate). Re-parenting an approved
+process is a modeling change a Requester should be shown — a leveled ID puts
+it in front of them instead of letting it pass as an edited column.
 
 ### Never-reused starts at the gate
 
@@ -149,12 +194,13 @@ a Requester who reviewed the previous draft will otherwise see identifiers
 shift under them without explanation.
 
 **`scripts/check_model.py` enforces this**, and CI runs it: every reference
-resolves, no ID is defined twice, and no retired ID reappears as live. It
-checks `architecture/` only. Scope documents, decision records, and reviews are
-narrative *about* the model — they cite retired elements, illustrate the
-convention, and are frozen once merged (`core-scope-doc`), so a reference check
-there could never be made to pass. Keep IDs accurate in them anyway; nothing
-but review will catch a mistake.
+resolves, no ID is defined twice, no retired ID reappears as live, and every
+leveled ID has its parent defined. It checks `architecture/` only. Scope
+documents, decision records, and reviews are narrative *about* the model —
+they cite retired elements, illustrate the convention, and are frozen once
+merged (`core-scope-doc`), so a reference check there could never be made to
+pass. Keep IDs accurate in them anyway; nothing but review will catch a
+mistake.
 
 ### Namespacing across domains
 
@@ -172,6 +218,12 @@ The domain segment is the folder name under `architecture/domains/`, upper-cased
 (`domains/sales/` → `SALES.`). A subdomain chains it — `SALES.EMEA.BSVC2` —
 which is also why the tree is capped at three levels; beyond that the IDs
 stop being readable, and the thing being modeled is a team, not a domain.
+
+**Both qualifiers use a dot, and the prefix tells them apart**: upper-case
+segments *before* the prefix are the domain path, numeric segments *after* it
+are the catalogue's levels. `SALES.BPROC1.3` is the third process under macro
+process `BPROC1`, owned by the sales domain. Read outwards from the prefix and
+neither half is ambiguous.
 
 Numbering stays per prefix **per domain**: two domains may both own a
 `BSVC3`, and the qualifier is what tells them apart. This is deliberate —
