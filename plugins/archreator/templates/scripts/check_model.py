@@ -8,7 +8,7 @@ enforced that until this script: `check_links.py` verifies that a *link*
 resolves, and an agent reading `relieves PAIN2` has no cheap way to notice
 that `PAIN2` was deleted three initiatives ago.
 
-Three things are checked, per project:
+Four things are checked, per project:
 
 - **Dangling references** — every referenced ID resolves to a definition.
   A qualified reference (`SALES.BSVC3`) resolves inside that domain's
@@ -16,6 +16,15 @@ Three things are checked, per project:
 - **Duplicate definitions** — no ID is defined twice.
 - **Retired then live** — no ID appears in both a live table and a
   `## Retired` section. Retired IDs stay retired.
+- **Orphan levels** — a leveled ID (`CAP1.2`, `BPROC7.2.1`) has the element
+  one level up defined too. A hierarchical identifier that names a parent
+  nobody wrote is the same defect as a dangling reference.
+
+An ID can carry two dot-separated qualifiers and they mean different things,
+so this script reads outwards from the type prefix: upper-case segments
+*before* it are the domain path (`SALES.BSVC3`), numeric segments *after* it
+are the catalogue's levels (`BSVC3.1`). Only the first makes a reference
+qualified — `core-architecture-doc-style` § Levels number hierarchically.
 
 A **project** is the directory containing an `architecture/` folder, so IDs are
 scoped per project and two projects may each own a `G1`.
@@ -95,14 +104,23 @@ PREFIXES = sorted(
     key=len,
     reverse=True,
 )
-_ID = r"(?:[A-Z][A-Z0-9]*\.)*(?:" + "|".join(PREFIXES) + r")\d+"
+# The element itself: a type prefix, its number, then one dotted number per
+# level below the top (`CAP1`, `CAP1.2`, `CAP1.2.3`).
+_LOCAL = r"(?:" + "|".join(PREFIXES) + r")\d+(?:\.\d+)*"
+# A full ID prepends the domain path, when there is one (`SALES.CAP1.2`).
+_ID = r"(?:[A-Z][A-Z0-9]*\.)*" + _LOCAL
 
 # A backticked ID anywhere in the prose or a table cell is a reference.
 REFERENCE_RE = re.compile(r"`(" + _ID + r")`")
 # A table row whose first cell is a bare backticked ID defines that element.
-# A *qualified* first cell is a reference instead — that is what a domain
-# charter's "Consumed services" table holds.
-TABLE_DEF_RE = re.compile(r"^\|\s*`([A-Z][A-Z0-9]*\d+)`\s*\|", re.M)
+# A *domain-qualified* first cell is a reference instead — that is what a
+# domain charter's "Consumed services" table holds. A *leveled* first cell
+# (`BPROC7.2`) is a definition like any other: the dot is this element's own
+# place in the catalogue, not somebody else's ownership of it.
+TABLE_DEF_RE = re.compile(r"^\|\s*`([A-Z][A-Z0-9]*\d+(?:\.\d+)*)`\s*\|", re.M)
+# Splits an ID into its domain path and the rest, so the two meanings of the
+# dot never get confused for each other.
+ID_PARTS_RE = re.compile(r"^((?:[A-Z][A-Z0-9]*\.)*)(" + _LOCAL + r")$")
 # Goals and principles are written as bolded lead-ins rather than table rows.
 BULLET_DEF_RE = re.compile(r"\*\*(" + _ID + r")\s+—", re.M)
 RETIRED_HEADING_RE = re.compile(r"^##+\s+Retired\s*$", re.M)
@@ -124,6 +142,27 @@ def split_retired(text: str) -> tuple[str, str]:
 
 def definitions_in(text: str) -> set[str]:
     return set(TABLE_DEF_RE.findall(text)) | set(BULLET_DEF_RE.findall(text))
+
+
+def qualifier_of(element: str) -> str:
+    """The domain path of an ID, or "" when it is unqualified.
+
+    `SALES.BPROC1.3` is qualified and `BPROC1.3` is not, even though both
+    contain a dot: the levels sit after the prefix, the domain before it.
+    """
+    match = ID_PARTS_RE.match(element)
+    return match.group(1).rstrip(".") if match else ""
+
+
+def parent_of(element: str) -> str:
+    """The ID one level up, or "" for an element that is already top-level.
+
+    A trailing numeric segment is a level, so `SALES.CAP1.2` is a child of
+    `SALES.CAP1`, while `SALES.CAP1` is a top-level capability whose leading
+    segment names its domain rather than a parent element.
+    """
+    head, _, tail = element.rpartition(".")
+    return head if tail.isdigit() else ""
 
 
 def unvalidated_tables(text: str) -> int:
@@ -201,7 +240,7 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
 
         defined_here = definitions_in(text)
         for reference in REFERENCE_RE.findall(text):
-            if "." not in reference and reference in defined_here:
+            if not qualifier_of(reference) and reference in defined_here:
                 continue
             references.append((reference, md_file))
 
@@ -214,19 +253,27 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
                 f"still defined live in {defined[element].relative_to(REPO_ROOT)}"
             )
 
+    for element, md_file in sorted(defined.items()):
+        parent = parent_of(element)
+        if parent and parent not in defined and parent not in retired:
+            errors.append(
+                f"{md_file.relative_to(REPO_ROOT)}: `{element}` is one level "
+                f"below `{parent}`, which is not defined in this project"
+            )
+
     seen: set[tuple[str, Path]] = set()
     for reference, md_file in references:
         if (reference, md_file) in seen:
             continue
         seen.add((reference, md_file))
         scope = domain_of(md_file, project)
+        qualifier = qualifier_of(reference)
         candidates = [reference]
-        if "." not in reference and scope:
+        if not qualifier and scope:
             candidates.insert(0, f"{scope}.{reference}")
         if any(candidate in defined or candidate in retired for candidate in candidates):
             continue
         rel = md_file.relative_to(REPO_ROOT)
-        qualifier = reference.rsplit(".", 1)[0] if "." in reference else ""
         if qualifier and qualifier not in domains:
             errors.append(f"{rel}: `{reference}` names unknown domain `{qualifier}`")
         else:

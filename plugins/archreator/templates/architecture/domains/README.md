@@ -111,7 +111,11 @@ Bare inside the owning domain (`BSVC3`), qualified from outside
 prefix **per domain**, so two domains may each own a `BSVC3` — the qualifier
 is what distinguishes them, and this is deliberate: globally unique
 numbering would make every new domain a merge conflict against every other.
-Full rules in `core-architecture-doc-style` § Element IDs.
+
+A leveled element extends its parent's ID (`BPROC1.3`), so an ID can carry
+both qualifiers at once — `SALES.BPROC1.3`. Read outwards from the prefix:
+upper-case segments before it are the domain path, numeric segments after it
+are the levels. Full rules in `core-architecture-doc-style` § Element IDs.
 
 ## Layer view
 

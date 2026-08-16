@@ -1,6 +1,6 @@
 ---
 name: discover-process-and-capability-levels
-description: Use when modeling an organization's business processes or capabilities — building a process map, deciding how far to decompose, or drafting a capability model. Covers the four macro process categories (strategic, operational, support, evaluation), what each level means and how its elements are described, seeding a capability map from an industry reference model, and the breadth-first depth-on-pain rule that says which branches to detail and which to leave alone. Not needed for a single application, which has no process map of its own.
+description: Use when modeling an organization's business processes or capabilities — building a process map, deciding how far to decompose, drafting a capability model, or numbering leveled elements. Covers the four macro process categories (strategic, operational, support, evaluation), what each level means and how its elements are described, the hierarchical identifiers that carry the level (`BPROC7`, `BPROC7.2`, `BPROC7.2.1`), seeding a capability map from an industry reference model, and the breadth-first depth-on-pain rule that says which branches to detail and which to leave alone. Not needed for a single application, which has no process map of its own.
 ---
 
 # Levels, and how far down to go
@@ -74,12 +74,12 @@ or improves. Report an empty band as a finding, not as a blank.
 
 ### What each level means
 
-| Level | It is | Named | Usual count |
-| ----- | ----- | ----- | ----------- |
-| **1 — Macro process** | A band's major grouping of work, end to end | Verb + object, or a noun phrase where the organization already has one | 8–15 for a whole organization |
-| **2 — Process** | An end-to-end process with a trigger, a definable output, and one accountable role | Verb + object | 3–8 per macro process |
-| **3 — Sub-process** | The ordered steps inside a level-2 process — the first level where a flow diagram says something a list cannot | Verb + object | Only where a pain justifies it |
-| **4 — Task** | What one person or system does in one sitting | Verb + object | Belongs in a work instruction, not in the model |
+| Level | ID | It is | Named | Usual count |
+| ----- | -- | ----- | ----- | ----------- |
+| **1 — Macro process** | `BPROC7` | A band's major grouping of work, end to end | Verb + object, or a noun phrase where the organization already has one | 8–15 for a whole organization |
+| **2 — Process** | `BPROC7.2` | An end-to-end process with a trigger, a definable output, and one accountable role | Verb + object | 3–8 per macro process |
+| **3 — Sub-process** | `BPROC7.2.1` | The ordered steps inside a level-2 process — the first level where a flow diagram says something a list cannot | Verb + object | Only where a pain justifies it |
+| **4 — Task** | — | What one person or system does in one sitting | Verb + object | Belongs in a work instruction, not in the model |
 
 Level 4 is named here so it can be refused. When a Requester asks for it, the
 answer is that the model stops at 3 and the procedure continues in whatever
@@ -94,8 +94,12 @@ carries at least:
 | Level | Columns beyond ID and name |
 | ----- | -------------------------- |
 | **1** | Category · purpose (one sentence) · owner · composed of |
-| **2** | Parent · purpose · trigger · input · output · owner role · realized by |
+| **2** | Purpose · trigger · input · output · owner role · realized by |
 | **3** | The level-2 set, plus the sequence — which is what the diagram carries |
+
+No level carries a parent column: `BPROC7.2` names its parent already, and a
+column repeating it is `P3` broken inside a row. `composed of` stays, because
+it carries the children's **names**, which the identifiers do not.
 
 **Purpose is one sentence saying what this turns into what, and for whom.**
 "Manages orders" is a restatement of the name. "Turns a confirmed order into a
@@ -116,11 +120,11 @@ able to do*, with no sequence and no trigger — "Claims adjudication", not
 a process list wearing the wrong label, and it is the most common failure of
 this document.
 
-| Level | It is | Usual count |
-| ----- | ----- | ----------- |
-| **1 — Capability area** | What a decision gets taken at — "does this initiative strengthen X?" is answerable | 6–12 for a whole organization |
-| **2 — Capability** | A distinct ability, realized by people, systems and information | 3–8 per area |
-| **3 — Sub-capability** | Only where a pain justifies it | — |
+| Level | ID | It is | Usual count |
+| ----- | -- | ----- | ----------- |
+| **1 — Capability area** | `CAP1` | What a decision gets taken at — "does this initiative strengthen X?" is answerable | 6–12 for a whole organization |
+| **2 — Capability** | `CAP1.2` | A distinct ability, realized by people, systems and information | 3–8 per area |
+| **3 — Sub-capability** | `CAP1.2.3` | Only where a pain justifies it | — |
 
 Only the leaves name a realizing artifact. An area is realized by its parts,
 and asking it to point at something real is the grounding rule applied one
@@ -170,8 +174,8 @@ catalogue's index and carries **every** level-2 element:
 
 | ID | Element | Detailed to | Justified by | Note |
 | -- | ------- | ----------- | ------------ | ---- |
-| `BPROC7` | Deliver the service | Level 3 | `PAIN2` | Where the engagement's pain sits |
-| `BPROC8` | Bill and collect | Level 2 | — | No pain raised. Revisit when one is |
+| `BPROC7.2` | Deliver the service | Level 3 | `PAIN2` | Where the engagement's pain sits |
+| `BPROC7.3` | Bill and collect | Level 2 | — | No pain raised. Revisit when one is |
 
 A branch stopping at level 2 with a dash in the justification column is a
 decision a reader can disagree with. The same branch with nothing written is a
@@ -182,10 +186,11 @@ model, and it should be: it is where the engagement's scope actually lives.
 
 ## Where the documents live
 
-**Below roughly fifteen elements in a level, the level is a column** — one
-document with a `Level` column and a parent column, which is what the
-fifteen-element threshold in `core-architecture-doc-style` § Diagrams come first
-already implies for the diagram.
+**Below roughly fifteen elements in a level, the whole catalogue is one
+document** — its rows grouped by level and ordered by ID, which sorts them
+into the tree without a `Level` column or a parent column to maintain. That
+is the fifteen-element threshold in `core-architecture-doc-style` § Diagrams
+come first, applied to the file rather than to the diagram.
 
 **Above it, the catalogue becomes a folder** named for the file it replaces,
 with one document per level:
@@ -207,10 +212,17 @@ inventory table — per `core-architecture-doc-style`. The index README carries 
 focus table and links the levels; it defines no elements of its own, so it
 needs no legend.
 
-**A level is a column, never an identifier.** `BPROC7` at level 2 is a
-`BPROC`, not a `BPROC1.3`. Element IDs are a prefix and an integer, the
-validator enforces that, and encoding the hierarchy into the ID would break
-every reference the first time a process moves under a different parent.
+**The identifier carries the level.** A level-2 process under macro process
+`BPROC7` is `BPROC7.2`, and a level-3 sub-process under that is `BPROC7.2.1`
+— `core-architecture-doc-style` § Levels number hierarchically holds the rule,
+including what re-parenting an approved element costs. Splitting the catalogue
+into a folder changes none of it: the files exist for readability, and the
+identifiers say the same thing they would say in one table.
+
+This is what makes a partial model navigable. The focus table says which
+branches were detailed; the IDs say the same thing element by element, so a
+`BPROC7.2.1` cited from the application layer announces both its parent and
+the fact that this branch was one of the few taken to level 3.
 
 ## Done when
 
@@ -218,6 +230,8 @@ every reference the first time a process moves under a different parent.
 - Levels 1 and 2 are complete across the whole subject.
 - Every level-3 document cites the pain that justifies it.
 - The focus table covers every level-2 element, including the undetailed ones.
+- Every identifier extends its parent's — a level-2 process under `BPROC7` is
+  `BPROC7.<n>` — and no table carries a parent column beside it.
 - Each process carries a purpose, a trigger, an output and an owner; each
   capability is a noun and its leaves name what realizes them.
 - The reference model used to seed the capability map is named in the

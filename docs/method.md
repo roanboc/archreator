@@ -150,12 +150,14 @@ The step-by-step version of this same flow lives in the
 ## Where the model lives
 
 Layer folders and files are numbered by assessment order. Each element
-carries a short ID — a type prefix and an integer, like `G1`, `CAP3`,
-`BSVC2` — and the whole set is grounded: every element names the code
+carries a short ID — a type prefix and a number, like `G1`, `CAP3`,
+`BSVC2` — which extends its parent's where a catalogue has levels, so the
+second capability under `CAP3` is `CAP3.2` and its first sub-capability is
+`CAP3.2.1`. The whole set is grounded: every element names the code
 artifact, page, or written procedure that realizes it, or is explicitly
 marked "Pending — future initiative". Two validators in
 [`plugins/archreator/templates/scripts/`](../plugins/archreator/templates/scripts/) enforce that references
-resolve and no identifier is reused.
+resolve, that every leveled ID has a parent, and that no identifier is reused.
 
 The scaffold at [`plugins/archreator/templates/`](../plugins/archreator/templates/README.md) has every layer
 README ready to fill in. The full conventions — numbering, ArchiMate on

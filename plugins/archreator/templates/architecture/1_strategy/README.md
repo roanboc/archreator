@@ -33,7 +33,8 @@ and is not restated here. Principles are the exception — they have no canvas
 block, and are discovered directly with the Requester in either track.
 
 **On an organization, capabilities are leveled** — areas, then capabilities,
-then sub-capabilities only where a named pain justifies going further — and
+then sub-capabilities only where a named pain justifies going further, with
+identifiers that carry the level (`CAP1`, `CAP1.2`, `CAP1.2.3`) — and
 the map is drafted from a reference model for the organization's industry
 that the Requester then confirms item by item, rather than recalled from a
 blank page. The `discover-process-and-capability-levels` skill holds both, including
