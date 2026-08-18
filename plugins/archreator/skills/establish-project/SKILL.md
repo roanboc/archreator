@@ -1,144 +1,229 @@
 ---
 name: establish-project
 description: Use when a project has the archreator method available but no model yet — there is no architecture/ folder, CLAUDE.md or README.md still contain placeholder markers, architecture/ holds only layer READMEs, or the user says they just installed the plugin, cloned or generated the repository and wants to start. Emits the scaffold, walks the first-commit checklist, assesses and announces the modeling depth, and hands off to the right discovery track. Not needed once CLAUDE.md declares a depth.
+metadata:
+  aip:
+    spec: https://github.com/zach-blumenfeld/aip/tree/v0.3a3
+    schemaId: https://github.com/roanboc/archreator/schemas/gated-procedure.schema.json
 ---
 
-# Bootstrapping a project from the template
+```yaml
+purpose: >
+  Bridge an installed method and a modeled project. Emit the scaffold, turn it
+  into this project, declare how deeply the project intends to model itself,
+  and hand off to discovery. Everything after that is the ordinary
+  align-change-through-layers process; there is no separate template mode to
+  graduate out of.
 
-_`README.md` is the human-facing version of this
-checklist; `CONTRIBUTING.md` is the method it
-leads into._
+trigger_when:
+  - A project has the method available but no architecture/ folder.
+  - CLAUDE.md or README.md still contain <placeholder> markers.
+  - architecture/ holds only layer READMEs and no elements.
+  - The user says they just installed the plugin, cloned or generated the repository, and wants to start.
 
-This skill is the bridge between an installed method and a modeled project:
-it **emits the scaffold**, turns it into *this* project, declares how deeply
-the project intends to model itself, and hands off to discovery. Everything
-after that is the normal `align-change-through-layers` process — there is no separate
-"template mode" to graduate out of.
+do_not_use_when:
+  - CLAUDE.md already declares a modeling depth — the project is bootstrapped, and a change goes through align-change-through-layers.
+  - The request is a change to an existing model rather than a first setup.
 
-The scaffold ships beside the skills, at `templates/` inside the plugin. Nothing is inherited by cloning, so nothing has to be pruned
-afterwards: the project gets exactly the empty model, and the method stays
-where it was installed.
+realizes_process:
+  - BPROC1.1
 
-**Run this before anything else on a fresh project.** An agent that skips
-straight to `align-change-through-layers` will find placeholder strategy, trigger
-discovery, and produce a strategy layer for a project that still has no
-name, no declared language, and no declared depth.
+applies_at_depth: [1, 2, 3]
 
-## Step 1 — Find out what is being built, and how deep to model it
+invariants:
+  - >
+    Run this before anything else on a fresh project. An agent that skips
+    straight to align-change-through-layers finds placeholder strategy,
+    triggers discovery, and produces a strategy layer for a project with no
+    name, no declared language and no declared depth.
+  - >
+    Ask, do not infer. The two questions in the first step are answered by the
+    Requester in their own words, not guessed from the repository.
+  - >
+    The scaffold is the only thing that lands. The method stays where the
+    plugin installed it, which is why there is nothing of archreator's to
+    delete afterwards.
+  - >
+    Never pick the depth silently. A Requester who is told can correct you in
+    one sentence; a Requester who is told nothing finds out three initiatives
+    later.
 
-Ask, don't infer. Two questions carry the whole step:
+scope_and_approval: >
+  This procedure writes freely into a project that has no model yet — copying
+  the scaffold and replacing its placeholders needs no gate, because nothing it
+  overwrites was ever approved. It carries no gate of its own. The first
+  approval belongs to the discovery it hands off to, at Gate 0 or Gate 1.
 
-1. **What is this project?** One or two sentences in the Requester's own
-   words.
-2. **What is the subject — an application, or an organization?** Something
-   being built, or the way a business works?
+steps:
+  - name: establish-subject-and-depth
+    description: >
+      Ask what the project is, in one or two sentences, and whether the subject
+      is an application being built or an organization whose way of working is
+      the deliverable. Pick a modeling depth from those answers, then state it
+      out loud with its reason and its exit.
+    actor: Agent
+    analysis: >
+      An app, tool, site or service being built is Depth 1. A company,
+      department or service line whose way of working is the deliverable is
+      Depth 2. Several business lines needing to be understood separately is
+      Depth 3. Depth is about the subject, not the effort — a large application
+      is still Depth 1. When in doubt go shallower: deepening is a normal
+      initiative, while unwinding an over-modeled project throws away documents
+      the Requester already approved.
+    one_of:
+      - 1 — Application
+      - 2 — Organization
+      - 3 — Enterprise
+    outputs:
+      - name: declared-depth
+        type: integer
+        description: The depth, stated to the Requester with its reason and how to change it later.
+      - name: project-description
+        type: string
+        description: What the project is, in the Requester's own words.
 
-From the answers, pick a depth from
-`architecture/README.md` § Modeling depth:
+  - name: emit-the-scaffold
+    description: >
+      Copy the scaffold whole from templates/ in the plugin into the project
+      root — CLAUDE.md, README.md, CONTRIBUTING.md, architecture/ with scope/
+      and decisions/ inside it, and scripts/ with the two validators.
+    actor: Agent
+    inputs:
+      - name: declared-depth
+        type: integer
+    produces:
+      - CLAUDE.md
+      - README.md
+      - CONTRIBUTING.md
+      - architecture/
+      - scripts/
+    outputs:
+      - name: scaffold-in-place
+        type: boolean
 
-| The Requester describes | Depth |
-| ----------------------- | ----- |
-| An app, a tool, a site, a service they're building | **1 — Application** |
-| A company, a department, or a service line whose way of working is the deliverable | **2 — Organization** |
-| Several business lines that need to be understood separately | **3 — Enterprise** |
+  - name: make-it-this-project
+    description: >
+      In one pass, so the first commit is coherent: fill CLAUDE.md with the real
+      name, description, layout, commands and the declared depth; write
+      README.md as the project's own front door rather than archreator's with
+      names swapped; decide and record the documentation language; leave
+      CONTRIBUTING.md § Development workflow as its TEMPLATE comment until a
+      stack exists; and keep or delete the optional files deliberately.
+    actor: Agent
+    inputs:
+      - name: scaffold-in-place
+        type: boolean
+      - name: project-description
+        type: string
+    analysis: >
+      The optional files are a judgement, not a default. Keep
+      architecture/scope/open-questions.md only where a stakeholder cannot be
+      consulted synchronously, and architecture/decisions/ only where the
+      project will make enough architecture-significant calls to justify a log.
+      Delete either otherwise; both can come back later. If the documentation
+      language is not English, architecture-document-style requires a
+      stereotype-correspondence table in architecture/README.md so the ArchiMate
+      vocabulary stays traceable.
+    produces:
+      - CLAUDE.md
+      - README.md
+    outputs:
+      - name: placeholders-cleared
+        type: boolean
 
-**Then say it out loud, with the reason and the exit.** This is the whole
-point of the step:
+  - name: set-the-layers-to-the-depth
+    description: >
+      All six layer folders stay at every depth. Set each layer README's table
+      to what exists or to "not started" — an unfilled layer is a known gap, a
+      missing folder is an unknown one. At Depth 1 leave 0_business-design/ and
+      domains/ empty and say so; at Depth 2 domains/ stays empty and discovery
+      fills the canvases; at Depth 3 the enterprise level is modeled first and
+      domains after.
+    actor: Agent
+    inputs:
+      - name: declared-depth
+        type: integer
+    produces:
+      - architecture/
+    outputs:
+      - name: layers-declared
+        type: boolean
 
-> "You're building one application, so I'll treat this as **Depth 1** — a
-> light strategy layer (goals and principles, enough to judge changes
-> against), no business-model canvases, and one approval gate before code.
-> If this turns into modeling how the business works, say so and we'll
-> deepen it — that's a normal change, not a restart."
+  - name: open-the-first-initiative
+    description: >
+      Create scope document 1_*.md in architecture/scope/ and index it in
+      architecture/scope/README.md. Discovery is a full initiative, and this is
+      the project's first — which is why the index is not empty on day one.
+    actor: Agent
+    uses_template: write-scope-document
+    inputs:
+      - name: project-description
+        type: string
+    produces:
+      - architecture/scope/
+    outputs:
+      - name: first-scope-document
+        type: string
 
-Never pick silently. A Requester who is told can correct you in one
-sentence; a Requester who is told nothing finds out three initiatives later.
+  - name: hand-off-to-discovery
+    description: >
+      Hand off by depth, then close the loop: the request that started all this
+      is still unbuilt, so say so and offer to open it as the next initiative.
+    actor: Agent
+    inputs:
+      - name: declared-depth
+        type: integer
+      - name: first-scope-document
+        type: string
 
-**When in doubt, go shallower.** Deepening is a normal initiative;
-unwinding an over-modeled project means throwing away documents the
-Requester already approved.
+hands_off_to:
+  - skill: discover-strategy
+    when: Depth 1 — a light pass over stakeholders, drivers, goals and the Principles that gate every later change.
+    returns: A filled 1_strategy/ approved at Gate 1. Bootstrap is finished; the next change re-enters align-change-through-layers.
+  - skill: discover-business-model
+    when: Depth 2 or 3 — the canvases come first and are approved at Gate 0, before anything is derived from them.
+    returns: Approved canvases, which discover-strategy then derives the strategy layer from at Gate 1.
+  - skill: model-domains
+    when: Depth 3, after the enterprise level is modeled — one charter per business line.
+    returns: A domain per business line, each with its exposed and consumed services.
+  - skill: stack-selection
+    when: No stack is chosen yet and the subject is a small application.
+    returns: A recorded choice in architecture/5_technology/1_technology-services.md.
 
-## Step 2 — Emit the scaffold, then make it this project
+done_when:
+  - CLAUDE.md and README.md contain no <placeholder> markers.
+  - CLAUDE.md declares the modeling depth.
+  - The documentation language is decided and recorded.
+  - The scaffold has been copied out of the plugin's templates/, and the optional files are kept or deleted deliberately.
+  - Every layer README's table says either what exists or "not started".
+  - Scope document 1_*.md exists and is indexed.
+  - python3 scripts/check_links.py and python3 scripts/check_model.py both pass — they came with the scaffold, so every project has them from its first commit.
 
-**First, copy the scaffold** from `templates/` in the plugin into
-the project root. It holds `CLAUDE.md`, `README.md`, `CONTRIBUTING.md`,
-`architecture/` — with `architecture/scope/` and `architecture/decisions/`
-inside it — and `scripts/`, the two validators that keep the model honest. An empty model
-with every layer README in place, and the checks that enforce it. Copy it
-whole; the checklist below replaces the placeholders, and Step 3 sets the
-layers to the declared depth.
+scenarios:
+  - need: "\"I want to build a small tool that reformats our export files.\""
+    context: The repository is a fresh copy of the scaffold; nothing is filled in.
+    action: >
+      Depth 1. Announced as: "You're building one application, so I'll treat
+      this as Depth 1 — a light strategy layer (goals and principles, enough to
+      judge changes against), no business-model canvases, and one approval gate
+      before code. If this turns into modelling how the business works, say so
+      and we'll deepen it — that's a normal change, not a restart." Then hand
+      off to discover-strategy.
+    outcome: >
+      A named project with a declared depth the Requester could have corrected
+      in one sentence, and a first scope document covering the discovery.
+  - need: "\"We're three consultants and I want to document how we actually work.\""
+    context: The subject is the organization itself rather than anything being built.
+    action: >
+      Depth 2 — the way the business works is the deliverable, not a side note.
+      Hand off to discover-business-model for the canvases at Gate 0 before
+      anything is derived from them.
+    outcome: A model whose strategy layer is derived from approved canvases rather than guessed.
 
-The scaffold is the only thing that lands. The method itself stays where the
-plugin installed it, which is why there is nothing of archreator's to delete
-afterwards.
-
-Then, in one pass, so the first commit is coherent:
-
-1. **`CLAUDE.md`** — the real project name and description, the layout, the
-   commands, and the **declared modeling depth** (`align-change-through-layers` Step 1a
-   reads it on every subsequent change). This file is the agent entry point;
-   leaving placeholders in it is what makes later sessions guess.
-2. **`README.md`** — the project's own front door. What it is, who it's for,
-   how to run it. Not archreator's README with names swapped.
-3. **Documentation language** — decide once, note it in `CLAUDE.md`. English
-   is the template's default. If it's another language, `architecture-document-style`
-   requires a stereotype-correspondence table in `architecture/README.md` so the
-   ArchiMate vocabulary stays traceable.
-4. **`CONTRIBUTING.md` § Development workflow** — fill in once a stack
-   exists; leave the TEMPLATE comment until then rather than inventing
-   commands.
-5. **Optional files** — keep `architecture/scope/open-questions.md` only if there's
-   a stakeholder who can't be consulted synchronously; keep
-   `architecture/decisions/` only if the project will make enough
-   architecture-significant calls to justify a log. Delete either otherwise;
-   both can come back later.
-
-## Step 3 — Set the scaffold to the declared depth
-
-All six layer folders stay, at every depth. What changes is their **declared
-state**: a layer the project isn't filling in yet gets "not started" in its
-README table, not a deletion. An unfilled layer is a known gap; a missing
-folder is an unknown one.
-
-- **Depth 1** — leave `0_business-design/` and `domains/` empty and say so.
-- **Depth 2** — `0_business-design/` gets filled by discovery; `domains/`
-  stays empty.
-- **Depth 3** — read `architecture/domains/README.md` and use the
-  `model-domains` skill; the enterprise level is modeled first, domains
-  after.
-
-If no stack is chosen yet and this is a small application, use
-`stack-selection` rather than re-deriving one, and record the choice in
-`architecture/5_technology/1_technology-services.md`.
-
-## Step 4 — Hand off to discovery
-
-Bootstrap does not write the strategy — discovery does, with the Requester,
-against gates. Hand off by depth:
-
-| Depth | Next |
-| ----- | ---- |
-| 1 | `discover-strategy` — a light pass. Stakeholders, drivers, goals, and the Principles that will gate every later change. Ends at **Gate 1** |
-| 2 | `discover-business-model` — the canvases first, **Gate 0**, then `discover-strategy` derives the strategy from them, **Gate 1** |
-| 3 | `discover-business-model` for the enterprise, then `model-domains` per business line |
-
-Discovery is a full initiative: it gets scope document `1_...md` in
-`architecture/scope/`, indexed in `architecture/scope/README.md`, created before its gate.
-That is the project's first initiative and the reason the index isn't empty
-on day one.
-
-When discovery finishes, the request that started all this — "build me X" —
-is still unbuilt. Say so, and offer to open it as the next initiative.
-
-## Done when
-
-- `CLAUDE.md` and `README.md` contain no `<placeholder>` markers, and
-  `CLAUDE.md` declares the modeling depth.
-- The documentation language is decided and recorded.
-- The scaffold has been copied out of the plugin's `templates/` and the optional files
-  are kept or deleted deliberately.
-- Every layer README's table says either what exists or "not started".
-- Scope document `1_...md` exists and is indexed.
-- `python3 scripts/check_links.py` and `python3 scripts/check_model.py`
-  both pass. They came with the scaffold, so every project has them from
-  its first commit.
+anti_patterns:
+  - Inferring the subject or the depth from the repository instead of asking the Requester.
+  - Picking a depth without saying which, why, and how to change it later.
+  - Writing the strategy here. Bootstrap hands off to discovery, which does it with the Requester against gates.
+  - Deleting a layer folder the project is not filling in yet, rather than marking it "not started".
+  - Leaving the Requester's original request unmentioned once discovery finishes, so a docs-only PR reads as the process having failed to build anything.
+```

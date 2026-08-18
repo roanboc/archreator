@@ -302,6 +302,14 @@ def check_graph(known: set[str]) -> list[str]:
                         f"{skill}: step `{step.get('name')}` depends on `{dependency}`, "
                         f"which is not a step in this procedure"
                     )
+        for step in steps:
+            template = step.get("uses_template")
+            # A path is checked by check_body_paths; a bare name is a skill.
+            if isinstance(template, str) and "/" not in template and template not in known:
+                errors.append(
+                    f"{skill}: step `{step.get('name')}` uses template `{template}`, "
+                    f"which is neither a path nor an existing skill"
+                )
         for handoff in parsed.get("hands_off_to") or []:
             if isinstance(handoff, dict):
                 target = handoff.get("skill")
