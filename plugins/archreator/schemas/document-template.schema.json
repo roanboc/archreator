@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roanboc/archreator/schemas/document-template.schema.json",
+  "title": "Document Template",
+  "description": "AIP schema for skills that specify a document rather than a procedure: where the document lives, what sections it carries, the rules its content obeys, and whether it is a historical record whose words may not later change. The output is the subject; any steps involved in producing it are incidental.",
+  "aip": {
+    "spec": "https://github.com/zach-blumenfeld/aip/tree/v0.3a3",
+    "version": "0.1"
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["purpose", "trigger_when", "output", "sections"],
+  "$defs": {
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "description": "The section heading as it appears in the document." },
+        "guidance": { "type": "string", "description": "What belongs in the section, and what does not." },
+        "mandatory": { "type": "boolean", "description": "Optional. False for a section that is kept only when it applies. Defaults to true - a section that is usually dropped is usually not a section." },
+        "records_gate": { "type": "string", "description": "Optional. The gate whose approval this section records. A gate that did not apply is recorded as N/A with its reason rather than being deleted." }
+      }
+    }
+  },
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "description": "What the document is for as a coherent unit of work - what it captures and what it adds beyond general agent knowledge. One short paragraph."
+    },
+    "trigger_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Conditions under which the agent should consider this skill. Mixed granularity expected."
+    },
+    "do_not_use_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Conditions under which a different document, or none, is the right answer."
+    },
+    "realizes_process": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. IDs of the level-2 processes this document belongs to, from the method's process model. Omit when the document is an output specification that no process is accountable for on its own."
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location"],
+      "description": "Where the document lands, and how a reader finds it.",
+      "properties": {
+        "location": { "type": "string", "description": "Path or path pattern for the document, relative to the project root." },
+        "naming": { "type": "string", "description": "Optional. The filename convention, including how the number is allocated where documents are numbered." },
+        "index": { "type": "string", "description": "Optional. The index the document is added to in the same change. A document nothing indexes is a document nobody finds." }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/section" },
+      "minItems": 1,
+      "description": "The document's sections, in the order they appear."
+    },
+    "template_asset": {
+      "type": "string",
+      "description": "Optional. Relative path under assets/ to the fill-in template. Where present it is the source of truth for the document's literal shape, and the sections list is its index."
+    },
+    "immutability": {
+      "type": "string",
+      "description": "Optional. Whether the document is a historical record once merged, and what may still be changed afterwards. Link targets get repaired when files move; the words do not change."
+    },
+    "rules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Rules the content obeys, beyond the shape the sections give it."
+    },
+    "scenarios": {
+      "type": "array",
+      "description": "Optional. Worked examples of the document applied to concrete cases. Documentation, not a runtime decision table.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["need", "action"],
+        "properties": {
+          "need": { "type": "string", "description": "The situation calling for the document." },
+          "context": { "type": "string", "description": "Optional. What preceding investigation surfaced." },
+          "action": { "type": "string", "description": "What was written." },
+          "outcome": { "type": "string", "description": "Optional. The result delivered." }
+        }
+      }
+    },
+    "anti_patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Concrete corrections to mistakes the agent would otherwise make when writing this document."
+    }
+  }
+}

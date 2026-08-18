@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roanboc/archreator/schemas/rulebook.schema.json",
+  "title": "Rulebook",
+  "description": "AIP schema for reference skills that are consulted rather than run: conventions, notation, and decision aids that other skills comply with. Rules carry their rationale and, where one exists, the validator that mechanically enforces them - so a rule left to good intentions is visible as one. Lookup tables are referenced as assets, never typed here.",
+  "aip": {
+    "spec": "https://github.com/zach-blumenfeld/aip/tree/v0.3a3",
+    "version": "0.1"
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["purpose", "trigger_when", "rules"],
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "rule"],
+      "properties": {
+        "id": { "type": "string", "description": "Short kebab-case identifier, unique within this rulebook, so another skill can cite the rule without quoting it." },
+        "rule": { "type": "string", "description": "The rule as an instruction. Imperative, and specific enough to be complied with or not." },
+        "rationale": { "type": "string", "description": "Why the rule exists. A rule whose reason is unwritten is one nobody can judge an exception against." },
+        "applies_to": { "type": "string", "description": "Optional. What the rule governs, where it is narrower than the rulebook's own scope." },
+        "enforced_by": { "type": "string", "description": "Optional. The validator or script that mechanically checks this rule. Its absence is the useful signal: the rule holds only by good intentions, and the corpus can be queried for how many do." },
+        "carve_outs": { "type": "array", "items": { "type": "string" }, "description": "Optional. Cases the rule deliberately does not cover, so a reader can tell an exception from an oversight." }
+      }
+    }
+  },
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "description": "What the rulebook governs as a coherent body of convention - its scope, and what it adds beyond general agent knowledge. One short paragraph."
+    },
+    "trigger_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Conditions under which the agent should consult this rulebook. A rulebook is reached for while doing something else, so these are usually contexts rather than requests."
+    },
+    "do_not_use_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Conditions under which these conventions do not apply, or another rulebook governs instead."
+    },
+    "applies_to": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. The artifacts these rules govern - paths, document kinds, or model layers."
+    },
+    "complied_with_by": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Skills that must comply with this rulebook. A rulebook realizes no process; it is a constraint on the skills that do, and naming them makes that relation queryable rather than implied."
+    },
+    "rules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rule" },
+      "minItems": 1,
+      "description": "The rules themselves."
+    },
+    "tables": {
+      "type": "array",
+      "description": "Optional. Lookup tables the rules depend on, referenced as assets rather than typed here. A table an agent would read at runtime to pick a value belongs in a file that scripts can read too, so that one fact has one place.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "asset"],
+        "properties": {
+          "name": { "type": "string", "description": "What the table holds." },
+          "asset": { "type": "string", "description": "Relative path under assets/ to the data file." },
+          "consumed_by": { "type": "string", "description": "Optional. Scripts or validators that read the same file, which is the reason it is a file." }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "description": "Optional. Supporting documents loaded on demand, so the body stays inside its token budget.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "when_to_load"],
+        "properties": {
+          "path": { "type": "string", "description": "Relative path under references/." },
+          "when_to_load": { "type": "string", "description": "The condition under which the agent should read it. A reference with no stated trigger is either never loaded or always loaded, and both defeat the purpose." }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "description": "Optional. Worked examples applying the rules to concrete cases. Documentation, not a runtime decision table.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["need", "action"],
+        "properties": {
+          "need": { "type": "string", "description": "The situation the rules are applied to." },
+          "context": { "type": "string", "description": "Optional. What preceding investigation surfaced." },
+          "action": { "type": "string", "description": "Which rule was applied, and how." },
+          "outcome": { "type": "string", "description": "Optional. The result." }
+        }
+      }
+    },
+    "anti_patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Concrete corrections to mistakes the agent would otherwise make."
+    }
+  }
+}

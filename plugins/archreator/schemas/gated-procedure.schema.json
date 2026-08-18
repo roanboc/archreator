@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/roanboc/archreator/schemas/gated-procedure.schema.json",
+  "title": "Gated Procedure",
+  "description": "AIP schema for procedures that run under human approval: a graph of steps where named gates stop the work until an accountable person approves, and the approval is recorded. Covers the procedure's place in a levelled process model, the rules holding across all of its steps, what each step produces, and where it hands off to another skill and returns.",
+  "aip": {
+    "spec": "https://github.com/zach-blumenfeld/aip/tree/v0.3a3",
+    "version": "0.1"
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["purpose", "trigger_when", "steps"],
+  "$defs": {
+    "io_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "description": "Identifier for this input or output. A downstream step consumes it by declaring an input of the same name." },
+        "type": { "type": "string", "description": "Short type label from the AIP vocabulary: string, integer, float, boolean, object, or list[*]. Not machine-enforced; detailed checks belong in the backing script." },
+        "nullable": { "type": "boolean", "description": "Optional. True when the value may be absent. Defaults to false." },
+        "description": { "type": "string", "description": "One-line summary of what this carries, so the graph reads without opening the script." }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "approver_role", "presents"],
+      "description": "An approval checkpoint. Its presence is what makes a step stop and wait for a person; a step without one is the agent proceeding on its own judgement.",
+      "properties": {
+        "id": { "type": "string", "description": "The gate's name as the method states it, e.g. 'Gate 2 - Business'. The single source for which gate applies when is the change-alignment skill, not this field." },
+        "approver_role": { "type": "string", "description": "The role that grants approval. A role, never a person.", "enum": ["Requester", "Reviewer"] },
+        "presents": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "What the approver is shown, one entry per document or artifact. An approval granted against a summary is an approval of the summary." },
+        "recorded_in": { "type": "string", "description": "Where the approval is written down. An approval that isn't recorded didn't happen." },
+        "on_changes_requested": { "type": "string", "description": "Which step the procedure returns to when the approver asks for changes." },
+        "not_applicable_when": { "type": "string", "description": "The condition under which this gate does not apply. A gate that didn't apply is recorded as N/A with its reason, never deleted." }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill", "when"],
+      "description": "A switch to another skill that is not an exit: the work continues there and comes back.",
+      "properties": {
+        "skill": { "type": "string", "description": "Name of the skill taking over." },
+        "when": { "type": "string", "description": "The verdict or condition that triggers the handoff." },
+        "returns": { "type": "string", "description": "What comes back, and which step resumes. Omit only when the handoff genuinely ends this procedure." }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description"],
+      "properties": {
+        "name": { "type": "string", "description": "Short kebab-case identifier, unique within this procedure. Other steps reference it via depends_on." },
+        "description": { "type": "string", "description": "What the step does. When the step is script-backed, keep this to a one-line summary; the script is the source of truth for the logic." },
+        "actor": { "type": "string", "description": "Who performs the step. The method's three roles; the Agent may be an AI or a person.", "enum": ["Agent", "Requester", "Reviewer"] },
+        "depends_on": { "type": "array", "items": { "type": "string" }, "description": "Optional. Names of steps that must complete first. Omit for steps that run in list order." },
+        "one_of": { "type": "array", "items": { "type": "string" }, "description": "Optional. Mutually exclusive verdicts or alternatives; the agent reaches exactly one and states it. Use where choosing hinges on judging the input, which is what keeps it out of a script." },
+        "script": { "type": "string", "description": "Optional. Relative path under scripts/ to the code that executes this step. When present, the script is the source of truth for the logic." },
+        "analysis": { "type": "string", "description": "Optional. The judgement the step demands - the criteria applied, not the mechanics. Prose steps only; a script-backed step has none." },
+        "uses_template": { "type": "string", "description": "Optional. Relative path under assets/, or the name of the document-template skill that owns the output's shape." },
+        "produces": { "type": "array", "items": { "type": "string" }, "description": "Optional. Repository paths this step writes or updates. Makes 'which skill writes this document' answerable without reading the body." },
+        "gate": { "$ref": "#/$defs/gate" },
+        "inputs": { "type": "array", "items": { "$ref": "#/$defs/io_item" }, "description": "Optional. What this step consumes - outputs of upstream steps, or values supplied from outside." },
+        "outputs": { "type": "array", "items": { "$ref": "#/$defs/io_item" }, "description": "Optional. What this step produces, consumed downstream by name." }
+      }
+    }
+  },
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "description": "What the procedure encapsulates as a coherent unit of work - the scope it covers and what it adds beyond general agent knowledge. One short paragraph."
+    },
+    "trigger_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Conditions under which the agent should consider this skill. Mixed granularity expected - an immediate invocation trigger and a broader applicability context belong in the same list."
+    },
+    "do_not_use_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Conditions under which this skill is the wrong one, sharpening activation against its neighbours."
+    },
+    "realizes_process": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. IDs of the level-2 processes this skill realizes, from the method's process model. A list, because a skill and a process are cut on different axes and bind many-to-many. The full SIPOC lives once, in the process model; this field references it and never restates it. Omit for a skill that realizes no process."
+    },
+    "applies_at_depth": {
+      "type": "array",
+      "items": { "type": "integer", "enum": [1, 2, 3] },
+      "description": "Optional. Modeling depths at which this procedure applies - 1 Application, 2 Organization, 3 Enterprise. Omit when it applies at all three."
+    },
+    "invariants": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Rules that hold across every step rather than at one of them. A rule repeated into each step is that rule maintained in several places."
+    },
+    "scope_and_approval": {
+      "type": "string",
+      "description": "Optional. Read-only versus write actions, and what the procedure may do without human confirmation. The gates are typed on the steps that carry them; this is the surrounding posture."
+    },
+    "steps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/step" },
+      "minItems": 1,
+      "description": "The steps the agent executes, in list order unless depends_on says otherwise. A step carrying a gate stops until its approver acts."
+    },
+    "hands_off_to": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/handoff" },
+      "description": "Optional. Skills this procedure switches to mid-flight and returns from. Handing off is not an exit."
+    },
+    "done_when": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Checkable conditions that all hold when the procedure is finished."
+    },
+    "integrations": {
+      "type": "array",
+      "description": "Optional. How this procedure composes with other skills or workflows, as freeform prose per partner.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["partner", "body"],
+        "properties": {
+          "partner": { "type": "string", "description": "Name of the partner skill or workflow." },
+          "body": { "type": "string", "description": "How the integration works." }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "description": "Optional. Worked examples showing the procedure applied to concrete cases. Documentation, not a runtime decision table.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["need", "action"],
+        "properties": {
+          "need": { "type": "string", "description": "The situation the procedure is applied to." },
+          "context": { "type": "string", "description": "Optional. What preceding investigation surfaced." },
+          "action": { "type": "string", "description": "The step path taken." },
+          "outcome": { "type": "string", "description": "Optional. The result delivered." }
+        }
+      }
+    },
+    "anti_patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional. Concrete corrections to mistakes the agent would otherwise make."
+    }
+  }
+}
