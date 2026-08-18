@@ -94,7 +94,7 @@ carries at least:
 | Level | Columns beyond ID and name |
 | ----- | -------------------------- |
 | **1** | Category · purpose (one sentence) · owner · composed of |
-| **2** | Purpose · trigger · input · output · owner role · realized by |
+| **2** | Purpose · trigger · supplier · input · output · customer · owner role · realized by |
 | **3** | The level-2 set, plus the sequence — which is what the diagram carries |
 
 No level carries a parent column: `BPROC7.2` names its parent already, and a
@@ -104,6 +104,19 @@ it carries the children's **names**, which the identifiers do not.
 **Purpose is one sentence saying what this turns into what, and for whom.**
 "Manages orders" is a restatement of the name. "Turns a confirmed order into a
 delivered shipment for the customer who placed it" is a definition.
+
+**Supplier and customer are named, not implied.** With them the level-2 row is a
+SIPOC — supplier, input, process, output, customer — and a SIPOC belongs to *each*
+process, never one to the whole map. They cost two columns and they are what turns
+a catalogue into a chain: a process whose supplier is nobody is either triggered
+from outside the organization or missing a predecessor, and a process whose customer
+is nobody produces an output no one consumes. Neither is visible from trigger and
+output alone.
+
+Name the neighbouring process by ID where there is one (`BPROC7.2`), and the
+external party where there is not (`Requester`, `Regulator`). A chain the reader can
+follow by ID is the payoff — and the identifiers already carry the tree, so the
+chain and the hierarchy are readable from the same table.
 
 `realized by` is the grounding rule (`core-architecture-doc-style` § Grounding
 rule) on the organization track: a process is realized by a team, a role, or a
@@ -232,6 +245,8 @@ the fact that this branch was one of the few taken to level 3.
 - The focus table covers every level-2 element, including the undetailed ones.
 - Every identifier extends its parent's — a level-2 process under `BPROC7` is
   `BPROC7.<n>` — and no table carries a parent column beside it.
+- Each level-2 process names a supplier and a customer, not just an input and
+  an output.
 - Each process carries a purpose, a trigger, an output and an owner; each
   capability is a noun and its leaves name what realizes them.
 - The reference model used to seed the capability map is named in the
