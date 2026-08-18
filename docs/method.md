@@ -63,12 +63,13 @@ Approval is granted by the Requester and recorded in the scope document's
 gate that didn't apply gets an `N/A — <why>` row rather than being deleted.
 An approval that isn't recorded didn't happen.
 
-| Gate | When | The Requester approves |
-| ---- | ---- | ----------------------- |
-| **Gate 0 — Business model** | Only when the initiative is modeling an organization | The canvases: Value Proposition per segment, Business Model per product |
-| **Gate 1 — Strategy** | Only when strategy discovery is triggered | The strategy layer and the key business elements discovered with it |
-| **Gate 2 — Business** | Every initiative that changes documented behavior | The changes (or explicit "no change" verdicts) to `1_strategy`, `2_business`, `3_information` |
-| **Gate 3 — Solution design** | Only when the Requester opts in at Gate 2 | The solution architecture and logical application components |
+There are four: **Gate 0 — Business model**, **Gate 1 — Strategy**,
+**Gate 2 — Business**, and **Gate 3 — Solution design**. Which of them applies
+to a given change, and what the Requester is shown at each, is defined in
+exactly one place — the
+[`core-architecture-first-change` skill](../plugins/archreator/skills/core-architecture-first-change/SKILL.md)
+§ The gates. This page names the gates; it does not restate the rule, because a
+second copy is a second thing to drift.
 
 Pure bug fixes that change no documented behavior pass no gates.
 
@@ -78,73 +79,35 @@ How a requirement gets from "someone wants a change" to "merged", and where
 each actor's responsibility starts and ends.
 
 ```mermaid
-flowchart TD
-  subgraph REQ["Requester"]
-    req(["Presents a requirement or reports a problem"])
-    gate0{"Gate 0 — approve the business model?"}
-    gate1{"Gate 1 — approve the strategy?"}
-    gate2{"Gate 2 — approve strategy, business, information?"}
-    gate3{"Gate 3 — approve the solution design?"}
-  end
-
-  subgraph AGENT["Agent (person or AI)"]
-    depth["Confirm modeling depth; at Depth 3, locate the domain"]
-    assess["Assess 1_strategy against the change"]
-    canvases["Operating-model discovery — canvases, docs-only"]
-    discovery["Strategy discovery — question-driven, docs-only"]
-    dscope["Draft scope document"]
-    conflict{"Contradicts an existing Principle?"}
-    bugfix{"Pure bug fix — no documented behavior changes?"}
-    walk23["Align 2_business and 3_information"]
-    scopedoc["Draft scope document"]
-    walk45["Align 4_application and 5_technology"]
-    implement["Implement, keeping EA + scope docs true to the code"]
-    verify["Verify alignment"]
-    openpr["Open PR"]
-    address["Address review feedback"]
-  end
-
-  subgraph REV["Reviewer"]
-    review{"Approve?"}
-  end
-
-  stop[["Stop — surface the conflict to the Requester"]]
+flowchart LR
+  req(["⚇ Requester presents a requirement"])
+  align["⚙ Agent aligns it through the layers"]
+  gates{{"❖ Gates 0–3 — the Requester approves"}}
+  build["⚙ Agent implements, keeping the documents true"]
+  rev(["⚇ Reviewer reads the whole branch"])
   merged(["Merged"])
 
-  req --> depth --> assess
-  assess -->|the subject is an organization| canvases
-  canvases --> dscope --> gate0
-  gate0 -- changes requested --> canvases
-  gate0 -- approved --> discovery
-  assess -->|strategy is placeholders, or the change shifts it| discovery
-  discovery --> dscope
-  dscope --> gate1
-  gate1 -- changes requested --> discovery
-  gate1 -- approved --> verify
-  assess --> conflict
-  conflict -- yes --> stop
-  stop -.->|Requester resolves| req
-  conflict -- no --> bugfix
-  bugfix -- yes --> implement
-  bugfix -- no --> walk23 --> scopedoc --> gate2
-  gate2 -- changes requested --> walk23
-  gate2 -- approved --> walk45
-  walk45 -->|Gate 3 requested| gate3
-  gate3 -- changes requested --> walk45
-  gate3 -- approved --> implement
-  walk45 -->|Gate 3 not requested| implement
-  implement --> verify --> openpr --> review
-  review -- changes requested --> address --> openpr
-  review -- approved --> merged
+  req --> align --> gates
+  gates -->|changes requested| align
+  gates -->|approved| build --> rev
+  rev -->|changes requested| build
+  rev -->|approved| merged
+
+  classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
+  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
+  class req,align,build,rev,merged business
+  class gates implementation
 ```
 
-Every arrow into the Agent subgraph is a decision the agent makes
-explicitly and records — a "no change" verdict on an EA layer, a "pure bug
-fix, no scope document" statement, a gate approval written into the
-Approvals table, an open question logged for the Requester — never a silent
-skip.
+Two loops, and neither can be skipped: the Requester's, which runs before any
+code exists, and the Reviewer's, which runs before any code merges.
 
-The step-by-step version of this same flow lives in the
+Inside the Agent boxes there is branching — a "no change" verdict on a layer,
+a "pure bug fix, no scope document" statement, a conflict with an approved
+Principle that stops the work, an open question logged for the Requester.
+**Every one of those is stated and recorded, never a silent skip.** Drawn out,
+that branching is the levelled process model in
+[`docs/process/`](./process/README.md); written out step by step it is the
 [`core-architecture-first-change` skill](../plugins/archreator/skills/core-architecture-first-change/SKILL.md).
 
 ## Where the model lives

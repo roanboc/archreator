@@ -17,7 +17,7 @@ flattening it into the enterprise's.
 ## The tree
 
 ```
-docs/ea/                          ← the enterprise level
+architecture/                     ← the enterprise level
   0_business-design/              ← the enterprise's canvases
   1_strategy/ … 5_technology/     ← what is true across all domains
   domains/

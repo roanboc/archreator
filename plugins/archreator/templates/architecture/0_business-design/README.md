@@ -136,5 +136,5 @@ flowchart LR
 The canvas blocks are drawn with the Motivation and Strategy fills because
 that is where they land once derived — the customer profile becomes
 motivation elements, the value map becomes strategy elements. The fills come
-from [`docs/ea/README.md` § Notation conventions](../README.md#notation-conventions),
+from [`architecture/README.md` § Notation conventions](../README.md#notation-conventions),
 which stays the single source for the palette.

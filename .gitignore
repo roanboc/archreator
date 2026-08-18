@@ -1,3 +1,10 @@
 # Python bytecode from running the checks in scripts/.
 __pycache__/
 *.pyc
+
+# Agent-local tooling, not repository content: vendored third-party skills,
+# worktrees, local settings. The validators skip these directories too.
+.claude/
+
+# Where CI clones the pinned AIP skill to run its validators.
+.aip/
