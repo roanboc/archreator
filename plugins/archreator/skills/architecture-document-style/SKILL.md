@@ -1,5 +1,5 @@
 ---
-name: core-architecture-doc-style
+name: architecture-document-style
 description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions. Also use when writing or editing any other document in the repository — a README, a docs/ page, a contributing guide — for what a document may contain: its subject rather than its own construction, no version commentary, and where a surviving note goes.
 ---
 
@@ -174,9 +174,9 @@ permanent afterwards.**
 | The element was | Removing it means |
 | --------------- | ----------------- |
 | **Never approved** — added while drafting, before the gate covering its layer | Renumber so the sequence stays continuous. No Retired row, no note explaining the gap. It never existed as far as the model is concerned |
-| **Approved at a gate** | The identifier is retired permanently and never reused, and the retirement is recorded (see `doc-restate-current-state` § The Retired section) |
+| **Approved at a gate** | The identifier is retired permanently and never reused, and the retirement is recorded (see `restate-current-state` § The Retired section) |
 
-Which gate covers which element is `core-architecture-first-change` § The gates:
+Which gate covers which element is `align-change-through-layers` § The gates:
 canvases freeze at Gate 0, the strategy layer at Gate 1, business and
 information at Gate 2. An element added to an already-approved layer by a
 later initiative is draft until *that* initiative's gate.
@@ -199,13 +199,13 @@ resolves, no ID is defined twice, no retired ID reappears as live, and every
 leveled ID has its parent defined. It checks `architecture/` only. Scope
 documents, decision records, and reviews are narrative *about* the model —
 they cite retired elements, illustrate the convention, and are frozen once
-merged (`core-scope-doc`), so a reference check there could never be made to
+merged (`write-scope-document`), so a reference check there could never be made to
 pass. Keep IDs accurate in them anyway; nothing but review will catch a
 mistake.
 
 ### Namespacing across domains
 
-A project modeling multiple domains (see the `discover-domain-modeling` skill and
+A project modeling multiple domains (see the `model-domains` skill and
 `architecture/domains/README.md`) qualifies
 IDs by domain, the way a module path qualifies a symbol:
 
@@ -425,7 +425,7 @@ columns beyond the usual name/description:
 | Escalation path | Who/what it hands off to when it's outside its authority or confidence — a Business Role, not a vague "a human" |
 
 If an initiative changes an AI actor's autonomy level or decision rights,
-that's exactly the kind of call the `doc-decision-record` skill is for.
+that's exactly the kind of call the `record-decision` skill is for.
 
 ## What the document contains: the subject, not its own construction
 
@@ -455,7 +455,7 @@ What goes is the document narrating its own drafting.
 required.** A consolidation — what was merged into what, and how many elements
 each catalogue ended up with — is a modeling decision the Requester approves at
 a gate, so it belongs in the scope document and the gate presentation
-(`discover-operating-model` § Gate 0 already asks for it there). Writing it in
+(`discover-business-model` § Gate 0 already asks for it there). Writing it in
 the layer document as well is a second copy of a fact, which is DRY broken.
 
 ### Two carve-outs
@@ -496,7 +496,7 @@ for.
 - Then one section per element group, each **opening with its diagram**,
   followed by the inventory table, followed by prose.
 - A **Retired** section, only if something approved has been retired
-  (`doc-restate-current-state`).
+  (`restate-current-state`).
 - **Additional notes**, last, and only if there is one — see § What the
   document contains.
 - Prefer tables for element inventories, Mermaid for relationships, and

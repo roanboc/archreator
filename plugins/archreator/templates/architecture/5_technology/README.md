@@ -17,7 +17,7 @@ their runtime nodes_.
 | 2   | [2_deployment.md](./2_deployment.md)                   | Nodes, Artifacts, and the CI/CD deployment pipeline               | How does the build get to where it runs?  |
 
 If no stack has been chosen yet — typical the first time this layer is
-assessed for a new small project — use the `flow-stack-selection` skill for a
+assessed for a new small project — use the `stack-selection` skill for a
 decision framework and concrete defaults (static hosting vs. Supabase +
 Vercel, etc.) before writing `1_technology-services.md`.
 

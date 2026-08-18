@@ -1,11 +1,11 @@
 ---
-name: discover-operating-model
+name: discover-business-model
 description: Use when the initiative is modeling an organization rather than building a single application — a company, a department, or a service line whose operating model is itself the deliverable. Runs a question-driven discovery with the Requester over the Value Proposition Canvas and a Business Model Canvas per product, ending at an explicit business-model approval gate (Gate 0), then hands off to discover-strategy to derive the enterprise architecture from it.
 ---
 
 # Operating model discovery
 
-_Reached from `core-architecture-first-change` Step 1c, or from `core-project-bootstrap` on a
+_Reached from `align-change-through-layers` Step 1c, or from `establish-project` on a
 project whose subject is an organization. `README.md`
 orients a person; `CONTRIBUTING.md` draws where
 this branch sits in the whole flow._
@@ -14,7 +14,7 @@ The company track. When this skill applies, **the product is the
 architecture**: the deliverable is a documented business model and the
 operating model derived from it — no application design, no stack
 decisions, no code. Whatever gets built later is a separate initiative that
-runs the normal `core-architecture-first-change` process and finds the organization
+runs the normal `align-change-through-layers` process and finds the organization
 already modeled.
 
 Use this instead of `discover-strategy` when the thing being modeled is an
@@ -57,7 +57,7 @@ you do:
   fast — a round of questions about pains easily yields twelve. Before
   writing them down, merge the ones that are the same pain felt at different
   severity, or the same job seen from two segments, and give the survivor a
-  per-segment column instead. `core-architecture-doc-style` § Consolidate before you
+  per-segment column instead. `architecture-document-style` § Consolidate before you
   enumerate has the rules. Doing this at the end means renumbering
   everything; doing it per round means the canvas is always readable, and the
   Requester is reviewing a model rather than a transcript.
@@ -108,7 +108,7 @@ Ask, at theme 7 and again while deriving, whether any activity or role is
 performed or assisted by an **AI system** — and if so at what autonomy
 level, with what decision rights, and escalating to which role. An
 organization that has AI in its delivery or in its products should say so
-in the model rather than leave it implicit (see `core-architecture-doc-style`'s actor
+in the model rather than leave it implicit (see `architecture-document-style`'s actor
 notation).
 
 ## Before the gate — create the scope document
@@ -118,7 +118,7 @@ document like any other. **Create it before presenting Gate 0**, not after:
 the Requester should approve against a concrete document, and the approval
 needs somewhere to be recorded the moment it is granted.
 
-Using the `core-scope-doc` skill, add the next-numbered file to `architecture/scope/` and
+Using the `write-scope-document` skill, add the next-numbered file to `architecture/scope/` and
 its row to `architecture/scope/README.md`'s index. One document covers this whole
 track — the same file gains its Gate 1 row when `discover-strategy` takes
 over, so don't open a second one at the handoff.
@@ -133,7 +133,7 @@ flag the gaps — do not quietly present an unfit canvas.
 Then present one compact summary — segments, their jobs, the sharpest
 pains and gains, the products, and for each product the blocks that
 distinguish it (revenue, channels, dominant cost) — with **full branch links
-to each canvas document** (`core-architecture-first-change` § Show the Requester what they
+to each canvas document** (`align-change-through-layers` § Show the Requester what they
 are approving), and ask explicitly for approval of the business model.
 
 Name the consolidation in the summary: how many elements each catalogue
@@ -145,7 +145,7 @@ list.
 **In the summary and the scope document — not in the canvas.** The canvas
 describes the business; how many elements it took to describe it is a fact
 about the modeling, and belongs where the decision is recorded
-(`core-architecture-doc-style` § What the document contains).
+(`architecture-document-style` § What the document contains).
 
 Record the approval in the scope document's Approvals table (who, when,
 what was shown). If changes are requested, revise and present again.
@@ -166,7 +166,7 @@ discovered directly with the Requester. That handoff ends at **Gate 1 —
 Strategy**, as usual.
 
 The capabilities and processes derived there are **leveled**, and how far down
-they go is decided rather than assumed — `discover-process-and-capability-levels` holds
+they go is decided rather than assumed — `process-and-capability-levels` holds
 that, including the rule that pays for this whole track's breadth: levels 1
 and 2 complete, level 3 only where one of the Pains on the canvas you just had
 approved justifies it. The Pains are what make that rule usable, which is why
@@ -182,12 +182,12 @@ A docs-only initiative:
   product, plus the revenue and cost tables keyed to element IDs;
 - the strategy and key business layers derived from them via
   `discover-strategy`;
-- a scope document (`core-scope-doc` skill) whose EA-alignment table records the
+- a scope document (`write-scope-document` skill) whose EA-alignment table records the
   impact on layers 0–2 and an explicit "not started" verdict for the rest,
   and whose Approvals table records **both Gate 0 and Gate 1**;
 - open questions logged for everything adopted-but-unconfirmed.
 
-Follow `core-architecture-doc-style` for numbering, element IDs, ArchiMate-on-Mermaid
+Follow `architecture-document-style` for numbering, element IDs, ArchiMate-on-Mermaid
 notation, and the grounding rule. The grounding rule reads differently on
 this track: an organization's business processes are realized by people and
 procedures, not source files, so name the team, role, or written procedure

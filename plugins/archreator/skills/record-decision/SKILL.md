@@ -1,17 +1,17 @@
 ---
-name: doc-decision-record
+name: record-decision
 description: Use when a choice needs a durable rationale but doesn't rise to a full scope document — architecture-significant calls like an AI actor's autonomy level, a library/pattern choice, or a tradeoff a future reader will ask "why did we do it this way?" about.
 ---
 
 # Recording a decision
 
-A scope document (`core-scope-doc` skill) captures an entire initiative's EA
+A scope document (`write-scope-document` skill) captures an entire initiative's EA
 alignment; a decision record captures **one call**, in isolation, in the
 place future readers will actually look for it. Reach for this when the
 call is smaller than an initiative but too consequential to leave as an
 unrecorded judgment buried in a PR thread — the clearest recurring case in
 this template is an **AI actor's autonomy level or decision rights**
-(`core-architecture-doc-style`'s actor notation): "why is this role co-pilot and not fully
+(`architecture-document-style`'s actor notation): "why is this role co-pilot and not fully
 autonomous?" deserves a citable answer, not just a table cell.
 
 ## When to use this instead of (or alongside) a scope document
@@ -27,7 +27,7 @@ autonomous?" deserves a citable answer, not just a table cell.
   structure, but too consequential to leave unrecorded.
 
 If the change also adds or changes EA elements, write the scope document
-first (`core-architecture-first-change`) — the decision record supplements it, linked
+first (`align-change-through-layers`) — the decision record supplements it, linked
 from the EA-alignment table row it explains; it never replaces it.
 
 ## Where decisions live

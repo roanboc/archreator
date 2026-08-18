@@ -1,6 +1,6 @@
 ---
-name: core-scope-doc
-description: Use when creating or updating a project scope document in architecture/scope/ — one per initiative, drafted before the pre-implementation gate as step 3 of the core-architecture-first-change process, and the durable record of gate approvals.
+name: write-scope-document
+description: Use when creating or updating a project scope document in architecture/scope/ — one per initiative, drafted before the pre-implementation gate as step 3 of the align-change-through-layers process, and the durable record of gate approvals.
 ---
 
 # Writing a scope document
@@ -79,7 +79,7 @@ _[← Scope index](./README.md) · [EA home](../README.md)_
   explicit "no change" — silence is not a decision.
 - **Every gate gets a row, including the ones that didn't apply.** Which
   gate applies to which initiative is defined in exactly one place —
-  `core-architecture-first-change` § The gates — and the shortest form of it is:
+  `align-change-through-layers` § The gates — and the shortest form of it is:
   **Gate 2 applies to every initiative that changes documented behavior,
   which is every initiative that will produce code; a docs-only initiative
   passes Gate 0 and/or Gate 1 instead.** A gate that didn't apply is written
@@ -88,7 +88,7 @@ _[← Scope index](./README.md) · [EA home](../README.md)_
   scope document is a historical record, so the table shows who accepted
   what, durably. **"What was approved" names the documents that were put in
   front of the Requester**, not the topic in the abstract — the gate
-  presentation links them in full (`core-architecture-first-change` § Show the Requester
+  presentation links them in full (`align-change-through-layers` § Show the Requester
   what they are approving), and the row is what says which ones they were.
 - **Deliverables are concrete artifacts** (file paths, page/screen names),
   never vague ("improved UX").
@@ -98,7 +98,7 @@ _[← Scope index](./README.md) · [EA home](../README.md)_
   this document and in the gate presentation drawn from it. An architecture
   document that also states it is a second copy of the fact, and describes its
   own construction rather than its subject
-  (`core-architecture-doc-style` § What the document contains).
+  (`architecture-document-style` § What the document contains).
 - **Out of scope is as important as in scope**: it is where the next
   initiative's backlog lives. Pair each meaningful exclusion with a gap
   note.
@@ -126,7 +126,7 @@ confirmation. If the project keeps one:
 - **Every new (or resolved) "Open questions" row is mirrored there** in the
   same change — it is the consolidated index reviewed between initiatives
   so questions don't get lost in old scope documents.
-- Step 0 of `core-architecture-first-change` reads it before starting a new change.
+- Step 0 of `align-change-through-layers` reads it before starting a new change.
 
 Projects without an external stakeholder to reconcile with can skip this
 file entirely — the "Open questions" section within each scope document is

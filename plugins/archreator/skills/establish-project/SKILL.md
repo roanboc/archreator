@@ -1,5 +1,5 @@
 ---
-name: core-project-bootstrap
+name: establish-project
 description: Use when a project has the archreator method available but no model yet — there is no architecture/ folder, CLAUDE.md or README.md still contain placeholder markers, architecture/ holds only layer READMEs, or the user says they just installed the plugin, cloned or generated the repository and wants to start. Emits the scaffold, walks the first-commit checklist, assesses and announces the modeling depth, and hands off to the right discovery track. Not needed once CLAUDE.md declares a depth.
 ---
 
@@ -12,7 +12,7 @@ leads into._
 This skill is the bridge between an installed method and a modeled project:
 it **emits the scaffold**, turns it into *this* project, declares how deeply
 the project intends to model itself, and hands off to discovery. Everything
-after that is the normal `core-architecture-first-change` process — there is no separate
+after that is the normal `align-change-through-layers` process — there is no separate
 "template mode" to graduate out of.
 
 The scaffold ships beside the skills, at `templates/` inside the plugin. Nothing is inherited by cloning, so nothing has to be pruned
@@ -20,7 +20,7 @@ afterwards: the project gets exactly the empty model, and the method stays
 where it was installed.
 
 **Run this before anything else on a fresh project.** An agent that skips
-straight to `core-architecture-first-change` will find placeholder strategy, trigger
+straight to `align-change-through-layers` will find placeholder strategy, trigger
 discovery, and produce a strategy layer for a project that still has no
 name, no declared language, and no declared depth.
 
@@ -75,13 +75,13 @@ afterwards.
 Then, in one pass, so the first commit is coherent:
 
 1. **`CLAUDE.md`** — the real project name and description, the layout, the
-   commands, and the **declared modeling depth** (`core-architecture-first-change` Step 1a
+   commands, and the **declared modeling depth** (`align-change-through-layers` Step 1a
    reads it on every subsequent change). This file is the agent entry point;
    leaving placeholders in it is what makes later sessions guess.
 2. **`README.md`** — the project's own front door. What it is, who it's for,
    how to run it. Not archreator's README with names swapped.
 3. **Documentation language** — decide once, note it in `CLAUDE.md`. English
-   is the template's default. If it's another language, `core-architecture-doc-style`
+   is the template's default. If it's another language, `architecture-document-style`
    requires a stereotype-correspondence table in `architecture/README.md` so the
    ArchiMate vocabulary stays traceable.
 4. **`CONTRIBUTING.md` § Development workflow** — fill in once a stack
@@ -104,11 +104,11 @@ folder is an unknown one.
 - **Depth 2** — `0_business-design/` gets filled by discovery; `domains/`
   stays empty.
 - **Depth 3** — read `architecture/domains/README.md` and use the
-  `discover-domain-modeling` skill; the enterprise level is modeled first, domains
+  `model-domains` skill; the enterprise level is modeled first, domains
   after.
 
 If no stack is chosen yet and this is a small application, use
-`flow-stack-selection` rather than re-deriving one, and record the choice in
+`stack-selection` rather than re-deriving one, and record the choice in
 `architecture/5_technology/1_technology-services.md`.
 
 ## Step 4 — Hand off to discovery
@@ -119,8 +119,8 @@ against gates. Hand off by depth:
 | Depth | Next |
 | ----- | ---- |
 | 1 | `discover-strategy` — a light pass. Stakeholders, drivers, goals, and the Principles that will gate every later change. Ends at **Gate 1** |
-| 2 | `discover-operating-model` — the canvases first, **Gate 0**, then `discover-strategy` derives the strategy from them, **Gate 1** |
-| 3 | `discover-operating-model` for the enterprise, then `discover-domain-modeling` per business line |
+| 2 | `discover-business-model` — the canvases first, **Gate 0**, then `discover-strategy` derives the strategy from them, **Gate 1** |
+| 3 | `discover-business-model` for the enterprise, then `model-domains` per business line |
 
 Discovery is a full initiative: it gets scope document `1_...md` in
 `architecture/scope/`, indexed in `architecture/scope/README.md`, created before its gate.

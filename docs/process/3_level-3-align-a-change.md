@@ -62,5 +62,5 @@ to `BPROC1.2` or `BPROC1.3` and comes back, which is why the arrow leaves rather
 than ends.
 
 The step-by-step form of this diagram is the
-[`core-architecture-first-change` skill](../../plugins/archreator/skills/core-architecture-first-change/SKILL.md);
+[`align-change-through-layers` skill](../../plugins/archreator/skills/align-change-through-layers/SKILL.md);
 this page says where the steps sit, not what they say.

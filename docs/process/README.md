@@ -28,7 +28,7 @@ only, and the focus table below says why.
 **Identifiers carry their parent.** `BPROC2.1` is a level-2 process whose parent is
 the macro process `BPROC2`. The depth of the number is the level, so a reader who
 meets an ID anywhere in the repository can place it without a lookup — the rule is
-[`core-architecture-doc-style`](../../plugins/archreator/skills/core-architecture-doc-style/SKILL.md)
+[`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
 § Levels number hierarchically, and this model is the first thing in the repository
 to use it.
 
@@ -95,7 +95,7 @@ flowchart TD
 | `BPROC4` | Evaluation | Learn from the engagement | Turns what the method failed to cover into proposals, before the memory of it evaporates | `BPROC4.1` |
 
 The four bands are the classification
-[`process-and-capability-levels`](../../plugins/archreator/skills/discover-process-and-capability-levels/SKILL.md)
+[`process-and-capability-levels`](../../plugins/archreator/skills/process-and-capability-levels/SKILL.md)
 prescribes. They carry no identifiers, because nothing realizes a band.
 
 **The Strategic band is empty, and that is a scope statement rather than a gap.**

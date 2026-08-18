@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check that element-ID references in this repo resolve to real elements.
 
-`core-architecture-doc-style` gives every element an ID (`G1`, `CAP3`, `SALES.BSVC3`) and
+`architecture-document-style` gives every element an ID (`G1`, `CAP3`, `SALES.BSVC3`) and
 says an ID is assigned once and never reused, so that a stale reference
 fails loudly rather than silently pointing at something else. Nothing
 enforced that until this script: `check_links.py` verifies that a *link*
@@ -24,7 +24,7 @@ An ID can carry two dot-separated qualifiers and they mean different things,
 so this script reads outwards from the type prefix: upper-case segments
 *before* it are the domain path (`SALES.BSVC3`), numeric segments *after* it
 are the catalogue's levels (`BSVC3.1`). Only the first makes a reference
-qualified — `core-architecture-doc-style` § Levels number hierarchically.
+qualified — `architecture-document-style` § Levels number hierarchically.
 
 A **project** is the directory containing an `architecture/` folder, so IDs are
 scoped per project and two projects may each own a `G1`.
@@ -93,7 +93,7 @@ FENCE_RE = re.compile(
     re.DOTALL | re.MULTILINE,
 )
 
-# Element-ID prefixes, from `core-architecture-doc-style` § Element IDs. Longest first so
+# Element-ID prefixes, from `architecture-document-style` § Element IDs. Longest first so
 # that alternation matches `BSVC` before `B`-prefixed neighbours.
 PREFIXES = sorted(
     [

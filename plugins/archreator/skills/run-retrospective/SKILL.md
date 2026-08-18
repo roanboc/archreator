@@ -1,5 +1,5 @@
 ---
-name: flow-engagement-retrospective
+name: run-retrospective
 description: Use at the end of a completed initiative or client engagement, once the work has merged or been delivered — captures what the method failed to tell you to do and what you did instead, as a pattern note that can become a method improvement. Not a project retrospective about what went well; specifically about the gap between the method and the judgement the work actually needed.
 ---
 
@@ -69,7 +69,7 @@ finding to make a note look worthwhile.**
 
 **Proposals become initiatives, not edits.** This skill never edits a skill,
 a layer document, or a rule. It writes a note whose last section proposes,
-and each proposal is picked up as its own change through `core-architecture-first-change`
+and each proposal is picked up as its own change through `align-change-through-layers`
 with the gates that implies. That is what keeps a human between the learning
 and the method.
 
@@ -142,5 +142,5 @@ initiative that week. When it appears in one, wait — the generalization test
 in question 3 is unreliable on a single case, and encoding a one-off makes
 the method worse rather than better.
 
-Follow `core-architecture-doc-style` for numbering and links, and `core-scope-doc` for any
+Follow `architecture-document-style` for numbering and links, and `write-scope-document` for any
 initiative a proposal becomes.

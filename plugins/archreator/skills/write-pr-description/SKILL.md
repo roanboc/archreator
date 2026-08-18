@@ -1,5 +1,5 @@
 ---
-name: core-pr-description
+name: write-pr-description
 description: Use when creating or updating a pull request in this repo. The PR body must follow the template at .github/pull_request_template.md and cover every change on the branch (diff against main) — never just the latest commit.
 ---
 
@@ -27,7 +27,7 @@ change fills the same body — a pure bug fix included. Fill every section:
 - **Summary** — what the branch delivers, 2–4 sentences.
 - **Scope document** — link the `architecture/scope/N_*.md` file(s) this branch adds
   or updates. Its Approvals table must already record the gates the change
-  required (Gate 2 at minimum — see `core-architecture-first-change`); an empty table
+  required (Gate 2 at minimum — see `align-change-through-layers`); an empty table
   means the branch isn't ready for review. A pure bug fix states "no scope
   document" with a reason — what broke, the root cause, and the fix.
 - **EA layers touched** — copy the verdicts from the scope document's

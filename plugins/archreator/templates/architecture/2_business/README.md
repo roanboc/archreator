@@ -28,7 +28,7 @@ named pain justifies detailing. Past roughly fifteen elements in a level the
 file becomes a folder of the same name with one document per level.
 **Identifiers carry the level** — `BPROC7`, then `BPROC7.2`, then
 `BPROC7.2.1` — so no table needs a parent column. The
-`discover-process-and-capability-levels` skill holds the categories, the level
+`process-and-capability-levels` skill holds the categories, the level
 definitions, the description each level carries, and the focus table that
 records which branches were deliberately left at level 2 — that table is what
 separates a scoped model from an unfinished one.
@@ -53,11 +53,11 @@ them.
 
 `1_business-actors-and-roles.md` states each actor's **kind** — human, AI,
 or hybrid — and, for AI/hybrid actors, its autonomy level, decision
-rights, and escalation path (see the `core-architecture-doc-style` skill's actor
+rights, and escalation path (see the `architecture-document-style` skill's actor
 notation). This is where an AI system's role **in the business being
 modeled** gets stated explicitly — not just its role in how this repo is
 developed (see `CONTRIBUTING.md`). If an initiative changes one of those
-values, consider a `doc-decision-record` alongside the scope document.
+values, consider a `record-decision` alongside the scope document.
 
 ## Layer view
 

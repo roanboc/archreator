@@ -1,11 +1,11 @@
 ---
-name: discover-domain-modeling
+name: model-domains
 description: Use when an organization's model is large enough to split into business lines or domains, when adding a new domain to an existing enterprise model, or when a change crosses a domain boundary. Covers the split test, writing a domain charter, namespaced element IDs, and the federation rule that governs cross-domain contracts. Not needed for a project modeling a single application or a single organization.
 ---
 
 # Modeling an organization as domains
 
-_Reached from `core-architecture-first-change` Step 1b, or when a Requester asks to model a
+_Reached from `align-change-through-layers` Step 1b, or when a Requester asks to model a
 business line. The structure this skill produces is described in
 `architecture/domains/README.md`;
 `README.md` orients a person._
@@ -42,7 +42,7 @@ own customers, own economics, own decision rights — so I'd model Advisory
 as a domain" is a sentence the Requester can disagree with. Silently
 restructuring the tree is not.
 
-**Splitting is a business-layer change.** It goes through `core-architecture-first-change`
+**Splitting is a business-layer change.** It goes through `align-change-through-layers`
 like anything else: a scope document, and Gate 2 before the folders move.
 
 ## Step 2 — Write the charter
@@ -88,7 +88,7 @@ The interface. Other domains may reference these IDs and nothing else.
 ## Operated by
 
 <Human / AI / Hybrid>, at <autonomy level>. <Decision rights and escalation
-path, per `core-architecture-doc-style` § Actors — applied to the domain as a whole.>
+path, per `architecture-document-style` § Actors — applied to the domain as a whole.>
 ```
 
 Two rules that decide whether the charter is worth anything:
@@ -102,7 +102,7 @@ Two rules that decide whether the charter is worth anything:
 
 ## Step 3 — Fill in the domain's layers
 
-Same numbered layers as the enterprise, same skills (`core-architecture-doc-style` for
+Same numbered layers as the enterprise, same skills (`architecture-document-style` for
 notation, `discover-strategy` if the domain needs its own strategy). Fill
 in only the layers the domain has something to say about and mark the rest
 "not started".
@@ -120,7 +120,7 @@ customer segment the enterprise canvases don't already cover.
 Bare inside the owning domain (`BSVC3`), qualified from outside
 (`SALES.BSVC3`), bare at the enterprise level (`G1`). Numbering is per
 prefix **per domain** — two domains may each own a `BSVC3`. Full rules in
-`core-architecture-doc-style` § Element IDs.
+`architecture-document-style` § Element IDs.
 
 The qualifier is the folder name upper-cased, so renaming a domain folder
 rewrites every inbound reference. Pick the name once, and prefer the
@@ -149,5 +149,5 @@ Domain boundaries are what make parallel work by multiple agents safe — one
 agent per domain, coordinating only on charters. That isn't set up here.
 Doing it well needs a queryable projection of the model so agents can see
 each other's work, which the backlog sequences after the graph exporter
-(`flow-stack-selection` § The model as data). Until then, work domains one at a
+(`stack-selection` § The model as data). Until then, work domains one at a
 time.

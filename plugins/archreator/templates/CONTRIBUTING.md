@@ -1,7 +1,7 @@
 # Contributing
 
 <!--
-  TEMPLATE — `core-project-bootstrap` fills in § Development workflow once a
+  TEMPLATE — `establish-project` fills in § Development workflow once a
   stack exists. Keep § Actors: the skills reference it by name, and a project
   whose roles are unwritten has gates nobody can grant.
 -->
@@ -22,7 +22,7 @@ order, against the same documents.
 | **Agent** | An AI agent (or a person) | Aligns the change through the architecture layers, stops at each gate for the Requester's approval, writes a scope document, implements, and opens a PR |
 | **Reviewer** | \<who reviews and merges> | Reviews and merges. Nothing ships without a human approving it |
 
-Which gate applies when is defined once, in the `core-architecture-first-change`
+Which gate applies when is defined once, in the `align-change-through-layers`
 skill — this page does not restate it. An approval that isn't recorded didn't
 happen: every gate is written into the scope document's Approvals table, with
 who approved, when, and what was shown.
@@ -30,7 +30,7 @@ who approved, when, and what was shown.
 ## Development workflow
 
 <!--
-  TEMPLATE — `core-project-bootstrap` leaves this until the project has a
+  TEMPLATE — `establish-project` leaves this until the project has a
   stack. Fill in the real lint/typecheck/test/build commands then, rather
   than inventing them now.
 -->

@@ -37,13 +37,13 @@ then sub-capabilities only where a named pain justifies going further, with
 identifiers that carry the level (`CAP1`, `CAP1.2`, `CAP1.2.3`) — and
 the map is drafted from a reference model for the organization's industry
 that the Requester then confirms item by item, rather than recalled from a
-blank page. The `discover-process-and-capability-levels` skill holds both, including
+blank page. The `process-and-capability-levels` skill holds both, including
 the safeguard that keeps a reference model a proposal instead of an answer.
 It is also where the distinction that keeps this document honest is written
 down: capabilities are nouns, processes are verbs.
 
 `1_motivation.md` is where **Principles** live — the constraints that a
-proposed change is checked against in step 1 of `core-architecture-first-change` before
+proposed change is checked against in step 1 of `align-change-through-layers` before
 anything else. Keep them few, load-bearing, and testable (e.g. "role
 determines access", not "be secure").
 

@@ -1,5 +1,5 @@
 ---
-name: flow-story-sharding
+name: shard-stories
 description: Use when a scope document's work package is too large or long-running to implement in one sitting — shard it into small, self-contained story files so each can be picked up (by an agent or a person) without re-deriving the whole plan from the EA docs and scope document each time.
 ---
 
@@ -16,7 +16,7 @@ its own text plus the specific links it cites, nothing else.
 
 Not every work package needs this — a work package small enough to finish
 in one sitting doesn't need splitting. Shard when a work package (from
-`core-scope-doc`'s template) has any of:
+`write-scope-document`'s template) has any of:
 
 - Multiple genuinely independent deliverables that could be built, reviewed,
   or merged separately.
@@ -71,7 +71,7 @@ glossary terms this story needs, e.g.:>
   history will carry it.
 - **Links, not restated rationale.** A story points at the EA document that
   owns a rule or a component; it does not re-explain the rule. Rationale
-  still lives in exactly one place (`core-architecture-doc-style`'s rule).
+  still lives in exactly one place (`architecture-document-style`'s rule).
 - **Treat each story as a clean handoff.** When you pick up a story — in a
   new session, a fresh agent context, or after a long gap — read only the
   story and what it links to before starting; you shouldn't need the whole

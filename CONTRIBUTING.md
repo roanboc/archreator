@@ -81,14 +81,14 @@ needed one), gives every affected surface a verdict, and describes the whole
 branch (`git diff main...HEAD`), not just the latest commit. For a pure bug
 fix, say what broke, the root cause, the fix, and any regression coverage.
 
-The [`core-pr-description`](./plugins/archreator/skills/core-pr-description/SKILL.md)
+The [`write-pr-description`](./plugins/archreator/skills/write-pr-description/SKILL.md)
 skill keeps the body current.
 
 ## Conventions
 
 - **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - **Documentation language:** English.
-- **Skill folder names** carry a role prefix (`core-*`, `discover-*`,
-  `doc-*`, `flow-*`) — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
+- **Skill folder names** are a verb and an object for a skill you run, a noun
+  phrase for one you consult — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
 - **A merged scope document is a historical record** — link targets get
   repaired when files move; the words never change (`RULE6`).

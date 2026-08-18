@@ -14,14 +14,14 @@ Works on any Claude Code project, existing or new:
 /plugin install archreator@archreator
 ```
 
-Then just say what you want to model. The `core-project-bootstrap` skill
+Then just say what you want to model. The `establish-project` skill
 takes it from there: it asks what the project is, picks a modeling depth,
 tells you which one it picked, and writes the scaffold into your
 repository.
 
 **The plugin ships two things.** The skills — which do not touch your files
 until you ask them to — and the scaffold under
-[`plugins/archreator/templates/`](../plugins/archreator/templates/README.md), which `core-project-bootstrap`
+[`plugins/archreator/templates/`](../plugins/archreator/templates/README.md), which `establish-project`
 copies into your project. Nothing else lands.
 
 ## Option B — clone the scaffold directly
@@ -45,7 +45,7 @@ them stays in sync automatically:
 - **The skills**, at `plugins/archreator/skills/*/`, come with the plugin and update
   when you run `/plugin update archreator@archreator`.
 - **The scaffold**, at `plugins/archreator/templates/`, is copied *once* into your project by
-  `core-project-bootstrap`. It does not update afterwards, because a
+  `establish-project`. It does not update afterwards, because a
   scaffold that changed under a project would rewrite documents the
   Requester already approved.
 - **The scaffold's own scripts** in `plugins/archreator/templates/scripts/` land in your

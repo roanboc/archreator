@@ -5,12 +5,12 @@ _[← Scope index](./README.md) · [EA home](../README.md)_
 <!--
   OPTIONAL — delete this file if the project has no external stakeholder
   or governing body whose confirmation can't be obtained synchronously.
-  See "Optional: the open-questions log" in the core-scope-doc skill.
+  See "Optional: the open-questions log" in the write-scope-document skill.
 -->
 
 A living index of every adopted interpretation, across all scope documents,
 that still needs confirmation from the project's stakeholder(s). Reviewed
-as step 0 of `core-architecture-first-change` before starting a new initiative, and kept in
+as step 0 of `align-change-through-layers` before starting a new initiative, and kept in
 sync with each scope document's own "Open questions" section.
 
 ## Pending

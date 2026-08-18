@@ -9,11 +9,11 @@ worked examples of the method applied to real organizations live in
 
 | Path | What it holds |
 | ---- | ------------- |
-| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, grouped by role — `core-*` (the spine), `discover-*` (question-driven), `doc-*` (state management), `flow-*` (situational) |
+| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, ordered by the process each realizes, with the three rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
 | [`plugins/archreator/schemas/`](./plugins/archreator/schemas/README.md) | The three AIP schemas skill bodies validate against — `gated-procedure`, `document-template`, `rulebook` |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus itself. It stays out of `templates/` because a downstream project has no skills |
-| [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `core-project-bootstrap` |
+| [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `establish-project` |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works and how to adopt it. The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The one-page public site, deployed to <https://roanboc.github.io/archreator/> |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
@@ -22,7 +22,7 @@ worked examples of the method applied to real organizations live in
 
 **Strategy and business architecture are validated before any other layer,
 and the Requester approves at explicit gates before development.** A change
-to a project *using* archreator runs through `core-architecture-first-change`;
+to a project *using* archreator runs through `align-change-through-layers`;
 a change to *the method itself* is recorded in the sibling repository
 [`architecture-archreator`](https://github.com/roanboc/architecture-archreator),
 whose `product-archreator/architecture/scope/` is where the method's own

@@ -2,13 +2,13 @@
 
 **This project has not been bootstrapped yet.** It is a fresh copy of the
 [archreator](./README.md) template: the method works, the model is empty.
-Run the `core-project-bootstrap` skill before anything else — it names the
+Run the `establish-project` skill before anything else — it names the
 project, declares the modeling depth, prunes what wasn't inherited, and
 hands off to discovery. Everything in this file below the rule is a
 placeholder it will replace.
 
 <!--
-  TEMPLATE — core-project-bootstrap replaces this comment block, the line above,
+  TEMPLATE — establish-project replaces this comment block, the line above,
   and the placeholders below. Keep "The rule that governs everything else"
   and "Modeling depth"; they are the whole point of this template.
 -->
@@ -25,7 +25,7 @@ alignment and the gates, but still keep the docs true.
 
 ## Modeling depth
 
-**Declared depth: _not yet declared_** — `core-project-bootstrap` sets this.
+**Declared depth: _not yet declared_** — `establish-project` sets this.
 
 The six layers describe a weekend app and a twenty-business-line company
 alike; the depth says how much of them gets filled in and which gates apply
@@ -38,24 +38,25 @@ normal initiative, decided by the Requester.
 ## The skills
 
 Claude Code surfaces these from their `description:` frontmatter; you don't
-invoke them by name in normal use.
+invoke them by name in normal use. They are listed in the order they are
+used in, with the three rulebooks — consulted rather than run — at the end.
 
 | Skill | Reach for it when |
 | ----- | ----------------- |
-| `core-project-bootstrap` | A project from the template hasn't been set up yet — start here |
-| `core-architecture-first-change` | Any requirement change. **The spine** — defines the gates and the order |
-| `core-architecture-doc-style` | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
-| `core-scope-doc` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
-| `core-pr-description` | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
-| `discover-operating-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |
+| `establish-project` | A project from the template hasn't been set up yet — start here |
+| `discover-business-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |
 | `discover-strategy` | The strategy is unfilled or the change shifts it (Gate 1) |
-| `discover-process-and-capability-levels` | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
-| `discover-domain-modeling` | The organization is large enough to split into business lines, or a change crosses a domain boundary |
-| `doc-restate-current-state` | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
-| `doc-decision-record` | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
-| `flow-story-sharding` | A work package is too large to finish in one sitting |
-| `flow-stack-selection` | No technology stack chosen yet on a small application |
-| `flow-engagement-retrospective` | An initiative or engagement just finished — capture what the method didn't cover before it evaporates |
+| `model-domains` | The organization is large enough to split into business lines, or a change crosses a domain boundary |
+| `align-change-through-layers` | Any requirement change. **The spine** — defines the gates and the order |
+| `write-scope-document` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
+| `shard-stories` | A work package is too large to finish in one sitting |
+| `write-pr-description` | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
+| `restate-current-state` | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
+| `record-decision` | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
+| `run-retrospective` | An initiative or engagement just finished — capture what the method didn't cover before it evaporates |
+| `architecture-document-style` | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
+| `process-and-capability-levels` | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
+| `stack-selection` | No technology stack chosen yet on a small application |
 
 ## Layout
 
@@ -101,4 +102,4 @@ Both must be green before pushing.
 
 - Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - Documentation language: **English** (change during bootstrap; see
-  `core-architecture-doc-style`).
+  `architecture-document-style`).

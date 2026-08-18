@@ -19,11 +19,12 @@ a named escalation path.
 
 ## What this repository is
 
-- **Fourteen Claude Code skills** — the method itself, grouped by role
-  under [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md).
+- **Fourteen Claude Code skills** — the method itself, under
+  [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md), each
+  named for the process it realizes.
 - **A scaffold** — the empty project a new adopter starts from, at
   [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md), copied by the
-  `core-project-bootstrap` skill.
+  `establish-project` skill.
 - **A plugin package** — the manifests at
   [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json)
   and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
@@ -41,7 +42,7 @@ No application code. No worked models — those live in the sibling repo.
 /plugin install archreator@archreator
 ```
 
-Then just say what you want to model — the `core-project-bootstrap` skill
+Then just say what you want to model — the `establish-project` skill
 takes it from there.
 
 Prefer to clone the scaffold instead of installing? Both routes, and what
@@ -55,7 +56,7 @@ each one lands in your project, are in
 | **What the method does and how** | [`docs/method.md`](./docs/method.md) — the process, the layers, the loop |
 | **The method as a levelled process model** | [`docs/process/`](./docs/process/README.md) — the macro map, a SIPOC per process, and which skill realizes each |
 | **Which standards it rests on** | [`docs/standards-alignment.md`](./docs/standards-alignment.md) — every coined term, the established name behind it, and where the method is genuinely its own |
-| **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, grouped by role |
+| **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, in the order they are used |
 | **How to adopt it in your own project** | [`docs/adopting.md`](./docs/adopting.md) |
 | **What a filled-in model looks like** | [`architecture-archreator`](https://github.com/roanboc/architecture-archreator) |
 | **How to contribute to this repository** | [`CONTRIBUTING.md`](./CONTRIBUTING.md) |

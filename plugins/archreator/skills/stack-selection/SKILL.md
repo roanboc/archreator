@@ -1,5 +1,5 @@
 ---
-name: flow-stack-selection
+name: stack-selection
 description: Use when bootstrapping a new project from this template and no technology stack has been chosen yet, or when assessing architecture/5_technology/ for a small application. Gives a decision framework and concrete default recommendations for small/solo apps, rather than re-deriving the choice from scratch each time.
 ---
 
@@ -53,7 +53,7 @@ nothing to secure, patch, or pay to keep running.
 | **Database + auth + row-level access control** | **Supabase** (managed Postgres, built-in Auth, Row-Level Security policies enforced by the database itself rather than application code, generous free tier) | **Firebase** if the data is naturally document-shaped/NoSQL and you want faster prototyping over relational integrity; **PlanetScale/Neon** if you specifically want just a Postgres/MySQL database with no bundled auth (e.g. you already have an auth provider) |
 | **Auth only** (already have a database, or the DB choice has no bundled auth) | **Auth.js (NextAuth)** if self-hosting is fine and the framework is Next.js | **Clerk** for the fastest setup and best out-of-box UI components, at the cost of a third-party dependency and its own free-tier limits |
 | **App hosting / deploy** | **Vercel** for Next.js (zero-config, preview deployments per PR, generous free tier) | **Netlify** as a framework-agnostic equivalent; **Cloudflare Pages** for the cheapest/fastest option at real scale or if going all-in on the Workers ecosystem |
-| **CI** | **GitHub Actions** (already assumed by this template's `core-pr-description` and `5_technology/2_deployment.md` conventions) | — |
+| **CI** | **GitHub Actions** (already assumed by this template's `write-pr-description` and `5_technology/2_deployment.md` conventions) | — |
 
 **Reference combination** for "typical small app with users and real
 data": **Next.js + Vercel + Supabase**. Vercel handles hosting/CI/CD via
@@ -74,7 +74,7 @@ section answers is what, if anything, should be derived from it.
 `grep` traverses it, and an agent reads Markdown natively — there is no
 parsing gap to close for the reader the model is written for. A derived
 store would be a second representation that can fall behind the first, which
-is the drift `core-architecture-doc-style`'s one-fact-one-place rule exists to prevent.
+is the drift `architecture-document-style`'s one-fact-one-place rule exists to prevent.
 
 What *is* needed is **validation**, and that needs a parse, not a store.
 `scripts/check_model.py` builds the graph in memory, checks that every
@@ -86,7 +86,7 @@ three initiatives ago, and will reason confidently from the stale reference.
 ### When a persisted projection becomes worth it
 
 Reach for one only when one of these is actually true — and record the call
-with a `doc-decision-record`:
+with a `record-decision`:
 
 | Trigger | Why it changes the answer |
 | ------- | ------------------------- |
@@ -107,7 +107,7 @@ CREATE TABLE edges(src TEXT, dst TEXT, rel TEXT);  -- realizes, serves, …
 ```
 
 The projection is regenerated, never hand-edited, and `check_model.py`
-already extracts what it would need — element IDs (`core-architecture-doc-style` § Element
+already extracts what it would need — element IDs (`architecture-document-style` § Element
 IDs) are what make it mechanical rather than a parsing exercise, which is
 the reason to use them consistently from the first document.
 

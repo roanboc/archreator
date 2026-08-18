@@ -1,11 +1,11 @@
 ---
 name: discover-strategy
-description: Use when the core-architecture-first-change process finds that a change needs a new or significantly revised strategy — the strategy layer still contains template placeholders (first real initiative of a project created from the template), or the change adds/modifies a Stakeholder, Driver, Goal, or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Gate 1) before anything else is built.
+description: Use when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer still contains template placeholders (first real initiative of a project created from the template), or the change adds/modifies a Stakeholder, Driver, Goal, or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Gate 1) before anything else is built.
 ---
 
 # Strategy discovery
 
-_Reached from `core-architecture-first-change` Step 1c. `README.md`
+_Reached from `align-change-through-layers` Step 1c. `README.md`
 orients a person; `CONTRIBUTING.md` draws where
 this branch sits in the whole flow._
 
@@ -14,7 +14,7 @@ no application design, no stack decisions. The deliverables are the
 strategy layer, the key business elements it implies, and a scope document
 recording the Requester's **Gate 1 — Strategy** approval. Implementation —
 whatever request originally triggered the discovery — follows as a
-separate initiative through the normal `core-architecture-first-change` process, which
+separate initiative through the normal `align-change-through-layers` process, which
 will then find the strategy filled in and current.
 
 ## How to run the conversation
@@ -23,18 +23,18 @@ will then find the strategy filled in and current.
   Requester answer, an existing document, or observable fact — never from
   what a project like this "usually" wants. What the Requester can't
   answer yet is marked **"Pending — future initiative"** or logged as an
-  open question with the interpretation you adopted (see `core-scope-doc`).
+  open question with the interpretation you adopted (see `write-scope-document`).
 - **Small batches, one theme at a time.** Ask 3–5 questions per round,
   following the theme order below. Phrase them in the Requester's business
   language, not in ArchiMate vocabulary — "who would be upset if this
   didn't exist?" beats "enumerate your stakeholders".
 - **Write as you go, and show it back.** After each round, update the
-  affected documents (per `core-architecture-doc-style`) and reflect a short summary back
+  affected documents (per `architecture-document-style`) and reflect a short summary back
   to the Requester so misunderstandings surface immediately — the docs are
   the record of the conversation, not a transcript kept elsewhere.
 - **Consolidate as you go.** Goals that differ only in wording are one goal;
   a capability named twice at different granularity is one capability. Merge
-  per round rather than at the end, per `core-architecture-doc-style` § Consolidate before
+  per round rather than at the end, per `architecture-document-style` § Consolidate before
   you enumerate. A strategy layer with six load-bearing goals is worth more
   than one with twenty, because every later initiative gets checked against
   it and nobody checks against twenty.
@@ -75,7 +75,7 @@ elements underneath.
 4. **Capabilities and resources** (`2_capabilities-and-resources.md`):
    What must the project be able to do to reach those goals? With what —
    people, systems, data, budget — and what is missing today? **On an
-   organization, this theme runs through `discover-process-and-capability-levels`**:
+   organization, this theme runs through `process-and-capability-levels`**:
    capabilities are leveled, seeded from a named industry reference as a
    proposal the Requester confirms, and detailed below level 2 only where a
    pain justifies it. Asking an organization to recall its capabilities from
@@ -85,16 +85,16 @@ elements underneath.
    each stage?
 6. **Key business elements** (`architecture/2_business/`): Who are the actors
    and roles — and is any role performed or assisted by an AI, at what
-   autonomy level and decision rights (`core-architecture-doc-style`'s actor notation)?
+   autonomy level and decision rights (`architecture-document-style`'s actor notation)?
    What core services are offered, what main business objects are handled,
    and which terms and rules came up repeatedly (they seed the glossary
    and rules table)? On an organization, ask what process map already exists —
    a quality management system often holds a correct level 1 — and shape what
-   you find with `discover-process-and-capability-levels`.
+   you find with `process-and-capability-levels`.
 
 Theme 6 discovers the **key** business elements — enough for the strategy
 to be judged coherent and for Gate 1 to mean something. The full business
-and information alignment still happens per initiative in `core-architecture-first-change`
+and information alignment still happens per initiative in `align-change-through-layers`
 steps 2–4.
 
 ## Deliverables
@@ -103,7 +103,7 @@ A docs-only initiative:
 
 - `architecture/1_strategy/` filled in (or revised), and the key business
   elements captured in `architecture/2_business/`;
-- a scope document (`core-scope-doc` skill) whose EA-alignment table records
+- a scope document (`write-scope-document` skill) whose EA-alignment table records
   the impact on layers 1–2 and an explicit "not started" / "no change"
   verdict for the rest, and whose Approvals table records Gate 1;
 - open questions logged for everything adopted-but-unconfirmed.
@@ -115,12 +115,12 @@ document like any other. **Create it before presenting Gate 1**, not after:
 the Requester should approve against a concrete document, and the approval
 needs somewhere to be recorded the moment it is granted.
 
-Using the `core-scope-doc` skill, add the next-numbered file to `architecture/scope/`
+Using the `write-scope-document` skill, add the next-numbered file to `architecture/scope/`
 and its row to `architecture/scope/README.md`'s index. On this track the EA
 alignment table records the impact on layers 1–2 with an explicit "not
 started" verdict for the rest, and the Approvals table carries a Gate 1 row
 plus `N/A` rows for the gates that don't apply (Gate 2 and Gate 3 always;
-Gate 0 unless `discover-operating-model` handed off to you, in which case
+Gate 0 unless `discover-business-model` handed off to you, in which case
 it is already recorded).
 
 ## Gate 1 — Strategy approval
@@ -128,7 +128,7 @@ it is already recorded).
 When the themes are exhausted (or the Requester's answers are), present
 one compact summary — stakeholders, drivers, goals, principles, value
 stream, key business elements — with **full branch links to each document
-behind it** (`core-architecture-first-change` § Show the Requester what they are approving),
+behind it** (`align-change-through-layers` § Show the Requester what they are approving),
 and ask explicitly for approval of the strategy. Record the approval in the
 scope document's Approvals table (who, when, what was shown). Only after
 Gate 1 is granted may an implementation initiative build on this strategy;

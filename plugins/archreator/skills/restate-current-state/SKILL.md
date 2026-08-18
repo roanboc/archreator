@@ -1,5 +1,5 @@
 ---
-name: doc-restate-current-state
+name: restate-current-state
 description: Use when the model has accumulated history that obscures what is true now — shipped work still marked "Pending", superseded elements still listed as live, resolved open questions still in the pending table, decision records that no longer bind, or a Requester asking "what does this actually look like today?". Compacts the current-state documents so only live elements remain, without rewriting the immutable record of how they got there.
 ---
 
@@ -37,7 +37,7 @@ the evidence that a gate was passed against different information.
 moves a file, a merged document's links stop resolving. Repair the path and
 leave every word alone, link text included. A dangling link makes the record
 less usable without making it more truthful — fixing the path preserves the
-history, and changing a claim would rewrite it. See `core-scope-doc` § Rules.
+history, and changing a claim would rewrite it. See `write-scope-document` § Rules.
 
 **An approved element's ID is never reused.** A retired element's ID stays
 retired. If you find yourself wanting to reassign `BSVC3` because the old one
@@ -46,7 +46,7 @@ something else.
 
 The rule starts at the gate, not at first writing — an element removed before
 it was ever approved is renumbered out of the sequence and leaves nothing
-behind (`core-architecture-doc-style` § Never-reused starts at the gate). By the
+behind (`architecture-document-style` § Never-reused starts at the gate). By the
 time this skill runs, everything in the model has been through a gate, so in
 practice restatement only ever meets permanent identifiers.
 
@@ -87,7 +87,7 @@ Work through the model and collect, without changing anything yet:
 7. **The document narrating its own construction.** Sentences about what the
    source material held, what was consolidated into what, why identifiers
    moved, which initiative the document is new as of, or an empty Retired
-   section. `core-architecture-doc-style` § What the document contains has the test
+   section. `architecture-document-style` § What the document contains has the test
    and the worked examples; a restatement is the natural pass to apply it,
    because this is a document reading as its own history rather than as a
    description of today.
@@ -117,7 +117,7 @@ corrective in the current-state documents, and leaves history alone.**
 nothing does not have one.** Not an empty table, not a "None" line — an
 absent section says "nothing retired here" more clearly than a sentence
 saying so, and a sentence saying so is the version commentary
-`core-architecture-doc-style` § No version commentary forbids.
+`architecture-document-style` § No version commentary forbids.
 
 Each layer document that retires anything gains a short section at the end:
 
@@ -146,7 +146,7 @@ record; move them out and say so in one line.
 ## Step 3 — Record it as an initiative
 
 Restating is a change to the model, so it gets a scope document like
-anything else (`core-scope-doc` skill), with:
+anything else (`write-scope-document` skill), with:
 
 - an EA-alignment table naming every layer touched, and "no change" for the
   rest;
@@ -188,4 +188,4 @@ anything else (`core-scope-doc` skill), with:
 - **It does not change what the model asserts about the world** — only
   whether the model still describes today. If restating reveals the
   architecture should be different, that is the *next* initiative, through
-  `core-architecture-first-change`, with its own gates.
+  `align-change-through-layers`, with its own gates.
