@@ -58,10 +58,11 @@ flowchart LR
 
 Glyph, shape and colour follow
 [`architecture/README.md` § Notation conventions](../../plugins/archreator/templates/architecture/README.md#notation-conventions),
-which stays the single source. The **approval gate** is this model's own addition: a
-gate is not an ArchiMate element type, and drawing it as an ordinary decision rhombus
-— which is how it was drawn until now — hides the one distinction that matters most
-here. An agent decision continues the flow. A gate stops it until a person acts.
+which stays the single source. The **approval gate** has no ArchiMate element type, so
+it takes a shape of its own here. As an ordinary decision rhombus it is
+indistinguishable from a verdict the agent reaches alone, and that is the distinction
+which matters most on this page: an agent decision continues the flow, a gate stops it
+until a person acts.
 
 ## The macro process map
 

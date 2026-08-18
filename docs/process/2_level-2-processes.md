@@ -7,8 +7,6 @@ by` is the [grounding rule](../../plugins/archreator/skills/core-architecture-do
 on the method's own track — a process here is realized by a written procedure, and a
 skill is a written procedure.
 
-Skill names in the last column are the ones that ship today.
-
 ## `BPROC1` — Establish the architecture model
 
 | ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |

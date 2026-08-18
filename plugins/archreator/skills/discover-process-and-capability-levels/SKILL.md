@@ -98,7 +98,7 @@ carries at least:
 | **3** | The level-2 set, plus the sequence — which is what the diagram carries |
 
 No level carries a parent column: `BPROC7.2` names its parent already, and a
-column repeating it is `P3` broken inside a row. `composed of` stays, because
+column repeating it is DRY broken inside a row. `composed of` stays, because
 it carries the children's **names**, which the identifiers do not.
 
 **Purpose is one sentence saying what this turns into what, and for whom.**

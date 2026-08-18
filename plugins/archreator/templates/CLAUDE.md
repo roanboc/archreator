@@ -44,7 +44,7 @@ invoke them by name in normal use.
 | ----- | ----------------- |
 | `core-project-bootstrap` | A project from the template hasn't been set up yet — start here |
 | `core-architecture-first-change` | Any requirement change. **The spine**: it defines the gates and the order |
-| `core-architecture-doc-style` | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule |
+| `core-architecture-doc-style` | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
 | `core-scope-doc` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
 | `core-pr-description` | Opening or updating a PR — the body covers the whole branch, not the latest commit |
 | `discover-operating-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |

@@ -37,7 +37,7 @@ Always in play. Together they define the method.
 | ----- | ----------------- |
 | [`core-project-bootstrap`](./core-project-bootstrap/SKILL.md) | A project from the template hasn't been set up yet — start here |
 | [`core-architecture-first-change`](./core-architecture-first-change/SKILL.md) | Any requirement change. **The spine** — defines the gates and the order |
-| [`core-architecture-doc-style`](./core-architecture-doc-style/SKILL.md) | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule |
+| [`core-architecture-doc-style`](./core-architecture-doc-style/SKILL.md) | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
 | [`core-scope-doc`](./core-scope-doc/SKILL.md) | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
 | [`core-pr-description`](./core-pr-description/SKILL.md) | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
 
