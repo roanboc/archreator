@@ -21,7 +21,7 @@ converted skill names would stop being checked by anything.
 This script covers the skills, and lives outside `templates/` because a
 downstream project has no skills to check.
 
-Four things are checked:
+Five things are checked:
 
 - **Section markers** - every `<skill>` § `<Section>` reference names a skill
   that exists and a heading it actually has.
@@ -30,6 +30,12 @@ Four things are checked:
   own `realizes_process` agrees with the model.
 - **Body paths** - `script`, `template_asset`, `references` and `tables`
   entries in a converted skill resolve to files in that skill's folder.
+- **Graph integrity** - inside a converted body, step names are unique,
+  `depends_on` names a step that exists, and `hands_off_to` names a real skill.
+- **Schema binding** - the schema bundled in a skill's `source/` is the same
+  file as the canonical one under `schemas/`, and the frontmatter `schemaId`
+  matches its `$id`. AIP requires the bundle so a skill is self-contained;
+  nothing in AIP notices when the copy drifts from the original.
 - **Catalogue agreement** - the skill table in `skills/README.md` and its
   deliberate copy in `templates/CLAUDE.md` carry the same rows.
 
@@ -44,6 +50,7 @@ Exit code is 0 when everything resolves, 1 otherwise.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -66,6 +73,7 @@ SKILLS_DIR = REPO_ROOT / "plugins" / "archreator" / "skills"
 PROCESS_DIR = REPO_ROOT / "docs" / "process"
 CATALOGUE = SKILLS_DIR / "README.md"
 CATALOGUE_COPY = REPO_ROOT / "plugins" / "archreator" / "templates" / "CLAUDE.md"
+SCHEMAS_DIR = REPO_ROOT / "plugins" / "archreator" / "schemas"
 
 # A fenced block, anchored and matched on fence length so a fence containing a
 # fence does not close early. Same rule as the two shipped validators.
@@ -275,6 +283,72 @@ def check_body_paths(known: set[str]) -> list[str]:
     return errors
 
 
+def check_graph(known: set[str]) -> list[str]:
+    """Inside a converted body, the references between steps actually resolve."""
+    errors: list[str] = []
+    for skill in sorted(known):
+        parsed = body_yaml(SKILLS_DIR / skill / "SKILL.md")
+        if not parsed or parsed.get("__unparsed__"):
+            continue
+        steps = [s for s in (parsed.get("steps") or []) if isinstance(s, dict)]
+        names = [s.get("name") for s in steps if isinstance(s.get("name"), str)]
+        for name in sorted({n for n in names if names.count(n) > 1}):
+            errors.append(f"{skill}: two steps are both named `{name}`")
+        known_steps = set(names)
+        for step in steps:
+            for dependency in step.get("depends_on") or []:
+                if dependency not in known_steps:
+                    errors.append(
+                        f"{skill}: step `{step.get('name')}` depends on `{dependency}`, "
+                        f"which is not a step in this procedure"
+                    )
+        for handoff in parsed.get("hands_off_to") or []:
+            if isinstance(handoff, dict):
+                target = handoff.get("skill")
+                if isinstance(target, str) and target not in known:
+                    errors.append(f"{skill}: hands off to `{target}`, which does not exist")
+    return errors
+
+
+def check_schema_binding(known: set[str]) -> list[str]:
+    """A skill's bundled schema is the canonical one, and its id matches."""
+    errors: list[str] = []
+    canonical = {}
+    if SCHEMAS_DIR.is_dir():
+        for path in SCHEMAS_DIR.glob("*.schema.json"):
+            try:
+                canonical[json.loads(path.read_text(encoding="utf-8"))["$id"]] = path
+            except (ValueError, KeyError):
+                errors.append(f"schemas/{path.name}: not readable as a schema with an $id")
+
+    for skill in sorted(known):
+        skill_md = SKILLS_DIR / skill / "SKILL.md"
+        match = FRONTMATTER_RE.match(skill_md.read_text(encoding="utf-8"))
+        if not match:
+            continue
+        declared = re.search(r"^\s*schemaId:\s*(\S+)\s*$", match.group(1), re.M)
+        source = SKILLS_DIR / skill / "source"
+        if not declared:
+            if source.is_dir():
+                errors.append(f"{skill}: has a source/ directory but declares no metadata.aip.schemaId")
+            continue
+        schema_id = declared.group(1).strip("\"'")
+        if schema_id not in canonical:
+            errors.append(f"{skill}: schemaId `{schema_id}` matches no schema under schemas/")
+            continue
+        bundled = list(source.glob("*.schema.json")) if source.is_dir() else []
+        if not bundled:
+            errors.append(f"{skill}: declares a schemaId but bundles no schema in source/")
+            continue
+        original = canonical[schema_id].read_text(encoding="utf-8")
+        for copy in bundled:
+            if copy.read_text(encoding="utf-8") != original:
+                errors.append(
+                    f"{skill}: source/{copy.name} has drifted from schemas/{canonical[schema_id].name}"
+                )
+    return errors
+
+
 def catalogue_rows(path: Path) -> dict[str, str]:
     if not path.is_file():
         return {}
@@ -317,6 +391,8 @@ def main() -> int:
         ("section markers", check_section_markers(known)),
         ("process binding", check_process_binding(known)),
         ("body paths", check_body_paths(known)),
+        ("graph integrity", check_graph(known)),
+        ("schema binding", check_schema_binding(known)),
         ("catalogue", check_catalogue(known)),
     ]:
         if errors:
@@ -329,7 +405,8 @@ def main() -> int:
             print(f"  {line}")
         return 1
 
-    print(f"{len(known)} skills: section markers, process binding, paths and catalogue all resolve.")
+    print(f"{len(known)} skills: section markers, process binding, paths, graph, "
+          f"schema binding and catalogue all resolve.")
     return 0
 
 

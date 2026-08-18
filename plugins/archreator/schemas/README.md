@@ -50,5 +50,7 @@ expected spec version from their own sibling `SKILL.md`, so the whole release
 is checked out rather than the scripts alone — cherry-picking makes the
 version check pass without doing anything.
 
-The bundled copy of a schema inside a skill's `source/` is what that skill
-validates against, and it is the same file as the one here.
+AIP requires each skill to bundle its schema in `source/` so the skill is
+self-contained. Nothing in AIP notices when that copy drifts from the original,
+so [`check_skills.py`](../scripts/check_skills.py) compares them and checks that
+the frontmatter `schemaId` matches the `$id` it claims.
