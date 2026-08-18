@@ -37,19 +37,40 @@ Pure bug fixes skip the gates, per the method's own rule.
 
 ## Working locally
 
-Both validators must be green before pushing; CI runs the same:
+All three validators must be green before pushing; CI runs the same:
 
 ```bash
 python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve
+python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 
-The scripts live under `plugins/archreator/templates/` because they ship with the scaffold —
-the same scripts land in every project the method emits. Running them from
-the root of this repository is a smoke test: since there is no
-`architecture/` folder here, `check_model.py` reports the scaffold as
-having no elements and passes trivially, while `check_links.py` checks the
-docs, the scaffold, and the site.
+The first two live under `plugins/archreator/templates/` because they ship with
+the scaffold — the same scripts land in every project the method emits. Running
+them from the root of this repository is a smoke test: since there is no
+`architecture/` folder here, `check_model.py` reports the scaffold as having no
+elements and passes trivially, while `check_links.py` checks the docs, the
+scaffold, and the site.
+
+`check_skills.py` sits outside `templates/` because a downstream project has no
+skills to check. It reads the process model in [`docs/process/`](./docs/process/README.md)
+and the skill bodies, and needs PyYAML only once those bodies are YAML — use
+`uv run` in place of `python3` where it is not installed.
+
+Skills and schemas are also validated against the pinned
+[AIP](https://github.com/zach-blumenfeld/aip) release, which CI checks out into
+`.aip/`. To run those locally, clone the same release and point the validators
+at your working copy:
+
+```bash
+git clone --depth 1 --branch v0.3a3 https://github.com/zach-blumenfeld/aip .aip
+uv run .aip/scripts/validate_schema.py plugins/archreator/schemas/gated-procedure.schema.json
+uv run .aip/scripts/validate.py plugins/archreator/skills/<a-converted-skill>
+```
+
+Clone the release whole rather than copying `scripts/` out of it: the
+validators read their sibling `SKILL.md` to derive the expected spec version,
+and without it that check passes without doing anything.
 
 ## Pull requests
 

@@ -1,0 +1,99 @@
+name: Skills check
+
+on:
+  pull_request:
+    paths:
+      - "plugins/archreator/skills/**"
+      - "plugins/archreator/schemas/**"
+      - "plugins/archreator/scripts/**"
+      - "plugins/archreator/templates/CLAUDE.md"
+      - "docs/process/**"
+      - ".github/workflows/skills-check.yml"
+  push:
+    branches: [main]
+    paths:
+      - "plugins/archreator/skills/**"
+      - "plugins/archreator/schemas/**"
+      - "plugins/archreator/scripts/**"
+      - "plugins/archreator/templates/CLAUDE.md"
+      - "docs/process/**"
+      - ".github/workflows/skills-check.yml"
+  schedule:
+    # Monday morning. AIP is an alpha spec whose version string is a literal in
+    # every schema and every converted skill, so an upstream release breaks all
+    # of them at once. Better to find out on a Monday than mid-review.
+    - cron: "0 7 * * 1"
+
+# The AIP release this repository's schemas and skills declare. Pinned rather
+# than tracked, because `metadata.aip.spec` must equal the installed version
+# exactly. The whole repository is checked out, not just scripts/ — the
+# validators read their sibling SKILL.md to derive the expected spec URL, and
+# cherry-picking makes that check pass silently instead of doing its job.
+env:
+  AIP_REF: v0.3a3
+
+jobs:
+  check-skills:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Check the skill corpus
+        run: uv run plugins/archreator/scripts/check_skills.py
+
+      - name: Check out the pinned AIP release
+        uses: actions/checkout@v4
+        with:
+          repository: zach-blumenfeld/aip
+          ref: ${{ env.AIP_REF }}
+          path: .aip
+
+      - name: Validate the schemas
+        run: |
+          for schema in plugins/archreator/schemas/*.schema.json; do
+            uv run .aip/scripts/validate_schema.py "$schema"
+          done
+
+      - name: Validate the converted skills
+        # A skill with no source/ has not been converted yet. Skipping those is
+        # what lets the corpus be converted in waves rather than all at once.
+        run: |
+          converted=0
+          for skill in plugins/archreator/skills/*/; do
+            if [ -d "${skill}source" ]; then
+              uv run .aip/scripts/validate.py "$skill"
+              converted=$((converted + 1))
+            fi
+          done
+          echo "$converted skill(s) validated against their bundled schema."
+
+  aip-upstream-drift:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Check out AIP main
+        uses: actions/checkout@v4
+        with:
+          repository: zach-blumenfeld/aip
+          ref: main
+          path: .aip
+
+      - name: Validate the schemas against AIP main
+        run: |
+          for schema in plugins/archreator/schemas/*.schema.json; do
+            uv run .aip/scripts/validate_schema.py "$schema"
+          done
+
+      - name: Validate the converted skills against AIP main
+        run: |
+          for skill in plugins/archreator/skills/*/; do
+            if [ -d "${skill}source" ]; then
+              uv run .aip/scripts/validate.py "$skill"
+            fi
+          done

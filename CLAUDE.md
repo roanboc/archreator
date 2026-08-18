@@ -11,6 +11,8 @@ worked examples of the method applied to real organizations live in
 | ---- | ------------- |
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, grouped by role — `core-*` (the spine), `discover-*` (question-driven), `doc-*` (state management), `flow-*` (situational) |
 | [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
+| [`plugins/archreator/schemas/`](./plugins/archreator/schemas/README.md) | The three AIP schemas skill bodies validate against — `gated-procedure`, `document-template`, `rulebook` |
+| [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus itself. It stays out of `templates/` because a downstream project has no skills |
 | [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `core-project-bootstrap` |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works and how to adopt it. The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The one-page public site, deployed to <https://roanboc.github.io/archreator/> |
@@ -42,10 +44,15 @@ platforms are additive — each adds a manifest, none forks the method.
 ```bash
 python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve, per project
+python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 
-Both must be green before pushing; CI runs the same on the scaffold as any
-downstream project runs on its own model.
+All three must be green before pushing. The first two run on the scaffold here
+exactly as a downstream project runs them on its own model; the third has no
+downstream counterpart.
+
+`check_skills.py` needs PyYAML only once skills carry YAML bodies. Run it with
+`uv run` instead of `python3` where that is not installed.
 
 ## Conventions
 
