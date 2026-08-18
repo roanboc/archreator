@@ -318,6 +318,6 @@ someone restarts it, so don't leave that to chance.
 ## Step 8 — PR description
 
 When opening (or updating) the pull request, use the `core-pr-description`
-skill: it picks the right template (default, or
-`.github/PULL_REQUEST_TEMPLATE/bugfix.md` for a pure bug fix) and covers
-the whole branch (`main...HEAD`), not just the latest commit.
+skill: it fills `.github/pull_request_template.md` — the one template every
+change uses, a pure bug fix included — and covers the whole branch
+(`main...HEAD`), not just the latest commit.
