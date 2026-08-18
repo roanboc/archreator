@@ -49,7 +49,7 @@ _[← Decisions index](./README.md)_
 **Status:** Proposed | Accepted | Superseded by [decision <m>](./<m>_*.md)
 **Date:** <YYYY-MM-DD>
 **Touches:** <link the EA document/row this decision explains, e.g.
-[2_business/1_business-actors-and-roles.md#support-triage-agent](../ea/2_business/1_business-actors-and-roles.md#support-triage-agent)>
+[2_business/1_business-actors-and-roles.md#support-triage-agent](../2_business/1_business-actors-and-roles.md#support-triage-agent)>
 
 ## Context
 

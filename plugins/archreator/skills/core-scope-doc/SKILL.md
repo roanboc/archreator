@@ -14,7 +14,7 @@ index table in `architecture/scope/README.md`, and add the new document to it).
 ```markdown
 # Project Scope — <Initiative Name>
 
-_[← Scope index](./README.md) · [EA home](../ea/README.md)_
+_[← Scope index](./README.md) · [EA home](../README.md)_
 
 **ArchiMate viewpoint:** Implementation & Migration.
 **Delivered as:** <branch and/or PR reference>.
