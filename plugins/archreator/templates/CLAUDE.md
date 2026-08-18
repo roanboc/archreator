@@ -43,10 +43,10 @@ invoke them by name in normal use.
 | Skill | Reach for it when |
 | ----- | ----------------- |
 | `core-project-bootstrap` | A project from the template hasn't been set up yet — start here |
-| `core-architecture-first-change` | Any requirement change. **The spine**: it defines the gates and the order |
+| `core-architecture-first-change` | Any requirement change. **The spine** — defines the gates and the order |
 | `core-architecture-doc-style` | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
 | `core-scope-doc` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
-| `core-pr-description` | Opening or updating a PR — the body covers the whole branch, not the latest commit |
+| `core-pr-description` | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
 | `discover-operating-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |
 | `discover-strategy` | The strategy is unfilled or the change shifts it (Gate 1) |
 | `discover-process-and-capability-levels` | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
