@@ -1,6 +1,6 @@
 ---
 name: core-architecture-doc-style
-description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions for this repo's documentation.
+description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions. Also use when writing or editing any other document in the repository — a README, a docs/ page, a contributing guide — for what a document may contain: its subject rather than its own construction, no version commentary, and where a surviving note goes.
 ---
 
 # EA documentation style
@@ -429,9 +429,16 @@ that's exactly the kind of call the `doc-decision-record` skill is for.
 
 ## What the document contains: the subject, not its own construction
 
-**Every sentence in an architecture document is either about the subject or
-about the act of modeling it. The first belongs here; the second belongs in
-the scope document.**
+**Every sentence in a document is either about its subject or about the act of
+writing it. The first belongs in the document; the second belongs in the scope
+document.**
+
+**This governs every document in the repository, not only those under
+`architecture/`** — a README, a page under `docs/`, a process model, a
+contributing guide. A layer document is the common case and the examples below
+are drawn from one, but nothing in the rule is specific to architecture. A
+reference page that narrates which of its entries were added last is doing the
+same thing as a layer document narrating its own drafting.
 
 | Stays — it is about the subject | Goes — it is about making the document |
 | ------------------------------- | -------------------------------------- |
