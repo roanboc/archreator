@@ -105,10 +105,9 @@ flowchart TD
   class g2b implementation
 ```
 
-The two children share a band and nothing else — they answer different triggers and
-never hand off to one another. Reported rather than padded: the count is what it is,
-and inventing a sibling to reach a target would put an element in the model that
-nothing realizes.
+The two children share a band and nothing else. They answer different triggers, run
+independently, and never hand off to one another, which is why the band has no
+internal sequence.
 
 ## `BPROC4` — Learn from the engagement
 

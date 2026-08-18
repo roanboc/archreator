@@ -4,8 +4,7 @@ _[← The process model](./README.md) · [Level 2](./2_level-2-processes.md)_
 
 The one process decomposed past level 2, and the
 [focus table](./README.md#the-focus-table) says why: every gate but Gate 0 and
-Gate 1 sits here, and the branching is what made the single diagram this replaced
-impossible to follow.
+Gate 1 sits here, and its branching is more than one diagram can carry legibly.
 
 ```mermaid
 flowchart TD
