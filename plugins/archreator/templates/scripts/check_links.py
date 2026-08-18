@@ -42,7 +42,16 @@ def _find_repo_root(start: Path) -> Path:
 
 REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
-FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+# A fenced code block: an opening run of three or more backticks at the start of
+# a line, closed by a run at least as long, per CommonMark. Both halves of that
+# rule carry weight. An unanchored, fixed-length pattern pairs the opening fence
+# with the first `` ``` `` it meets — so a fence that *contains* a fence closes
+# early, and the remainder of the block gets scanned as prose. That is the exact
+# shape of a skill whose body is one `yaml` fence wrapping a document template.
+FENCE_RE = re.compile(
+    r"^(?P<ticks>`{3,})[^\n]*\n.*?^(?P=ticks)`*[ \t]*$",
+    re.DOTALL | re.MULTILINE,
+)
 INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
 NUMBERED_EA_DOC_RE = re.compile(r"^\d+_[\w.-]+\.md$")
 # href/src attribute values; the lookbehind avoids matching data-src, xlink:href, etc.
@@ -129,10 +138,21 @@ def check_html(html_file: Path) -> list[str]:
     return errors
 
 
+# Directories that are tooling rather than repository content. `.git` is
+# obvious; `.claude` holds agent-local material — vendored third-party skills,
+# worktrees, local settings — which is not this repository's to validate, and
+# which is equally not a downstream project's once these scripts ship there.
+EXCLUDED_DIRS = {".git", ".claude"}
+
+
+def _excluded(path: Path) -> bool:
+    return bool(EXCLUDED_DIRS & set(path.parts))
+
+
 def main() -> int:
     all_errors = []
     for path in REPO_ROOT.rglob("*"):
-        if ".git" in path.parts or not path.is_file():
+        if _excluded(path) or not path.is_file():
             continue
         if path.suffix == ".md":
             all_errors.extend(check_markdown(path))

@@ -85,7 +85,13 @@ MODEL_DIR = "architecture"
 # Narrative folders inside the model directory. They are *about* the model
 # rather than part of it, and are deliberately not reference-checked.
 NARRATIVE = {"scope", "decisions", "reviews", "engagements"}
-FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+# See the note in check_links.py: anchored to line starts and matched on fence
+# length, so a fence containing a fence does not close early and leak its body
+# back into the scanned prose.
+FENCE_RE = re.compile(
+    r"^(?P<ticks>`{3,})[^\n]*\n.*?^(?P=ticks)`*[ \t]*$",
+    re.DOTALL | re.MULTILINE,
+)
 
 # Element-ID prefixes, from `core-architecture-doc-style` § Element IDs. Longest first so
 # that alternation matches `BSVC` before `B`-prefixed neighbours.
@@ -180,11 +186,22 @@ def unvalidated_tables(text: str) -> int:
     return count
 
 
+# Directories that are tooling rather than repository content. `.git` is
+# obvious; `.claude` holds agent-local material — vendored third-party skills,
+# worktrees, local settings — which is not this repository's to validate, and
+# which is equally not a downstream project's once these scripts ship there.
+EXCLUDED_DIRS = {".git", ".claude"}
+
+
+def _excluded(path: Path) -> bool:
+    return bool(EXCLUDED_DIRS & set(path.parts))
+
+
 def find_projects() -> list[Path]:
     """A project is the directory containing an `architecture/` folder."""
     projects = []
     for model_dir in sorted(REPO_ROOT.rglob(MODEL_DIR)):
-        if ".git" in model_dir.parts or not model_dir.is_dir():
+        if _excluded(model_dir) or not model_dir.is_dir():
             continue
         projects.append(model_dir.parent)
     return projects
@@ -212,7 +229,7 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
     files = [
         path
         for path in sorted(model_root.rglob("*.md"))
-        if ".git" not in path.parts
+        if not _excluded(path)
         and "templates" not in path.parts
         and not (NARRATIVE & set(path.relative_to(model_root).parts))
     ]
