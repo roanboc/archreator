@@ -145,7 +145,7 @@ Two consequences, and they are most of the point:
 
 - **The ID carries the parent, so the table drops its parent column.** A
   `Parent` column beside `CAP1.2` restates what the identifier already says,
-  which is `P3` broken inside a single row. A column naming what a parent is
+  which is DRY — each fact in one place — broken inside a single row. A column naming what a parent is
   *composed of* survives, because it carries the children's **names**, which
   no identifier holds.
 - **A level is not a type.** `CAP1.2` is a Capability exactly as `CAP1` is.
@@ -185,8 +185,9 @@ The reason is what a gap in a sequence should mean. If identifiers freeze the
 moment they are typed, a reader finding `CS1`, `CS3`, `CS4` has to wonder what
 happened to a customer segment that in fact existed for one afternoon of
 drafting and was never shown to anyone. If they freeze at the gate, a gap means
-something real was retired — which is exactly what `P5` is protecting, and
-nothing is protected by preserving the history of a draft nobody approved.
+something real was retired — which is exactly what never reusing an identifier
+is protecting, and nothing is protected by preserving the history of a draft
+nobody approved.
 
 **A gate presentation on a renumbered draft says so in one line.** The
 validators only check that references resolve, so renumbering passes silently;
@@ -240,7 +241,7 @@ it up with that domain's charter instead.
 A model that federates — an organization with applications built under it —
 has the same six layers at every level, and **the layers do not mean the same
 thing at each**. Without a rule for that, the same fact gets written twice at
-different granularity, which is `P3` broken across a boundary rather than
+different granularity, which is DRY broken across a boundary rather than
 inside a document.
 
 **Tier is not depth.** Depth says how much of the six layers a model fills in
@@ -380,8 +381,7 @@ can be read as a sequence.
 **A diagram earns its place by saying something the table cannot.** Which
 element has the most edges, which has none, where every path converges,
 which side of a boundary is thin. If a diagram only restates the rows
-beneath it, cut it — that is `P3` (each fact in one place) applied to
-pictures.
+beneath it, cut it — that is DRY applied to pictures.
 
 ### Every element document opens with "How to read this document"
 
@@ -449,7 +449,7 @@ required.** A consolidation — what was merged into what, and how many elements
 each catalogue ended up with — is a modeling decision the Requester approves at
 a gate, so it belongs in the scope document and the gate presentation
 (`discover-operating-model` § Gate 0 already asks for it there). Writing it in
-the layer document as well is a second copy of a fact, which is `P3` broken.
+the layer document as well is a second copy of a fact, which is DRY broken.
 
 ### Two carve-outs
 
