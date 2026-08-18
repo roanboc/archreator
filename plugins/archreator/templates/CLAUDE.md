@@ -68,6 +68,8 @@ invoke them by name in normal use.
   describing the current state, `architecture/domains/` (Depth 3 only),
   `architecture/scope/` — one document per initiative — and
   `architecture/decisions/` for calls smaller than an initiative.
+- `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
+  development workflow.
 - `scripts/` — the two validators, run before every push.
 
 ## Commands

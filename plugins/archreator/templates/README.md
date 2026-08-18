@@ -23,7 +23,8 @@ does and how its pieces relate.
 
 Requirements are aligned through the model and approved at explicit gates
 before anything is built. [`CLAUDE.md`](./CLAUDE.md) states the rule and the
-declared modeling depth; the `core-architecture-first-change` skill runs the process.
+declared modeling depth, [`CONTRIBUTING.md`](./CONTRIBUTING.md) names who
+grants those gates, and the `core-architecture-first-change` skill runs the process.
 
 ## Built with
 

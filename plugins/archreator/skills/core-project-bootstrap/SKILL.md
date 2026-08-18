@@ -61,9 +61,9 @@ Requester already approved.
 ## Step 2 — Emit the scaffold, then make it this project
 
 **First, copy the scaffold** from `templates/` in the plugin into
-the project root. It holds `CLAUDE.md`, `README.md`, `architecture/` — with
-`architecture/scope/` and `architecture/decisions/` inside it — and
-`scripts/`, the two validators that keep the model honest. An empty model
+the project root. It holds `CLAUDE.md`, `README.md`, `CONTRIBUTING.md`,
+`architecture/` — with `architecture/scope/` and `architecture/decisions/`
+inside it — and `scripts/`, the two validators that keep the model honest. An empty model
 with every layer README in place, and the checks that enforce it. Copy it
 whole; the checklist below replaces the placeholders, and Step 3 sets the
 layers to the declared depth.
