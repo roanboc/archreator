@@ -5,7 +5,6 @@ metadata:
   archreator:
     kind: document-template
     realizes_process: BPROC2.1
-    applies_at_depth: "1,2,3"
     gates: none
 ---
 
@@ -147,7 +146,7 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   many elements each catalogue ended up with, what was merged into what, and
   why, is a modeling decision the Requester approves. A layer document that
   also states it holds a second copy of the fact and describes its own
-  construction (`architecture-document-style` § What the document contains).
+  construction (`document-style` § What the document contains).
 - **Out of scope is as important as in scope** — it is where the next
   initiative's backlog lives. Pair each meaningful exclusion with a gap note.
 - **A merged scope document is a historical record.** Follow-up work gets a

@@ -5,7 +5,6 @@ metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.3
-    applies_at_depth: "1,2,3"
     gates: Gate 1
 ---
 
@@ -73,7 +72,7 @@ flowchart TD
   capability named twice at different granularity is one capability. A
   strategy layer with six load-bearing goals is worth more than one with
   twenty, because every later initiative gets checked against it and nobody
-  checks against twenty. `architecture-document-style` § Consolidate before you
+  checks against twenty. `document-style` § Consolidate before you
   enumerate holds the rules.
 - **Revision, not amnesia.** Where the layer already has real content, start
   from it: confirm what still holds, and focus on what the new requirement

@@ -19,7 +19,7 @@ a named escalation path.
 
 ## What this repository is
 
-- **Fourteen Claude Code skills** — the method itself, under
+- **Fifteen Claude Code skills** — the method itself, under
   [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md), each
   named for the process it realizes.
 - **A scaffold** — the empty project a new adopter starts from, at

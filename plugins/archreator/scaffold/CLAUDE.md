@@ -39,7 +39,7 @@ normal initiative, decided by the Requester.
 
 Claude Code surfaces these from their `description:` frontmatter; you don't
 invoke them by name in normal use. They are listed in the order they are
-used in, with the three rulebooks — consulted rather than run — at the end.
+used in, with the four rulebooks — consulted rather than run — at the end.
 
 | Skill | Reach for it when |
 | ----- | ----------------- |
@@ -54,7 +54,8 @@ used in, with the three rulebooks — consulted rather than run — at the end.
 | `restate-current-state` | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
 | `record-decision` | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
 | `run-retrospective` | An initiative or engagement just finished — capture what the method didn't cover before it evaporates |
-| `architecture-document-style` | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
+| `document-style` | Writing or editing any document at all — the language, what it may contain, and how it links |
+| `architecture-document-style` | Editing anything under `architecture/` — numbering, element IDs, tiers, ArchiMate-on-Mermaid, actors, the grounding rule |
 | `process-and-capability-levels` | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
 | `stack-selection` | No technology stack chosen yet on a small application |
 
@@ -102,4 +103,4 @@ Both must be green before pushing.
 
 - Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - Documentation language: **English** (change during bootstrap; see
-  `architecture-document-style`).
+  `document-style`).

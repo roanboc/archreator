@@ -37,15 +37,16 @@ skill is a written procedure.
 | -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
 | `BPROC4.1` | Run the engagement retrospective | Turns what the method failed to cover into written proposals, before the memory of it evaporates | An initiative or engagement just finished | `BPROC2.3` | What the method did and did not cover, while it is still remembered | A retrospective note carrying proposals | Whoever maintains the method | Whoever did the work | `run-retrospective` |
 
-## The three skills that realize no process
+## The four skills that realize no process
 
-They should not be made to.
-[`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
-and
-[`process-and-capability-levels`](../../plugins/archreator/skills/process-and-capability-levels/SKILL.md)
-are rules every process above complies with, and
-[`stack-selection`](../../plugins/archreator/skills/stack-selection/SKILL.md)
-is a decision aid reached for inside `BPROC2.2`. A rule is not a step.
+They should not be made to. A rule is not a step.
+
+| Skill | What it is |
+| ----- | ---------- |
+| [`document-style`](../../plugins/archreator/skills/document-style/SKILL.md) | The rules every document in the repository obeys, whatever it is about |
+| [`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md) | What a model adds on top of those — identifiers, notation, tiers, actors |
+| [`process-and-capability-levels`](../../plugins/archreator/skills/process-and-capability-levels/SKILL.md) | How far a catalogue decomposes, and how its levels are shaped |
+| [`stack-selection`](../../plugins/archreator/skills/stack-selection/SKILL.md) | A decision aid, reached for inside `BPROC2.2` |
 
 **Processes and skills bind many-to-many, and neither side is the other's index.**
 A process boundary is drawn by accountability — one trigger, one definable output,

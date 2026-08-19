@@ -5,7 +5,6 @@ metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.1
-    applies_at_depth: "1,2,3"
     gates: none
 ---
 
@@ -129,7 +128,7 @@ Then, in one pass, so the first commit is coherent:
 | `CLAUDE.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point; placeholders left here are what make later sessions guess |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `CONTRIBUTING.md` | Leave § Development workflow as its TEMPLATE comment until a stack exists, rather than inventing commands |
-| Documentation language | Decide once, record it in `CLAUDE.md`. If it is not English, `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
+| Documentation language | Decide once, record it in `CLAUDE.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
 
 **⚖ Judgement.** The optional files are a decision, not a default:
 

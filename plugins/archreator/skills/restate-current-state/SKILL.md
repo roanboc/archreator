@@ -5,7 +5,6 @@ metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC3.1
-    applies_at_depth: "1,2,3"
     gates: Gate 2
 ---
 
@@ -105,7 +104,7 @@ Collect, without changing anything yet.
 | 4 | **Resolved open questions** | Answered in a gate conversation, a PR thread, or by the passage of events |
 | 5 | **Decision records that no longer bind** | Consequences that no longer describe the project, or one a later decision quietly replaced |
 | 6 | **Layer state tables that lie** | "not started" for a layer that now has three documents, or the reverse |
-| 7 | **A document narrating its own construction** | What the source held, what was consolidated, why identifiers moved, an empty Retired section. `architecture-document-style` § What the document contains has the test and the worked examples |
+| 7 | **A document narrating its own construction** | What the source held, what was consolidated, why identifiers moved, an empty Retired section. `document-style` § What the document contains has the test and the worked examples |
 
 **⚖ Judgement.** Present the list to the Requester **before touching
 anything**. Restating is mechanical only where the answer is obvious; "is this
@@ -140,7 +139,7 @@ decision-record Status lines.
 nothing does not have one.** Not an empty table, not a "None" line — an absent
 section says "nothing retired here" more clearly than a sentence saying so,
 and such a sentence is the version commentary
-`architecture-document-style` § No version commentary forbids.
+`document-style` § No version commentary forbids.
 
 ```markdown
 ## Retired

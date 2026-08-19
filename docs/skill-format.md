@@ -18,7 +18,6 @@ to enforce. What that script checks is this page, expressed as code.
 | `description` | Yes | The activation summary — the only signal an agent has before opening the file. Keyword-rich, and **no unquoted colon**, which makes the frontmatter unparseable |
 | `metadata.archreator.kind` | Yes | `gated-procedure`, `document-template` or `rulebook` |
 | `metadata.archreator.realizes_process` | When one applies | The level-2 process IDs from [`docs/process/`](./process/README.md) |
-| `metadata.archreator.applies_at_depth` | When narrower than all | Modeling depths, as `"1,2,3"` |
 | `metadata.archreator.gates` | Yes | The gates this skill stops at, or `none` |
 
 **The description declares the kind, in its first two words.** `Procedure — run
