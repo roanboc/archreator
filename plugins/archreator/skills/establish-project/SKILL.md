@@ -117,9 +117,10 @@ into every step below.
 
 ### 2 — Emit the scaffold, then make it this project
 
-Copy the scaffold whole from `templates/` in the plugin into the project root.
+Copy the scaffold whole from `scaffold/` in the plugin into the project root.
 It holds `CLAUDE.md`, `README.md`, `CONTRIBUTING.md`, `architecture/` — with
-`scope/` and `decisions/` inside it — and `scripts/`, the two validators.
+`scope/` and `decisions/` inside it — and `scripts/`, the two validators with
+their own README.
 
 Then, in one pass, so the first commit is coherent:
 
@@ -221,7 +222,7 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 - `CLAUDE.md` and `README.md` contain no `<placeholder>` markers, and
   `CLAUDE.md` declares the modeling depth.
 - The documentation language is decided and recorded.
-- The scaffold has been copied out of the plugin's `templates/`, and the
+- The scaffold has been copied out of the plugin's `scaffold/`, and the
   optional files are kept or deleted deliberately.
 - Every layer README's table says either what exists or "not started".
 - Scope document `1_*.md` exists and is indexed.

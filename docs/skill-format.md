@@ -54,7 +54,7 @@ strips the glyph before matching.
 | `⇄` | Hands off to | Skills reached, and what returns | required | — | — |
 | `✎` | Worked example | One concrete case | optional | optional | optional |
 | `⚠` | Anti-patterns | Corrections | required | optional | optional |
-| `☑` | Done when | Checkable completion | required | required | — |
+| `☑` | Done when | Checkable completion | required | required | optional — the checklist for a catalogue its rules shaped |
 
 ## Inside a step
 
@@ -77,7 +77,7 @@ reading a word of it.
 
 Filled boxes are this skill's steps. Unfilled ones are skills it reaches.
 Rose hexagons are gates. Glyph, shape and colour follow
-[`architecture/README.md` § Notation conventions](../plugins/archreator/templates/architecture/README.md#notation-conventions),
+[`architecture/README.md` § Notation conventions](../plugins/archreator/scaffold/architecture/README.md#notation-conventions),
 which stays the single source for the palette.
 
 ## Cross-references

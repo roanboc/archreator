@@ -8,7 +8,7 @@ real file. Two categories are deliberately not flagged:
 
 - Links inside fenced code blocks or inline code spans — skill files quote
   illustrative link syntax (e.g. `./<n>_*.md`) as examples, not real links.
-- Links inside a skill's `templates/architecture/` scaffold whose target is
+- Links inside a skill's `scaffold/architecture/` scaffold whose target is
   a numbered EA content file (`<n>_kebab-name.md`) that doesn't exist yet —
   layer READMEs deliberately forward-reference the numbered docs a
   downstream project will write, so an unfilled template is expected to have
@@ -31,7 +31,7 @@ def _find_repo_root(start: Path) -> Path:
 
     The scripts ship inside the scaffold, so the same file runs from
     `<project>/scripts/` in a generated project and from the method's own
-    `templates/scripts/`. Walking up to the enclosing repository gets the
+    `scaffold/scripts/`. Walking up to the enclosing repository gets the
     right answer in both places.
     """
     for candidate in (start, *start.parents):
@@ -78,11 +78,11 @@ def is_expected_forward_reference(resolved: Path) -> bool:
     """A numbered EA doc the scaffold points at but no project has written yet.
 
     The scaffold ships inside the skill that emits it, so the exemption is
-    keyed on `templates/architecture/` rather than on any one project path.
+    keyed on `scaffold/architecture/` rather than on any one project path.
     """
     parts = resolved.parts
     in_template_scaffold = any(
-        parts[i] == "templates" and parts[i + 1] == "architecture"
+        parts[i] == "scaffold" and parts[i + 1] == "architecture"
         for i in range(len(parts) - 1)
     )
     if not in_template_scaffold:

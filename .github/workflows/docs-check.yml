@@ -5,13 +5,13 @@ on:
     paths:
       - "**/*.md"
       - "**/*.html"
-      - "plugins/archreator/templates/scripts/*.py"
+      - "plugins/archreator/scaffold/scripts/*.py"
   push:
     branches: [main]
     paths:
       - "**/*.md"
       - "**/*.html"
-      - "plugins/archreator/templates/scripts/*.py"
+      - "plugins/archreator/scaffold/scripts/*.py"
 
 jobs:
   check-docs:
@@ -19,6 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check relative Markdown and HTML links
-        run: python3 plugins/archreator/templates/scripts/check_links.py
+        run: python3 plugins/archreator/scaffold/scripts/check_links.py
       - name: Check element-ID references
-        run: python3 plugins/archreator/templates/scripts/check_model.py
+        run: python3 plugins/archreator/scaffold/scripts/check_model.py

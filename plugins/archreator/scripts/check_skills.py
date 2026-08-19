@@ -7,14 +7,14 @@
 # ///
 """Check the skill corpus against the process model and against itself.
 
-The two validators under `templates/scripts/` ship to every project the method
+The two validators under `scaffold/scripts/` ship to every project the method
 emits, and they check what a project has: links, and element-ID references
 inside `architecture/`. Neither looks at a skill. That gap is where four
 defects have already lived - a skill citing an element ID from a model that
 does not ship with it, a section reference to a heading that had been renamed,
 and stale paths inside document templates.
 
-This script covers the skills, and lives outside `templates/` because a
+This script covers the skills, and lives outside `scaffold/` because a
 downstream project has no skills to check.
 
 Four things are checked:
@@ -28,7 +28,7 @@ Four things are checked:
   the headings its kind requires. A skill declaring no kind is skipped, which
   is what lets the corpus be converted in waves.
 - **Catalogue agreement** - the skill table in `skills/README.md` and its
-  deliberate copy in `templates/CLAUDE.md` carry the same rows.
+  deliberate copy in `scaffold/CLAUDE.md` carry the same rows.
 
 Headings may open with a glyph, which is stripped before matching: the glyph
 is notation, the words are the identity.
@@ -67,7 +67,7 @@ REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
 SKILLS_DIR = REPO_ROOT / "plugins" / "archreator" / "skills"
 PROCESS_DIR = REPO_ROOT / "docs" / "process"
 CATALOGUE = SKILLS_DIR / "README.md"
-CATALOGUE_COPY = REPO_ROOT / "plugins" / "archreator" / "templates" / "CLAUDE.md"
+CATALOGUE_COPY = REPO_ROOT / "plugins" / "archreator" / "scaffold" / "CLAUDE.md"
 # The headings each kind of skill must carry. This replaces the JSON Schemas:
 # the structural promise a schema made is a list of required sections, and a
 # list of required sections is legible to the people who write them.
@@ -121,6 +121,7 @@ LEVEL2_ROW_RE = re.compile(r"^\|\s*`(BPROC\d+\.\d+)`\s*\|(.+)\|\s*$", re.M)
 SKILL_NAME_RE = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 
 GATE_GLYPH = "❖"
+MIDDLE_DOT = "·"
 MIN_PREFIX_CHARS = 4
 
 
@@ -364,6 +365,58 @@ def check_required_sections(known: set[str]) -> list[str]:
     return errors
 
 
+def check_prefix_registry() -> list[str]:
+    """The prefix table in the style rulebook matches the file the scripts read.
+
+    One fact, two representations: a table a person reads, and a JSON file that
+    ships beside check_model.py because a project has the scripts and not the
+    skills. Neither is derived from the other at runtime, so CI holds them
+    together.
+    """
+    skill = SKILLS_DIR / "architecture-document-style" / "SKILL.md"
+    registry = (
+        REPO_ROOT / "plugins" / "archreator" / "scaffold" / "scripts" / "element-prefixes.json"
+    )
+    if not skill.is_file() or not registry.is_file():
+        return []
+
+    lines = skill.read_text(encoding="utf-8").splitlines()
+    header = [
+        i for i, line in enumerate(lines)
+        if line.strip().startswith("| Where ") and "Prefixes" in line
+    ]
+    if not header:
+        return ["architecture-document-style: the element-prefix table is missing"]
+
+    documented: dict[str, str] = {}
+    for line in lines[header[0] + 2:]:
+        if not line.strip().startswith("|"):
+            break
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) != 2:
+            continue
+        for entry in cells[1].split(MIDDLE_DOT):
+            code, _, name = entry.strip().partition(" ")
+            documented[code.strip("`")] = name.strip()
+
+    shipped: dict[str, str] = {}
+    for group in json.loads(registry.read_text(encoding="utf-8"))["prefixes"].values():
+        shipped.update(group)
+
+    errors: list[str] = []
+    for code in sorted(set(documented) - set(shipped)):
+        errors.append(f"`{code}` is in the style rulebook's table but not element-prefixes.json")
+    for code in sorted(set(shipped) - set(documented)):
+        errors.append(f"`{code}` is in element-prefixes.json but not the style rulebook's table")
+    for code in sorted(set(documented) & set(shipped)):
+        if documented[code] != shipped[code]:
+            errors.append(
+                f"`{code}` is `{documented[code]}` in the rulebook and "
+                f"`{shipped[code]}` in element-prefixes.json"
+            )
+    return errors
+
+
 def catalogue_rows(path: Path) -> dict[str, list[str]]:
     """Skill name -> its remaining cells, normalized."""
     if not path.is_file():
@@ -388,15 +441,15 @@ def check_catalogue(known: set[str]) -> list[str]:
     for skill in sorted(set(primary) - known):
         errors.append(f"skills/README.md: `{skill}` is catalogued but no such skill exists")
     for skill in sorted(set(primary) - set(copy)):
-        errors.append(f"templates/CLAUDE.md: `{skill}` is missing from the copied table")
+        errors.append(f"scaffold/CLAUDE.md: `{skill}` is missing from the copied table")
     for skill in sorted(set(copy) - set(primary)):
-        errors.append(f"templates/CLAUDE.md: `{skill}` is in the copied table but not the catalogue")
+        errors.append(f"scaffold/CLAUDE.md: `{skill}` is in the copied table but not the catalogue")
     for skill in sorted(set(primary) & set(copy)):
         # The catalogue carries a Kind column the copy does not, so compare the
         # last cell - the one both tables end on.
         if primary[skill][-1] != copy[skill][-1]:
             errors.append(
-                f"templates/CLAUDE.md: the row for `{skill}` has drifted from skills/README.md"
+                f"scaffold/CLAUDE.md: the row for `{skill}` has drifted from skills/README.md"
             )
 
     for skill, cells in sorted(primary.items()):
@@ -431,6 +484,7 @@ def main() -> int:
         ("section markers", check_section_markers(known)),
         ("process binding", check_process_binding(known)),
         ("required sections", check_required_sections(known)),
+        ("prefix registry", check_prefix_registry()),
         ("catalogue", check_catalogue(known)),
     ]:
         if errors:

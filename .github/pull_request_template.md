@@ -34,7 +34,7 @@
 <!-- Group by surface. Every commit's work must be represented. -->
 
 - **Skills** — which SKILL.md files, what changed in each
-- **Scaffold** — anything under templates/
+- **Scaffold** — anything under scaffold/
 - **Docs / site** — under docs/ or site/
 - **Plugin package / CI** — manifests under .claude-plugin/, workflows
 
@@ -43,8 +43,8 @@
 <!-- What was run and what happened: -->
 
 ```
-python3 plugins/archreator/templates/scripts/check_links.py
-python3 plugins/archreator/templates/scripts/check_model.py
+python3 plugins/archreator/scaffold/scripts/check_links.py
+python3 plugins/archreator/scaffold/scripts/check_model.py
 ```
 
 ## Out of scope / follow-ups

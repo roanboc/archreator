@@ -47,7 +47,7 @@ Deliberately not checked:
 
 - `architecture/scope/`, `architecture/decisions/`, `architecture/reviews/` and `architecture/engagements/` inside
   `architecture/`, and anything outside `architecture/` entirely, per above.
-- The scaffold under `templates/` — its layer READMEs and the skill files
+- The scaffold under `scaffold/` — its layer READMEs and the skill files
   beside them carry illustrative IDs inside templates
   (`BSVC1`, `SALES.BSVC3`, `RULE7`); validating the documentation of the
   convention would fail on itself.
@@ -59,6 +59,7 @@ Deliberately not checked:
 - Whether a "Realized by" cell points at a file that exists. That is the
   grounding rule, and it is still enforced only for links.
 """
+import json
 import re
 import sys
 from collections import defaultdict
@@ -69,7 +70,7 @@ def _find_repo_root(start: Path) -> Path:
 
     The scripts ship inside the scaffold, so the same file runs from
     `<project>/scripts/` in a generated project and from the method's own
-    `templates/scripts/`. Walking up to the enclosing repository gets the
+    `scaffold/scripts/`. Walking up to the enclosing repository gets the
     right answer in both places.
     """
     for candidate in (start, *start.parents):
@@ -93,23 +94,19 @@ FENCE_RE = re.compile(
     re.DOTALL | re.MULTILINE,
 )
 
-# Element-ID prefixes, from `architecture-document-style` § Element IDs. Longest first so
-# that alternation matches `BSVC` before `B`-prefixed neighbours.
-PREFIXES = sorted(
-    [
-        "STK", "DRV", "ASM", "G", "OUT", "P",           # motivation
-        "CAP", "RES", "COA", "VS",                       # strategy
-        "ACT", "ROLE", "BCOL", "PROD", "BSVC", "BPROC",  # business
-        "BOBJ", "BIF", "CTR", "RULE", "VAL",
-        "DOBJ",                                          # information
-        "ASVC", "ACMP",                                  # application
-        "TSVC", "NODE", "ART",                           # technology
-        "JOB", "PAIN", "GAIN", "PREL", "GCRE",           # canvas (VPC)
-        "KP", "KA", "KR", "VP", "CR", "CH", "CS", "RS", "COST",  # canvas (BMC)
-    ],
-    key=len,
-    reverse=True,
-)
+# Element-ID prefixes, loaded from the file that ships beside this script.
+# The human-readable source is the table in the architecture-document-style
+# skill; check_skills.py keeps the two in step, so this is not a second place
+# to maintain the list. Longest first, so alternation matches `BSVC` before
+# `B`-prefixed neighbours.
+PREFIX_FILE = Path(__file__).resolve().parent / "element-prefixes.json"
+with PREFIX_FILE.open(encoding="utf-8") as handle:
+    PREFIXES = sorted(
+        (code for group in json.load(handle)["prefixes"].values() for code in group),
+        key=len,
+        reverse=True,
+    )
+
 # The element itself: a type prefix, its number, then one dotted number per
 # level below the top (`CAP1`, `CAP1.2`, `CAP1.2.3`).
 _LOCAL = r"(?:" + "|".join(PREFIXES) + r")\d+(?:\.\d+)*"
@@ -231,7 +228,7 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
         path
         for path in sorted(model_root.rglob("*.md"))
         if not _excluded(path)
-        and "templates" not in path.parts
+        and "scaffold" not in path.parts
         and not (NARRATIVE & set(path.relative_to(model_root).parts))
     ]
 
