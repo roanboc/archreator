@@ -455,7 +455,8 @@ What goes is the document narrating its own drafting.
 required.** A consolidation — what was merged into what, and how many elements
 each catalogue ended up with — is a modeling decision the Requester approves at
 a gate, so it belongs in the scope document and the gate presentation
-(`discover-business-model` § Gate 0 already asks for it there). Writing it in
+(`discover-business-model` § 5 — Present for approval already asks for it
+there). Writing it in
 the layer document as well is a second copy of a fact, which is DRY broken.
 
 ### Two carve-outs

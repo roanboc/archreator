@@ -97,7 +97,9 @@ HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*$", re.M)
 # a window, not the name.
 MARKER_RE = re.compile(r"`([a-z0-9][a-z0-9-]*)`\s*§\s*([^\n]*(?:\n[^\n]*)?)")
 # Terminators that cannot appear inside a heading being cited mid-sentence.
-WINDOW_END_RE = re.compile(r"[.,;:)—]|\s+§\s+")
+# An em-dash is not one: step headings use it, and the longest-prefix search
+# below already copes with a window that runs past the heading it names.
+WINDOW_END_RE = re.compile(r"[.,;:)]|\s+§\s+")
 CATALOGUE_ROW_RE = re.compile(r"^\|\s*(?:\[)?`([a-z0-9-]+)`(?:\]\([^)]*\))?\s*\|\s*(.+?)\s*\|\s*$", re.M)
 # The level-2 rows of the process model: a dotted ID, the process name, and the
 # realizing skills in the last cell.
