@@ -2,7 +2,7 @@
 
 _[← Repository README](../../../README.md)_
 
-The fourteen skills that are the archreator method. Claude Code picks them
+The fifteen skills that are the archreator method. Claude Code picks them
 up automatically from their `description:` frontmatter — you don't invoke
 them by name in normal use, they surface when their situation applies.
 
@@ -22,7 +22,7 @@ three.
 
 **The order below is the order they are used in** — the processes of
 [`docs/process/`](../../../docs/process/README.md) from `BPROC1.1` to
-`BPROC4.1`, then the three rulebooks that realize no process.
+`BPROC4.1`, then the four rulebooks that realize no process.
 
 This folder sits inside the **`archreator` plugin**, whose root is
 `plugins/archreator/` — its manifest is
@@ -83,12 +83,14 @@ Turning a model that has drifted back into a description of today.
 
 ## The rulebooks
 
-Consulted rather than run, and realizing no process: two are rules every
-process above complies with, and one is a decision aid reached for inside
-`BPROC2.2`.
+Consulted rather than run, and realizing no process. `document-style` governs
+every document in the repository; `architecture-document-style` adds what a
+model needs and obeys it; `process-and-capability-levels` shapes a catalogue;
+and `stack-selection` is a decision aid reached for inside `BPROC2.2`.
 
 | Skill | Kind | Reach for it when |
 | ----- | ---- | ----------------- |
-| [`architecture-document-style`](./architecture-document-style/SKILL.md) | ※ Rulebook | Editing anything under `architecture/` — numbering, element IDs, ArchiMate-on-Mermaid, the grounding rule — and writing any other document in the repository, for what it may contain |
+| [`document-style`](./document-style/SKILL.md) | ※ Rulebook | Writing or editing any document at all — the language, what it may contain, and how it links |
+| [`architecture-document-style`](./architecture-document-style/SKILL.md) | ※ Rulebook | Editing anything under `architecture/` — numbering, element IDs, tiers, ArchiMate-on-Mermaid, actors, the grounding rule |
 | [`process-and-capability-levels`](./process-and-capability-levels/SKILL.md) | ※ Rulebook | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
 | [`stack-selection`](./stack-selection/SKILL.md) | ※ Rulebook | No technology stack chosen yet on a small application |

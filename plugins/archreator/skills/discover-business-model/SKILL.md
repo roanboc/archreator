@@ -87,7 +87,7 @@ second.
 - **Consolidate as you go, not at the end.** A round about pains easily yields
   twelve. Merge the ones that are the same pain at different severity, or the
   same job seen from two segments, and give the survivor a per-segment column.
-  `architecture-document-style` § Consolidate before you enumerate has the
+  `document-style` § Consolidate before you enumerate has the
   rules. Consolidating at the end means renumbering everything.
 - **One segment and one product at a time.** Canvases filled in parallel drift
   into each other.
@@ -174,7 +174,7 @@ more consequential than any single element in the list.
 
 **In the summary and the scope document, not in the canvas.** The canvas
 describes the business; how many elements it took to describe it is a fact
-about the modeling (`architecture-document-style` § What the document contains).
+about the modeling (`document-style` § What the document contains).
 
 Record the approval in the Approvals table — who, when, what was shown. If
 changes are requested, revise from Step 2 and present again.

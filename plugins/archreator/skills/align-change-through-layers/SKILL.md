@@ -94,7 +94,7 @@ Every step produces elements — goals, capabilities, services, rules, canvas
 blocks. **At every one of them, consolidate before you enumerate.** Two
 elements differing only in degree are one element with a severity column. A
 list past one screen is asking which of its entries are the same thing seen
-from two angles. The rules are in `architecture-document-style` § Consolidate
+from two angles. The rules are in `document-style` § Consolidate
 before you enumerate and are not restated here.
 
 This applies to what is **proposed** as much as to what is written: a Requester

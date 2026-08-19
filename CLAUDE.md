@@ -9,7 +9,7 @@ worked examples of the method applied to real organizations live in
 
 | Path | What it holds |
 | ---- | ------------- |
-| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, ordered by the process each realizes, with the three rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
+| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fifteen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model. It stays out of `scaffold/` because a downstream project has no skills |
 | `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), [the validators](./plugins/archreator/scaffold/scripts/README.md), and placeholder `CLAUDE.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |

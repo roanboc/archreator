@@ -198,6 +198,27 @@ def scanned_files() -> list[Path]:
     return sorted(files)
 
 
+def _continues(heading: str, prefix: str, rest: list[str]) -> bool:
+    """Does `prefix` name the start of `heading`, without the citation then
+    contradicting it?
+
+    A short prefix of a citation can open a heading it does not mean - `what`
+    opens both `what the document contains` and `what belongs at which tier`.
+    So where the heading carries on with a word and the citation carries on
+    with a different word, this is a different section wearing the same first
+    word.
+    """
+    if not heading.startswith(prefix):
+        return False
+    tail = heading[len(prefix):].strip().split(" ")
+    if not tail or not tail[0] or not rest or not rest[0]:
+        return True
+    # Only an alphabetic pair can contradict; punctuation carries no meaning here.
+    if tail[0][:1].isalpha() and rest[0][:1].isalpha():
+        return tail[0] == rest[0]
+    return True
+
+
 def check_section_markers(known: set[str]) -> list[str]:
     """Every section reference names a skill that exists and a heading it has."""
     errors: list[str] = []
@@ -231,7 +252,7 @@ def check_section_markers(known: set[str]) -> list[str]:
                 prefix = " ".join(words[:count])
                 if len(prefix) < MIN_PREFIX_CHARS:
                     break
-                if any(h.startswith(prefix) for h in cache[skill]):
+                if any(_continues(h, prefix, words[count:]) for h in cache[skill]):
                     matched = True
                     break
             if not matched:

@@ -53,7 +53,7 @@ detailed, and **says so in the focus table** rather than trailing off.
 Horizontal completeness is what makes a model trustworthy: a reader who sees
 the whole map knows nothing is hidden. Vertical completeness is what makes it
 unreadable. Only the second is optional, so only the second gets cut. This is
-`architecture-document-style` § Consolidate before you enumerate applied to
+`document-style` § Consolidate before you enumerate applied to
 depth instead of to count.
 
 ### Level 1 is the macro process map, in four categories
