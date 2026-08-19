@@ -111,7 +111,10 @@ MARKER_RE = re.compile(r"`([a-z0-9][a-z0-9-]*)`\s*§\s*([^\n]*(?:\n[^\n]*)?)")
 # An em-dash is not one: step headings use it, and the longest-prefix search
 # below already copes with a window that runs past the heading it names.
 WINDOW_END_RE = re.compile(r"[.,;:)]|\s+§\s+")
-CATALOGUE_ROW_RE = re.compile(r"^\|\s*(?:\[)?`([a-z0-9-]+)`(?:\]\([^)]*\))?\s*\|\s*(.+?)\s*\|\s*$", re.M)
+# A catalogue row: the skill in the first cell, linked or bare. Later cells are
+# split off rather than swept up, so the two tables may carry different
+# columns and still be compared on the ones they share.
+CATALOGUE_ROW_RE = re.compile(r"^\|\s*(?:\[)?`([a-z0-9-]+)`(?:\]\([^)]*\))?\s*\|(.*)\|\s*$", re.M)
 # The level-2 rows of the process model: a dotted ID, the process name, and the
 # realizing skills in the last cell.
 LEVEL2_ROW_RE = re.compile(r"^\|\s*`(BPROC\d+\.\d+)`\s*\|(.+)\|\s*$", re.M)
@@ -348,11 +351,15 @@ def check_required_sections(known: set[str]) -> list[str]:
     return errors
 
 
-def catalogue_rows(path: Path) -> dict[str, str]:
+def catalogue_rows(path: Path) -> dict[str, list[str]]:
+    """Skill name -> its remaining cells, normalized."""
     if not path.is_file():
         return {}
     text = strip_code(path.read_text(encoding="utf-8"))
-    return {name: normalize(desc) for name, desc in CATALOGUE_ROW_RE.findall(text)}
+    rows = {}
+    for name, rest in CATALOGUE_ROW_RE.findall(text):
+        rows[name] = [normalize(cell) for cell in rest.split("|")]
+    return rows
 
 
 def check_catalogue(known: set[str]) -> list[str]:
@@ -372,9 +379,22 @@ def check_catalogue(known: set[str]) -> list[str]:
     for skill in sorted(set(copy) - set(primary)):
         errors.append(f"templates/CLAUDE.md: `{skill}` is in the copied table but not the catalogue")
     for skill in sorted(set(primary) & set(copy)):
-        if primary[skill] != copy[skill]:
+        # The catalogue carries a Kind column the copy does not, so compare the
+        # last cell - the one both tables end on.
+        if primary[skill][-1] != copy[skill][-1]:
             errors.append(
                 f"templates/CLAUDE.md: the row for `{skill}` has drifted from skills/README.md"
+            )
+
+    for skill, cells in sorted(primary.items()):
+        declared = skill_meta(skill).get("kind")
+        if not declared or len(cells) < 2:
+            continue
+        word = KIND_MARKERS[declared][0].split(" ")[0].lower()
+        if word not in cells[0]:
+            errors.append(
+                f"skills/README.md: `{skill}` is catalogued as `{cells[0]}` "
+                f"but declares kind `{declared}`"
             )
     return errors
 
