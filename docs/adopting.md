@@ -21,12 +21,12 @@ repository.
 
 **The plugin ships two things.** The skills — which do not touch your files
 until you ask them to — and the scaffold under
-[`plugins/archreator/templates/`](../plugins/archreator/templates/README.md), which `establish-project`
+[`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md), which `establish-project`
 copies into your project. Nothing else lands.
 
 ## Option B — clone the scaffold directly
 
-Copy [`plugins/archreator/templates/`](../plugins/archreator/templates/README.md) into a new repository. It holds:
+Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It holds:
 
 - `CLAUDE.md` and `README.md` — placeholders you'll fill in when the
   bootstrap skill runs
@@ -44,11 +44,11 @@ them stays in sync automatically:
 
 - **The skills**, at `plugins/archreator/skills/*/`, come with the plugin and update
   when you run `/plugin update archreator@archreator`.
-- **The scaffold**, at `plugins/archreator/templates/`, is copied *once* into your project by
+- **The scaffold**, at `plugins/archreator/scaffold/`, is copied *once* into your project by
   `establish-project`. It does not update afterwards, because a
   scaffold that changed under a project would rewrite documents the
   Requester already approved.
-- **The scaffold's own scripts** in `plugins/archreator/templates/scripts/` land in your
+- **The scaffold's own scripts** in `plugins/archreator/scaffold/scripts/` land in your
   project's `scripts/`. They are the same on both sides; if the method's
   validators change, copy the updated files across.
 

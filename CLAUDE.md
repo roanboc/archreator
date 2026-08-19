@@ -11,8 +11,8 @@ worked examples of the method applied to real organizations live in
 | ---- | ------------- |
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, ordered by the process each realizes, with the three rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
-| [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model. It stays out of `templates/` because a downstream project has no skills |
-| [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `establish-project` |
+| [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model. It stays out of `scaffold/` because a downstream project has no skills |
+| `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), [the validators](./plugins/archreator/scaffold/scripts/README.md), and placeholder `CLAUDE.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, how to adopt it, and [the format every skill follows](./docs/skill-format.md). The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The one-page public site, deployed to <https://roanboc.github.io/archreator/> |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
@@ -41,8 +41,8 @@ platforms are additive — each adds a manifest, none forks the method.
 ## Commands
 
 ```bash
-python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
-python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve, per project
+python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
+python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve, per project
 python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 

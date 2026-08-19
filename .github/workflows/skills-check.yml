@@ -5,7 +5,7 @@ on:
     paths:
       - "plugins/archreator/skills/**"
       - "plugins/archreator/scripts/**"
-      - "plugins/archreator/templates/CLAUDE.md"
+      - "plugins/archreator/scaffold/CLAUDE.md"
       - "docs/process/**"
       - "docs/skill-format.md"
       - ".github/workflows/skills-check.yml"
@@ -14,7 +14,7 @@ on:
     paths:
       - "plugins/archreator/skills/**"
       - "plugins/archreator/scripts/**"
-      - "plugins/archreator/templates/CLAUDE.md"
+      - "plugins/archreator/scaffold/CLAUDE.md"
       - "docs/process/**"
       - "docs/skill-format.md"
       - ".github/workflows/skills-check.yml"

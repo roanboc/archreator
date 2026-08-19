@@ -71,7 +71,7 @@ used in, with the three rulebooks — consulted rather than run — at the end.
   `architecture/decisions/` for calls smaller than an initiative.
 - `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
   development workflow.
-- `scripts/` — the two validators, run before every push.
+- [`scripts/`](./scripts/README.md) — the two validators, run before every push.
 
 ## Commands
 

@@ -23,7 +23,7 @@ a named escalation path.
   [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md), each
   named for the process it realizes.
 - **A scaffold** — the empty project a new adopter starts from, at
-  [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md), copied by the
+  [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md), copied by the
   `establish-project` skill.
 - **A plugin package** — the manifests at
   [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json)

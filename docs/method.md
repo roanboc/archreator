@@ -119,11 +119,11 @@ second capability under `CAP3` is `CAP3.2` and its first sub-capability is
 `CAP3.2.1`. The whole set is grounded: every element names the code
 artifact, page, or written procedure that realizes it, or is explicitly
 marked "Pending — future initiative". Two validators in
-[`plugins/archreator/templates/scripts/`](../plugins/archreator/templates/scripts/) enforce that references
+[`plugins/archreator/scaffold/scripts/`](../plugins/archreator/scaffold/scripts/) enforce that references
 resolve, that every leveled ID has a parent, and that no identifier is reused.
 
-The scaffold at [`plugins/archreator/templates/`](../plugins/archreator/templates/README.md) has every layer
+The scaffold at [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) has every layer
 README ready to fill in. The full conventions — numbering, ArchiMate on
 Mermaid, colour ramps, actor kinds — are in
-[`plugins/archreator/templates/architecture/README.md`](../plugins/archreator/templates/architecture/README.md)
+[`plugins/archreator/scaffold/architecture/README.md`](../plugins/archreator/scaffold/architecture/README.md)
 and in the [`architecture-document-style` skill](../plugins/archreator/skills/architecture-document-style/SKILL.md).

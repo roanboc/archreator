@@ -39,7 +39,7 @@ consuming project's documents by naming the path in a code span —
 
 **This page is the catalogue.** It is the only one — the rest of the
 repository links here rather than restating it. The one deliberate copy is
-the table in [`templates/CLAUDE.md`](../templates/CLAUDE.md), which
+the table in [`scaffold/CLAUDE.md`](../scaffold/CLAUDE.md), which
 lands in a project that cannot link back to this repository at all; change
 a row here and change it there in the same commit.
 [`check_skills.py`](../scripts/check_skills.py) compares them.

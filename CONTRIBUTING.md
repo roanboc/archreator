@@ -40,19 +40,19 @@ Pure bug fixes skip the gates, per the method's own rule.
 All three validators must be green before pushing; CI runs the same:
 
 ```bash
-python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
-python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve
+python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
+python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve
 python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 
-The first two live under `plugins/archreator/templates/` because they ship with
+The first two live under `plugins/archreator/scaffold/` because they ship with
 the scaffold — the same scripts land in every project the method emits. Running
 them from the root of this repository is a smoke test: since there is no
 `architecture/` folder here, `check_model.py` reports the scaffold as having no
 elements and passes trivially, while `check_links.py` checks the docs, the
 scaffold, and the site.
 
-`check_skills.py` sits outside `templates/` because a downstream project has no
+`check_skills.py` sits outside `scaffold/` because a downstream project has no
 skills to check. It reads the process model in [`docs/process/`](./docs/process/README.md)
 and every skill's frontmatter and headings, checking them against
 [the skill format](./docs/skill-format.md). It needs PyYAML — use `uv run` in
