@@ -1,6 +1,6 @@
 ---
 name: discover-strategy
-description: Use when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer still contains template placeholders, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Gate 1) before anything else is built.
+description: Procedure — run this when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer still contains template placeholders, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Gate 1) before anything else is built.
 metadata:
   archreator:
     kind: gated-procedure
@@ -9,7 +9,7 @@ metadata:
     gates: Gate 1
 ---
 
-# Discover the strategy
+# ⚙ Discover the strategy
 
 When this skill applies, **the entire initiative is discovery**: no code, no
 application design, no stack decisions. The deliverables are the strategy

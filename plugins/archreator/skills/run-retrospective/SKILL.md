@@ -1,6 +1,6 @@
 ---
 name: run-retrospective
-description: Use at the end of a completed initiative or client engagement, once the work has merged or been delivered — captures what the method failed to tell you to do and what you did instead, as a pattern note that can become a method improvement. Not a project retrospective about what went well; specifically about the gap between the method and the judgement the work actually needed.
+description: Document — write one at the end of a completed initiative or client engagement, once the work has merged or been delivered — captures what the method failed to tell you to do and what you did instead, as a pattern note that can become a method improvement. Not a project retrospective about what went well; specifically about the gap between the method and the judgement the work actually needed.
 metadata:
   archreator:
     kind: document-template
@@ -9,7 +9,7 @@ metadata:
     gates: none
 ---
 
-# Run the engagement retrospective
+# ▤ Run the engagement retrospective
 
 A **blameless retrospective**, narrowed to one subject: the gap between what
 the method says and what the work needed. Every method improvement starts as

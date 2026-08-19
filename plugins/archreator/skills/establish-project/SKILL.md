@@ -1,6 +1,6 @@
 ---
 name: establish-project
-description: Set up a project that has the archreator method available but no model yet — the user just installed the plugin, cloned or generated the repository, or architecture/ still holds nothing but scaffolding. Emits the scaffold, names the project, declares the modeling depth, and hands off to discovery. Not needed once CLAUDE.md declares a depth.
+description: Procedure — run this to set up a project that has the archreator method available but no model yet — the user just installed the plugin, cloned or generated the repository, or architecture/ still holds nothing but scaffolding. Emits the scaffold, names the project, declares the modeling depth, and hands off to discovery. Not needed once CLAUDE.md declares a depth.
 metadata:
   archreator:
     kind: gated-procedure
@@ -9,7 +9,7 @@ metadata:
     gates: none
 ---
 
-# Establish a project
+# ⚙ Establish a project
 
 The bridge between an installed method and a modeled project: emit the
 scaffold, turn it into *this* project, declare how deeply the project intends

@@ -1,6 +1,6 @@
 ---
 name: write-scope-document
-description: Use when creating or updating a project scope document in architecture/scope/ — one per initiative, drafted before the pre-implementation gate as step 3 of the align-change-through-layers process, and the durable record of gate approvals.
+description: Document — write one when creating or updating a project scope document in architecture/scope/ — one per initiative, drafted before the pre-implementation gate as step 3 of the align-change-through-layers process, and the durable record of gate approvals.
 metadata:
   archreator:
     kind: document-template
@@ -9,7 +9,7 @@ metadata:
     gates: none
 ---
 
-# Write a scope document
+# ▤ Write a scope document
 
 One document per initiative, and the place its gate approvals are recorded.
 An **architecture definition** narrowed to a single change: what it alters,

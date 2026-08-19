@@ -301,6 +301,14 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
 
 
 def main() -> int:
+    # Findings carry em-dashes, notation glyphs and whatever a heading is
+    # named in. A console that cannot encode them should show a replacement
+    # character, not raise and take the whole run down with it.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):  # pragma: no cover - older or wrapped streams
+            pass
     all_errors: list[str] = []
     summary: list[str] = []
     for project in find_projects():

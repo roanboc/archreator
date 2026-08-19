@@ -1,6 +1,6 @@
 ---
 name: shard-stories
-description: Use when a scope document's work package is too large or long-running to implement in one sitting — shard it into small, self-contained story files so each can be picked up, by an agent or a person, without re-deriving the whole plan from the architecture documents and scope document each time.
+description: Document — write one when a scope document's work package is too large or long-running to implement in one sitting — shard it into small, self-contained story files so each can be picked up, by an agent or a person, without re-deriving the whole plan from the architecture documents and scope document each time.
 metadata:
   archreator:
     kind: document-template
@@ -9,7 +9,7 @@ metadata:
     gates: none
 ---
 
-# Shard stories
+# ▤ Shard stories
 
 Vertical slicing, with the context packed in. The practice is adapted from
 [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD)'s context-engineered

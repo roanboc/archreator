@@ -1,6 +1,6 @@
 ---
 name: discover-business-model
-description: Use when the initiative is modeling an organization rather than building a single application — a company, a department, or a service line whose operating model is itself the deliverable. Runs a question-driven discovery with the Requester over the Value Proposition Canvas and a Business Model Canvas per product, ending at an explicit business-model approval gate (Gate 0), then hands off to discover-strategy to derive the enterprise architecture from it.
+description: Procedure — run this when the initiative is modeling an organization rather than building a single application — a company, a department, or a service line whose operating model is itself the deliverable. Runs a question-driven discovery with the Requester over the Value Proposition Canvas and a Business Model Canvas per product, ending at an explicit business-model approval gate (Gate 0), then hands off to discover-strategy to derive the enterprise architecture from it.
 metadata:
   archreator:
     kind: gated-procedure
@@ -9,7 +9,7 @@ metadata:
     gates: Gate 0
 ---
 
-# Discover the business model
+# ⚙ Discover the business model
 
 The company track. When this skill applies, **the product is the
 architecture**: the deliverable is a documented business model and the

@@ -1,6 +1,6 @@
 ---
 name: write-pr-description
-description: Use when creating or updating a pull request in this repo. The PR body follows the template at .github/pull_request_template.md and covers every change on the branch, diffed against main — never just the latest commit.
+description: Procedure — run this when creating or updating a pull request in this repo. The PR body follows the template at .github/pull_request_template.md and covers every change on the branch, diffed against main — never just the latest commit.
 metadata:
   archreator:
     kind: gated-procedure
@@ -9,7 +9,7 @@ metadata:
     gates: none
 ---
 
-# Write a PR description
+# ⚙ Write a PR description
 
 The handover. A pull request is reviewed and merged as a unit, so its body
 describes the whole branch — not the commit that happened to be last.

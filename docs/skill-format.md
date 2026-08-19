@@ -21,6 +21,14 @@ to enforce. What that script checks is this page, expressed as code.
 | `metadata.archreator.applies_at_depth` | When narrower than all | Modeling depths, as `"1,2,3"` |
 | `metadata.archreator.gates` | Yes | The gates this skill stops at, or `none` |
 
+**The description declares the kind, in its first two words.** `Procedure — run
+this when…`, `Document — write one when…`, `Rulebook — consult when…`. The
+description is the only thing loaded before a skill is chosen, so it is the only
+place a kind marker can change what the agent reaches for; the folder name, the
+metadata and the catalogue all say it too, and all three are invisible at that
+moment. The title repeats it as a glyph — `# ⚙`, `# ▤`, `# ※` — for whoever
+opens the file. `check_skills.py` checks both against `kind`.
+
 **Values are strings.** Agent Skills types `metadata.*` as string to string, so
 a list is one comma-separated string rather than a YAML sequence.
 

@@ -72,6 +72,17 @@ CATALOGUE_COPY = REPO_ROOT / "plugins" / "archreator" / "templates" / "CLAUDE.md
 # the structural promise a schema made is a list of required sections, and a
 # list of required sections is legible to the people who write them.
 # Defined once, in docs/skill-format.md; this is the machine-readable copy.
+# The kind is declared where the agent can actually act on it. A description
+# is the only thing loaded before a skill is chosen, so it opens by saying
+# whether this is run or consulted; the H1 repeats it as a glyph for whoever
+# opens the file. Both are checked against metadata.archreator.kind rather
+# than left to authoring discipline.
+KIND_MARKERS = {
+    "gated-procedure": ("Procedure —", "⚙"),
+    "document-template": ("Document —", "▤"),
+    "rulebook": ("Rulebook —", "※"),
+}
+
 REQUIRED_SECTIONS = {
     "gated-procedure": [
         "When to use this", "When not to", "Where this sits",
@@ -267,6 +278,26 @@ def check_process_binding(known: set[str]) -> list[str]:
     return errors
 
 
+def _frontmatter(skill: str) -> dict:
+    """The whole frontmatter mapping, or {} when it will not parse."""
+    path = SKILLS_DIR / skill / "SKILL.md"
+    match = FRONTMATTER_RE.match(path.read_text(encoding="utf-8"))
+    if not match or yaml is None:
+        return {}
+    try:
+        loaded = yaml.safe_load(match.group(1))
+    except yaml.YAMLError:
+        return {}
+    return loaded if isinstance(loaded, dict) else {}
+
+
+def _first_heading(skill: str) -> str:
+    """The skill's H1, unnormalized, so its glyph survives."""
+    text = strip_code((SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8"))
+    found = HEADING_RE.findall(text)
+    return found[0].strip() if found else ""
+
+
 def check_required_sections(known: set[str]) -> list[str]:
     """A skill declaring a kind carries the headings that kind requires.
 
@@ -291,6 +322,16 @@ def check_required_sections(known: set[str]) -> list[str]:
                 f"{skill}: kind `{kind}` is not one of " + ", ".join(sorted(REQUIRED_SECTIONS))
             )
             continue
+        prefix, glyph = KIND_MARKERS[kind]
+        description = str(_frontmatter(skill).get("description", ""))
+        if not description.startswith(prefix):
+            errors.append(
+                f"{skill}: a {kind} description must open `{prefix}` - it is "
+                "the only signal an agent has before the skill is chosen"
+            )
+        first = _first_heading(skill)
+        if first and not first.startswith(glyph):
+            errors.append(f"{skill}: a {kind} title opens with the glyph `{glyph}`")
         headings = headings_of(skill)
         for required in REQUIRED_SECTIONS[kind]:
             want = normalize(required)
@@ -339,6 +380,14 @@ def check_catalogue(known: set[str]) -> list[str]:
 
 
 def main() -> int:
+    # Findings carry em-dashes, notation glyphs and whatever a heading is
+    # named in. A console that cannot encode them should show a replacement
+    # character, not raise and take the whole run down with it.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):  # pragma: no cover - older or wrapped streams
+            pass
     known = skill_names()
     if not known:
         print(f"No skills found under {SKILLS_DIR.relative_to(REPO_ROOT)} - nothing to check.")
