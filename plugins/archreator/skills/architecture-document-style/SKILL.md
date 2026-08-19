@@ -1,11 +1,48 @@
 ---
 name: architecture-document-style
-description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions. Also use when writing or editing any other document in the repository — a README, a docs/ page, a contributing guide — for what a document may contain — its subject rather than its own construction, no version commentary, and where a surviving note goes.
+description: Rulebook — consult when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions. Also consult when writing any other document in the repository — a README, a docs/ page, a contributing guide — for what a document may contain, which is its subject rather than its own construction.
+metadata:
+  archreator:
+    kind: rulebook
+    gates: none
 ---
 
+# ※ Architecture document style
+
+How every document in this repository is written: its language, its
+identifiers, its notation, and the one rule about what a document may contain.
+
+Most of it governs `architecture/`. The sections on what a document contains
+and on links govern **every** document — a README, a page under `docs/`, a
+contributing guide — because nothing in those rules is specific to
+architecture.
+
+## ⊕ When to use this
+
+| The situation | What it looks like |
+| ------------- | ------------------ |
+| Editing the model | Any document under `architecture/` is being created or changed |
+| Allocating an identifier | A new element needs an ID, or a leveled one needs numbering |
+| Drawing anything | A diagram is going into a document |
+| Writing any other document | A README, a `docs/` page, a contributing guide — for § What the document contains and § Links |
+
+## ⊖ When not to
+
+| The situation | Use instead |
+| ------------- | ----------- |
+| The question is how far to decompose | `process-and-capability-levels` — that governs shape, this governs form |
+| The question is what the document is for | The skill that produces it — `write-scope-document`, `record-decision` |
+
+## ⌖ Where this sits
+
+**Realizes no process.** It is the rulebook every process complies with, and
+the most-cited skill in the corpus: thirteen of the other thirteen reach for
+it. Nothing here is a step.
+
+## ※ Rules
 # EA documentation style
 
-## Language
+### Language
 
 Pick one documentation language for the project and use it consistently
 across `architecture/`, `architecture/scope/`, commit messages, and code identifiers
@@ -16,7 +53,7 @@ cross-platform path and URL-encoding issues. If ArchiMate stereotypes are
 translated, keep a correspondence table to the standard English element
 names near the top of `architecture/README.md`.
 
-### Write it out
+#### Write it out
 
 **Language is the interface** — to a human reader, and to an agent that has
 nothing but the text. So spell things out:
@@ -40,7 +77,7 @@ This costs a few characters and buys the thing the whole method is for: a
 document that means the same to the person who wrote it, the person reading
 it a year later, and the agent acting on it.
 
-### Consolidate before you enumerate
+#### Consolidate before you enumerate
 
 **Fewer, better-defined elements beat many narrow ones.** Every element in a
 catalogue is a row someone has to read and an edge someone has to trace in a
@@ -65,7 +102,7 @@ The reason is the diagrams. The catalogues connect to each other, and the
 value of the model is in seeing how — which is exactly what a long list
 destroys.
 
-## Numbering
+### Numbering
 
 - Layer folders are numbered in assessment order and never reordered:
   `1_strategy`, `2_business`, `3_information`, `4_application`,
@@ -81,7 +118,7 @@ destroys.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
 
-## Element IDs
+### Element IDs
 
 Every element carries a short **ID**: a type prefix followed by a number,
 no separator — `G1`, `CAP3`, `PROD2`. IDs are how one document refers to an
@@ -123,7 +160,7 @@ a leveled catalogue; and an element's ID never changes when it is renamed.
 Referencing an element in prose or a table cell means writing its ID —
 `relieves GAIN2` — not repeating its description.
 
-### Levels number hierarchically
+#### Levels number hierarchically
 
 **An element that decomposes carries its parent's ID plus its own number,
 joined by a dot.** Capabilities, processes and products are the usual cases;
@@ -166,7 +203,7 @@ that replaced it (§ Never-reused starts at the gate). Re-parenting an approved
 process is a modeling change a Requester should be shown — a leveled ID puts
 it in front of them instead of letting it pass as an edited column.
 
-### Never-reused starts at the gate
+#### Never-reused starts at the gate
 
 **An identifier is draft until the gate that approves its element, and
 permanent afterwards.**
@@ -203,7 +240,7 @@ merged (`write-scope-document`), so a reference check there could never be made 
 pass. Keep IDs accurate in them anyway; nothing but review will catch a
 mistake.
 
-### Namespacing across domains
+#### Namespacing across domains
 
 A project modeling multiple domains (see the `model-domains` skill and
 `architecture/domains/README.md`) qualifies
@@ -236,7 +273,7 @@ referenced from outside it. Referencing another domain's internal process or
 resource by ID reaches through the contract and is a modeling error — take
 it up with that domain's charter instead.
 
-## What belongs at which tier
+### What belongs at which tier
 
 A model that federates — an organization with applications built under it —
 has the same six layers at every level, and **the layers do not mean the same
@@ -254,7 +291,7 @@ Two models at the same depth can sit at different tiers:
 | A product it offers | 1 — Application | **Product** |
 | A thing that implements part of that product | 1 — Application | **Implementation** |
 
-### The rule
+#### The rule
 
 **A tier may refine what the tier above exposed; it may never restate it. Every
 refining element names its parent.**
@@ -280,7 +317,7 @@ abstract. What an implementation may not do is *restate* a service, an actor
 or an object the tier above already owns: it cites that one and adds only what
 its own delivery requires.
 
-### Telling which tier you are in
+#### Telling which tier you are in
 
 Ask what the model is *for*. If it describes a business, it is enterprise. If
 it describes something the business offers, it is product. If it describes one
@@ -288,7 +325,7 @@ built thing that realizes part of an offer, it is implementation. A model that
 would have to restate its parent's elements to make sense is not a tier of its
 own — it is a section of its parent.
 
-### Where an implementation's model lives
+#### Where an implementation's model lives
 
 Either in the product's own tree, or in a tree of its own. **That is the
 Requester's call, made per implementation**, and both are legitimate: keep it
@@ -296,7 +333,7 @@ local when the implementation needs little design of its own, split it when it
 needs a lot. The tier rule is unaffected either way — it governs what the
 model contains, not which directory holds it.
 
-## Canvas notation
+### Canvas notation
 
 The canvases in `0_business-design/` are Strategyzer artifacts, not
 ArchiMate, so they are written as **tables, one per canvas**, not as
@@ -312,7 +349,7 @@ customer profile and the Strategy fill for the value map, as in
 The canvas-block-to-ArchiMate-element mapping lives in that same README and
 is not restated anywhere else.
 
-## Grounding rule (the most important one)
+### Grounding rule (the most important one)
 
 Every EA element must name the code artifact that realizes it — a page, a
 module path, a pipeline file. If you cannot point at the realizing
@@ -322,7 +359,7 @@ initiative"** (ideally linked to the initiative that will deliver it). This
 keeps the whole set verifiable against the code at any time — an outsider
 should be able to open any EA document and check it against the repo.
 
-## ArchiMate on Mermaid
+### ArchiMate on Mermaid
 
 ArchiMate has no native Mermaid profile — no icons, no standard shapes — so
 these documents encode its semantics with **four devices: label format,
@@ -365,7 +402,7 @@ Relationships are labeled with their ArchiMate name (**serves**,
 **aggregates**, **influences**); where Mermaid arrowheads can't distinguish
 relation types, the label is authoritative.
 
-### Diagrams come first, one per section
+#### Diagrams come first, one per section
 
 **A section that has a diagram opens with it**, and the tables and prose
 below describe it. Not the reverse: a reader who meets three tables before a
@@ -383,7 +420,7 @@ element has the most edges, which has none, where every path converges,
 which side of a boundary is thin. If a diagram only restates the rows
 beneath it, cut it — that is DRY applied to pictures.
 
-### Every element document opens with "How to read this document"
+#### Every element document opens with "How to read this document"
 
 A legend diagram showing this document's element types and how they connect,
 then a table of **glyph / shape / element / ID prefix** — including any
@@ -400,7 +437,7 @@ one file, has the notation in front of them and needs no second file open.
 That matters more here than in most documentation, because these documents
 are read one at a time and out of order.
 
-## Actors: human, AI, and hybrid
+### Actors: human, AI, and hybrid
 
 `«Business Actor»` and `«Business Role»` nodes name **who** — and in a
 system where an AI can hold a role, "who" is no longer implicitly human.
@@ -427,7 +464,7 @@ columns beyond the usual name/description:
 If an initiative changes an AI actor's autonomy level or decision rights,
 that's exactly the kind of call the `record-decision` skill is for.
 
-## What the document contains: the subject, not its own construction
+### What the document contains: the subject, not its own construction
 
 **Every sentence in a document is either about its subject or about the act of
 writing it. The first belongs in the document; the second belongs in the scope
@@ -459,7 +496,7 @@ a gate, so it belongs in the scope document and the gate presentation
 there). Writing it in
 the layer document as well is a second copy of a fact, which is DRY broken.
 
-### Two carve-outs
+#### Two carve-outs
 
 - **Anything awaiting validation stays inline.** A "Pending — future
   initiative" marker, an adopted interpretation, a figure nobody has confirmed
@@ -471,7 +508,7 @@ the layer document as well is a second copy of a fact, which is DRY broken.
   document talking about itself. The first is a reference, the second is a
   narrative.
 
-### No version commentary
+#### No version commentary
 
 No "as of initiative N", no note about what an unapproved proposal would
 change, no record of a draft's revisions, no "Retired — None". The document
@@ -479,14 +516,14 @@ states what is true now; git holds how it got there and the scope documents
 hold why. A model carrying its own changelog gives a reader two accounts to
 reconcile and no way to tell which is current.
 
-### Notes that survive go to the end
+#### Notes that survive go to the end
 
 A note worth keeping that belongs to no single section goes in a final
 **Additional notes** section, after the last element group — not woven between
 a diagram and the table it explains, where it displaces what the reader came
 for.
 
-## Document skeleton
+### Document skeleton
 
 - Title (`# …`), then a nav line:
   `_[← <Layer> layer](./README.md) · [EA home](../README.md)_`
@@ -504,7 +541,7 @@ for.
   prose only for rationale (the "why", not the "what" — the diagrams and
   tables already say what), and only where the "why" is about the subject.
 
-## Links
+### Links
 
 - Always relative, always to a specific file (`../2_business/README.md`,
   not `../2_business/`), keeping `#anchors` when pointing at a section.
