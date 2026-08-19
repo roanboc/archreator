@@ -1,45 +1,69 @@
 ---
 name: record-decision
-description: Use when a choice needs a durable rationale but doesn't rise to a full scope document — architecture-significant calls like an AI actor's autonomy level, a library/pattern choice, or a tradeoff a future reader will ask "why did we do it this way?" about.
+description: Use when a choice needs a durable rationale but doesn't rise to a full scope document — architecture-significant calls like an AI actor's autonomy level, a library or pattern choice, or a tradeoff a future reader will ask "why did we do it this way?" about. Writes a numbered, indexed decision record.
+metadata:
+  archreator:
+    kind: document-template
+    realizes_process: BPROC3.2
+    applies_at_depth: "1,2,3"
+    gates: none
 ---
 
-# Recording a decision
+# Record a decision
 
-A scope document (`write-scope-document` skill) captures an entire initiative's EA
-alignment; a decision record captures **one call**, in isolation, in the
-place future readers will actually look for it. Reach for this when the
-call is smaller than an initiative but too consequential to leave as an
-unrecorded judgment buried in a PR thread — the clearest recurring case in
-this template is an **AI actor's autonomy level or decision rights**
-(`architecture-document-style`'s actor notation): "why is this role co-pilot and not fully
-autonomous?" deserves a citable answer, not just a table cell.
+An **architecture decision record** — the pattern Michael Nygard named, and
+whose sections here parallel MADR's. A scope document captures an entire
+initiative's alignment; a decision record captures **one call**, in isolation,
+in the place a future reader will look for it.
 
-## When to use this instead of (or alongside) a scope document
+## ⊕ When to use this
 
-- The call doesn't change any EA layer's content by itself — it's a
-  rationale for a value that's already going into a table (an actor's
-  autonomy level, a technology choice already in
-  `5_technology/1_technology-services.md`), not a new element.
-- A future reader (human or AI) picking up the code will reasonably ask
-  "why this and not the alternative?" and the answer isn't obvious from
-  the EA docs alone.
-- It's too small to justify a full scope document's plateaus/work-package
-  structure, but too consequential to leave unrecorded.
+| The situation | What it looks like |
+| ------------- | ------------------ |
+| A rationale, not an element | The call does not change any layer's content by itself — it explains a value already going into a table |
+| A reader will ask why | "Why this and not the alternative?" is not answerable from the layer documents alone |
+| Smaller than an initiative | Too small for plateaus and work packages, too consequential to leave in a PR thread |
+| An AI actor's autonomy | The clearest recurring case: why a role is co-pilot rather than fully autonomous deserves a citable answer, not a table cell |
 
-If the change also adds or changes EA elements, write the scope document
-first (`align-change-through-layers`) — the decision record supplements it, linked
-from the EA-alignment table row it explains; it never replaces it.
+## ⊖ When not to
 
-## Where decisions live
+| The situation | Use instead |
+| ------------- | ----------- |
+| The change adds or alters model elements | `align-change-through-layers`, then link the decision record from the alignment row it explains |
+| Context and Consequences run past half a page | The call is initiative-sized — write a scope document |
+| The project makes only a handful of significant calls | Fold the rationale into the relevant scope document's prose; add the folder the first time a decision does not fit |
 
-`architecture/decisions/<n>_<kebab-case-slug>.md`, numbered chronologically across
-all decisions (one flat sequence, not per-layer), indexed in
-`architecture/decisions/README.md`. Optional — like `architecture/scope/open-questions.md`,
-projects with only a handful of significant calls can skip the folder
-entirely and fold the rationale into the relevant scope document's prose
-instead; add the folder the first time a decision doesn't fit that mold.
+A decision record supplements a scope document. It never replaces one.
 
-## Template
+## ⌖ Where this sits
+
+Realizes `BPROC3.2`, in the band that keeps the model true. It carries no
+gate: a decision record states a call that has already been made, and the
+approval that mattered happened wherever the call was taken.
+
+```mermaid
+flowchart LR
+  call(["One consequential call, smaller than an initiative"])
+  doc[/"architecture/decisions/n_slug.md"/]
+  idx[/"decisions/README.md — the index"/]
+  row(["The layer row it explains, linked both ways"])
+  reader(["A reader asking: why this, and not the alternative?"])
+
+  call --> doc --> idx
+  doc <--> row
+  doc --> reader
+
+  classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
+  classDef artifact fill:#eef2f7,stroke:#9fb0c4,color:#333
+  class call,row,reader business
+  class doc,idx artifact
+```
+
+## ▤ Template
+
+Lives at `architecture/decisions/<n>_<kebab-case-slug>.md`, numbered
+chronologically across all decisions — one flat sequence, not per layer — and
+indexed in `architecture/decisions/README.md`.
 
 ```markdown
 # Decision <n> — <Short title>
@@ -48,19 +72,19 @@ _[← Decisions index](./README.md)_
 
 **Status:** Proposed | Accepted | Superseded by [decision <m>](./<m>_*.md)
 **Date:** <YYYY-MM-DD>
-**Touches:** <link the EA document/row this decision explains, e.g.
+**Touches:** <link the document/row this decision explains, e.g.
 [2_business/1_business-actors-and-roles.md#support-triage-agent](../2_business/1_business-actors-and-roles.md#support-triage-agent)>
 
 ## Context
 
 <What prompted the call — the constraint, the risk, the requirement that
-made this not-obvious.>
+made this not obvious.>
 
 ## Options considered
 
 | Option | Why not (or why) |
-| ------ | ------------------ |
-| …      | …                 |
+| ------ | ---------------- |
+| …      | …                |
 
 ## Decision
 
@@ -73,16 +97,41 @@ actor's autonomy level, what oversight or audit trail it commits the
 project to.>
 ```
 
-## Rules
+## ※ Rules
 
-- **Link both ways.** The EA row this decision explains links to the
-  decision record; the decision record links back to that row (`Touches`).
-  One fact — the value — one home (the EA table); the decision record
-  holds the *why*, not a restatement of the *what*.
-- **A decision record is a historical record once accepted** — like a
-  merged scope document, don't rewrite it; a changed call gets a new
-  numbered record that supersedes it (update the old one's `Status` line
-  to point at the new one).
-- **Keep it short.** If Context and Consequences together need more than
-  half a page, the call is probably initiative-sized — write a scope
-  document instead.
+- **Link both ways.** The layer row links to the decision record; the record
+  links back through `Touches`. One fact — the value — has one home in the
+  layer table. The record holds the *why*, never a restatement of the *what*.
+- **A decision record is a historical record once accepted.** Like a merged
+  scope document, its words do not change. A changed call gets a new numbered
+  record, and the old one's `Status` line points at it.
+- **Keep it short.** Half a page for Context and Consequences together is the
+  ceiling, and passing it is the signal that this is an initiative.
+- **Options considered earns its place.** A record with one option is a
+  statement, not a decision — name what was rejected, or the reader cannot
+  tell a choice from a default.
+
+## ✎ Worked example
+
+> A support-triage role is modeled as `(AI)` at **co-pilot** autonomy. The
+> layer table carries the value; the decision record carries why full autonomy
+> was rejected — an unreviewed misclassification reaches a customer — and what
+> co-pilot commits the project to: a human review queue, and an audit trail of
+> what the actor proposed against what shipped.
+
+## ⚠ Anti-patterns
+
+- Restating the value in the record instead of the reasoning behind it.
+- A record with no rejected option.
+- Rewriting an accepted record instead of superseding it.
+- Numbering per layer rather than in one flat chronological sequence.
+- Creating the folder for a project that will produce two records, where the
+  scope documents would have carried the rationale perfectly well.
+
+## ☑ Done when
+
+- The record is numbered, slugged and indexed in `decisions/README.md`.
+- `Touches` links the row it explains, and that row links back.
+- `Status` is one of Proposed, Accepted, or Superseded with a link.
+- Options considered names at least one rejected alternative.
+- Consequences say what the call commits the project to, not only what it enables.
