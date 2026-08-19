@@ -5,7 +5,6 @@ metadata:
   archreator:
     kind: document-template
     realizes_process: BPROC3.2
-    applies_at_depth: "1,2,3"
     gates: none
 ---
 

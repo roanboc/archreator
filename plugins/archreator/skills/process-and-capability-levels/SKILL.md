@@ -4,7 +4,6 @@ description: Rulebook — consult when modeling an organization's business proce
 metadata:
   archreator:
     kind: rulebook
-    applies_at_depth: "2,3"
     gates: none
 ---
 

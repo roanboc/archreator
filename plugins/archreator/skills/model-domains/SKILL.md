@@ -5,7 +5,6 @@ metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.4
-    applies_at_depth: "3"
     gates: Gate 2
 ---
 
