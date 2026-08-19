@@ -46,7 +46,7 @@ strips the glyph before matching.
 | ----- | ------- | ----- | :---------------: | :-----------------: | :--------: |
 | `⊕` | When to use this | The observable conditions | required | required | required |
 | `⊖` | When not to | Where a different skill serves | required | required | required |
-| `⌖` | Where this sits | The process realized, the gates, the diagram | required | required | — |
+| `⌖` | Where this sits | The process realized, the gates, the diagram | required | required | optional — to say it realizes none |
 | `⚓` | Invariants | Rules holding at every step | required | — | — |
 | `⚙` | Steps | The work, numbered | required | — | — |
 | `▤` | Template | The document's shape | — | required | — |
