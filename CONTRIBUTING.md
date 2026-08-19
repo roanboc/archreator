@@ -37,19 +37,27 @@ Pure bug fixes skip the gates, per the method's own rule.
 
 ## Working locally
 
-Both validators must be green before pushing; CI runs the same:
+All three validators must be green before pushing; CI runs the same:
 
 ```bash
 python3 plugins/archreator/templates/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/templates/scripts/check_model.py    # element-ID references resolve
+python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 
-The scripts live under `plugins/archreator/templates/` because they ship with the scaffold —
-the same scripts land in every project the method emits. Running them from
-the root of this repository is a smoke test: since there is no
-`architecture/` folder here, `check_model.py` reports the scaffold as
-having no elements and passes trivially, while `check_links.py` checks the
-docs, the scaffold, and the site.
+The first two live under `plugins/archreator/templates/` because they ship with
+the scaffold — the same scripts land in every project the method emits. Running
+them from the root of this repository is a smoke test: since there is no
+`architecture/` folder here, `check_model.py` reports the scaffold as having no
+elements and passes trivially, while `check_links.py` checks the docs, the
+scaffold, and the site.
+
+`check_skills.py` sits outside `templates/` because a downstream project has no
+skills to check. It reads the process model in [`docs/process/`](./docs/process/README.md)
+and every skill's frontmatter and headings, checking them against
+[the skill format](./docs/skill-format.md). It needs PyYAML — use `uv run` in
+place of `python3` where that is not installed, and it will supply it from the
+script's own inline metadata.
 
 ## Pull requests
 
@@ -60,14 +68,17 @@ needed one), gives every affected surface a verdict, and describes the whole
 branch (`git diff main...HEAD`), not just the latest commit. For a pure bug
 fix, say what broke, the root cause, the fix, and any regression coverage.
 
-The [`core-pr-description`](./plugins/archreator/skills/core-pr-description/SKILL.md)
+The [`write-pr-description`](./plugins/archreator/skills/write-pr-description/SKILL.md)
 skill keeps the body current.
 
 ## Conventions
 
 - **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - **Documentation language:** English.
-- **Skill folder names** carry a role prefix (`core-*`, `discover-*`,
-  `doc-*`, `flow-*`) — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
+- **Skill folder names** are a verb and an object for a skill you run, a noun
+  phrase for one you consult — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
+- **Skills follow a fixed format** — frontmatter, sections and glyphs are
+  specified in [`docs/skill-format.md`](./docs/skill-format.md), and
+  `check_skills.py` enforces it.
 - **A merged scope document is a historical record** — link targets get
   repaired when files move; the words never change (`RULE6`).

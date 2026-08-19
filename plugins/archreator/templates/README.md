@@ -1,7 +1,7 @@
 # \<project-name\>
 
 <!--
-  TEMPLATE — `core-project-bootstrap` replaces this whole file with the project's
+  TEMPLATE — `establish-project` replaces this whole file with the project's
   own front door. Keep it short: what this is, who it's for, and where the
   model lives. The completion check looks for the `<placeholder>` marker
   below, so remove it once the real content is written.
@@ -24,7 +24,7 @@ does and how its pieces relate.
 Requirements are aligned through the model and approved at explicit gates
 before anything is built. [`CLAUDE.md`](./CLAUDE.md) states the rule and the
 declared modeling depth, [`CONTRIBUTING.md`](./CONTRIBUTING.md) names who
-grants those gates, and the `core-architecture-first-change` skill runs the process.
+grants those gates, and the `align-change-through-layers` skill runs the process.
 
 ## Built with
 

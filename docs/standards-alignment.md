@@ -26,7 +26,7 @@ the name.
 
 **Skills name their standards as they are converted.** Where a Note names a
 standard that the skill body does not cite, the citation is **Pending — lands
-with that skill's conversion to an AIP Instruction**.
+with that skill's conversion to [the skill format](./skill-format.md)**.
 
 ## Partitioning and scope
 
@@ -54,10 +54,10 @@ with that skill's conversion to an AIP Instruction**.
 | ---------- | ----------- | ------- | ---- |
 | **Grounding rule** — every element names the artifact realizing it, or is marked Pending | ISO/IEC/IEEE 42010 *correspondences* and *correspondence rules* | Cite | Strong match. A correspondence relates architecture-description elements to other things; a correspondence rule is what makes it checkable, and `check_model.py` enforces one |
 | **Each fact in one place** | **DRY** (Hunt and Thomas); single source of truth | Adopted | The skills name the principle rather than an element ID. An ID from archreator's own motivation layer does not resolve for a reader of the skills, and in a downstream project resolves to *that* project's principle instead |
-| **What a gap in the identifiers means** | The never-reuse rule, stated in `core-architecture-doc-style` § Element IDs | Adopted | Same reason |
+| **What a gap in the identifiers means** | The never-reuse rule, stated in `architecture-document-style` § Element IDs | Adopted | Same reason |
 | **"Consolidate before you enumerate" / "well-done less is more"** | KISS; YAGNI; parsimony in modeling | Cite | The archreator phrasing is an instruction where the standards are slogans, so it earns its keep |
 | **"The document describes the subject, not its own construction"** | Living documentation (Martraire); present-tense technical writing | Cite | Approximate. The specific ban on version commentary inside a document is archreator's own sharpening |
-| **`doc-restate-current-state`** | Adjacent only: documentation debt, model refactoring | **Ours** | Making "the model has drifted" its own gated initiative, with its own skill, has no standard name |
+| **`restate-current-state`** | Adjacent only: documentation debt, model refactoring | **Ours** | Making "the model has drifted" its own gated initiative, with its own skill, has no standard name |
 
 ## AI actors
 
@@ -71,8 +71,8 @@ with that skill's conversion to an AIP Instruction**.
 
 | archreator | Established | Verdict | Note |
 | ---------- | ----------- | ------- | ---- |
-| **`doc-decision-record`** | **ADR** — Architecture Decision Record (Nygard); MADR | Cite | Its sections parallel MADR's. Not naming the pattern costs it every reader who already knows it |
-| **`flow-story-sharding`** | Vertical slicing; INVEST (Wake) | Cite | BMAD-METHOD is cited in the skill for the context-engineering half; INVEST names the sizing half |
-| **`flow-engagement-retrospective`** | Retrospective; blameless post-mortem | Cite | |
-| **`flow-stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | SPADE belongs with `doc-decision-record` rather than here: this skill is a decision *aid* carrying defaults, not a decision *record* |
+| **`record-decision`** | **ADR** — Architecture Decision Record (Nygard); MADR | Cite | Its sections parallel MADR's. Not naming the pattern costs it every reader who already knows it |
+| **`shard-stories`** | Vertical slicing; INVEST (Wake) | Cite | BMAD-METHOD is cited in the skill for the context-engineering half; INVEST names the sizing half |
+| **`run-retrospective`** | Retrospective; blameless post-mortem | Cite | |
+| **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying defaults, not a decision *record* |
 | **The canvases** | Osterwalder — Business Model Canvas, Value Proposition Canvas | Adopted | |

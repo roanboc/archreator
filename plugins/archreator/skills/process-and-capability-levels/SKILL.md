@@ -1,13 +1,13 @@
 ---
-name: discover-process-and-capability-levels
+name: process-and-capability-levels
 description: Use when modeling an organization's business processes or capabilities — building a process map, deciding how far to decompose, drafting a capability model, or numbering leveled elements. Covers the four macro process categories (strategic, operational, support, evaluation), what each level means and how its elements are described, the hierarchical identifiers that carry the level (`BPROC7`, `BPROC7.2`, `BPROC7.2.1`), seeding a capability map from an industry reference model, and the breadth-first depth-on-pain rule that says which branches to detail and which to leave alone. Not needed for a single application, which has no process map of its own.
 ---
 
 # Levels, and how far down to go
 
-_Reached from `core-architecture-first-change` Step 2 when the project is Depth 2
+_Reached from `align-change-through-layers` Step 2 when the project is Depth 2
 or above, from `discover-strategy` theme 4, and from
-`discover-operating-model` at the hand-off. `core-architecture-doc-style` governs
+`discover-business-model` at the hand-off. `architecture-document-style` governs
 how the documents are written; this governs how they are shaped._
 
 An organization's processes and capabilities are the two catalogues that grow
@@ -29,7 +29,7 @@ detailed, and **says so in the focus table** rather than trailing off.
 Horizontal completeness is what makes a model trustworthy: a reader who can
 see the whole map knows nothing is hidden. Vertical completeness is what makes
 it unreadable. Only the second one is optional, so only the second one gets
-cut. This is `core-architecture-doc-style` § Consolidate before you enumerate
+cut. This is `architecture-document-style` § Consolidate before you enumerate
 applied to depth instead of to count, and it is the same instinct as the
 modeling-depth ladder — spend the method where the subject is worth it.
 
@@ -118,7 +118,7 @@ external party where there is not (`Requester`, `Regulator`). A chain the reader
 follow by ID is the payoff — and the identifiers already carry the tree, so the
 chain and the hierarchy are readable from the same table.
 
-`realized by` is the grounding rule (`core-architecture-doc-style` § Grounding
+`realized by` is the grounding rule (`architecture-document-style` § Grounding
 rule) on the organization track: a process is realized by a team, a role, or a
 written procedure — not by a source file. Name that, or mark it Pending.
 
@@ -202,7 +202,7 @@ model, and it should be: it is where the engagement's scope actually lives.
 **Below roughly fifteen elements in a level, the whole catalogue is one
 document** — its rows grouped by level and ordered by ID, which sorts them
 into the tree without a `Level` column or a parent column to maintain. That
-is the fifteen-element threshold in `core-architecture-doc-style` § Diagrams
+is the fifteen-element threshold in `architecture-document-style` § Diagrams
 come first, applied to the file rather than to the diagram.
 
 **Above it, the catalogue becomes a folder** named for the file it replaces,
@@ -221,13 +221,13 @@ not renumber, and a second focused branch renumbers nothing outside the
 folder.
 
 Each level document is a full element document — legend, diagram per section,
-inventory table — per `core-architecture-doc-style`. The index README carries the
+inventory table — per `architecture-document-style`. The index README carries the
 focus table and links the levels; it defines no elements of its own, so it
 needs no legend.
 
 **The identifier carries the level.** A level-2 process under macro process
 `BPROC7` is `BPROC7.2`, and a level-3 sub-process under that is `BPROC7.2.1`
-— `core-architecture-doc-style` § Levels number hierarchically holds the rule,
+— `architecture-document-style` § Levels number hierarchically holds the rule,
 including what re-parenting an approved element costs. Splitting the catalogue
 into a folder changes none of it: the files exist for readability, and the
 identifiers say the same thing they would say in one table.

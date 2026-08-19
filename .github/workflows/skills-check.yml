@@ -1,0 +1,31 @@
+name: Skills check
+
+on:
+  pull_request:
+    paths:
+      - "plugins/archreator/skills/**"
+      - "plugins/archreator/scripts/**"
+      - "plugins/archreator/templates/CLAUDE.md"
+      - "docs/process/**"
+      - "docs/skill-format.md"
+      - ".github/workflows/skills-check.yml"
+  push:
+    branches: [main]
+    paths:
+      - "plugins/archreator/skills/**"
+      - "plugins/archreator/scripts/**"
+      - "plugins/archreator/templates/CLAUDE.md"
+      - "docs/process/**"
+      - "docs/skill-format.md"
+      - ".github/workflows/skills-check.yml"
+
+jobs:
+  check-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # uv supplies PyYAML from the script's own inline metadata, so the
+      # checker needs no requirements file and no install step.
+      - uses: astral-sh/setup-uv@v5
+      - name: Check the skill corpus
+        run: uv run plugins/archreator/scripts/check_skills.py

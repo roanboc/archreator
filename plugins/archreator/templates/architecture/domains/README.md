@@ -61,7 +61,7 @@ domain. If you can't name what the domain would expose to the rest of the
 organization, it isn't one yet.
 
 Splitting is a change to the business layer, so it goes through the normal
-process and needs Gate 2 like anything else. The `discover-domain-modeling` skill
+process and needs Gate 2 like anything else. The `model-domains` skill
 walks it.
 
 ## The charter
@@ -77,7 +77,7 @@ entitled to depend on. It carries:
 | **Exposed services** | The «Business Service» elements other domains may reference, with their IDs. This is the interface — nothing else is public |
 | **Consumed services** | What it depends on from other domains, by qualified ID |
 | **Decision rights and escalation** | What it decides alone, and who it escalates to |
-| **Operated by** | Human, AI, or hybrid — with the autonomy level, decision rights, and escalation path from `core-architecture-doc-style`'s actor notation, applied to the domain as a whole |
+| **Operated by** | Human, AI, or hybrid — with the autonomy level, decision rights, and escalation path from `architecture-document-style`'s actor notation, applied to the domain as a whole |
 
 That last row is what makes this useful for an AI-first organization: a
 domain operated by an AI at a declared autonomy level, with declared
@@ -115,7 +115,7 @@ numbering would make every new domain a merge conflict against every other.
 A leveled element extends its parent's ID (`BPROC1.3`), so an ID can carry
 both qualifiers at once — `SALES.BPROC1.3`. Read outwards from the prefix:
 upper-case segments before it are the domain path, numeric segments after it
-are the levels. Full rules in `core-architecture-doc-style` § Element IDs.
+are the levels. Full rules in `architecture-document-style` § Element IDs.
 
 ## Layer view
 

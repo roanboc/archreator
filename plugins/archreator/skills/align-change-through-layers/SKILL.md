@@ -1,5 +1,5 @@
 ---
-name: core-architecture-first-change
+name: align-change-through-layers
 description: Use when requirements change or a new feature/behavior change is requested in this repo. Assesses whether the change needs strategy discovery first, aligns the change through the enterprise architecture layers (strategy → business → information → application → technology) with explicit Requester approval gates before implementation, records it in a scope document, and only then implements. Not needed for pure bug fixes that change no documented behavior.
 ---
 
@@ -7,7 +7,7 @@ description: Use when requirements change or a new feature/behavior change is re
 
 _New to this repository? `README.md` orients a person,
 `CONTRIBUTING.md` draws this same process as a
-flow, and the `core-project-bootstrap` skill handles a project that was created
+flow, and the `establish-project` skill handles a project that was created
 from the template but never set up._
 
 In this repository, **strategy and business architecture are validated
@@ -26,7 +26,7 @@ canvas blocks. **At every one of them, consolidate before you enumerate.**
 Two elements that differ only in degree are one element with a severity or
 intensity column. A list that has grown past one screen is asking which of
 its entries are the same thing seen from two angles, not how to be sorted.
-The rules are in `core-architecture-doc-style` § Consolidate before you enumerate and are
+The rules are in `architecture-document-style` § Consolidate before you enumerate and are
 not restated here.
 
 This applies to what is **proposed** as much as to what is written: a
@@ -42,18 +42,18 @@ that anyone will trace.
 
 | Gate | When | The Requester approves |
 | ---- | ---- | ----------------------- |
-| **Gate 0 — Business model** | Only when step 1 finds the initiative is modeling an organization | The Value Proposition Canvas per customer segment and the Business Model Canvas per product, before anything is derived from them — see the `discover-operating-model` skill |
+| **Gate 0 — Business model** | Only when step 1 finds the initiative is modeling an organization | The Value Proposition Canvas per customer segment and the Business Model Canvas per product, before anything is derived from them — see the `discover-business-model` skill |
 | **Gate 1 — Strategy** | Only when step 1 triggers strategy discovery | The strategy layer itself (motivation, capabilities, value stream) and the key business elements discovered with it — see the `discover-strategy` skill |
 | **Gate 2 — Business** | Every initiative that changes documented behavior — which is every initiative that will produce code. A docs-only initiative passes Gate 0 and/or Gate 1 instead | The changes (or explicit "no change" verdicts) to `1_strategy`, `2_business`, and `3_information` |
 | **Gate 3 — Solution design** | Only if the Requester opts in when asked at Gate 2 | The solution architecture and logical application components, with the good practices and design patterns applied called out |
 
 **This table is the single source for which gate applies when.**
-`CONTRIBUTING.md`, `architecture/scope/README.md`, and the `core-scope-doc` skill point
+`CONTRIBUTING.md`, `architecture/scope/README.md`, and the `write-scope-document` skill point
 here rather than restating it.
 
 Approval is granted by the **Requester** (see `CONTRIBUTING.md` § Actors)
 and recorded in the scope document's **Approvals** table (see the
-`core-scope-doc` skill) — which gate, who approved, when, and what was shown. A
+`write-scope-document` skill) — which gate, who approved, when, and what was shown. A
 gate that didn't apply gets an `N/A — <why>` row rather than being deleted,
 so a reader can tell a skipped gate from a forgotten one. An approval that
 isn't recorded didn't happen. Pure bug fixes that change no documented
@@ -108,7 +108,7 @@ row bear on the requested change? If the user (or whoever owns the product)
 answers one during this conversation, record the answer there and in the
 originating scope document's "Resolved" section in the same change, before
 continuing. Skip this step if the project has no such log yet — it is
-optional (see the `core-scope-doc` skill).
+optional (see the `write-scope-document` skill).
 
 ## Step 1 — Locate the change, then assess strategy
 
@@ -127,7 +127,7 @@ Read it, and check the request against it:
   Requester, not something to absorb quietly mid-change.
 
 If `CLAUDE.md` declares no depth, the project was never bootstrapped — run
-the `core-project-bootstrap` skill first.
+the `establish-project` skill first.
 
 Never let the depth go unstated. A Requester who is told "I'm treating this
 as Depth 1 — one application, light strategy layer; say the word if you want
@@ -141,7 +141,7 @@ At Depth 3 the model is split into domains
 assessing anything, name which domain owns this change, and check whether it
 touches another domain's **exposed** services. If it does, this is a
 cross-domain change: the consuming domains' Requesters approve at Gate 2 too,
-and the `discover-domain-modeling` skill governs how the contract changes. At Depth 1
+and the `model-domains` skill governs how the contract changes. At Depth 1
 and 2 skip this step.
 
 ### 1c — Assess strategy, and decide whether this is discovery
@@ -153,7 +153,7 @@ four verdicts, explicitly:
   modeled is an **organization** rather than a single application — a
   company, a department, or a service line whose operating model is itself
   the deliverable — and `architecture/0_business-design/` is empty or no longer
-  matches. Switch to the `discover-operating-model` skill: the initiative
+  matches. Switch to the `discover-business-model` skill: the initiative
   becomes documenting the Value Proposition Canvas per segment and the
   Business Model Canvas per product, ending at **Gate 0**, and then handing
   off to `discover-strategy` to derive layers 1–2 from the approved
@@ -202,14 +202,14 @@ the same change set, not an afterthought):
 1. **`architecture/2_business/`** — Which business services/processes/objects
    are added or changed? At Depth 2 and above, processes are leveled and
    level 1 is classified into four macro categories — use the
-   `discover-process-and-capability-levels` skill rather than deciding the shape and
+   `process-and-capability-levels` skill rather than deciding the shape and
    the decomposition depth per initiative. New business rules get a row in the
    rules table of `5_domain-context-and-rules.md` (with the _why_) before they
    get code.
    New terms go into the glossary; reuse existing glossary terms in code.
    If the change adds an actor, or changes an existing AI actor's autonomy
-   level or decision rights (`core-architecture-doc-style`'s actor notation), consider a
-   `doc-decision-record` alongside the scope document explaining why.
+   level or decision rights (`architecture-document-style`'s actor notation), consider a
+   `record-decision` alongside the scope document explaining why.
 2. **`architecture/3_information/`** — New or changed data objects, flows,
    representations, storage, classification, retention?
 
@@ -218,7 +218,7 @@ in the scope document rather than skipping them.
 
 ## Step 3 — Draft the scope document
 
-Create the next-numbered file in `architecture/scope/` using the `core-scope-doc` skill.
+Create the next-numbered file in `architecture/scope/` using the `write-scope-document` skill.
 Do this **before Gate 2**, so the Requester approves against a concrete
 document; refine it as implementation proceeds.
 
@@ -247,7 +247,7 @@ again.
    change? New ports/interfaces follow `5_interface-contracts.md`; new
    platforms/adapters follow `4_solution-design.md`.
 2. **`architecture/5_technology/`** — Any impact on runtimes, build, CI, or
-   hosting? If no stack has been chosen yet, use the `flow-stack-selection`
+   hosting? If no stack has been chosen yet, use the `stack-selection`
    skill instead of re-deriving one from scratch.
 
 If the Requester opted into **Gate 3** at Gate 2: present the updated
@@ -262,7 +262,7 @@ rework this step if changes are requested.
 **First, size the work.** If any work package is too large or long-running
 to finish in one sitting — more than a handful of files, or spanning a
 break, a session boundary, or a handoff to someone else — shard it with the
-`flow-story-sharding` skill before writing code. Each story is then actionable
+`shard-stories` skill before writing code. Each story is then actionable
 from its own text and links alone, so whoever picks it up next doesn't
 re-derive the plan from the whole EA tree. A small work package needs no
 stories; an inline task list in the scope document is the default.
@@ -317,7 +317,7 @@ someone restarts it, so don't leave that to chance.
 
 ## Step 8 — PR description
 
-When opening (or updating) the pull request, use the `core-pr-description`
+When opening (or updating) the pull request, use the `write-pr-description`
 skill: it fills `.github/pull_request_template.md` — the one template every
 change uses, a pure bug fix included — and covers the whole branch
 (`main...HEAD`), not just the latest commit.

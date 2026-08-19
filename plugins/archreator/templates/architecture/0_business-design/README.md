@@ -20,7 +20,7 @@ organization** — a company, a department, a service line. A project that is
 building a single application skips it entirely and starts at the
 [strategy layer](../1_strategy/README.md), driven by the
 `discover-strategy` skill. The company track is driven by the
-`discover-operating-model` skill instead, and ends at **Gate 0 — Business
+`discover-business-model` skill instead, and ends at **Gate 0 — Business
 model**, where the Requester approves these canvases before anything is
 derived from them.
 

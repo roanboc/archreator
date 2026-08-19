@@ -67,7 +67,7 @@ There are four: **Gate 0 — Business model**, **Gate 1 — Strategy**,
 **Gate 2 — Business**, and **Gate 3 — Solution design**. Which of them applies
 to a given change, and what the Requester is shown at each, is defined in
 exactly one place — the
-[`core-architecture-first-change` skill](../plugins/archreator/skills/core-architecture-first-change/SKILL.md)
+[`align-change-through-layers` skill](../plugins/archreator/skills/align-change-through-layers/SKILL.md)
 § The gates. This page names the gates; it does not restate the rule, because a
 second copy is a second thing to drift.
 
@@ -108,7 +108,7 @@ Principle that stops the work, an open question logged for the Requester.
 **Every one of those is stated and recorded, never a silent skip.** Drawn out,
 that branching is the levelled process model in
 [`docs/process/`](./process/README.md); written out step by step it is the
-[`core-architecture-first-change` skill](../plugins/archreator/skills/core-architecture-first-change/SKILL.md).
+[`align-change-through-layers` skill](../plugins/archreator/skills/align-change-through-layers/SKILL.md).
 
 ## Where the model lives
 
@@ -126,4 +126,4 @@ The scaffold at [`plugins/archreator/templates/`](../plugins/archreator/template
 README ready to fill in. The full conventions — numbering, ArchiMate on
 Mermaid, colour ramps, actor kinds — are in
 [`plugins/archreator/templates/architecture/README.md`](../plugins/archreator/templates/architecture/README.md)
-and in the [`core-architecture-doc-style` skill](../plugins/archreator/skills/core-architecture-doc-style/SKILL.md).
+and in the [`architecture-document-style` skill](../plugins/archreator/skills/architecture-document-style/SKILL.md).

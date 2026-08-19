@@ -6,7 +6,7 @@
   If named alternates are ever added for the "choose a template" flow, they
   must live in a .github/PULL_REQUEST_TEMPLATE/ directory and are selected
   via ?template=<name>.md. How to fill this in: CONTRIBUTING.md and the
-  core-pr-description skill.
+  write-pr-description skill.
 -->
 <!--
   Describe the WHOLE branch, not just the latest commit:
