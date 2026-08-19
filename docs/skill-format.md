@@ -63,7 +63,7 @@ strips the glyph before matching.
 | `⚖` | Judgement | The criteria to weigh, where the step is a decision rather than a mechanism |
 | `←` | Needs | What the step consumes from an earlier one |
 | `→` | Produces | What it writes, by path |
-| `❖` | Gate | The approval that stops the step until a person acts |
+| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely names gates it does not own to say they are `N/A` |
 
 **Needs and Produces each get their own paragraph.** Consecutive lines are one
 paragraph in markdown, and the two arrows render on one line if they share it.
@@ -95,3 +95,32 @@ correctly on both paths.
 **A skill never cites an element ID from a specific model.** `P3` is that
 model's third principle, and in a downstream project it resolves to something
 else entirely. Name the principle.
+
+## Where this format came from
+
+The section vocabulary is adapted from the
+[Agent Instruction Protocol](https://github.com/zach-blumenfeld/aip) (AIP),
+which models a skill as a schema-validated execution graph. Its lasting
+contribution here is **naming the negative space**: a skill states when *not*
+to use it, what it hands off to and gets back, the mistakes it steers away
+from, and the rules holding across every step rather than at one of them.
+Those four sections are AIP's, and three of them were where real defects had
+been hiding.
+
+Two more of its ideas carry through. A skill belongs to a **kind**, and the
+kind decides what structure it owes — which is why `REQUIRED_SECTIONS` is
+keyed by kind rather than applied uniformly. And its test for what to
+mechanize is the right one: script a fixed rule over structured input, leave a
+judgement over a loosely-specified one as prose for the agent to reason
+through.
+
+**The format is markdown rather than AIP's fenced YAML, and that is a
+deliberate divergence.** AIP's value comes from steps backed by scripts and
+wired by typed edges; these skills have neither — they are judgement
+procedures under human approval, and the one conversion measured carried zero
+script-backed steps and zero graph edges while growing 59% in lines. Markdown
+also keeps one artifact for both readers, and keeps the diagrams, which a YAML
+body cannot hold.
+
+The parts of AIP worth having did not need its file format. What replaced the
+JSON Schemas is the section table above, and `check_skills.py` enforcing it.

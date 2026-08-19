@@ -120,6 +120,7 @@ CATALOGUE_ROW_RE = re.compile(r"^\|\s*(?:\[)?`([a-z0-9-]+)`(?:\]\([^)]*\))?\s*\|
 LEVEL2_ROW_RE = re.compile(r"^\|\s*`(BPROC\d+\.\d+)`\s*\|(.+)\|\s*$", re.M)
 SKILL_NAME_RE = re.compile(r"`([a-z0-9][a-z0-9-]*)`")
 
+GATE_GLYPH = "❖"
 MIN_PREFIX_CHARS = 4
 
 
@@ -340,6 +341,18 @@ def check_required_sections(known: set[str]) -> list[str]:
             want = normalize(required)
             if not any(h.startswith(want) for h in headings):
                 errors.append(f"{skill}: a {kind} needs a `{required}` section")
+
+        # A declared gate has to appear in the body. The reverse is not an
+        # error: a skill may draw a gate belonging to the skill it hands to,
+        # which is how establish-project shows where bootstrap ends.
+        body = (SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
+        for gate in listed(meta, "gates"):
+            # Matched on the gate glyph, not a bare mention: a skill routinely
+            # names gates it does not own, saying they are N/A.
+            if gate.lower() != "none" and (GATE_GLYPH + " " + gate) not in body:
+                errors.append(
+                    f"{skill}: declares `{gate}` but its body never names it"
+                )
 
         # Every skill named in a Hands off to table has to exist.
         text = strip_code((SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8"))

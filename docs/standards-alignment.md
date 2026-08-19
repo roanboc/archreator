@@ -76,3 +76,5 @@ with that skill's conversion to [the skill format](./skill-format.md)**.
 | **`run-retrospective`** | Retrospective; blameless post-mortem | Cite | |
 | **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying defaults, not a decision *record* |
 | **The canvases** | Osterwalder — Business Model Canvas, Value Proposition Canvas | Adopted | |
+| **The skill format** | [AIP](https://github.com/zach-blumenfeld/aip) — the Agent Instruction Protocol | Cite | The section vocabulary and the kind-decides-structure idea are AIP's. The fenced-YAML body is not adopted: these skills have no script-backed steps and no graph edges, which is what that format exists to carry. [`docs/skill-format.md`](./skill-format.md) says what was taken and what was left |
+| **`shard-stories`' context packing** | [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) — context-engineered development | Cite | Already cited in the skill itself |
