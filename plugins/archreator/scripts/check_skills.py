@@ -14,36 +14,31 @@ defects have already lived - a skill citing an element ID from a model that
 does not ship with it, a section reference to a heading that had been renamed,
 and stale paths inside document templates.
 
-It widens as skills become AIP Instructions, because an AIP body is one fenced
-YAML block and `check_links.py` exempts fenced blocks by design. Every path a
-converted skill names would stop being checked by anything.
-
 This script covers the skills, and lives outside `templates/` because a
 downstream project has no skills to check.
 
-Five things are checked:
+Four things are checked:
 
-- **Section markers** - every `<skill>` § `<Section>` reference names a skill
-  that exists and a heading it actually has.
+- **Section markers** - every reference of the form skill-name, section sign,
+  heading names a skill that exists and a heading it actually has.
 - **Process binding** - every skill named in the process model exists, every
-  level-2 process is realized by at least one skill, and a converted skill's
-  own `realizes_process` agrees with the model.
-- **Body paths** - `script`, `template_asset`, `references` and `tables`
-  entries in a converted skill resolve to files in that skill's folder.
-- **Graph integrity** - inside a converted body, step names are unique,
-  `depends_on` names a step that exists, and `hands_off_to` names a real skill.
-- **Schema binding** - the schema bundled in a skill's `source/` is the same
-  file as the canonical one under `schemas/`, and the frontmatter `schemaId`
-  matches its `$id`. AIP requires the bundle so a skill is self-contained;
-  nothing in AIP notices when the copy drifts from the original.
+  level-2 process is realized by at least one skill, and a skill's own
+  `realizes_process` agrees with the model.
+- **Required sections** - a skill declaring `metadata.archreator.kind` carries
+  the headings its kind requires. A skill declaring no kind is skipped, which
+  is what lets the corpus be converted in waves.
 - **Catalogue agreement** - the skill table in `skills/README.md` and its
   deliberate copy in `templates/CLAUDE.md` carry the same rows.
 
+Headings may open with a glyph, which is stripped before matching: the glyph
+is notation, the words are the identity.
+
 A section reference is matched as a prefix of the heading, because a citation
-in running prose is routinely cut short by the sentence around it - `§ Grounding`
-for a heading of `Grounding rule (the most important one)`. One rename therefore
-escapes: extending a heading while keeping its opening words, where `Rules`
-becomes `Rules and constraints`. Renaming to anything else is caught.
+in running prose is routinely cut short by the sentence around it - a
+reference to `Grounding` for a heading of `Grounding rule (the most important
+one)`. One rename therefore escapes: extending a heading while keeping its
+opening words, where `Rules` becomes `Rules and constraints`. Renaming to
+anything else is caught.
 
 Exit code is 0 when everything resolves, 1 otherwise.
 """
@@ -73,7 +68,21 @@ SKILLS_DIR = REPO_ROOT / "plugins" / "archreator" / "skills"
 PROCESS_DIR = REPO_ROOT / "docs" / "process"
 CATALOGUE = SKILLS_DIR / "README.md"
 CATALOGUE_COPY = REPO_ROOT / "plugins" / "archreator" / "templates" / "CLAUDE.md"
-SCHEMAS_DIR = REPO_ROOT / "plugins" / "archreator" / "schemas"
+# The headings each kind of skill must carry. This replaces the JSON Schemas:
+# the structural promise a schema made is a list of required sections, and a
+# list of required sections is legible to the people who write them.
+# Defined once, in docs/skill-format.md; this is the machine-readable copy.
+REQUIRED_SECTIONS = {
+    "gated-procedure": [
+        "When to use this", "When not to", "Where this sits",
+        "Invariants", "Steps", "Hands off to", "Anti-patterns", "Done when",
+    ],
+    "document-template": [
+        "When to use this", "When not to", "Where this sits",
+        "Template", "Rules", "Done when",
+    ],
+    "rulebook": ["When to use this", "When not to", "Rules"],
+}
 
 # A fenced block, anchored and matched on fence length so a fence containing a
 # fence does not close early. Same rule as the two shipped validators.
@@ -99,8 +108,13 @@ MIN_PREFIX_CHARS = 4
 
 
 def normalize(text: str) -> str:
-    """Whitespace-collapsed, lower-cased, punctuation-trimmed for comparison."""
-    return re.sub(r"\s+", " ", text).strip().lower()
+    """Whitespace-collapsed, lower-cased, and stripped of any leading glyph.
+
+    A section heading may open with a notation glyph. The glyph says what kind
+    of section it is; the words are what a reference names.
+    """
+    collapsed = re.sub(r"\s+", " ", text).strip().lower()
+    return re.sub(r"^[^0-9a-z]+", "", collapsed)
 
 
 def strip_code(text: str) -> str:
@@ -120,19 +134,33 @@ def headings_of(skill: str) -> list[str]:
     return [normalize(h) for h in HEADING_RE.findall(strip_code(path.read_text(encoding="utf-8")))]
 
 
-def body_yaml(skill_md: Path) -> dict | None:
-    """The parsed YAML body of an AIP skill, or None if it is not one."""
-    match = FRONTMATTER_RE.match(skill_md.read_text(encoding="utf-8"))
+def skill_meta(skill: str) -> dict:
+    """The `metadata.archreator` block of a skill, or {} when it has none."""
+    path = SKILLS_DIR / skill / "SKILL.md"
+    match = FRONTMATTER_RE.match(path.read_text(encoding="utf-8"))
     if not match:
-        return None
-    body = match.group(2).strip()
-    fence = re.match(r"^```(?:yaml|yml)\s*\n(.*?)\n```\s*$", body, re.DOTALL)
-    if not fence:
-        return None
+        return {}
     if yaml is None:
         return {"__unparsed__": True}
-    loaded = yaml.safe_load(fence.group(1))
-    return loaded if isinstance(loaded, dict) else {}
+    try:
+        loaded = yaml.safe_load(match.group(1))
+    except yaml.YAMLError as error:
+        # An unquoted colon in a description is the usual cause, and it makes
+        # the frontmatter unreadable to anything that parses it strictly.
+        return {"__invalid__": str(error).splitlines()[0]}
+    if not isinstance(loaded, dict):
+        return {}
+    meta = (loaded.get("metadata") or {}).get("archreator") or {}
+    return meta if isinstance(meta, dict) else {}
+
+
+def listed(meta: dict, key: str) -> list[str]:
+    """A comma-separated metadata value as a list.
+
+    Agent Skills types `metadata.*` as string to string, so a list is written
+    as one comma-separated string rather than a YAML sequence.
+    """
+    return [v.strip() for v in str(meta.get(key, "")).split(",") if v.strip()]
 
 
 # This file defines the marker pattern, so it necessarily contains examples of
@@ -224,13 +252,10 @@ def check_process_binding(known: set[str]) -> list[str]:
                 errors.append(f"docs/process/: `{pid}` is realized by `{skill}`, which does not exist")
 
     for skill in sorted(known):
-        parsed = body_yaml(SKILLS_DIR / skill / "SKILL.md")
-        if not parsed or parsed.get("__unparsed__"):
+        meta = skill_meta(skill)
+        if meta.get("__unparsed__") or meta.get("__invalid__"):
             continue
-        declared = parsed.get("realizes_process") or []
-        if isinstance(declared, str):
-            declared = [declared]
-        for pid in declared:
+        for pid in listed(meta, "realizes_process"):
             if pid not in processes:
                 errors.append(f"{skill}: realizes_process `{pid}` is not a level-2 process")
             elif skill not in processes[pid]:
@@ -240,120 +265,43 @@ def check_process_binding(known: set[str]) -> list[str]:
     return errors
 
 
-def check_body_paths(known: set[str]) -> list[str]:
-    """Paths a converted skill names resolve inside its own folder.
+def check_required_sections(known: set[str]) -> list[str]:
+    """A skill declaring a kind carries the headings that kind requires.
 
-    `produces` is deliberately not checked: those are paths in a consuming
-    project's repository, which does not exist here.
+    A skill declaring no kind has not been converted yet and is skipped, which
+    is what lets the corpus move over in waves.
     """
     errors: list[str] = []
-    unparsed = []
+    handoff_re = re.compile(r"^#+[^\n]*hands off to[^\n]*$(.*?)(?=^#|\Z)", re.M | re.I | re.S)
     for skill in sorted(known):
-        skill_dir = SKILLS_DIR / skill
-        parsed = body_yaml(skill_dir / "SKILL.md")
-        if not parsed:
+        meta = skill_meta(skill)
+        if meta.get("__invalid__"):
+            errors.append(f"{skill}: frontmatter is not valid YAML - {meta['__invalid__']}")
             continue
-        if parsed.get("__unparsed__"):
-            unparsed.append(skill)
+        if meta.get("__unparsed__"):
+            errors.append(f"{skill}: PyYAML is not installed, so its frontmatter was not read")
             continue
-        targets: list[str] = []
-        for step in parsed.get("steps") or []:
-            if isinstance(step, dict):
-                for field in ("script", "uses_template"):
-                    value = step.get(field)
-                    if isinstance(value, str) and "/" in value:
-                        targets.append(value)
-        if isinstance(parsed.get("template_asset"), str):
-            targets.append(parsed["template_asset"])
-        for ref in parsed.get("references") or []:
-            if isinstance(ref, dict) and isinstance(ref.get("path"), str):
-                targets.append(ref["path"])
-        for table in parsed.get("tables") or []:
-            if isinstance(table, dict) and isinstance(table.get("asset"), str):
-                targets.append(table["asset"])
-        for target in targets:
-            if not (skill_dir / target).exists():
-                errors.append(f"{skill}: `{target}` does not resolve inside the skill folder")
-    if unparsed:
-        errors.append(
-            "PyYAML is not installed, so the YAML bodies of "
-            + ", ".join(unparsed)
-            + " were not checked. Install it, or run this script with `uv run`."
-        )
-    return errors
+        kind = meta.get("kind")
+        if not kind:
+            continue
+        if kind not in REQUIRED_SECTIONS:
+            errors.append(
+                f"{skill}: kind `{kind}` is not one of " + ", ".join(sorted(REQUIRED_SECTIONS))
+            )
+            continue
+        headings = headings_of(skill)
+        for required in REQUIRED_SECTIONS[kind]:
+            want = normalize(required)
+            if not any(h.startswith(want) for h in headings):
+                errors.append(f"{skill}: a {kind} needs a `{required}` section")
 
-
-def check_graph(known: set[str]) -> list[str]:
-    """Inside a converted body, the references between steps actually resolve."""
-    errors: list[str] = []
-    for skill in sorted(known):
-        parsed = body_yaml(SKILLS_DIR / skill / "SKILL.md")
-        if not parsed or parsed.get("__unparsed__"):
-            continue
-        steps = [s for s in (parsed.get("steps") or []) if isinstance(s, dict)]
-        names = [s.get("name") for s in steps if isinstance(s.get("name"), str)]
-        for name in sorted({n for n in names if names.count(n) > 1}):
-            errors.append(f"{skill}: two steps are both named `{name}`")
-        known_steps = set(names)
-        for step in steps:
-            for dependency in step.get("depends_on") or []:
-                if dependency not in known_steps:
-                    errors.append(
-                        f"{skill}: step `{step.get('name')}` depends on `{dependency}`, "
-                        f"which is not a step in this procedure"
-                    )
-        for step in steps:
-            template = step.get("uses_template")
-            # A path is checked by check_body_paths; a bare name is a skill.
-            if isinstance(template, str) and "/" not in template and template not in known:
-                errors.append(
-                    f"{skill}: step `{step.get('name')}` uses template `{template}`, "
-                    f"which is neither a path nor an existing skill"
-                )
-        for handoff in parsed.get("hands_off_to") or []:
-            if isinstance(handoff, dict):
-                target = handoff.get("skill")
-                if isinstance(target, str) and target not in known:
+        # Every skill named in a Hands off to table has to exist.
+        text = strip_code((SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8"))
+        section = handoff_re.search(text)
+        if section:
+            for target in SKILL_NAME_RE.findall(section.group(1)):
+                if target not in known and "-" in target:
                     errors.append(f"{skill}: hands off to `{target}`, which does not exist")
-    return errors
-
-
-def check_schema_binding(known: set[str]) -> list[str]:
-    """A skill's bundled schema is the canonical one, and its id matches."""
-    errors: list[str] = []
-    canonical = {}
-    if SCHEMAS_DIR.is_dir():
-        for path in SCHEMAS_DIR.glob("*.schema.json"):
-            try:
-                canonical[json.loads(path.read_text(encoding="utf-8"))["$id"]] = path
-            except (ValueError, KeyError):
-                errors.append(f"schemas/{path.name}: not readable as a schema with an $id")
-
-    for skill in sorted(known):
-        skill_md = SKILLS_DIR / skill / "SKILL.md"
-        match = FRONTMATTER_RE.match(skill_md.read_text(encoding="utf-8"))
-        if not match:
-            continue
-        declared = re.search(r"^\s*schemaId:\s*(\S+)\s*$", match.group(1), re.M)
-        source = SKILLS_DIR / skill / "source"
-        if not declared:
-            if source.is_dir():
-                errors.append(f"{skill}: has a source/ directory but declares no metadata.aip.schemaId")
-            continue
-        schema_id = declared.group(1).strip("\"'")
-        if schema_id not in canonical:
-            errors.append(f"{skill}: schemaId `{schema_id}` matches no schema under schemas/")
-            continue
-        bundled = list(source.glob("*.schema.json")) if source.is_dir() else []
-        if not bundled:
-            errors.append(f"{skill}: declares a schemaId but bundles no schema in source/")
-            continue
-        original = canonical[schema_id].read_text(encoding="utf-8")
-        for copy in bundled:
-            if copy.read_text(encoding="utf-8") != original:
-                errors.append(
-                    f"{skill}: source/{copy.name} has drifted from schemas/{canonical[schema_id].name}"
-                )
     return errors
 
 
@@ -398,9 +346,7 @@ def main() -> int:
     for label, errors in [
         ("section markers", check_section_markers(known)),
         ("process binding", check_process_binding(known)),
-        ("body paths", check_body_paths(known)),
-        ("graph integrity", check_graph(known)),
-        ("schema binding", check_schema_binding(known)),
+        ("required sections", check_required_sections(known)),
         ("catalogue", check_catalogue(known)),
     ]:
         if errors:
@@ -413,8 +359,9 @@ def main() -> int:
             print(f"  {line}")
         return 1
 
-    print(f"{len(known)} skills: section markers, process binding, paths, graph, "
-          f"schema binding and catalogue all resolve.")
+    converted = sum(1 for s in known if skill_meta(s).get("kind"))
+    print(f"{len(known)} skills ({converted} converted): section markers, process "
+          f"binding, required sections and catalogue all resolve.")
     return 0
 
 

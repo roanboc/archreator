@@ -54,23 +54,10 @@ scaffold, and the site.
 
 `check_skills.py` sits outside `templates/` because a downstream project has no
 skills to check. It reads the process model in [`docs/process/`](./docs/process/README.md)
-and the skill bodies, and needs PyYAML only once those bodies are YAML — use
-`uv run` in place of `python3` where it is not installed.
-
-Skills and schemas are also validated against the pinned
-[AIP](https://github.com/zach-blumenfeld/aip) release, which CI checks out into
-`.aip/`. To run those locally, clone the same release and point the validators
-at your working copy:
-
-```bash
-git clone --depth 1 --branch v0.3a3 https://github.com/zach-blumenfeld/aip .aip
-uv run .aip/scripts/validate_schema.py plugins/archreator/schemas/gated-procedure.schema.json
-uv run .aip/scripts/validate.py plugins/archreator/skills/<a-converted-skill>
-```
-
-Clone the release whole rather than copying `scripts/` out of it: the
-validators read their sibling `SKILL.md` to derive the expected spec version,
-and without it that check passes without doing anything.
+and every skill's frontmatter and headings, checking them against
+[the skill format](./docs/skill-format.md). It needs PyYAML — use `uv run` in
+place of `python3` where that is not installed, and it will supply it from the
+script's own inline metadata.
 
 ## Pull requests
 
@@ -90,5 +77,8 @@ skill keeps the body current.
 - **Documentation language:** English.
 - **Skill folder names** are a verb and an object for a skill you run, a noun
   phrase for one you consult — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
+- **Skills follow a fixed format** — frontmatter, sections and glyphs are
+  specified in [`docs/skill-format.md`](./docs/skill-format.md), and
+  `check_skills.py` enforces it.
 - **A merged scope document is a historical record** — link targets get
   repaired when files move; the words never change (`RULE6`).

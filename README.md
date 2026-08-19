@@ -55,6 +55,7 @@ each one lands in your project, are in
 | ------------- | ---- |
 | **What the method does and how** | [`docs/method.md`](./docs/method.md) — the process, the layers, the loop |
 | **The method as a levelled process model** | [`docs/process/`](./docs/process/README.md) — the macro map, a SIPOC per process, and which skill realizes each |
+| **The format every skill follows** | [`docs/skill-format.md`](./docs/skill-format.md) — frontmatter, the fixed sections, and the glyphs that mark them |
 | **Which standards it rests on** | [`docs/standards-alignment.md`](./docs/standards-alignment.md) — every coined term, the established name behind it, and where the method is genuinely its own |
 | **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, in the order they are used |
 | **How to adopt it in your own project** | [`docs/adopting.md`](./docs/adopting.md) |

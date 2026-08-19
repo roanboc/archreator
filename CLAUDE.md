@@ -11,10 +11,9 @@ worked examples of the method applied to real organizations live in
 | ---- | ------------- |
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fourteen skills that are the method, ordered by the process each realizes, with the three rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
-| [`plugins/archreator/schemas/`](./plugins/archreator/schemas/README.md) | The three AIP schemas skill bodies validate against — `gated-procedure`, `document-template`, `rulebook` |
-| [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus itself. It stays out of `templates/` because a downstream project has no skills |
+| [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model. It stays out of `templates/` because a downstream project has no skills |
 | [`plugins/archreator/templates/`](./plugins/archreator/templates/README.md) | The empty project scaffold — layer READMEs, the two validators (`scripts/`), the placeholder `CLAUDE.md` and `README.md`. Copied into a new project by `establish-project` |
-| [`docs/`](./docs/method.md) | The method explained in plain English — how the process works and how to adopt it. The skill catalogue is not here; it lives beside the skills |
+| [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, how to adopt it, and [the format every skill follows](./docs/skill-format.md). The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The one-page public site, deployed to <https://roanboc.github.io/archreator/> |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
 

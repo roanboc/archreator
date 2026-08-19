@@ -1,6 +1,6 @@
 ---
 name: architecture-document-style
-description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions. Also use when writing or editing any other document in the repository — a README, a docs/ page, a contributing guide — for what a document may contain: its subject rather than its own construction, no version commentary, and where a surviving note goes.
+description: Use when creating or editing any document under architecture/ — numbering, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), ArchiMate-on-Mermaid notation, grounding rules, and link conventions. Also use when writing or editing any other document in the repository — a README, a docs/ page, a contributing guide — for what a document may contain — its subject rather than its own construction, no version commentary, and where a surviving note goes.
 ---
 
 # EA documentation style

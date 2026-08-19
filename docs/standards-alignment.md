@@ -26,7 +26,7 @@ the name.
 
 **Skills name their standards as they are converted.** Where a Note names a
 standard that the skill body does not cite, the citation is **Pending — lands
-with that skill's conversion to an AIP Instruction**.
+with that skill's conversion to [the skill format](./skill-format.md)**.
 
 ## Partitioning and scope
 
