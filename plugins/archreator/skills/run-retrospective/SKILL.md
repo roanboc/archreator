@@ -64,7 +64,7 @@ flowchart LR
 
 One file per retrospective, numbered chronologically, in the organization's
 own `docs/engagements/` — or wherever the consuming project keeps them, named
-in that project's `CLAUDE.md`.
+in that project's `AGENTS.md`.
 
 ```markdown
 # N — <what the work was, in the most general terms that stay true>

@@ -7,7 +7,7 @@
 -->
 
 How changes are made in this project. The rule that governs them and the
-declared modeling depth are in [`CLAUDE.md`](./CLAUDE.md); the model itself
+declared modeling depth are in [`AGENTS.md`](./AGENTS.md); the model itself
 is in [`architecture/`](./architecture/README.md).
 
 ## Actors
