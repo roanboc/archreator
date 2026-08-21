@@ -2,16 +2,32 @@
 
 _[← Repository README](../README.md) · [The method](./method.md)_
 
-Two ways in, both landing at the same place — the skills drive the process
-either way.
+Three ways in, all landing at the same place — the skills drive the process
+whichever you take.
 
 ## Option A — install the plugin (recommended)
 
-Works on any Claude Code project, existing or new:
+Works on any project, existing or new. Pick your agent:
+
+**Claude Code**
 
 ```shell
 /plugin marketplace add roanboc/archreator
 /plugin install archreator@archreator
+```
+
+**GitHub Copilot** — the CLI, VS Code, or the Copilot app
+
+```shell
+copilot plugin marketplace add roanboc/archreator
+copilot plugin install archreator@archreator
+```
+
+**Codex CLI**
+
+```shell
+codex plugin marketplace add roanboc/archreator
+codex plugin install archreator@archreator
 ```
 
 Then just say what you want to model. The `establish-project` skill
@@ -24,26 +40,51 @@ until you ask them to — and the scaffold under
 [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md), which `establish-project`
 copies into your project. Nothing else lands.
 
-## Option B — clone the scaffold directly
+## Option B — install the skills on their own
+
+Gemini CLI installs an extension from a repository root rather than a
+subdirectory, so it cannot take this repository's plugin. `.agents/skills/`
+is the directory every host reads, and
+[`install_skills.py`](../plugins/archreator/scripts/install_skills.py) fills
+it — from a clone of this repository:
+
+```shell
+python3 plugins/archreator/scripts/install_skills.py
+```
+
+`--repo` puts them in the current project's `.agents/skills/` instead of your
+home directory, and `--dry-run` shows what would land. Restart the agent
+afterwards so it rescans.
+
+This route ships the skills and not the scaffold, so `establish-project`
+emits the scaffold on first run exactly as it does under a plugin — or take
+Option C and copy it yourself.
+
+## Option C — clone the scaffold directly
 
 Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It holds:
 
-- `CLAUDE.md` and `README.md` — placeholders you'll fill in when the
+- `AGENTS.md` and `README.md` — placeholders you'll fill in when the
   bootstrap skill runs
+- `CLAUDE.md` and `GEMINI.md` — one line each, importing `AGENTS.md`, so
+  the host that reads only its own filename still finds the entry point
 - `architecture/` — layer READMEs for the six layers, plus `scope/` and
   `decisions/`
 - `scripts/` — the two validators, run before every push
 
-Then follow the bootstrap checklist by hand, or install the plugin and let
-the skill do it.
+Then follow the bootstrap checklist by hand, or install the skills and let
+`establish-project` do it.
 
 ## Keeping a project in sync with the method
 
 Three things ship in this repo with different lifecycles, and only one of
 them stays in sync automatically:
 
-- **The skills**, at `plugins/archreator/skills/*/`, come with the plugin and update
-  when you run `/plugin update archreator@archreator`.
+- **The skills**, at `plugins/archreator/skills/*/`, come with the plugin and
+  update when you run `/plugin update archreator@archreator` in Claude Code,
+  `copilot plugin update archreator` in Copilot, or
+  `codex plugin update archreator` in Codex. Installed through Option B
+  instead, they update by re-running `install_skills.py` after a `git pull`.
 - **The scaffold**, at `plugins/archreator/scaffold/`, is copied *once* into your project by
   `establish-project`. It does not update afterwards, because a
   scaffold that changed under a project would rewrite documents the

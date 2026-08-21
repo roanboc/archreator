@@ -2,9 +2,10 @@
 
 _[← Repository README](../../../README.md)_
 
-The fifteen skills that are the archreator method. Claude Code picks them
-up automatically from their `description:` frontmatter — you don't invoke
-them by name in normal use, they surface when their situation applies.
+The fifteen skills that are the archreator method. Your coding agent picks
+them up automatically from their `description:` frontmatter — you don't
+invoke them by name in normal use, they surface when their situation
+applies.
 
 **A skill is named for what it does.** A verb and an object —
 `establish-project`, `write-scope-document` — is a skill you run; a noun
@@ -25,9 +26,10 @@ three.
 `BPROC4.1`, then the four rulebooks that realize no process.
 
 This folder sits inside the **`archreator` plugin**, whose root is
-`plugins/archreator/` — its manifest is
-[`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json),
-and the marketplace that publishes it is
+`plugins/archreator/` — its manifest is written twice, as
+[`plugin.json`](../plugin.json) for the hosts that read the plugin root and
+[`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json) for the one
+that doesn't, and the marketplace that publishes it is
 [`.claude-plugin/marketplace.json`](../../../.claude-plugin/marketplace.json)
 at the repository root.
 
@@ -39,7 +41,7 @@ consuming project's documents by naming the path in a code span —
 
 **This page is the catalogue.** It is the only one — the rest of the
 repository links here rather than restating it. The one deliberate copy is
-the table in [`scaffold/CLAUDE.md`](../scaffold/CLAUDE.md), which
+the table in [`scaffold/AGENTS.md`](../scaffold/AGENTS.md), which
 lands in a project that cannot link back to this repository at all; change
 a row here and change it there in the same commit.
 [`check_skills.py`](../scripts/check_skills.py) compares them.

@@ -19,16 +19,17 @@ a named escalation path.
 
 ## What this repository is
 
-- **Fifteen Claude Code skills** — the method itself, under
+- **Fifteen agent skills** — the method itself, under
   [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md), each
   named for the process it realizes.
 - **A scaffold** — the empty project a new adopter starts from, at
   [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md), copied by the
   `establish-project` skill.
 - **A plugin package** — the manifests at
+  [`plugins/archreator/plugin.json`](./plugins/archreator/plugin.json),
   [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json)
   and [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
-  that publish it to the Claude Code plugin marketplace.
+  that publish it to Claude Code, GitHub Copilot and Codex.
 - **The docs and the site** — plain-English explanation under
   [`docs/`](./docs/method.md), one-page public site under
   [`site/`](./site/index.html).
@@ -37,17 +38,26 @@ No application code. No worked models — those live in the sibling repo.
 
 ## Quick start
 
+In Claude Code:
+
 ```shell
 /plugin marketplace add roanboc/archreator
 /plugin install archreator@archreator
 ```
 
+In GitHub Copilot — the CLI, VS Code, or the Copilot app:
+
+```shell
+copilot plugin marketplace add roanboc/archreator
+copilot plugin install archreator@archreator
+```
+
 Then just say what you want to model — the `establish-project` skill
 takes it from there.
 
-Prefer to clone the scaffold instead of installing? Both routes, and what
-each one lands in your project, are in
-[`docs/adopting.md`](./docs/adopting.md).
+On Codex, on Gemini CLI, or if you would rather clone the scaffold than
+install anything, [`docs/adopting.md`](./docs/adopting.md) has the recipe
+for each and says what lands in your project either way.
 
 ## Where to go from here
 

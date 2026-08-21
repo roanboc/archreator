@@ -40,7 +40,7 @@ the folder empty and starts at layer 1.
 The same six layers describe a weekend application and a company with twenty
 business lines. What changes is **how much of them gets filled in, and which
 gates apply** — not which folders exist. Every project declares one of three
-depths in `CLAUDE.md`:
+depths in `AGENTS.md`:
 
 | Depth | The subject is | `0_business-design/` | `1_strategy/` | `domains/` | Gates |
 | ----- | -------------- | -------------------- | ------------- | ---------- | ----- |

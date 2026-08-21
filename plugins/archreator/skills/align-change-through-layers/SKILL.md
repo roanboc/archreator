@@ -32,7 +32,7 @@ document, and only then coded. The folder numbers give the assessment order.
 | The situation | Use instead |
 | ------------- | ----------- |
 | A pure bug fix changing no documented behavior | The bug-fix path — no gates, no scope document, but still update whatever the fix falsifies |
-| The project was never bootstrapped | `establish-project` first. `CLAUDE.md` declaring no depth is the signal |
+| The project was never bootstrapped | `establish-project` first. `AGENTS.md` declaring no depth is the signal |
 | The model has drifted rather than the requirement | `restate-current-state` — its own initiative, with its own diff |
 
 ## ⌖ Where this sits
@@ -186,14 +186,14 @@ has no such log — it is optional.
 
 ### 1 — Locate the change, then assess strategy
 
-**1a — Confirm the modeling depth, and say it out loud.** `CLAUDE.md` records
+**1a — Confirm the modeling depth, and say it out loud.** `AGENTS.md` records
 the declared depth. Read it and check the request against it.
 
 | Finding | What to do |
 | ------- | ---------- |
 | The request fits the declared depth | Say which depth you are working at, in one line, and continue |
 | The request outgrows it | Say so, and what deepening would cost. A depth change is its own initiative, decided by the Requester, never absorbed quietly mid-change |
-| `CLAUDE.md` declares no depth | The project was never bootstrapped — run `establish-project` first |
+| `AGENTS.md` declares no depth | The project was never bootstrapped — run `establish-project` first |
 
 Never let the depth go unstated. A Requester told "I'm treating this as Depth 1
 — one application, light strategy layer; say the word if you want the

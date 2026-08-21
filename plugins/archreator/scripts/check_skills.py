@@ -17,7 +17,7 @@ and stale paths inside document templates.
 This script covers the skills, and lives outside `scaffold/` because a
 downstream project has no skills to check.
 
-Four things are checked:
+Six things are checked:
 
 - **Section markers** - every reference of the form skill-name, section sign,
   heading names a skill that exists and a heading it actually has.
@@ -28,7 +28,11 @@ Four things are checked:
   the headings its kind requires. A skill declaring no kind is skipped, which
   is what lets the corpus be converted in waves.
 - **Catalogue agreement** - the skill table in `skills/README.md` and its
-  deliberate copy in `scaffold/CLAUDE.md` carry the same rows.
+  deliberate copy in `scaffold/AGENTS.md` carry the same rows.
+- **Manifest agreement** - the plugin manifest exists in both places hosts
+  look for it, with the same fields, and the marketplace entry agrees.
+- **Context files** - the `CLAUDE.md` and `GEMINI.md` the scaffold plants
+  hold nothing but the import of `AGENTS.md`.
 
 Headings may open with a glyph, which is stripped before matching: the glyph
 is notation, the words are the identity.
@@ -67,7 +71,23 @@ REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
 SKILLS_DIR = REPO_ROOT / "plugins" / "archreator" / "skills"
 PROCESS_DIR = REPO_ROOT / "docs" / "process"
 CATALOGUE = SKILLS_DIR / "README.md"
-CATALOGUE_COPY = REPO_ROOT / "plugins" / "archreator" / "scaffold" / "CLAUDE.md"
+SCAFFOLD_DIR = REPO_ROOT / "plugins" / "archreator" / "scaffold"
+CATALOGUE_COPY = SCAFFOLD_DIR / "AGENTS.md"
+# The plugin manifest, in the two places the hosts look for it. Claude Code
+# reads `.claude-plugin/plugin.json`; Copilot and Codex read the plugin root.
+# Neither is derived from the other at runtime, so CI holds them together the
+# way it holds the prefix registry together.
+PLUGIN_MANIFESTS = (
+    REPO_ROOT / "plugins" / "archreator" / "plugin.json",
+    REPO_ROOT / "plugins" / "archreator" / ".claude-plugin" / "plugin.json",
+)
+MARKETPLACE = REPO_ROOT / ".claude-plugin" / "marketplace.json"
+# A host that reads only its own filename still has to find the entry point,
+# and Claude Code has no AGENTS.md fallback. These carry the import and
+# nothing else, because content in one of them is content the other hosts
+# never see.
+CONTEXT_POINTERS = ("CLAUDE.md", "GEMINI.md")
+CONTEXT_IMPORT = "@AGENTS.md"
 # The headings each kind of skill must carry. This replaces the JSON Schemas:
 # the structural promise a schema made is a list of required sections, and a
 # list of required sections is legible to the people who write them.
@@ -462,15 +482,15 @@ def check_catalogue(known: set[str]) -> list[str]:
     for skill in sorted(set(primary) - known):
         errors.append(f"skills/README.md: `{skill}` is catalogued but no such skill exists")
     for skill in sorted(set(primary) - set(copy)):
-        errors.append(f"scaffold/CLAUDE.md: `{skill}` is missing from the copied table")
+        errors.append(f"scaffold/AGENTS.md: `{skill}` is missing from the copied table")
     for skill in sorted(set(copy) - set(primary)):
-        errors.append(f"scaffold/CLAUDE.md: `{skill}` is in the copied table but not the catalogue")
+        errors.append(f"scaffold/AGENTS.md: `{skill}` is in the copied table but not the catalogue")
     for skill in sorted(set(primary) & set(copy)):
         # The catalogue carries a Kind column the copy does not, so compare the
         # last cell - the one both tables end on.
         if primary[skill][-1] != copy[skill][-1]:
             errors.append(
-                f"scaffold/CLAUDE.md: the row for `{skill}` has drifted from skills/README.md"
+                f"scaffold/AGENTS.md: the row for `{skill}` has drifted from skills/README.md"
             )
 
     for skill, cells in sorted(primary.items()):
@@ -482,6 +502,93 @@ def check_catalogue(known: set[str]) -> list[str]:
             errors.append(
                 f"skills/README.md: `{skill}` is catalogued as `{cells[0]}` "
                 f"but declares kind `{declared}`"
+            )
+    return errors
+
+
+def check_manifests() -> list[str]:
+    """The plugin manifest agrees with its copy, and the marketplace with both.
+
+    Claude Code reads `.claude-plugin/plugin.json`, Copilot and Codex read
+    `plugin.json` at the plugin root, and all three want the same fields. The
+    same fact in two files is the arrangement the prefix registry already
+    lives with: written twice so each host finds it where it looks, never
+    generated at runtime, and held together here.
+    """
+    errors: list[str] = []
+    loaded: dict[Path, dict] = {}
+    for path in PLUGIN_MANIFESTS:
+        if not path.is_file():
+            errors.append(f"{path.relative_to(REPO_ROOT)}: the plugin manifest is missing")
+            continue
+        try:
+            loaded[path] = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            errors.append(f"{path.relative_to(REPO_ROOT)}: not valid JSON - {exc}")
+    if len(loaded) != len(PLUGIN_MANIFESTS):
+        return errors
+
+    canonical, copy = PLUGIN_MANIFESTS
+    left, right = loaded[canonical], loaded[copy]
+    for key in sorted(set(left) | set(right)):
+        if key not in left:
+            errors.append(f"`{key}` is in {copy.relative_to(REPO_ROOT)} but not {canonical.name}")
+        elif key not in right:
+            errors.append(f"`{key}` is in {canonical.name} but not {copy.relative_to(REPO_ROOT)}")
+        elif left[key] != right[key]:
+            errors.append(f"`{key}` differs between the two plugin manifests")
+
+    if not MARKETPLACE.is_file():
+        errors.append(".claude-plugin/marketplace.json is missing")
+        return errors
+    try:
+        market = json.loads(MARKETPLACE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        errors.append(f".claude-plugin/marketplace.json: not valid JSON - {exc}")
+        return errors
+
+    entries = [e for e in market.get("plugins", []) if e.get("name") == left.get("name")]
+    if not entries:
+        errors.append(
+            f".claude-plugin/marketplace.json lists no plugin named `{left.get('name')}`"
+        )
+        return errors
+    entry = entries[0]
+    for key in ("version", "description"):
+        if entry.get(key) != left.get(key):
+            errors.append(f"the marketplace entry's `{key}` has drifted from the plugin manifest")
+    source = REPO_ROOT / entry.get("source", "").lstrip("./")
+    if source.resolve() != canonical.parent.resolve():
+        errors.append(
+            f"the marketplace entry's `source` is {entry.get('source')!r}, "
+            f"which is not where the plugin manifest lives"
+        )
+    return errors
+
+
+def check_context_files() -> list[str]:
+    """The scaffold's per-host context files import AGENTS.md and say nothing else.
+
+    `AGENTS.md` is the entry point, and Copilot and Codex read it directly.
+    Claude Code reads `CLAUDE.md` only, with no fallback, and Gemini CLI
+    reads `GEMINI.md` unless configured otherwise - so each gets a file
+    carrying the import. Anything else written into one of them is guidance
+    the other hosts never see, which is the drift this catches.
+    """
+    errors: list[str] = []
+    if not CATALOGUE_COPY.is_file():
+        errors.append("scaffold/AGENTS.md is missing - it is the entry point the others import")
+    for name in CONTEXT_POINTERS:
+        path = SCAFFOLD_DIR / name
+        if not path.is_file():
+            errors.append(f"scaffold/{name} is missing - {CONTEXT_IMPORT} is all it needs to hold")
+            continue
+        lines = [line.strip() for line in path.read_text(encoding="utf-8").splitlines()]
+        body = [line for line in lines if line and not line.startswith("#")]
+        if body != [CONTEXT_IMPORT]:
+            errors.append(
+                f"scaffold/{name} holds more than `{CONTEXT_IMPORT}`; "
+                f"content here is content the other hosts never see"
             )
     return errors
 
@@ -507,6 +614,8 @@ def main() -> int:
         ("required sections", check_required_sections(known)),
         ("prefix registry", check_prefix_registry()),
         ("catalogue", check_catalogue(known)),
+        ("manifests", check_manifests()),
+        ("context files", check_context_files()),
     ]:
         if errors:
             all_errors.append(f"{label}:")
@@ -520,7 +629,8 @@ def main() -> int:
 
     converted = sum(1 for s in known if skill_meta(s).get("kind"))
     print(f"{len(known)} skills ({converted} converted): section markers, process "
-          f"binding, required sections and catalogue all resolve.")
+          f"binding, required sections, catalogue, manifests and context files "
+          f"all resolve.")
     return 0
 
 

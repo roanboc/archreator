@@ -22,7 +22,7 @@ does and how its pieces relate.
 ## How changes are made
 
 Requirements are aligned through the model and approved at explicit gates
-before anything is built. [`CLAUDE.md`](./CLAUDE.md) states the rule and the
+before anything is built. [`AGENTS.md`](./AGENTS.md) states the rule and the
 declared modeling depth, [`CONTRIBUTING.md`](./CONTRIBUTING.md) names who
 grants those gates, and the `align-change-through-layers` skill runs the process.
 

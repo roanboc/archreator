@@ -184,11 +184,13 @@ def unvalidated_tables(text: str) -> int:
 
 
 # Directories that are tooling rather than repository content. `.git` is
-# obvious; `.claude` holds agent-local material — vendored third-party skills,
-# worktrees, local settings — and `.aip` is a checkout of the pinned AIP
-# release the validators are run from. None is this repository's to validate,
-# and none is a downstream project's once these scripts ship there.
-EXCLUDED_DIRS = {".git", ".claude", ".aip"}
+# obvious; `.claude`, `.agents`, `.gemini`, `.codex` and `.copilot` hold
+# agent-local material — installed and vendored third-party skills, worktrees,
+# local settings — one per host the method runs on, and `.aip` is a checkout
+# of the pinned AIP release the validators are run from. None is this
+# repository's to validate, and none is a downstream project's once these
+# scripts ship there.
+EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot", ".aip"}
 
 
 def _excluded(path: Path) -> bool:
