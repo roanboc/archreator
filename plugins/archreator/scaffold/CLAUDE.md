@@ -91,7 +91,8 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing.
+Both must be green before pushing. `python3 scripts/build_model.py` projects
+the model into `.model/` for a rendered view or a report — a tool, not a gate.
 
 ## Conventions
 

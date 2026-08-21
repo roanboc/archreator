@@ -2,12 +2,9 @@
 __pycache__/
 *.pyc
 
-# Agent-local tooling, not repository content: vendored third-party skills,
-# worktrees, local settings. The validators skip these directories too.
-.claude/
-
-# Where CI clones the pinned AIP skill to run its validators.
-.aip/
+# Personal, machine-local Claude Code settings — never shared.
+# Project-scoped settings (.claude/settings.json) ARE committed.
+.claude/settings.local.json
 
 # The projection built by scripts/build_model.py. Regenerated from the
 # Markdown under architecture/ on every run, so it is never committed: a

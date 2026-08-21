@@ -12,7 +12,7 @@ worked examples of the method applied to real organizations live in
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The fifteen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model. It stays out of `scaffold/` because a downstream project has no skills |
-| `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), [the validators](./plugins/archreator/scaffold/scripts/README.md), and placeholder `CLAUDE.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |
+| `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), [the validators and the projection](./plugins/archreator/scaffold/scripts/README.md), a `.gitignore`, and placeholder `CLAUDE.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, how to adopt it, and [the format every skill follows](./docs/skill-format.md). The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The one-page public site, deployed to <https://roanboc.github.io/archreator/> |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
@@ -49,6 +49,10 @@ python3 plugins/archreator/scripts/check_skills.py             # the skill corpu
 All three must be green before pushing. The first two run on the scaffold here
 exactly as a downstream project runs them on its own model; the third has no
 downstream counterpart.
+
+`scaffold/scripts/build_model.py` projects a model into `.model/` as nodes and
+edges, for consumers that cannot read Markdown tables. It is a tool rather
+than a gate, and it finds nothing here — the scaffold has no elements.
 
 `check_skills.py` needs PyYAML only once skills carry YAML bodies. Run it with
 `uv run` instead of `python3` where that is not installed.
