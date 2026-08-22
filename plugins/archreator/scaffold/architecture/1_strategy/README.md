@@ -34,8 +34,7 @@ block, and are discovered directly with the Requester in either track.
 
 **On an organization, capabilities are leveled** — areas, then capabilities,
 then sub-capabilities only where a named pain justifies going further, with
-identifiers that carry the level (`CAP1`, `CAP1.2`, `CAP1.2.3`) — and
-the map is drafted from a reference model for the organization's industry
+identifiers that carry the level — and the map is drafted from a reference model for the organization's industry
 that the Requester then confirms item by item, rather than recalled from a
 blank page. The `process-and-capability-levels` skill holds both, including
 the safeguard that keeps a reference model a proposal instead of an answer.
