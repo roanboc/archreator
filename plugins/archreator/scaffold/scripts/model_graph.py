@@ -64,10 +64,13 @@ MODEL_DIR = "architecture"
 # rather than part of it, and are deliberately not read.
 NARRATIVE = {"scope", "decisions", "reviews", "engagements"}
 # Directories that are tooling rather than repository content. `.git` is
-# obvious; `.claude` holds agent-local material — vendored third-party skills,
-# worktrees, local settings — and `.aip` is a checkout of the pinned AIP
-# release the validators are run from.
-EXCLUDED_DIRS = {".git", ".claude", ".aip"}
+# obvious; `.claude`, `.agents`, `.gemini`, `.codex` and `.copilot` hold
+# agent-local material — installed and vendored third-party skills, worktrees,
+# local settings — one per host the method runs on, and `.aip` is a checkout
+# of the pinned AIP release the validators are run from. None is this
+# repository's to validate, and none is a downstream project's once these
+# scripts ship there.
+EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot", ".aip"}
 # See the note in check_links.py: anchored to line starts and matched on fence
 # length, so a fence containing a fence does not close early and leak its body
 # back into the scanned prose.

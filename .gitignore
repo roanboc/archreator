@@ -2,9 +2,16 @@
 __pycache__/
 *.pyc
 
-# Agent-local tooling, not repository content: vendored third-party skills,
-# worktrees, local settings. The validators skip these directories too.
+# Agent-local tooling, not repository content: installed and vendored
+# third-party skills, worktrees, local settings — one directory per host the
+# method runs on. The validators skip these directories too. `.agents/` is
+# where install_skills.py --repo lands, and this repository's own skills are
+# the source it copies from, so a copy of them here is not content.
 .claude/
+.agents/
+.gemini/
+.codex/
+.copilot/
 
 # Where CI clones the pinned AIP skill to run its validators.
 .aip/

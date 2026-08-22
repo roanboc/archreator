@@ -41,7 +41,7 @@ complies with, and the one rulebook that is not about architecture at all.
 
 Pick one documentation language for the project and use it consistently
 across `architecture/`, `architecture/scope/`, commit messages, and code identifiers
-(see the project's `CLAUDE.md`). Whatever language is chosen, **folder and
+(see the project's `AGENTS.md`). Whatever language is chosen, **folder and
 file names stay plain ASCII** (no accents, no non-Latin punctuation) even
 if the prose inside is written in a language that uses them — this avoids
 cross-platform path and URL-encoding issues. If ArchiMate stereotypes are

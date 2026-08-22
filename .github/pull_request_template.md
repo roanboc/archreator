@@ -36,7 +36,7 @@
 - **Skills** — which SKILL.md files, what changed in each
 - **Scaffold** — anything under scaffold/
 - **Docs / site** — under docs/ or site/
-- **Plugin package / CI** — manifests under .claude-plugin/, workflows
+- **Plugin package / CI** — the plugin and marketplace manifests, workflows
 
 ## Verification
 
@@ -45,6 +45,7 @@
 ```
 python3 plugins/archreator/scaffold/scripts/check_links.py
 python3 plugins/archreator/scaffold/scripts/check_model.py
+uv run plugins/archreator/scripts/check_skills.py
 ```
 
 ## Out of scope / follow-ups

@@ -1,6 +1,6 @@
 ---
 name: establish-project
-description: Procedure — run this to set up a project that has the archreator method available but no model yet — the user just installed the plugin, cloned or generated the repository, or architecture/ still holds nothing but scaffolding. Emits the scaffold, names the project, declares the modeling depth, and hands off to discovery. Not needed once CLAUDE.md declares a depth.
+description: Procedure — run this to set up a project that has the archreator method available but no model yet — the user just installed the plugin, cloned or generated the repository, or architecture/ still holds nothing but scaffolding. Emits the scaffold, names the project, declares the modeling depth, and hands off to discovery. Not needed once AGENTS.md declares a depth.
 metadata:
   archreator:
     kind: gated-procedure
@@ -21,7 +21,7 @@ ordinary `align-change-through-layers` process — there is no separate
 | The situation | What it looks like |
 | ------------- | ------------------ |
 | No model yet | The project has the method available but no `architecture/` folder |
-| Untouched scaffold | `CLAUDE.md` or `README.md` still contain `<placeholder>` markers |
+| Untouched scaffold | `AGENTS.md` or `README.md` still contain `<placeholder>` markers |
 | Empty model | `architecture/` holds only layer READMEs and no elements |
 | Said out loud | The user just installed the plugin, cloned or generated the repository, and wants to start |
 
@@ -29,7 +29,7 @@ ordinary `align-change-through-layers` process — there is no separate
 
 | The situation | Use instead |
 | ------------- | ----------- |
-| `CLAUDE.md` already declares a modeling depth | `align-change-through-layers` — the project is bootstrapped |
+| `AGENTS.md` already declares a modeling depth | `align-change-through-layers` — the project is bootstrapped |
 | The request changes an existing model | `align-change-through-layers` |
 
 ## ⌖ Where this sits
@@ -117,9 +117,13 @@ into every step below.
 ### 2 — Emit the scaffold, then make it this project
 
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
-It holds `CLAUDE.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
+It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
 `architecture/` — with `scope/` and `decisions/` inside it — and `scripts/`,
-the two validators and the projection tool with their own README.
+the two validators and the projection tool with their own README. `CLAUDE.md`
+and `GEMINI.md` come with it too, each holding nothing but an `@AGENTS.md`
+import so the host that reads only its own filename still finds the entry
+point. Copy them as they are and leave them alone; content in one of them is
+content the other hosts never see.
 
 **Copy the dotfiles too.** `.gitignore` is the one the project cannot do
 without: it keeps bytecode, machine-local settings and the regenerated
@@ -130,10 +134,10 @@ Then, in one pass, so the first commit is coherent:
 
 | File | Fill in |
 | ---- | ------- |
-| `CLAUDE.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point; placeholders left here are what make later sessions guess |
+| `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running; placeholders left here are what make later sessions guess |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `CONTRIBUTING.md` | Leave § Development workflow as its TEMPLATE comment until a stack exists, rather than inventing commands |
-| Documentation language | Decide once, record it in `CLAUDE.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
+| Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
 
 **⚖ Judgement.** The optional files are a decision, not a default:
 
@@ -144,7 +148,7 @@ Then, in one pass, so the first commit is coherent:
 
 **← Needs** the declared depth, the project description.
 
-**→ Produces** `CLAUDE.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `architecture/`, `scripts/`.
+**→ Produces** `AGENTS.md`, its `CLAUDE.md` and `GEMINI.md` imports, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `architecture/`, `scripts/`.
 
 ### 3 — Set the layers to the declared depth
 
@@ -223,8 +227,10 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 
 ## ☑ Done when
 
-- `CLAUDE.md` and `README.md` contain no `<placeholder>` markers, and
-  `CLAUDE.md` declares the modeling depth.
+- `AGENTS.md` and `README.md` contain no `<placeholder>` markers, and
+  `AGENTS.md` declares the modeling depth.
+- `CLAUDE.md` and `GEMINI.md` sit beside it, each still nothing but
+  `@AGENTS.md`.
 - The documentation language is decided and recorded.
 - The scaffold has been copied out of the plugin's `scaffold/`, and the
   optional files are kept or deleted deliberately.

@@ -44,7 +44,7 @@ from. It is filled only when the initiative is modeling an organization.
 
 The same six layers describe a weekend app and a twenty-business-line
 company alike. What changes is **how much of them gets filled in and which
-gates apply.** Every project declares one depth in `CLAUDE.md`, and **the
+gates apply.** Every project declares one depth in `AGENTS.md`, and **the
 agent tells you which depth it picked and why**.
 
 | Depth | The subject is | You get | Gates |
