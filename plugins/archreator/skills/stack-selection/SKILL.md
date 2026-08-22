@@ -116,10 +116,24 @@ with `record-decision`.
 | A genuinely **transitive** question recurs | "Blast radius of retiring `CAP3`" is a traversal, not a lookup. A one-off is a script, not infrastructure |
 | A non-agent consumer appears | A dashboard, a report or a rendered model cannot read Markdown tables |
 
-When that day comes the default is **SQLite**, as a `nodes`/`edges` pair
-traversed with recursive CTEs. At the scale a model reaches — hundreds of
-elements, edges in the low thousands, traversals a few hops deep — SQLite *is*
-the graph database, and `sqlite3` ships with Python.
+**The projection is already written.** `scripts/build_model.py` ships in the
+scaffold, so a project that needs one runs a command rather than building
+anything:
+
+```bash
+python3 scripts/build_model.py       # .model/model.json and .model/model.db
+python3 scripts/build_model.py --inventory   # one line per element, nothing written
+```
+
+It exists because the fourth trigger fired — a rendered view of the model, for
+stakeholders who will not read Markdown tables. **That does not make it the
+default.** A project with no such consumer should never run it, and deleting
+`.model/` loses nothing.
+
+It writes **SQLite**, as a `nodes`/`edges` pair traversed with recursive CTEs.
+At the scale a model reaches — hundreds of elements, edges in the low
+thousands, traversals a few hops deep — SQLite *is* the graph database, and
+`sqlite3` ships with Python.
 
 ```sql
 CREATE TABLE nodes(id TEXT PRIMARY KEY, type TEXT, layer TEXT,
@@ -127,10 +141,18 @@ CREATE TABLE nodes(id TEXT PRIMARY KEY, type TEXT, layer TEXT,
 CREATE TABLE edges(src TEXT, dst TEXT, rel TEXT);  -- realizes, serves, …
 ```
 
-The projection is regenerated, never hand-edited, and `check_model.py` already
-extracts what it would need. Consistent element IDs are what make it
-mechanical rather than a parsing exercise, which is the reason to use them
-from the first document.
+The shipped schema adds a `project` column to that pair, because one
+repository may hold several models and two of them may each own a `G1`.
+
+Three things keep it from becoming the second source of truth it warns about:
+it is **regenerated** from scratch on every run, it is **gitignored**, and
+**nothing reads it that could have read the Markdown instead**. Consistent
+element IDs are what make the parse mechanical rather than a guessing
+exercise, which is the reason to use them from the first document.
+
+`--inventory` is the part worth knowing about before a trigger fires: diffing
+the inventory of two commits says exactly which elements a large edit added,
+dropped or renamed, which reading a hundred files does not.
 
 Dedicated **embedded** graph databases are worth knowing about only once
 SQLite has actually stopped being enough: [LadybugDB](https://ladybugdb.com/),
@@ -176,6 +198,9 @@ is a real risk.
 - Committing to paid infrastructure before there is a concrete reason.
 - Projecting the model into a database because it would be tidy, rather than
   because one of the four triggers fired.
-- Hand-editing a projection instead of regenerating it.
+- Hand-editing a projection instead of regenerating it, or committing one.
+- Reading the projection for something the Markdown would have answered. An
+  agent reads the documents natively; the projection exists for the consumers
+  that cannot, and every other reader of it is a reader of a derived copy.
 - Choosing a stack and leaving the reasoning in a chat rather than in the
   technology layer.

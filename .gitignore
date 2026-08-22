@@ -15,3 +15,8 @@ __pycache__/
 
 # Where CI clones the pinned AIP skill to run its validators.
 .aip/
+
+# The projection built by scripts/build_model.py. Regenerated from the
+# Markdown under architecture/ on every run, so it is never committed: a
+# derived file that is checked in is a derived file that can go stale.
+.model/

@@ -88,6 +88,10 @@ MARKETPLACE = REPO_ROOT / ".claude-plugin" / "marketplace.json"
 # never see.
 CONTEXT_POINTERS = ("CLAUDE.md", "GEMINI.md")
 CONTEXT_IMPORT = "@AGENTS.md"
+# A backticked element identifier, as check_model.py reads one. Used here only
+# to find specimens in the scaffold, so it deliberately matches any prefix
+# rather than loading the registry: an invented prefix is just as wrong.
+SCAFFOLD_ID_RE = re.compile(r"`([A-Z][A-Z0-9]*\.)*[A-Z]+\d+(\.\d+)*`")
 # The headings each kind of skill must carry. This replaces the JSON Schemas:
 # the structural promise a schema made is a list of required sections, and a
 # list of required sections is legible to the people who write them.
@@ -406,6 +410,37 @@ def check_required_sections(known: set[str]) -> list[str]:
     return errors
 
 
+def check_scaffold_specimens() -> list[str]:
+    """No scaffold document under architecture/ may show an element identifier.
+
+    The scaffold is copied whole into a new project, so anything it contains
+    arrives in that project's `architecture/` folder. A specimen identifier —
+    `BPROC7.2` in a sentence teaching how levels are numbered — is a reference
+    to an element nobody defined, and `check_model.py` correctly rejects it the
+    moment the project defines its first real element.
+
+    It cannot be caught downstream by the validator that would care: the
+    scaffold here is excluded from `check_model.py` (its layer READMEs would
+    fail against themselves), and once copied it is no longer recognisable as
+    scaffold. So it is caught here, at the only point where the file is still
+    known to be a template.
+
+    The convention those specimens were teaching belongs to the rulebooks,
+    which are not copied anywhere and may show whatever they need to.
+    """
+    errors: list[str] = []
+    model_dir = SCAFFOLD_DIR / "architecture"
+    for path in sorted(model_dir.rglob("*.md")):
+        text = strip_code(path.read_text(encoding="utf-8"))
+        for match in SCAFFOLD_ID_RE.finditer(text):
+            errors.append(
+                f"{path.relative_to(REPO_ROOT)}: shows the element identifier "
+                f"{match.group(0)}, which ships into every generated project as "
+                f"a dangling reference. Name the rule and cite the rulebook instead"
+            )
+    return errors
+
+
 def check_prefix_registry() -> list[str]:
     """The prefix table in the style rulebook matches the file the scripts read.
 
@@ -613,6 +648,7 @@ def main() -> int:
         ("process binding", check_process_binding(known)),
         ("required sections", check_required_sections(known)),
         ("prefix registry", check_prefix_registry()),
+        ("scaffold specimens", check_scaffold_specimens()),
         ("catalogue", check_catalogue(known)),
         ("manifests", check_manifests()),
         ("context files", check_context_files()),

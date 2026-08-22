@@ -8,6 +8,13 @@ enforced that until this script: `check_links.py` verifies that a *link*
 resolves, and an agent reading `relieves PAIN2` has no cheap way to notice
 that `PAIN2` was deleted three initiatives ago.
 
+**The parse lives in `model_graph.py`**, which this script imports. It moved
+there when the published view of the model became a second consumer of the
+same reading of the same convention; a second parser would have drifted from
+this one silently. What stayed here is the judgement — the four checks below
+and the exit code. Nothing is persisted: validation needs a parse, not a
+store, so this script still builds the graph, checks it and exits.
+
 Four things are checked, per project:
 
 - **Dangling references** — every referenced ID resolves to a definition.
@@ -21,7 +28,7 @@ Four things are checked, per project:
   nobody wrote is the same defect as a dangling reference.
 
 An ID can carry two dot-separated qualifiers and they mean different things,
-so this script reads outwards from the type prefix: upper-case segments
+so the parser reads outwards from the type prefix: upper-case segments
 *before* it are the domain path (`SALES.BSVC3`), numeric segments *after* it
 are the catalogue's levels (`BSVC3.1`). Only the first makes a reference
 qualified — `architecture-document-style` § Levels number hierarchically.
@@ -59,227 +66,42 @@ Deliberately not checked:
 - Whether a "Realized by" cell points at a file that exists. That is the
   grounding rule, and it is still enforced only for links.
 """
-import json
-import re
 import sys
-from collections import defaultdict
 from pathlib import Path
 
-def _find_repo_root(start: Path) -> Path:
-    """The project this script is validating.
-
-    The scripts ship inside the scaffold, so the same file runs from
-    `<project>/scripts/` in a generated project and from the method's own
-    `scaffold/scripts/`. Walking up to the enclosing repository gets the
-    right answer in both places.
-    """
-    for candidate in (start, *start.parents):
-        if (candidate / ".git").exists():
-            return candidate
-    return start.parent
-
-
-REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
-# The layered model's directory name, in every project tree and in the
-# scaffold the skills emit.
-MODEL_DIR = "architecture"
-# Narrative folders inside the model directory. They are *about* the model
-# rather than part of it, and are deliberately not reference-checked.
-NARRATIVE = {"scope", "decisions", "reviews", "engagements"}
-# See the note in check_links.py: anchored to line starts and matched on fence
-# length, so a fence containing a fence does not close early and leak its body
-# back into the scanned prose.
-FENCE_RE = re.compile(
-    r"^(?P<ticks>`{3,})[^\n]*\n.*?^(?P=ticks)`*[ \t]*$",
-    re.DOTALL | re.MULTILINE,
+from model_graph import (
+    MODEL_DIR,
+    REPO_ROOT,
+    domain_of,
+    find_projects,
+    parent_of,
+    parse_project,
+    qualifier_of,
 )
-
-# Element-ID prefixes, loaded from the file that ships beside this script.
-# The human-readable source is the table in the architecture-document-style
-# skill; check_skills.py keeps the two in step, so this is not a second place
-# to maintain the list. Longest first, so alternation matches `BSVC` before
-# `B`-prefixed neighbours.
-PREFIX_FILE = Path(__file__).resolve().parent / "element-prefixes.json"
-with PREFIX_FILE.open(encoding="utf-8") as handle:
-    PREFIXES = sorted(
-        (code for group in json.load(handle)["prefixes"].values() for code in group),
-        key=len,
-        reverse=True,
-    )
-
-# The element itself: a type prefix, its number, then one dotted number per
-# level below the top (`CAP1`, `CAP1.2`, `CAP1.2.3`).
-_LOCAL = r"(?:" + "|".join(PREFIXES) + r")\d+(?:\.\d+)*"
-# A full ID prepends the domain path, when there is one (`SALES.CAP1.2`).
-_ID = r"(?:[A-Z][A-Z0-9]*\.)*" + _LOCAL
-
-# A backticked ID anywhere in the prose or a table cell is a reference.
-REFERENCE_RE = re.compile(r"`(" + _ID + r")`")
-# A table row whose first cell is a bare backticked ID defines that element.
-# A *domain-qualified* first cell is a reference instead — that is what a
-# domain charter's "Consumed services" table holds. A *leveled* first cell
-# (`BPROC7.2`) is a definition like any other: the dot is this element's own
-# place in the catalogue, not somebody else's ownership of it.
-TABLE_DEF_RE = re.compile(r"^\|\s*`([A-Z][A-Z0-9]*\d+(?:\.\d+)*)`\s*\|", re.M)
-# Splits an ID into its domain path and the rest, so the two meanings of the
-# dot never get confused for each other.
-ID_PARTS_RE = re.compile(r"^((?:[A-Z][A-Z0-9]*\.)*)(" + _LOCAL + r")$")
-# Goals and principles are written as bolded lead-ins rather than table rows.
-BULLET_DEF_RE = re.compile(r"\*\*(" + _ID + r")\s+—", re.M)
-RETIRED_HEADING_RE = re.compile(r"^##+\s+Retired\s*$", re.M)
-TABLE_ROW_RE = re.compile(r"^\|.*\|\s*$", re.M)
-ID_HEADER_RE = re.compile(r"^\|\s*(?:Qualified\s+)?ID\s*\|", re.I)
-
-
-def strip_code(text: str) -> str:
-    return FENCE_RE.sub("", text)
-
-
-def split_retired(text: str) -> tuple[str, str]:
-    """Return (live, retired) halves, split at a `## Retired` heading."""
-    match = RETIRED_HEADING_RE.search(text)
-    if not match:
-        return text, ""
-    return text[: match.start()], text[match.start() :]
-
-
-def definitions_in(text: str) -> set[str]:
-    return set(TABLE_DEF_RE.findall(text)) | set(BULLET_DEF_RE.findall(text))
-
-
-def qualifier_of(element: str) -> str:
-    """The domain path of an ID, or "" when it is unqualified.
-
-    `SALES.BPROC1.3` is qualified and `BPROC1.3` is not, even though both
-    contain a dot: the levels sit after the prefix, the domain before it.
-    """
-    match = ID_PARTS_RE.match(element)
-    return match.group(1).rstrip(".") if match else ""
-
-
-def parent_of(element: str) -> str:
-    """The ID one level up, or "" for an element that is already top-level.
-
-    A trailing numeric segment is a level, so `SALES.CAP1.2` is a child of
-    `SALES.CAP1`, while `SALES.CAP1` is a top-level capability whose leading
-    segment names its domain rather than a parent element.
-    """
-    head, _, tail = element.rpartition(".")
-    return head if tail.isdigit() else ""
-
-
-def unvalidated_tables(text: str) -> int:
-    """Count tables whose header row has no ID column."""
-    count = 0
-    in_table = False
-    for line in text.splitlines():
-        is_row = TABLE_ROW_RE.match(line) is not None
-        if is_row and not in_table:
-            in_table = True
-            if not ID_HEADER_RE.match(line):
-                count += 1
-        elif not is_row:
-            in_table = False
-    return count
-
-
-# Directories that are tooling rather than repository content. `.git` is
-# obvious; `.claude`, `.agents`, `.gemini`, `.codex` and `.copilot` hold
-# agent-local material — installed and vendored third-party skills, worktrees,
-# local settings — one per host the method runs on, and `.aip` is a checkout
-# of the pinned AIP release the validators are run from. None is this
-# repository's to validate, and none is a downstream project's once these
-# scripts ship there.
-EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot", ".aip"}
-
-
-def _excluded(path: Path) -> bool:
-    return bool(EXCLUDED_DIRS & set(path.parts))
-
-
-def find_projects() -> list[Path]:
-    """A project is the directory containing an `architecture/` folder."""
-    projects = []
-    for model_dir in sorted(REPO_ROOT.rglob(MODEL_DIR)):
-        if _excluded(model_dir) or not model_dir.is_dir():
-            continue
-        projects.append(model_dir.parent)
-    return projects
-
-
-def domain_of(md_file: Path, project: Path) -> str:
-    """Upper-cased domain path for a file inside `architecture/domains/<name>/`."""
-    parts = md_file.relative_to(project).parts
-    segments = [parts[i + 1] for i, part in enumerate(parts[:-1]) if part == "domains"]
-    return ".".join(s.upper() for s in segments)
 
 
 def check_project(project: Path) -> tuple[list[str], int, int]:
     """Return (errors, definition count, unvalidated-table count)."""
-    errors: list[str] = []
-    skipped = 0
-    # Qualified name -> the file that defined it. "" is the enterprise scope.
-    defined: dict[str, Path] = {}
-    duplicates: list[str] = []
-    retired: dict[str, Path] = {}
-    references: list[tuple[str, Path]] = []
-    domains: set[str] = set()
+    parsed = parse_project(project)
+    errors: list[str] = sorted(parsed.duplicates)
 
-    model_root = project / MODEL_DIR
-    files = [
-        path
-        for path in sorted(model_root.rglob("*.md"))
-        if not _excluded(path)
-        and "scaffold" not in path.parts
-        and not (NARRATIVE & set(path.relative_to(model_root).parts))
-    ]
-
-    for md_file in files:
-        text = strip_code(md_file.read_text(encoding="utf-8"))
-        scope = domain_of(md_file, project)
-        if scope:
-            domains.add(scope)
-        skipped += unvalidated_tables(text)
-        live_text, retired_text = split_retired(text)
-
-        for element in definitions_in(live_text):
-            key = f"{scope}.{element}" if scope else element
-            if key in defined:
-                duplicates.append(
-                    f"{md_file.relative_to(REPO_ROOT)}: duplicate definition of "
-                    f"`{key}` (first defined in "
-                    f"{defined[key].relative_to(REPO_ROOT)})"
-                )
-            else:
-                defined[key] = md_file
-        for element in definitions_in(retired_text):
-            retired[f"{scope}.{element}" if scope else element] = md_file
-
-        defined_here = definitions_in(text)
-        for reference in REFERENCE_RE.findall(text):
-            if not qualifier_of(reference) and reference in defined_here:
-                continue
-            references.append((reference, md_file))
-
-    errors.extend(sorted(duplicates))
-
-    for element, md_file in sorted(retired.items()):
-        if element in defined:
+    for element, md_file in sorted(parsed.retired.items()):
+        if element in parsed.defined:
             errors.append(
                 f"{md_file.relative_to(REPO_ROOT)}: `{element}` is retired but "
-                f"still defined live in {defined[element].relative_to(REPO_ROOT)}"
+                f"still defined live in {parsed.defined[element].relative_to(REPO_ROOT)}"
             )
 
-    for element, md_file in sorted(defined.items()):
+    for element, md_file in sorted(parsed.defined.items()):
         parent = parent_of(element)
-        if parent and parent not in defined and parent not in retired:
+        if parent and parent not in parsed.defined and parent not in parsed.retired:
             errors.append(
                 f"{md_file.relative_to(REPO_ROOT)}: `{element}` is one level "
                 f"below `{parent}`, which is not defined in this project"
             )
 
     seen: set[tuple[str, Path]] = set()
-    for reference, md_file in references:
+    for reference, md_file in parsed.references:
         if (reference, md_file) in seen:
             continue
         seen.add((reference, md_file))
@@ -288,15 +110,18 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
         candidates = [reference]
         if not qualifier and scope:
             candidates.insert(0, f"{scope}.{reference}")
-        if any(candidate in defined or candidate in retired for candidate in candidates):
+        if any(
+            candidate in parsed.defined or candidate in parsed.retired
+            for candidate in candidates
+        ):
             continue
         rel = md_file.relative_to(REPO_ROOT)
-        if qualifier and qualifier not in domains:
+        if qualifier and qualifier not in parsed.domains:
             errors.append(f"{rel}: `{reference}` names unknown domain `{qualifier}`")
         else:
             errors.append(f"{rel}: `{reference}` is not defined in this project")
 
-    return errors, len(defined), skipped
+    return errors, len(parsed.defined), parsed.skipped
 
 
 def main() -> int:

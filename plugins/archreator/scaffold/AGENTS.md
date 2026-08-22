@@ -72,7 +72,8 @@ used in, with the four rulebooks — consulted rather than run — at the end.
   `architecture/decisions/` for calls smaller than an initiative.
 - `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
   development workflow.
-- [`scripts/`](./scripts/README.md) — the two validators, run before every push.
+- [`scripts/`](./scripts/README.md) — the two validators, run before every
+  push, and the projection tool.
 
 ## Commands
 
@@ -91,7 +92,8 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing.
+Both must be green before pushing. `python3 scripts/build_model.py` projects
+the model into `.model/` for a rendered view or a report — a tool, not a gate.
 
 ## Conventions
 

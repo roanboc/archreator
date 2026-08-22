@@ -89,7 +89,7 @@ can actually reason about — and eventually hand to an agent.
 **A domain's exposed services are its contract; everything else is
 internal.**
 
-- Referencing another domain's exposed service by qualified ID (`SALES.BSVC3`)
+- Referencing another domain's exposed service by its qualified identifier
   is normal and expected.
 - Referencing another domain's *internal* process, resource, or data object
   reaches through the contract. That is a modeling error, not a shortcut —
@@ -106,16 +106,22 @@ change.
 
 ## Element IDs
 
-Bare inside the owning domain (`BSVC3`), qualified from outside
-(`SALES.BSVC3`), bare at the enterprise level (`G1`). Numbering is per
-prefix **per domain**, so two domains may each own a `BSVC3` — the qualifier
-is what distinguishes them, and this is deliberate: globally unique
-numbering would make every new domain a merge conflict against every other.
+An identifier is written bare inside the domain that owns it, qualified by
+that domain's name from outside, and bare at the enterprise level. Numbering
+is per prefix **per domain**, so two domains may each own the same number —
+the qualifier is what distinguishes them, and this is deliberate: globally
+unique numbering would make every new domain a merge conflict against every
+other.
 
-A leveled element extends its parent's ID (`BPROC1.3`), so an ID can carry
-both qualifiers at once — `SALES.BPROC1.3`. Read outwards from the prefix:
-upper-case segments before it are the domain path, numeric segments after it
-are the levels. Full rules in `architecture-document-style` § Element IDs.
+A leveled element extends its parent's identifier, so one identifier can
+carry both qualifiers at once. Read outwards from the prefix: upper-case
+segments before it are the domain path, numeric segments after it are the
+levels.
+
+The worked examples live in `architecture-document-style` § Element IDs and
+not here. A scaffold document that shows a specimen identifier ships that
+identifier into every generated project, where it becomes a reference to an
+element nobody defined.
 
 ## Layer view
 

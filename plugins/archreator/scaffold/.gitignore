@@ -1,0 +1,18 @@
+# Python bytecode from running the checks in scripts/.
+__pycache__/
+*.pyc
+
+# Agent-local material, one directory per host the method might run on:
+# installed and vendored skills, worktrees, machine-local settings. Never
+# shared. Project-scoped settings that ARE meant to be committed live in the
+# host's own settings file, not in these.
+.claude/settings.local.json
+.agents/
+.gemini/
+.codex/
+.copilot/
+
+# The projection built by scripts/build_model.py. Regenerated from the
+# Markdown under architecture/ on every run, so it is never committed: a
+# derived file that is checked in is a derived file that can go stale.
+.model/

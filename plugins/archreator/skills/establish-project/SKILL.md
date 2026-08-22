@@ -117,12 +117,18 @@ into every step below.
 ### 2 — Emit the scaffold, then make it this project
 
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
-It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `architecture/` — with
-`scope/` and `decisions/` inside it — and `scripts/`, the two validators with
-their own README. `CLAUDE.md` and `GEMINI.md` come with it too, each holding
-nothing but an `@AGENTS.md` import so the host that reads only its own
-filename still finds the entry point. Copy them as they are and leave them
-alone; content in one of them is content the other hosts never see.
+It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
+`architecture/` — with `scope/` and `decisions/` inside it — and `scripts/`,
+the two validators and the projection tool with their own README. `CLAUDE.md`
+and `GEMINI.md` come with it too, each holding nothing but an `@AGENTS.md`
+import so the host that reads only its own filename still finds the entry
+point. Copy them as they are and leave them alone; content in one of them is
+content the other hosts never see.
+
+**Copy the dotfiles too.** `.gitignore` is the one the project cannot do
+without: it keeps bytecode, machine-local settings and the regenerated
+projection out of the history. A glob copy drops it silently, which is only
+noticed later, in a commit that should not have contained what it did.
 
 Then, in one pass, so the first commit is coherent:
 
@@ -142,7 +148,7 @@ Then, in one pass, so the first commit is coherent:
 
 **← Needs** the declared depth, the project description.
 
-**→ Produces** `AGENTS.md`, its `CLAUDE.md` and `GEMINI.md` imports, `README.md`, `CONTRIBUTING.md`, `architecture/`, `scripts/`.
+**→ Produces** `AGENTS.md`, its `CLAUDE.md` and `GEMINI.md` imports, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `architecture/`, `scripts/`.
 
 ### 3 — Set the layers to the declared depth
 

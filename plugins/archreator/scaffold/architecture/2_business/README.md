@@ -26,8 +26,7 @@ classified into strategic, operational, support and evaluation; level 2 is the
 end-to-end processes inside each; and level 3 exists only for the branches a
 named pain justifies detailing. Past roughly fifteen elements in a level the
 file becomes a folder of the same name with one document per level.
-**Identifiers carry the level** — `BPROC7`, then `BPROC7.2`, then
-`BPROC7.2.1` — so no table needs a parent column. The
+**Identifiers carry the level**, so no table needs a parent column. The
 `process-and-capability-levels` skill holds the categories, the level
 definitions, the description each level carries, and the focus table that
 records which branches were deliberately left at level 2 — that table is what
