@@ -30,19 +30,21 @@ layers, stops wherever a human has to decide, and only then gets built.
 
 ```mermaid
 flowchart LR
-  ask(["A requirement, not a diff"]):::human
-  layers["Align it through six layers"]:::ai
-  scope["Write the scope document"]:::ai
-  gate{{"Gates 0-3"}}:::gate
-  build["Implement, keeping the docs true"]:::ai
-  review{{"Review the whole branch"}}:::gate
-  merged(["Merged, and the model still describes it"]):::done
-
-  ask --> layers --> scope --> gate
-  gate -->|changes requested| layers
-  gate -->|approved| build --> review
-  review -->|changes requested| build
-  review -->|approved| merged
+  subgraph A["&nbsp;&nbsp;Your agent works&nbsp;&nbsp;"]
+    design["Aligns six layers"]:::ai
+    build["Implements"]:::ai
+  end
+  subgraph H["&nbsp;&nbsp;You decide&nbsp;&nbsp;"]
+    ask(["A requirement"]):::human
+    gate{{"Gates 0-3"}}:::gate
+    review{{"Review"}}:::gate
+    merged(["Merged"]):::done
+  end
+  ask --> design --> gate
+  gate --> build --> review
+  review --> merged
+  gate -.->|changes| design
+  review -.->|changes| build
 
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
@@ -50,14 +52,13 @@ flowchart LR
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
-**Violet is you saying what you want. Cyan is the agent doing the work. Rose
-is you deciding, on the record. Green is done.** Two loops, and neither can be
-skipped: yours runs before any code exists, and yours again before any code
-merges.
+**You own both ends; the middle is the agent's.** The dotted edges are the two
+loops that can't be skipped — a gate you decline sends the work back *before
+any code exists*, and a review you decline sends it back *before anything
+merges*.
 
-That diagram is drawn in the same notation the method uses everywhere else —
-colour carries the layer, and an AI actor is always cyan so you never mistake
-it for a person.
+Drawn in the method's own palette: cyan is always an AI actor, here and in
+every model you'll build, so you never mistake one for a person.
 
 ### The six layers
 
