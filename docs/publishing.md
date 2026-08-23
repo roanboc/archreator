@@ -140,9 +140,19 @@ not obvious.
   it and nothing breaks if it is never run.
 - **It renders, it does not summarize.** A page in the portal says exactly what
   the file says. If the portal reads badly, the document reads badly.
-- **It needs the network at view time.** The theme loads Mermaid and its web
-  fonts from a CDN when a page is opened. A portal for a network that blocks
-  them needs a local copy of the library, added through `extra_javascript` in
-  `mkdocs.yml`.
+- **It needs the network at view time**, unless you take it off. The theme
+  loads Mermaid and its web fonts from a CDN when a page is opened, which a
+  corporate network may well refuse. Two changes make the portal
+  self-contained: drop a copy of `mermaid.min.js` into `overrides/assets/` and
+  name it in `mkdocs.yml`, which the theme then uses instead of asking the CDN,
+  and set `theme.font: false`, which drops the web fonts for the system ones.
+
+  ```yaml
+  theme:
+    name: material
+    font: false
+  extra_javascript:
+    - assets/mermaid.min.js
+  ```
 - **It is not the model.** It is a copy of the model on the day it was built.
   The Markdown in git is what anyone should argue with.
