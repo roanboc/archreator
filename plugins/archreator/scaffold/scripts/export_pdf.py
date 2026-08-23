@@ -80,6 +80,7 @@ from build_docs import (  # noqa: E402
     missing_dependencies,
     resolve_project,
     run_mkdocs,
+    shown,
     stage,
 )
 
@@ -259,16 +260,15 @@ def main() -> int:
             )
             return 1
         published, _, _ = stage(project, project / STAGING)
-        print(f"{published} document(s) staged into {STAGING}/.")
+        print(f"{published} document(s) staged into {shown(project / STAGING)}/.")
         code = run_mkdocs(project, ["build", "--site-dir", str(site)], config=args.config)
         if code != 0:
             return code
 
     page = print_page_in(site)
     if page is None:
-        where = site.relative_to(project) if site.is_relative_to(project) else site
         print(
-            f"{where}/ holds no print page. It is built by the print-site plugin, "
+            f"{shown(site)}/ holds no print page. It is built by the print-site plugin, "
             f"which {args.config} enables — check that it is still listed there"
             + (", and build the portal rather than passing --no-build." if args.no_build else "."),
             file=sys.stderr,
@@ -298,8 +298,7 @@ def main() -> int:
         return code
 
     size = output.stat().st_size / 1024
-    where = output.relative_to(project) if output.is_relative_to(project) else output
-    print(f"Exported {where} ({size:.0f} KB), printed from {page.name} by {Path(browser).name}.")
+    print(f"Exported {shown(output)} ({size:.0f} KB), printed from {page.name} by {Path(browser).name}.")
 
     complaint = None if args.no_check else check_diagrams(browser, page)
     if complaint:

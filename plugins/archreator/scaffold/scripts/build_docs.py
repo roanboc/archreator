@@ -55,7 +55,7 @@ from pathlib import Path
 # an import, so the directory it lives in is not on the path when that happens.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from model_graph import EXCLUDED_DIRS, MODEL_DIR, find_projects  # noqa: E402
+from model_graph import EXCLUDED_DIRS, MODEL_DIR, REPO_ROOT, find_projects  # noqa: E402
 
 # What lands in the portal: the model, and the documents that frame it. Every
 # Markdown file directly in the project root is published too, which is how
@@ -80,6 +80,15 @@ CONFIG = "mkdocs.yml"
 # another, so both are carried.
 REQUIRED = {"mkdocs": "mkdocs", "material": "mkdocs-material",
             "mkdocs_print_site_plugin": "mkdocs-print-site-plugin"}
+
+
+def shown(path: Path) -> str:
+    """A path as a reader of this repository would name it.
+
+    One repository can hold several models, and `.docs/site` names none of
+    them. Reported from the repository root, the message says which.
+    """
+    return str(path.relative_to(REPO_ROOT) if path.is_relative_to(REPO_ROOT) else path)
 
 
 def _excluded(path: Path) -> bool:
@@ -204,7 +213,7 @@ def main() -> int:
 
     published, copied, dropped = stage(project, project / STAGING)
     changed = f"{copied} written, {dropped} removed" if copied or dropped else "already current"
-    print(f"{published} document(s) staged into {STAGING}/ ({changed}).")
+    print(f"{published} document(s) staged into {shown(project / STAGING)}/ ({changed}).")
     if args.stage:
         return 0
 
@@ -234,8 +243,9 @@ def main() -> int:
 
     code = run_mkdocs(project, arguments)
     if code == 0 and not args.serve:
+        site = shown(project / SITE)
         print(
-            f"Portal built into {SITE}/. Open {SITE}/index.html to read it, hand "
+            f"Portal built into {site}/. Open {site}/index.html to read it, hand "
             f"the folder to whoever will host it, or run --serve to rebuild as "
             f"you edit."
         )
