@@ -1,0 +1,44 @@
+# The door the documentation portal opens. Every page carries a "Raise a
+# question about this page" link that lands here with the page filled in, so
+# a reader who is not in the repository still has a way back into the model.
+
+name: Question about the architecture
+description: Ask about something a page in the model says, or does not say.
+title: "Question: "
+labels: ["architecture-question"]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        The architecture documents are the model, and a question about one is
+        worth as much as a correction. Answering it changes the document, not
+        just this thread.
+  - type: input
+    id: page
+    attributes:
+      label: The page
+      description: Its path in the repository. The portal fills this in for you.
+      placeholder: architecture/2_business/README.md
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: What is unclear, missing, or looks wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: What you were trying to work out
+      description: >-
+        What you came to the page for. It is usually what decides whether the
+        answer is a sentence in the document or a change to the model.
+  - type: markdown
+    attributes:
+      value: >-
+        **What happens next.** A question the model owes an answer to is logged
+        in `architecture/scope/open-questions.md`; one that turns out to be a
+        change becomes an initiative and goes through the gates like any other.
+        Either way the answer lands in the documents, and the portal follows.

@@ -17,7 +17,9 @@ real file. Two categories are deliberately not flagged:
 **HTML** (`*.html`) — relative `href`/`src` targets must resolve to a real
 file, and any fragment (`#id`, or `page.html#id`) must resolve to an element
 `id` in the target HTML file. This catches broken page-to-page links and
-stale in-page anchors in the guidance site.
+stale in-page anchors in the guidance site. A target a template engine fills
+in at build time (`{{ page.edit_url }}`) names no file on disk, so it is not
+checked — the portal's theme override is a template, not a page.
 
 Absolute or non-file targets (http, https, mailto, tel, data, javascript)
 are never checked in either kind.
@@ -60,6 +62,10 @@ HREF_RE = re.compile(r"""(?<![\w:-])(?:href|src)\s*=\s*["']([^"']+)["']""")
 ID_RE = re.compile(r"""(?<![\w-])id\s*=\s*["']([^"']+)["']""")
 
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "data:", "javascript:")
+# A target the template engine fills in when the page is built, rather than a
+# path — `href="{{ page.edit_url }}"` in the portal's theme override. There is
+# nothing on disk for it to point at until something renders it.
+TEMPLATE_RE = re.compile(r"\{[{%]")
 
 _ids_cache: dict[Path, set[str]] = {}
 
@@ -121,7 +127,7 @@ def check_html(html_file: Path) -> list[str]:
     rel = html_file.relative_to(REPO_ROOT)
     for target in HREF_RE.findall(html_file.read_text(encoding="utf-8")):
         target = target.strip()
-        if not target or is_external(target):
+        if not target or is_external(target) or TEMPLATE_RE.search(target):
             continue
         path_part, _, fragment = target.partition("#")
         if not path_part:
@@ -145,7 +151,11 @@ def check_html(html_file: Path) -> list[str]:
 # of the pinned AIP release the validators are run from. None is this
 # repository's to validate, and none is a downstream project's once these
 # scripts ship there.
-EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot", ".aip"}
+# `.docs` is the documentation portal's staged copy and built site — every
+# document a second time, which would otherwise read as every element being
+# defined twice.
+EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot",
+                 ".aip", ".docs"}
 
 
 def _excluded(path: Path) -> bool:

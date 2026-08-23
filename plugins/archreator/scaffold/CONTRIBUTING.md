@@ -43,6 +43,22 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
+## Questions from outside the repository
+
+The model is also published as a website — `python3 scripts/build_docs.py`,
+deployed by `.github/workflows/publish-docs.yml` — for readers who will never
+open this repository. Every page there links back: the pencil opens that
+document in git, and **"Raise a question about this page"** opens an issue
+naming it, through
+[`.github/ISSUE_TEMPLATE/architecture-question.yml`](./.github/ISSUE_TEMPLATE/architecture-question.yml).
+
+Those issues are triaged like anything else a Requester says. A question the
+model owes an answer to is logged in
+[`architecture/scope/open-questions.md`](./architecture/scope/open-questions.md);
+one that turns out to be a change becomes an initiative and passes the gates
+like any other. **Answering in the thread and nowhere else leaves the model
+exactly as wrong as it was.**
+
 ## Pull requests
 
 The body covers the whole branch (`git diff main...HEAD`), not just the

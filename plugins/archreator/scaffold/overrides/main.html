@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+<!--
+  The portal's only addition to the Material theme, and it is there for one
+  reason: a reader who cannot get from a rendered page back to the Markdown
+  that produced it will treat the rendering as the model. Every page carries
+  its source path, the pencil that opens that file in git, and the link that
+  turns a question into an issue the project has to answer.
+
+  Nothing here holds content. A page in the portal says exactly what the file
+  under `architecture/` says, or the portal has become a second source of
+  truth — which is the one thing publishing must not do.
+-->
+
+{% block extrahead %}
+  {{ super() }}
+  <style>
+    .ar-feedback {
+      margin: 2.4rem 0 0;
+      padding-top: .8rem;
+      border-top: .05rem solid var(--md-default-fg-color--lightest);
+      font-size: .7rem;
+      color: var(--md-default-fg-color--light);
+    }
+    .ar-feedback p { margin: .2rem 0; }
+    .ar-feedback code { font-size: .95em; }
+    @media print { .ar-feedback { display: none; } }
+  </style>
+{% endblock %}
+
+{% block content %}
+  {{ super() }}
+
+  {% if page and page.file and "print_page" not in page.file.src_uri %}
+    <aside class="ar-feedback">
+      <p>
+        Rendered from
+        {% if page.edit_url %}
+          <a href="{{ page.edit_url }}"><code>{{ page.file.src_uri }}</code></a>
+        {% else %}
+          <code>{{ page.file.src_uri }}</code>
+        {% endif %}
+        in the repository, which is the source of truth. This page is a copy of it.
+      </p>
+      <p>
+        {% if config.repo_url %}
+          <a href="{{ config.repo_url }}/issues/new?template=architecture-question.yml&amp;page={{ page.file.src_uri | urlencode }}">Raise a question about this page</a>
+          &middot;
+        {% endif %}
+        <a href="{{ 'print_page/' | url }}">Read the whole model as one page</a>
+      </p>
+    </aside>
+  {% endif %}
+{% endblock %}
