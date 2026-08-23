@@ -95,6 +95,70 @@ when it is a question the model owes an answer to, or a new initiative when it
 is a change — the same two places a question raised in a conversation ends up.
 Neither is new machinery. The portal only gives the question a door.
 
+## Comments on a page
+
+The issue link is a door into the change process. A comment thread is the
+other thing readers ask for — somewhere to say "this contradicts what we
+agreed in March" without opening anything. The scaffold ships the wiring for
+it and leaves it off:
+[`overrides/partials/comments.html`](../plugins/archreator/scaffold/overrides/partials/comments.html)
+overrides the empty partial Material includes at the foot of every page, and
+renders nothing until `mkdocs.yml` carries the values.
+
+**What it needs.** [giscus](https://giscus.app) keeps the threads in the
+repository's own GitHub Discussions. Its prerequisites are what decide
+whether this is available to you at all:
+
+| Needs | Why it matters |
+| ----- | -------------- |
+| A **public** repository | giscus reads and writes Discussions through a public API. A private model cannot use it — see below |
+| **Discussions** enabled | Settings → General → Features → Discussions. The category you point at is where every page's thread lands |
+| The **giscus app** installed on the repository | It is what posts on a reader's behalf |
+| A **GitHub account** per commenter | Anyone who can read the repository can comment; nobody else can |
+
+giscus.app generates the four values from the repository name. They go in
+`mkdocs.yml` and nothing else changes:
+
+```yaml
+extra:
+  giscus:
+    repo: acme/widgets
+    repo_id: R_kgDO…
+    category: Architecture
+    category_id: DIC_kwDO…
+```
+
+Threads are keyed on the page's path, so a discussion follows the document
+rather than its title, and the widget is deliberately absent from
+`print_page/` — a comment thread on the copy of a page is not a thread anyone
+can answer, and in a PDF it is a blank box.
+
+**If the repository is private**, giscus is out, and so is every other
+GitHub-backed widget. What still works with no service to operate is a link:
+a new Discussion, prefilled with the page, in the same shape as the question
+link beside it. Three lines in
+[`overrides/main.html`](../plugins/archreator/scaffold/overrides/main.html):
+
+```html
+<a href="{{ config.repo_url }}/discussions/new?category=architecture&title=Discussion:%20{{ page.title | urlencode }}">
+  Discuss this page
+</a>
+```
+
+The alternatives are worth knowing and mostly worth declining: **utterances**
+has the same public-repository limit; **Hypothesis** annotates any page and
+keeps the annotations on its own service; **Isso**, **Commento** and
+**Remark42** are self-hosted, which trades the comment box for a server to run
+and a database to back up. A method whose whole claim is that there is nothing
+to operate should think twice before adding the first thing.
+
+**And the rule the threads do not escape.** A comment is a conversation about
+a document; the document is the model. An answer that stays in a thread has
+changed nothing — it belongs in the page, in
+`architecture/scope/open-questions.md`, or in an initiative. That is why the
+link that opens a proper question sits on every page whether or not comments
+are switched on.
+
 ## Running it
 
 ```bash

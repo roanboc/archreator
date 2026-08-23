@@ -52,6 +52,11 @@ document in git, and **"Raise a question about this page"** opens an issue
 naming it, through
 [`.github/ISSUE_TEMPLATE/architecture-question.yml`](./.github/ISSUE_TEMPLATE/architecture-question.yml).
 
+If comment threads are switched on (`extra.giscus` in `mkdocs.yml`), a page
+also carries a discussion. A thread is a conversation about a document and
+never the record of a change: whatever it settles is written into the model,
+or it did not happen.
+
 Those issues are triaged like anything else a Requester says. A question the
 model owes an answer to is logged in
 [`architecture/scope/open-questions.md`](./architecture/scope/open-questions.md);
