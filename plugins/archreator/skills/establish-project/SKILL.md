@@ -119,16 +119,20 @@ into every step below.
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
 It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
 `architecture/` — with `scope/` and `decisions/` inside it — and `scripts/`,
-the two validators and the projection tool with their own README. `CLAUDE.md`
+the two validators and the three tools with their own README. It also holds
+`mkdocs.yml` and `overrides/`, which publish the model as a website, and
+`.github/`, which carries the workflow that deploys it and the issue form a
+reader of that website raises a question through. `CLAUDE.md`
 and `GEMINI.md` come with it too, each holding nothing but an `@AGENTS.md`
 import so the host that reads only its own filename still finds the entry
 point. Copy them as they are and leave them alone; content in one of them is
 content the other hosts never see.
 
 **Copy the dotfiles too.** `.gitignore` is the one the project cannot do
-without: it keeps bytecode, machine-local settings and the regenerated
-projection out of the history. A glob copy drops it silently, which is only
-noticed later, in a commit that should not have contained what it did.
+without: it keeps bytecode, machine-local settings and everything regenerated —
+the projection and the published copy — out of the history. `.github/` is the
+other one a glob copy drops silently, which is only noticed later, in a commit
+that should not have contained what it did.
 
 Then, in one pass, so the first commit is coherent:
 
@@ -137,6 +141,7 @@ Then, in one pass, so the first commit is coherent:
 | `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running; placeholders left here are what make later sessions guess |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `CONTRIBUTING.md` | Leave § Development workflow as its TEMPLATE comment until a stack exists, rather than inventing commands |
+| `mkdocs.yml` | The site name, the description and the repository URL, so every published page carries a link back to the file that produced it. Left as it ships, the portal still builds — without those links |
 | Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
 
 **⚖ Judgement.** The optional files are a decision, not a default:
@@ -145,10 +150,11 @@ Then, in one pass, so the first commit is coherent:
 | ---- | ------------ | --------- |
 | `architecture/scope/open-questions.md` | A stakeholder cannot be consulted synchronously | Delete — it can come back later |
 | `architecture/decisions/` | The project will make enough architecture-significant calls to justify a log | Delete — it can come back later |
+| `.github/workflows/publish-docs.yml`, with the question form beside it | The model is meant to be read outside the repository, and publishing it is a disclosure the Requester would agree to | Delete — `scripts/build_docs.py` still renders it locally on demand |
 
 **← Needs** the declared depth, the project description.
 
-**→ Produces** `AGENTS.md`, its `CLAUDE.md` and `GEMINI.md` imports, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `architecture/`, `scripts/`.
+**→ Produces** `AGENTS.md`, its `CLAUDE.md` and `GEMINI.md` imports, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `architecture/`, `scripts/`, `mkdocs.yml`, `overrides/`, `.github/`.
 
 ### 3 — Set the layers to the declared depth
 

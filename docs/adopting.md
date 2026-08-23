@@ -70,7 +70,11 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
   the host that reads only its own filename still finds the entry point
 - `architecture/` — layer READMEs for the six layers, plus `scope/` and
   `decisions/`
-- `scripts/` — the two validators, run before every push
+- `scripts/` — the two validators, run before every push, and the three tools:
+  the projection, the documentation portal and the PDF export
+- `mkdocs.yml`, `overrides/` and `.github/` — how the model is published as a
+  website, and the issue form a reader of that website raises a question
+  through. See [`docs/publishing.md`](./publishing.md)
 
 Then follow the bootstrap checklist by hand, or install the skills and let
 `establish-project` do it.
