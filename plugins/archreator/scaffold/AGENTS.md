@@ -73,7 +73,10 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 - `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
   development workflow.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
-  push, and the projection tool.
+  push, and the three tools: the projection, the documentation portal and the
+  PDF export.
+- `mkdocs.yml` and `overrides/` — how the model is published as a website.
+  Everything they produce lands in `.docs/`, which is derived and gitignored.
 
 ## Commands
 
@@ -92,8 +95,18 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing. `python3 scripts/build_model.py` projects
-the model into `.model/` for a rendered view or a report — a tool, not a gate.
+Both must be green before pushing. Three tools sit beside them, none of them a
+gate:
+
+```bash
+python3 scripts/build_model.py    # the model as nodes and edges, in .model/
+python3 scripts/build_docs.py     # the model as a website, in .docs/site/
+python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
+```
+
+`build_model.py` is for a consumer that queries the model; the other two are
+for a reader who is not in this repository. All three are regenerated from the
+Markdown under `architecture/`, which stays the source of truth.
 
 ## Conventions
 

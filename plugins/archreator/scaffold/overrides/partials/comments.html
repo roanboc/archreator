@@ -1,0 +1,55 @@
+{#-
+  Comment threads under every page, backed by GitHub Discussions through
+  giscus. This file is the theme's own extension point: Material includes an
+  empty `partials/comments.html` at the end of every page, and this overrides
+  it.
+
+  It renders nothing until `extra.giscus` is filled in in `mkdocs.yml`, so the
+  portal ships without a comment system and gains one with four values and no
+  code.
+
+  **What a comment is, and is not.** A thread is a conversation about a page;
+  the page is the model. An answer that stays in a thread has changed nothing
+  — it belongs in the document, in `architecture/scope/open-questions.md`, or
+  in an initiative. That is why the link to raise a proper question sits on
+  every page whether or not this is switched on.
+
+  Two things it costs, both worth saying out loud before turning it on:
+  giscus needs the repository to be public and the commenter to hold a GitHub
+  account, and the widget is a third-party iframe loaded from giscus.app.
+-#}
+{% set giscus = config.extra.giscus if config.extra else None %}
+{% if page.meta and page.meta.hide and "comments" in page.meta.hide %}
+  {% set giscus = None %}
+{% endif %}
+{#- The print page carries every document at once, and a comment thread on
+    the copy of a page is not a thread anyone can answer. It is also what the
+    PDF is printed from, where an iframe is nothing but a slow blank box. -#}
+{% if page and page.file and "print_page" in page.file.src_uri %}
+  {% set giscus = None %}
+{% endif %}
+{% if giscus and giscus.repo and giscus.repo_id %}
+  <h2 id="__comments">{{ giscus.heading | d("Discussion", true) }}</h2>
+  <script src="https://giscus.app/client.js"
+      data-repo="{{ giscus.repo }}"
+      data-repo-id="{{ giscus.repo_id }}"
+      data-category="{{ giscus.category | d('General', true) }}"
+      data-category-id="{{ giscus.category_id }}"
+      {#- One discussion per document, keyed on the page's path, so a thread
+          follows the page rather than its title. -#}
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      {#- Follows the reader's system setting. It does not follow the theme
+          toggle at the top of the page: that needs a script posting to the
+          iframe on every switch, which is more moving parts than a colour is
+          worth. -#}
+      data-theme="preferred_color_scheme"
+      data-lang="{{ config.theme.language | d('en', true) }}"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+  </script>
+{% endif %}

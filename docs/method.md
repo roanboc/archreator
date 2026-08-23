@@ -122,6 +122,12 @@ marked "Pending — future initiative". Two validators in
 [`plugins/archreator/scaffold/scripts/`](../plugins/archreator/scaffold/scripts/) enforce that references
 resolve, that every leveled ID has a parent, and that no identifier is reused.
 
+The Markdown is the model, and the readers who never open a repository are
+served by rendering it rather than by keeping a second copy: one command
+publishes the same documents as a searchable website, another prints them as a
+single PDF, and both are regenerated and gitignored — see
+[`docs/publishing.md`](./publishing.md).
+
 The scaffold at [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) has every layer
 README ready to fill in. The full conventions — numbering, ArchiMate on
 Mermaid, colour ramps, actor kinds — are in

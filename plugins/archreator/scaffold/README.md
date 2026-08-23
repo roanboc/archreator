@@ -19,6 +19,10 @@ does and how its pieces relate.
 - [`architecture/scope/`](./architecture/scope/README.md) — one document per initiative, with its approval gates
 - [`architecture/decisions/`](./architecture/decisions/README.md) — consequential calls smaller than an initiative
 
+Not a repository person? `python3 scripts/build_docs.py` renders the same
+documents as a searchable website and `python3 scripts/export_pdf.py` as a
+single PDF — both built from the Markdown, which stays the model.
+
 ## How changes are made
 
 Requirements are aligned through the model and approved at explicit gates

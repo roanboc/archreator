@@ -20,3 +20,8 @@ __pycache__/
 # Markdown under architecture/ on every run, so it is never committed: a
 # derived file that is checked in is a derived file that can go stale.
 .model/
+
+# The documentation portal: the staged copy of the Markdown, the built site,
+# and the exported PDF. Rebuilt from `architecture/` by scripts/build_docs.py
+# on every run, so a copy in the history is a copy that can go stale.
+.docs/

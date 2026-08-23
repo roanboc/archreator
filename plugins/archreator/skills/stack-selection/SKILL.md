@@ -130,6 +130,14 @@ stakeholders who will not read Markdown tables. **That does not make it the
 default.** A project with no such consumer should never run it, and deleting
 `.model/` loses nothing.
 
+**An unfamiliar reader is not that consumer.** The fourth trigger is about
+something that has to *query* the model — a dashboard computing coverage, a
+report counting what a change touches. Someone who only has to read it wants
+the documents rendered, which needs no projection at all: `scripts/build_docs.py`
+publishes them as a website and `scripts/export_pdf.py` prints them as one PDF,
+both straight from the Markdown. Reach for the projection when the question is
+a traversal, not when the audience is new.
+
 It writes **SQLite**, as a `nodes`/`edges` pair traversed with recursive CTEs.
 At the scale a model reaches — hundreds of elements, edges in the low
 thousands, traversals a few hops deep — SQLite *is* the graph database, and

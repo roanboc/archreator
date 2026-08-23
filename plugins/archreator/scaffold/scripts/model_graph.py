@@ -70,7 +70,11 @@ NARRATIVE = {"scope", "decisions", "reviews", "engagements"}
 # of the pinned AIP release the validators are run from. None is this
 # repository's to validate, and none is a downstream project's once these
 # scripts ship there.
-EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot", ".aip"}
+# `.docs` is the documentation portal's staged copy and built site — every
+# document a second time, which would otherwise read as every element being
+# defined twice.
+EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot",
+                 ".aip", ".docs"}
 # See the note in check_links.py: anchored to line starts and matched on fence
 # length, so a fence containing a fence does not close early and leak its body
 # back into the scanned prose.
