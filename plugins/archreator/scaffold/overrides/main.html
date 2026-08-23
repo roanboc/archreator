@@ -47,7 +47,7 @@
           <a href="{{ config.repo_url }}/issues/new?template=architecture-question.yml&amp;page={{ page.file.src_uri | urlencode }}">Raise a question about this page</a>
           &middot;
         {% endif %}
-        <a href="{{ 'print_page/' | url }}">Read the whole model as one page</a>
+        <a href="{{ ('print_page/' if config.use_directory_urls else 'print_page.html') | url }}">Read the whole model as one page</a>
       </p>
     </aside>
   {% endif %}

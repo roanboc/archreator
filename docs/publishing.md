@@ -87,8 +87,8 @@ Every page carries three things, and each is a way back to the source:
 - **The pencil**, which opens that file in git — a correction becomes a pull
   request through the ordinary process, not an exception to it.
 - **"Raise a question about this page"**, which opens an issue prefilled with
-  the page it came from. The scaffold ships the issue form and the workflow
-  that publishes the portal, both under `.github/`.
+  the page it came from. The scaffold ships the issue form it lands on, under
+  `.github/ISSUE_TEMPLATE/`.
 
 An answered question ends up in one of two places: `architecture/scope/open-questions.md`
 when it is a question the model owes an answer to, or a new initiative when it
@@ -171,6 +171,11 @@ Both scripts declare their dependencies inline, so `uv run scripts/build_docs.py
 fetches MkDocs into a throwaway environment and installs nothing. Without `uv`,
 install them once: `pip install mkdocs-material mkdocs-print-site-plugin`.
 
+`--serve` binds to localhost. For a workshop where other people need to open
+it, `--addr 0.0.0.0:8000` serves it to the network — unauthenticated, to
+anyone who can reach the machine, so it is a room's convenience rather than a
+way to publish.
+
 The PDF needs a Chromium-family browser — Chromium, Chrome or Edge — which it
 finds on `PATH`, at the usual install location, or wherever `--browser` and
 `CHROME_PATH` point. There is no second renderer: the PDF is the portal's own
@@ -184,18 +189,120 @@ text that would have drawn it — a document that looks finished and is not. The
 export loads the page a second time, counts the diagrams that were drawn
 against the ones the model wrote, and says so when they do not match.
 
-## Deploying it
+## Handing it to whoever will host it
 
-The scaffold ships `.github/workflows/publish-docs.yml`, which builds the
-portal on every push to the default branch and deploys it to GitHub Pages, with
-the PDF attached to the run as an artifact. It needs Pages switched on for the
-repository (Settings → Pages → Source: GitHub Actions) and nothing else.
+**The deliverable is `.docs/site/` — a folder of static HTML.** No server, no
+database, no build step downstream. Every page is a real `.html` file, so the
+folder opens by double-clicking `index.html`, survives being zipped, and is
+served correctly by anything: a shared drive, an intranet path, an S3 bucket,
+an nginx already running, GitHub Pages.
 
-Publishing an architecture is a disclosure decision, not a technical one. A
-public repository's model is already public; a private one's is not, and a
-Pages site published from it can be. **Decide who the portal is for before
-turning the workflow on**, and record the call with `record-decision` if it is
-not obvious.
+Nothing in the scaffold publishes it, deliberately. A shipped workflow that
+fails until somebody enables Pages is worse than no workflow, and for most
+organizations Pages is the wrong answer anyway — a private repository's model
+published there stops being private. So the method builds the folder and stops.
+Where it goes is the organization's call, and a disclosure decision rather than
+a technical one: **decide who the portal is for**, and record the call with
+`record-decision` when it is not obvious.
+
+Three recipes, in the order most projects need them:
+
+| To | Do |
+| -- | -- |
+| **Hand it over** | `python3 scripts/build_docs.py`, then send or copy `.docs/site/`. Zipped, it opens on any machine with a browser and no tooling at all |
+| **Host it anywhere** | Point a static host at `.docs/site/`, or sync it: `aws s3 sync .docs/site s3://…`, `rsync -a .docs/site/ server:/var/www/model/` |
+| **Publish it to GitHub Pages** | `uv run mkdocs gh-deploy --config-file mkdocs.yml` — one command, pushes the built site to the `gh-pages` branch. Run it when you mean to, or from the workflow below |
+
+The workflow, for a project that wants it on every push. It is not shipped:
+copy it into `.github/workflows/publish-docs.yml` deliberately, and switch
+Pages on first (Settings → Pages → Source: GitHub Actions), or the runs go
+red.
+
+```yaml
+name: Publish docs
+
+on:
+  push:
+    branches: [main]
+    paths: ["architecture/**", "*.md", "mkdocs.yml", "overrides/**", "scripts/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv run scripts/build_docs.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .docs/site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+Until it is hosted somewhere, **the PDF is the distribution channel**: it is a
+file you can attach to a mail, and it is the same rendering. A portal nobody
+has hosted has not widened the audience by one reader.
+
+## Leaving documents out of the PDF
+
+A portal is complete by definition — it is the model, rendered. A document
+handed to someone is a selection: the board does not need the scope documents,
+and a customer-facing pack does not need the technology layer.
+
+What the PDF carries is one list in `mkdocs.yml`, and the pages it names stay
+in the portal:
+
+```yaml
+plugins:
+  print-site:
+    exclude:
+      - architecture/scope/*
+      - architecture/decisions/*
+```
+
+A second audience is a second config file that inherits the first and changes
+only that list:
+
+```yaml
+# mkdocs-board.yml
+INHERIT: mkdocs.yml
+plugins:
+  print-site:
+    exclude:
+      - architecture/scope/*
+      - architecture/5_technology/*
+```
+
+```bash
+python3 scripts/export_pdf.py                          # .docs/architecture.pdf
+python3 scripts/export_pdf.py --config mkdocs-board.yml # .docs/architecture-board.pdf
+```
+
+Each audience builds into its own site directory and writes its own file, so
+exporting one never overwrites another.
+
+**This is selection, not secrecy.** A document left out of a PDF is still in
+the repository and still in the portal, and the model is still the Markdown.
+If a layer must not reach a reader at all, that is a decision about who the
+portal is for — made once, recorded, and applied where the portal is hosted.
 
 ## What it does not do
 

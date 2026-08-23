@@ -72,9 +72,10 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
   `decisions/`
 - `scripts/` — the two validators, run before every push, and the three tools:
   the projection, the documentation portal and the PDF export
-- `mkdocs.yml`, `overrides/` and `.github/` — how the model is published as a
+- `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a
   website, and the issue form a reader of that website raises a question
-  through. See [`docs/publishing.md`](./publishing.md)
+  through. Nothing deploys it; where the built folder goes is your call. See
+  [`docs/publishing.md`](./publishing.md)
 
 Then follow the bootstrap checklist by hand, or install the skills and let
 `establish-project` do it.

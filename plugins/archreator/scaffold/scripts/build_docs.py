@@ -175,8 +175,8 @@ def missing_dependencies() -> list[str]:
     )
 
 
-def run_mkdocs(project: Path, arguments: list[str]) -> int:
-    command = [sys.executable, "-m", "mkdocs", *arguments, "--config-file", str(project / CONFIG)]
+def run_mkdocs(project: Path, arguments: list[str], config: str = CONFIG) -> int:
+    command = [sys.executable, "-m", "mkdocs", *arguments, "--config-file", str(project / config)]
     return subprocess.call(command, cwd=project)
 
 
@@ -235,9 +235,9 @@ def main() -> int:
     code = run_mkdocs(project, arguments)
     if code == 0 and not args.serve:
         print(
-            f"Portal built into {SITE}/. It uses directory URLs, so read it with\n"
-            f"  python3 scripts/build_docs.py --serve\n"
-            f"rather than by opening the files directly."
+            f"Portal built into {SITE}/. Open {SITE}/index.html to read it, hand "
+            f"the folder to whoever will host it, or run --serve to rebuild as "
+            f"you edit."
         )
     return code
 

@@ -34,6 +34,13 @@ site_description: >-
 docs_dir: .docs/src
 site_dir: .docs/site
 
+# Every page is a real `.html` file, so the built folder opens by
+# double-clicking it and survives being zipped, put on a shared drive or
+# served by anything at all. The alternative — MkDocs' default — is prettier
+# URLs on a web server and a folder that only works on one. Set it to `true`
+# if this portal will only ever be hosted.
+use_directory_urls: false
+
 # Staging, re-run before every build. It is what makes `mkdocs serve` and
 # `mkdocs build` work when called directly, by a CI action or by hand.
 hooks:
@@ -85,6 +92,20 @@ theme:
 #     category_id: <from giscus.app>
 #     heading: Discussion
 
+# A PDF for a particular audience is a second config file beside this one,
+# inheriting it and changing only what that audience does not need:
+#
+#   # mkdocs-board.yml
+#   INHERIT: mkdocs.yml
+#   plugins:
+#     print-site:
+#       exclude:
+#         - architecture/scope/*
+#         - architecture/5_technology/*
+#
+# then `python3 scripts/export_pdf.py --config mkdocs-board.yml`, which writes
+# `.docs/architecture-board.pdf` and leaves the portal alone.
+
 markdown_extensions:
   - abbr
   - admonition
@@ -107,17 +128,26 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 
+# Written as a mapping rather than a list so that a second config file can
+# inherit this one and override a single option — which is how an audience
+# gets its own PDF, below.
 plugins:
-  - search
+  search: {}
   # The whole model as one page, which is also what the PDF is rendered from
   # — see `scripts/export_pdf.py`. Kept out of the navigation because it is a
   # second copy of every page; readers reach it from the link the theme
-  # override puts at the foot of every page, or at /print_page/ directly.
-  - print-site:
-      add_to_navigation: false
-      add_print_site_banner: false
-      add_cover_page: true
-      add_table_of_contents: true
-      enumerate_headings: false
-      enumerate_figures: false
-      print_page_title: "The whole model"
+  # override puts at the foot of every page, or at print_page.html directly.
+  print-site:
+    add_to_navigation: false
+    add_print_site_banner: false
+    add_cover_page: true
+    add_table_of_contents: true
+    enumerate_headings: false
+    enumerate_figures: false
+    print_page_title: "The whole model"
+    # Documents the PDF leaves out. They stay in the portal — this is about
+    # what belongs in a document handed to someone, not about hiding a page.
+    # Paths are globs, relative to the project root, e.g.
+    #   - architecture/scope/*
+    #   - architecture/decisions/*
+    exclude: []

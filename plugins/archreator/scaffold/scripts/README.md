@@ -25,7 +25,7 @@ green for them, and nothing breaks if they are never run.
 | `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, and a levelled ID has its parent defined |
 | `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. `--inventory` prints one line per element instead |
 | `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
-| `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text |
+| `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text. What the PDF leaves out is the `print-site` `exclude` list in `mkdocs.yml`; `--config mkdocs-<audience>.yml` exports a second PDF from a config that inherits it |
 | `model_graph.py` | Library, imported by the others. The single parse of the document convention — element IDs, catalogue tables, Mermaid edges |
 | `element-prefixes.json` | Data, read by `model_graph.py`. The element-ID prefixes and what each stands for |
 

@@ -27,6 +27,24 @@ second set of rules about how the model looks, drifting from the first.
     python3 scripts/export_pdf.py --no-build          # print what is already built
     python3 scripts/export_pdf.py --print-page        # print nothing, say where the page is
 
+**Leaving documents out.** What the PDF carries is `print-site`'s `exclude`
+list in `mkdocs.yml` — globs, relative to the project root, of documents that
+stay in the portal but do not belong in a document handed to someone. A second
+audience is a second config file inheriting the first and changing only that
+list:
+
+    # mkdocs-board.yml
+    INHERIT: mkdocs.yml
+    plugins:
+      print-site:
+        exclude:
+          - architecture/scope/*
+
+    python3 scripts/export_pdf.py --config mkdocs-board.yml
+
+which builds into `.docs/site-board/`, writes `.docs/architecture-board.pdf`,
+and leaves the portal and the default PDF where they were.
+
 **Two things it needs.** A Chromium-family browser — Chromium, Chrome or Edge,
 found on `PATH`, at the usual install location, named by `--browser`, or in
 `CHROME_PATH` — and, while it renders, network access to the Mermaid library
@@ -66,8 +84,9 @@ from build_docs import (  # noqa: E402
 )
 
 # The page `mkdocs.yml` has the print-site plugin build: every document, in
-# navigation order, as one HTML page.
-PRINT_PAGE = "print_page/index.html"
+# navigation order, as one HTML page. Which of the two names it takes depends
+# on `use_directory_urls`, so both are looked for.
+PRINT_PAGES = ("print_page.html", "print_page/index.html")
 # Chromium-family executables, by the names they take on each platform. Edge
 # is included because it is the browser most likely to already be installed on
 # a corporate Windows machine.
@@ -92,6 +111,27 @@ DIAGRAM_DRAWN = '<div class="mermaid"'
 # it is loading the diagram library over the network on a page that may carry
 # a hundred diagrams.
 TIMEOUT_SECONDS = 300
+
+
+def print_page_in(site: Path) -> Path | None:
+    """The single page holding every document, whichever name it took."""
+    for name in PRINT_PAGES:
+        if (site / name).is_file():
+            return site / name
+    return None
+
+
+def audience_of(config: str) -> str:
+    """The name a config file gives its PDF: `mkdocs-board.yml` -> `board`.
+
+    The default config has no audience — it is the whole model, for whoever
+    asks. Anything else is a variant, and gets its own build and its own file
+    so that exporting one never overwrites another.
+    """
+    if config == CONFIG:
+        return ""
+    stem = Path(config).stem
+    return stem[len("mkdocs-"):] if stem.startswith("mkdocs-") else stem
 
 
 def find_browser(named: str | None) -> str | None:
@@ -188,6 +228,7 @@ def main() -> int:
 
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--project", type=Path, help="the project to export (default: the only one)")
+    parser.add_argument("--config", default=CONFIG, help=f"the portal config to build from (default: {CONFIG})")
     parser.add_argument("--output", type=Path, help=f"where to write it (default: {DERIVED}/architecture.pdf)")
     parser.add_argument("--browser", help="the Chromium-family browser to print with")
     parser.add_argument("--no-build", action="store_true", help="print the portal as it was last built")
@@ -198,9 +239,14 @@ def main() -> int:
     project = resolve_project(args.project)
     if project is None:
         return 1
-    if not (project / CONFIG).is_file():
-        print(f"{project}: no {CONFIG} — nothing says how to publish this project.", file=sys.stderr)
+    if not (project / args.config).is_file():
+        print(f"{project}: no {args.config} — nothing says how to publish this project.", file=sys.stderr)
         return 1
+
+    # A config other than the default builds its own site and writes its own
+    # file, so exporting for one audience never overwrites another's.
+    audience = audience_of(args.config)
+    site = project / (f"{SITE}-{audience}" if audience else SITE)
 
     if not args.no_build:
         missing = missing_dependencies()
@@ -214,15 +260,16 @@ def main() -> int:
             return 1
         published, _, _ = stage(project, project / STAGING)
         print(f"{published} document(s) staged into {STAGING}/.")
-        code = run_mkdocs(project, ["build"])
+        code = run_mkdocs(project, ["build", "--site-dir", str(site)], config=args.config)
         if code != 0:
             return code
 
-    page = project / SITE / PRINT_PAGE
-    if not page.is_file():
+    page = print_page_in(site)
+    if page is None:
+        where = site.relative_to(project) if site.is_relative_to(project) else site
         print(
-            f"{SITE}/{PRINT_PAGE} does not exist. It is built by the print-site "
-            f"plugin, which {CONFIG} enables — check that it is still listed there"
+            f"{where}/ holds no print page. It is built by the print-site plugin, "
+            f"which {args.config} enables — check that it is still listed there"
             + (", and build the portal rather than passing --no-build." if args.no_build else "."),
             file=sys.stderr,
         )
@@ -244,7 +291,8 @@ def main() -> int:
         )
         return 1
 
-    output = (args.output or project / DERIVED / "architecture.pdf").resolve()
+    default_name = f"architecture-{audience}.pdf" if audience else "architecture.pdf"
+    output = (args.output or project / DERIVED / default_name).resolve()
     code = render(browser, page, output)
     if code != 0:
         return code
