@@ -2,7 +2,7 @@
 
 _[← Repository README](../../../README.md)_
 
-The fifteen skills that are the archreator method. Your coding agent picks
+The seventeen skills that are the archreator method. Your coding agent picks
 them up automatically from their `description:` frontmatter — you don't
 invoke them by name in normal use, they surface when their situation
 applies.
@@ -21,9 +21,10 @@ documents, so the kind is its own column rather than something the grouping
 implies. [`docs/skill-format.md`](../../../docs/skill-format.md) specifies all
 three.
 
-**The order below is the order they are used in** — the processes of
-[`docs/process/`](../../../docs/process/README.md) from `BPROC1.1` to
-`BPROC4.1`, then the four rulebooks that realize no process.
+**The order below is the order they are used in**, which is not the order the
+processes of [`docs/process/`](../../../docs/process/README.md) are numbered in:
+`BPROC5` joined the model last and runs second, and an assigned identifier is
+never reallocated. The four rulebooks that realize no process come last.
 
 This folder sits inside the **`archreator` plugin**, whose root is
 `plugins/archreator/` — its manifest is written twice, as
@@ -56,6 +57,19 @@ Turning a subject nobody has modeled into one a change can be judged against.
 | [`discover-business-model`](./discover-business-model/SKILL.md) | ⚙ Procedure | The subject is an organization: canvases first (Gate 0), strategy derived from them |
 | [`discover-strategy`](./discover-strategy/SKILL.md) | ⚙ Procedure | The strategy is unfilled or the change shifts it (Gate 1) |
 | [`model-domains`](./model-domains/SKILL.md) | ⚙ Procedure | The organization is large enough to split into business lines, or a change crosses a domain boundary |
+| [`discover-current-landscape`](./discover-current-landscape/SKILL.md) | ⚙ Procedure | The subject already exists and layers 2–5 are empty — sweep the estate into a described baseline |
+
+## Planning the transition — `BPROC5`
+
+Turning a described present into a destination and an order for reaching it.
+
+| Skill | Kind | Reach for it when |
+| ----- | ---- | ----------------- |
+| [`plan-the-transition`](./plan-the-transition/SKILL.md) | ⚙ Procedure | The question is where the architecture should go and in what order — target plateaus, a gap register and a sequence |
+
+The only skill whose output describes a future. Everything else in the corpus is
+held to describing what is true now, which is a rule worth keeping precisely
+because exactly one folder is exempt from it.
 
 ## Delivering a change — `BPROC2`
 

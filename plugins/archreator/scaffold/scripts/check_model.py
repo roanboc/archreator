@@ -26,6 +26,13 @@ Four things are checked, per project:
 - **Orphan levels** — a leveled ID (`CAP1.2`, `BPROC7.2.1`) has the element
   one level up defined too. A hierarchical identifier that names a parent
   nobody wrote is the same defect as a dangling reference.
+- **Undeclared status** — a document that defines an element says in its
+  preamble how far it has been validated, with one of the three glyphs in
+  `architecture-document-style` § Document status. A catalogue of elements
+  somebody mentioned in a meeting and a layer a Requester approved look
+  identical on the page, and an agent that cannot tell them apart will build
+  on the wrong one. This is checked on the glyph, never on the word beside
+  it, so it holds in a model written in any language.
 
 An ID can carry two dot-separated qualifiers and they mean different things,
 so the parser reads outwards from the type prefix: upper-case segments
@@ -99,6 +106,32 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
                 f"{md_file.relative_to(REPO_ROOT)}: `{element}` is one level "
                 f"below `{parent}`, which is not defined in this project"
             )
+
+    # Keyed the same way `parsed.statuses` is, so the two line up without
+    # either side having to reconstruct the other's paths.
+    defining = {
+        str(path.relative_to(REPO_ROOT)).replace("\\", "/")
+        for path in set(parsed.defined.values()) | set(parsed.retired.values())
+    }
+    for doc, (status, count) in sorted(parsed.statuses.items()):
+        if doc not in defining:
+            # A document defining nothing - an index, a layer README of a
+            # layer nobody has filled - owes no status. It has nothing whose
+            # standing a reader could mistake.
+            continue
+        if count == 0:
+            errors.append(
+                f"{doc}: defines elements and declares no status. Open the "
+                f"preamble with one of ○ (not started), ◐ (draft catalogue) "
+                f"or ● (validated)"
+            )
+        elif count > 1:
+            errors.append(
+                f"{doc}: the preamble carries {count} status glyphs, so a "
+                f"reader cannot tell which one it means"
+            )
+        elif not status:  # pragma: no cover - unreachable while count == 1
+            errors.append(f"{doc}: unrecognised status glyph")
 
     seen: set[tuple[str, Path]] = set()
     for reference, md_file in parsed.references:

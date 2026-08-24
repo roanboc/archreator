@@ -72,6 +72,7 @@ CREATE TABLE nodes(
     type        TEXT,
     layer       TEXT,
     name        TEXT,
+    status      TEXT,
     doc         TEXT,
     realized_by TEXT,
     local       TEXT,
@@ -142,6 +143,7 @@ def collect() -> list[dict]:
                         "doc": element.doc,
                         "layer": element.layer,
                         "layer_no": element.layer_no,
+                        "status": element.status,
                         "retired": element.retired,
                         "realized_by": realized_by(element.attrs),
                         "attrs": element.attrs,
@@ -181,9 +183,10 @@ def write_sqlite(projects: list[dict], path: Path) -> None:
         for project in projects:
             name = project["project"]
             connection.executemany(
-                "INSERT INTO nodes(project, id, type, layer, name, doc, realized_by,"
-                " local, prefix, layer_group, layer_no, domain, parent, retired, attrs)"
-                " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO nodes(project, id, type, layer, name, status, doc,"
+                " realized_by, local, prefix, layer_group, layer_no, domain, parent,"
+                " retired, attrs)"
+                " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 [
                     (
                         name,
@@ -191,6 +194,7 @@ def write_sqlite(projects: list[dict], path: Path) -> None:
                         element["type"],
                         element["layer"],
                         element["name"],
+                        element["status"],
                         element["doc"],
                         element["realized_by"],
                         element["local"],
@@ -260,6 +264,7 @@ def print_inventory(projects: list[dict]) -> None:
                         element["id"],
                         element["type"] or "?",
                         element["name"] or "-",
+                        element["status"] or "?",
                         element["doc"],
                     )
                 )

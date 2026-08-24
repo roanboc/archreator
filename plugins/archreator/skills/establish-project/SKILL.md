@@ -118,8 +118,9 @@ into every step below.
 
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
 It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
-`architecture/` — with `scope/` and `decisions/` inside it — and `scripts/`,
-the two validators and the three tools with their own README. It also holds
+`architecture/` — with `scope/`, `decisions/`, `roadmap/` and `reference/`
+inside it — and `scripts/`, the two validators and the four tools with their
+own README. It also holds
 `mkdocs.yml` and `overrides/`, which render the model as a website, and
 `.github/`, which carries the pull-request template a change is described in
 and the issue form a reader of that website raises a question through. `CLAUDE.md`
@@ -202,6 +203,7 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 | `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles that gate every later change, approved at **Gate 1** |
 | `discover-business-model` | Depth 2 or 3 | The canvases, approved at **Gate 0** before anything is derived from them; `discover-strategy` then derives the strategy layer |
 | `model-domains` | Depth 3, after the enterprise level | One charter per business line, with its exposed and consumed services |
+| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, approved at **Gate 2** and **Gate 3** |
 | `stack-selection` | No stack chosen, small application | A recorded choice in `5_technology/` |
 
 ## ✎ Worked example

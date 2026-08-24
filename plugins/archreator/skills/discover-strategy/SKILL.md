@@ -127,6 +127,11 @@ of the conversation, not a transcript kept elsewhere.
 
 **← Needs** the answers from Step 1.
 
+Each document opens `◐ Draft catalogue` and its tables carry `Source` and
+`Notes` until Gate 1 — `architecture-document-style` § Document status. Where
+the Requester provided anything to work from, it is filed in
+`architecture/reference/` and the `Source` column points there.
+
 **→ Produces** `architecture/1_strategy/`, and the key elements in
 `architecture/2_business/`.
 
@@ -152,9 +157,12 @@ stream, key business elements — with **full branch links to each document
 behind it** (`align-change-through-layers` § Show the Requester what they are
 approving), and ask explicitly for approval of the strategy.
 
-Record the approval in the Approvals table: who, when, what was shown. Only
-after Gate 1 is granted may an implementation initiative build on this
-strategy. If changes are requested, revise from Step 2 and present again.
+Record the approval in the Approvals table: who, when, what was shown, and
+move every document it covered from `◐` to `● Validated at Gate 1`, emptying
+`Notes` as you go — each note becomes a fact in the model, a row in the
+open-questions log, or nothing. Only after Gate 1 is granted may an
+implementation initiative build on this strategy. If changes are requested,
+revise from Step 2 and present again, leaving the status lines where they are.
 
 **← Needs** the strategy layer, the scope document.
 
@@ -165,6 +173,7 @@ strategy. If changes are requested, revise from Step 2 and present again.
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
 | `process-and-capability-levels` | Theme 4, on an organization | Levelled capabilities seeded from a named reference model, detailed below level 2 only where a pain justifies it |
+| `discover-current-landscape` | Gate 1 is granted and the subject already runs — an organization with processes, applications and infrastructure nobody has written down | A described baseline in layers 2–5, which is what a later change is actually aligned against |
 | `align-change-through-layers` | Gate 1 is granted, and the original request is still unbuilt | The implementation initiative, which now finds the strategy current |
 
 ## ✎ Worked example

@@ -3,7 +3,8 @@
 _[← Project home](../README.md)_
 
 Two validators that keep this project's architecture documents honest, and
-three tools for the readers a repository does not reach. They came with the
+four tools — one for the reader who queries the model, three for the readers a
+repository does not reach. They came with the
 scaffold, so this project has had them since its first commit, and CI should
 run both validators on every pull request.
 
@@ -11,20 +12,23 @@ run both validators on every pull request.
 python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 python3 scripts/build_model.py    # project the model into .model/
+python3 scripts/query_model.py coverage      # what is grounded, and what is not
+python3 scripts/query_model.py trace CAP3    # what a change to one element touches
 python3 scripts/build_docs.py     # the model as a website, in .docs/site/
 python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 ```
 
 Both validators exit `0` when everything resolves and `1` otherwise, printing
-what failed. The other three are tools rather than gates: nothing has to be
+what failed. The other four are tools rather than gates: nothing has to be
 green for them, and nothing breaks if they are never run.
 
 | File | What it is |
 | ---- | ---------- |
 | `check_links.py` | Executable. Every relative Markdown link and every HTML `href`, `src` and `#fragment` points at something that exists |
-| `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, and a levelled ID has its parent defined |
+| `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, a levelled ID has its parent defined, and every document that defines an element declares how far it has been validated |
 | `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. `--inventory` prints one line per element instead |
-| `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
+| `query_model.py` | Executable. Reads the projection and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
+| `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
 | `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text. What the PDF leaves out is the `print-site` `exclude` list in `mkdocs.yml`; `--config mkdocs-<audience>.yml` exports a second PDF from a config that inherits it |
 | `model_graph.py` | Library, imported by the others. The single parse of the document convention — element IDs, catalogue tables, Mermaid edges |
 | `element-prefixes.json` | Data, read by `model_graph.py`. The element-ID prefixes and what each stands for |
@@ -47,7 +51,8 @@ Three things keep it honest. It is **regenerated** from scratch on every run,
 never hand-edited. It is **gitignored**, so no stale copy can be committed.
 And **nothing reads it that could have read the Markdown instead** — an agent
 reads the documents natively, so this exists for the consumers that cannot: a
-published view of the model, a dashboard, a report.
+report, a dashboard, and `query_model.py`, whose traversals are the reason a
+graph is worth materializing at all.
 
 Delete `.model/` and nothing is lost.
 
@@ -64,13 +69,55 @@ opens the real Markdown in git, so a reader who disagrees with a page can
 change it through the ordinary process. **A rendering nobody can trace back to
 its source is how a published copy quietly becomes a second model.**
 
+## `query_model.py` reports; it never fails a build
+
+Every element must name what realizes it. That is the one rule the validators
+do not enforce, and deliberately: telling a repository path from a team name is
+fuzzy, and a check that fails wrongly teaches people to ignore the checks that
+do not.
+
+So `coverage` prints and **always exits 0**. There is no `--strict`, because
+adding one would invite exactly the CI gate the reasoning above rules out. It
+also judges by catalogue table rather than by element — a table that grounds
+none of its rows is not modeling realization at all, and reporting each of its
+elements is how a report becomes noise. What it does report is a table that
+grounds some rows and leaves others blank, which is an omission rather than a
+convention.
+
+## Two folders the tools treat differently
+
+`architecture/reference/` holds source documents as they were provided. The
+validators and the projection do not read it — a transcript in which somebody
+says an element identifier is a person talking — and the portal and the PDF do
+not publish it. A raw transcript carries everything else that was in the room
+that day, to an audience that was not.
+
+Because `reference/` is unpublished, a link into it resolves in the repository
+and 404s on the site — a draft catalogue citing the transcript it was built
+from is the ordinary case. `check_links.py` cannot see that: it proves a link
+resolves *here*. So `build_docs.py` reports every staged link pointing at a
+file it did not publish, as a note rather than an error. Publishing a partial
+view is a legitimate choice; the person making it should know what it costs.
+
+`architecture/scope/`, `architecture/decisions/` and the other narrative
+folders are unread for the older reason: a merged scope document is immutable
+and will outlive the elements it names, so reference-checking it is incoherent
+rather than merely awkward.
+
 ## What each one cannot do
 
 `check_model.py` verifies that a *reference* resolves. `check_links.py`
 verifies that a *link* resolves. **Neither reads what a "Realized by" cell
 claims about a path**, so a cell naming a directory that no longer exists
-passes both silently. Checking that is a step in the change process, not
+passes both silently. `query_model.py coverage` finds the cell that is *empty*;
+whether a path it names still exists is a step in the change process, not
 something these scripts can do for you.
+
+`query_model.py` cannot say what nothing points at. The projection drops a
+reference made inside the document that defines the element, so an element
+named only by its own neighbours looks unreferenced — and answering the
+question properly would mean re-reading the Markdown, which is the one thing a
+consumer of the projection should not do.
 
 `build_model.py` reads structure from the identifier, the numbered folder and
 the notation — all of which survive translation, so it works the same on a

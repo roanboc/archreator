@@ -46,6 +46,7 @@ plain `python3`, install them once instead:
 """
 import argparse
 import importlib.util
+import re
 import shutil
 import subprocess
 import sys
@@ -70,6 +71,13 @@ STAGED_SUFFIXES = {".md", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"}
 # they put three copies of the same pointer in the navigation and say nothing
 # to a reader who is not an agent.
 NOT_STAGED = {"CLAUDE.md", "GEMINI.md"}
+# `architecture/reference/` holds source documents exactly as they were
+# provided - transcripts, decks, whatever somebody sent. They are provenance
+# for the repository and not publication material: the portal exists to hand a
+# reader the model, and a model that quotes a transcript has already decided
+# what in it was worth saying. Publishing the raw file would also publish
+# whatever else was in the room that day, to an audience that was not.
+NOT_PUBLISHED = {"reference"}
 # The derived tree, and the two things in it. `src/` is the staged copy MkDocs
 # publishes, `site/` is the portal it builds.
 DERIVED = ".docs"
@@ -92,7 +100,7 @@ def shown(path: Path) -> str:
 
 
 def _excluded(path: Path) -> bool:
-    return bool((EXCLUDED_DIRS | {DERIVED}) & set(path.parts))
+    return bool((EXCLUDED_DIRS | NOT_PUBLISHED | {DERIVED}) & set(path.parts))
 
 
 def sources(project: Path) -> list[Path]:
@@ -112,6 +120,42 @@ def sources(project: Path) -> list[Path]:
             and not _excluded(path.relative_to(project))
         )
     return found
+
+
+# A relative Markdown link. Same shape the link checker matches, and used here
+# for the opposite question: not "does this resolve in the repository" but
+# "will it still resolve once published".
+PORTAL_LINK_RE = re.compile(r"\[[^\]]*\]\(\s*(?!https?:|mailto:|#)([^)\s]+)")
+
+
+def unpublished_links(project: Path, wanted: dict[Path, Path]) -> list[str]:
+    """Links from a staged document to a file that exists but is not staged.
+
+    `check_links.py` proves a link resolves in the repository. That is a
+    different question from whether it resolves in the portal, and the two part
+    company exactly where a folder is deliberately unpublished — a draft
+    catalogue citing the transcript it was built from is the case this exists
+    for. The repository reader follows the link; the portal reader gets a 404,
+    and nothing else in the pipeline would say so.
+
+    Reported, never fatal. Publishing a partial view is a legitimate choice and
+    the person making it should simply know which links it costs.
+    """
+    staged = set(wanted)
+    notes: list[str] = []
+    for relative, source in sorted(wanted.items()):
+        if source.suffix.lower() != ".md":
+            continue
+        for match in PORTAL_LINK_RE.finditer(source.read_text(encoding="utf-8", errors="replace")):
+            target = match.group(1).split("#", 1)[0]
+            if not target:
+                continue
+            resolved = (source.parent / target).resolve()
+            if not resolved.is_file() or not resolved.is_relative_to(project):
+                continue
+            if resolved.relative_to(project) not in staged:
+                notes.append(f"{relative} → {resolved.relative_to(project)}")
+    return notes
 
 
 def stage(project: Path, staging: Path) -> tuple[int, int, int]:
@@ -214,6 +258,13 @@ def main() -> int:
     published, copied, dropped = stage(project, project / STAGING)
     changed = f"{copied} written, {dropped} removed" if copied or dropped else "already current"
     print(f"{published} document(s) staged into {shown(project / STAGING)}/ ({changed}).")
+
+    dangling = unpublished_links(project, {p.relative_to(project): p for p in sources(project)})
+    if dangling:
+        print(f"{len(dangling)} link(s) point at files this portal does not publish. They")
+        print("resolve in the repository and will 404 for a reader of the site:")
+        for note in dangling:
+            print(f"  {note}")
     if args.stage:
         return 0
 

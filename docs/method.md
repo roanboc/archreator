@@ -40,6 +40,25 @@ Layer 0 is the odd one out — it holds no ArchiMate elements, only the
 Value Proposition and Business Model canvases the architecture is derived
 from. It is filled only when the initiative is modeling an organization.
 
+**All six describe today.** That is what makes them worth reading, and it
+leaves two questions they cannot answer.
+
+*Where did the estate come from, if no requirement ever asked for it?* An
+organization that existed before it was modeled has processes, applications and
+infrastructure that no change request will ever produce. Layers 2–5 are filled
+for it once, from evidence rather than from a requirement, by the
+[`discover-current-landscape` skill](../plugins/archreator/skills/discover-current-landscape/SKILL.md)
+— which stops where a declared boundary says, so a reader can tell what was left
+out from what was missed.
+
+*Where is it going?* That lives in `architecture/roadmap/`, the one folder
+permitted to describe a future: target plateaus, the gaps between them and
+today, and the order the gaps are closed in. The
+[`plan-the-transition` skill](../plugins/archreator/skills/plan-the-transition/SKILL.md)
+writes it, and the Requester approves it as **direction** — not as permission
+to build any of it. Keeping intent in one folder is what lets every numbered
+layer be read as a description of now without checking its date.
+
 ## One method, three depths
 
 The same six layers describe a weekend app and a twenty-business-line
@@ -64,9 +83,13 @@ gate that didn't apply gets an `N/A — <why>` row rather than being deleted.
 An approval that isn't recorded didn't happen.
 
 There are four: **Gate 0 — Business model**, **Gate 1 — Strategy**,
-**Gate 2 — Business**, and **Gate 3 — Solution design**. Which of them applies
-to a given change, and what the Requester is shown at each, is defined in
-exactly one place — the
+**Gate 2 — Business**, and **Gate 3 — Solution design**. Four rather than five
+on purpose: a roadmap is approved at Gate 1, because approving a target and
+approving a strategy layer are the same act — a Requester settling a direction
+— and a fifth gate would add a row to every Approvals table ever written to
+record a decision an existing one already names. Which gate applies to a given
+change, and what the Requester is shown at each, is defined in exactly one
+place — the
 [`align-change-through-layers` skill](../plugins/archreator/skills/align-change-through-layers/SKILL.md)
 § The gates. This page names the gates; it does not restate the rule, because a
 second copy is a second thing to drift.
@@ -121,6 +144,24 @@ artifact, page, or written procedure that realizes it, or is explicitly
 marked "Pending — future initiative". Two validators in
 [`plugins/archreator/scaffold/scripts/`](../plugins/archreator/scaffold/scripts/) enforce that references
 resolve, that every leveled ID has a parent, and that no identifier is reused.
+
+Beside the numbered layers sit the folders that are not layers:
+`architecture/scope/` (one document per initiative), `architecture/decisions/`
+(calls smaller than an initiative), `architecture/domains/` (Depth 3 only),
+`architecture/roadmap/` (where it is going) and `architecture/reference/` (the
+transcripts, decks and documents the model was built from, kept as they
+arrived, dated, indexed, and never published).
+
+**Every document that defines an element says how far it has been validated**,
+with one of three glyphs in its preamble: `○` not started, `◐` a draft
+catalogue, `●` validated at a named gate on a named date. The middle one is
+the one that matters. A draft catalogue is a list of things somebody said
+exist, written down with notes so they can be checked — it is *not* an
+architecture draft, and on the page the two are identical. A Requester shown a
+catalogue and told "architecture" approves a description nobody verified; an
+agent that reads one builds on a system mentioned once in a meeting. The
+marker is what separates them, and `check_model.py` fails a document that
+defines elements without declaring one.
 
 The Markdown is the model, and the readers who never open a repository are
 served by rendering it rather than by keeping a second copy: one command

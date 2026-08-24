@@ -34,6 +34,8 @@ document, and only then coded. The folder numbers give the assessment order.
 | A pure bug fix changing no documented behavior | The bug-fix path — no gates, no scope document, but still update whatever the fix falsifies |
 | The project was never bootstrapped | `establish-project` first. `AGENTS.md` declaring no depth is the signal |
 | The model has drifted rather than the requirement | `restate-current-state` — its own initiative, with its own diff |
+| The question is where to go rather than what to build | `plan-the-transition` — a target state, a gap register and a sequence, approved as direction and not as work |
+| The subject already runs and the lower layers are empty | `discover-current-landscape` — there is nothing for a change to be aligned against yet |
 
 ## ⌖ Where this sits
 
@@ -117,9 +119,23 @@ unconsidered layer from an unaffected one.
 | Gate | When | The Requester approves |
 | ---- | ---- | ----------------------- |
 | **Gate 0 — Business model** | Only when Step 1 finds the initiative is modeling an organization | The Value Proposition Canvas per customer segment and the Business Model Canvas per product, before anything is derived from them — see `discover-business-model` |
-| **Gate 1 — Strategy** | Only when Step 1 triggers strategy discovery | The strategy layer itself (motivation, capabilities, value stream) and the key business elements discovered with it — see `discover-strategy` |
+| **Gate 1 — Strategy** | Only when Step 1 triggers strategy discovery, or when the initiative is planning rather than building | The strategy layer itself (motivation, capabilities, value stream) and the key business elements discovered with it — see `discover-strategy`; or the target plateaus, the gap register and the sequence — see `plan-the-transition`. Both are the Requester approving a **direction**, which is why they share a gate rather than adding one |
 | **Gate 2 — Business** | Every initiative that changes documented behavior, which is every initiative that will produce code. A docs-only initiative passes Gate 0 or Gate 1 instead | The changes, or explicit "no change" verdicts, to `1_strategy`, `2_business` and `3_information` |
 | **Gate 3 — Solution design** | Only if the Requester opts in when asked at Gate 2 | The solution architecture and logical application components, with the good practices and design patterns applied called out |
+
+**Gate 1 approving a roadmap approves no work.** Every initiative on a sequence
+still arrives here, still walks the layers, and still stops at its own Gate 2.
+A roadmap read as pre-approval has removed every gate in this table.
+
+**A granted gate moves a status line, and that is what makes it visible.** An
+element added or changed by this initiative sits in a document marked
+`◐ Draft catalogue` until the gate covering its layer is granted; the moment it
+is, the document says `● Validated at <gate>, <date>` and its `Notes` column is
+emptied — `architecture-document-style` § Document status. Changing the marker
+before the approval is the one edit that makes the model lie about its own
+standing, and changing it afterwards is not optional: a layer that stays `◐`
+after its gate tells every later reader not to rely on something a Requester
+approved.
 
 **This table is the single source for which gate applies when.** `CONTRIBUTING.md`,
 `architecture/scope/README.md` and `write-scope-document` point here rather than

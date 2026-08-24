@@ -47,6 +47,8 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 | `discover-business-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |
 | `discover-strategy` | The strategy is unfilled or the change shifts it (Gate 1) |
 | `model-domains` | The organization is large enough to split into business lines, or a change crosses a domain boundary |
+| `discover-current-landscape` | The subject already exists and layers 2–5 are empty — sweep the estate into a described baseline |
+| `plan-the-transition` | The question is where the architecture should go and in what order — target plateaus, a gap register and a sequence |
 | `align-change-through-layers` | Any requirement change. **The spine** — defines the gates and the order |
 | `write-scope-document` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
 | `shard-stories` | A work package is too large to finish in one sitting |
@@ -67,9 +69,17 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 -->
 
 - `architecture/` — everything architectural: the numbered ArchiMate layers
-  describing the current state, `architecture/domains/` (Depth 3 only),
-  `architecture/scope/` — one document per initiative — and
-  `architecture/decisions/` for calls smaller than an initiative.
+  describing the current state, `architecture/roadmap/` — the one place the
+  model describes a future — `architecture/reference/` — the transcripts,
+  decks and documents it was built from, kept as they arrived —
+  `architecture/domains/` (Depth 3 only), `architecture/scope/` — one document
+  per initiative — and `architecture/decisions/` for calls smaller than an
+  initiative.
+- **Every document that defines an element says how far it has been
+  validated**, with `○` not started, `◐` a draft catalogue of things somebody
+  said exist, or `●` validated at a named gate on a named date. A draft
+  catalogue is not an architecture draft and must never be read as one;
+  `scripts/check_model.py` fails a defining document that declares nothing.
 - `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
   development workflow.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
@@ -95,17 +105,20 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing. Three tools sit beside them, none of them a
+Both must be green before pushing. Four tools sit beside them, none of them a
 gate:
 
 ```bash
 python3 scripts/build_model.py    # the model as nodes and edges, in .model/
+python3 scripts/query_model.py coverage    # what is grounded, and what is not
 python3 scripts/build_docs.py     # the model as a website, in .docs/site/
 python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 ```
 
-`build_model.py` is for a consumer that queries the model; the other two are
-for a reader who is not in this repository. All three are regenerated from the
+`query_model.py` answers the questions a table cannot — `trace <ID>` for what a
+change to one element would touch, `coverage` for what names no realizing
+artifact — and reads the projection `build_model.py` writes. The last two are
+for a reader who is not in this repository. All four are regenerated from the
 Markdown under `architecture/`, which stays the source of truth.
 
 ## Conventions

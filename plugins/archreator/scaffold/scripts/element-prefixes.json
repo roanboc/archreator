@@ -40,6 +40,10 @@
       "NODE": "Node",
       "ART": "Artifact"
     },
+    "Implementation & Migration": {
+      "PLAT": "Plateau",
+      "GAP": "Gap"
+    },
     "Canvas (VPC)": {
       "JOB": "Job",
       "PAIN": "Pain",

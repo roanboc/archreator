@@ -35,8 +35,8 @@ language, what a document may contain, and how it links — are in
 ## ⌖ Where this sits
 
 **Realizes no process.** It is the rulebook every process complies with, and
-the most-cited skill in the corpus: thirteen of the other thirteen reach for
-it. Nothing here is a step.
+the most-cited skill in the corpus — every skill that writes or edits a model
+document reaches for it. Nothing here is a step.
 
 ## ※ Rules
 # EA documentation style
@@ -56,6 +56,89 @@ it. Nothing here is a step.
   when the analysis order genuinely changes.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
+- `architecture/roadmap/` is not a layer and carries no layer number. Its
+  documents are numbered in analysis order like a layer's are, because a gap
+  cannot be derived before the plateau it is measured against exists. It is
+  **the only folder in the model that describes a future**; every numbered
+  layer describes the current state, and that division is what lets a reader
+  trust a layer document without checking its date.
+
+### Document status
+
+**Every document that defines an element says in its preamble how far it has
+been validated.** One line, under the viewpoint line, opening with one of
+three glyphs:
+
+| Glyph | Status | What it means |
+| ----- | ------ | ------------- |
+| `○` | **Not started** | The document exists so the gap is visible. It defines nothing yet, and a claim about this part of the subject is not in the model |
+| `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has approved them. Identifiers are still draft, figures are unconfirmed, and nothing here may be built on |
+| `●` | **Validated** | Confirmed by whoever is accountable for it, on a named date. Identifiers are permanent and a change to any of them is an initiative |
+
+The line names the gate too, so a reader knows what would move it — or what
+already did:
+
+```markdown
+**Status:** ◐ Draft catalogue — identified from the sources named below, not
+yet validated. **Gate 2** covers this layer.
+
+**Status:** ● Validated at **Gate 2**, 2026-08-24.
+```
+
+**A `●` earned outside a gate names the decision that put it there.** Not
+every layer is covered by one: a Requester may decline Gate 3 and route the
+solution design to ordinary pull-request review, and that is a real decision by
+the person with the standing to make it. Such a document is validated, and its
+line says by what:
+
+```markdown
+**Status:** ● Validated — **Gate 3** declined at Gate 2 (scope document 1,
+2026-08-22), which routed this layer to pull-request review.
+```
+
+This is the one place `●` can be claimed without a gate, and the escape is
+narrow on purpose: it needs a recorded decision to point at. "I checked it" is
+not one, because an approval that is not recorded did not happen.
+
+`○` is the only one that is optional, and necessarily so: a document that
+defines nothing has nothing a reader could mistake, so the validator does not
+ask for a status there. Use it anyway where an empty document exists to keep a
+gap visible — it reads at a glance, and it puts the empty layer in the same
+vocabulary as the full ones.
+
+**The glyph carries the meaning; the sentence beside it is prose in whatever
+language the model is written in.** That is the same arrangement the element
+notation uses, and it is why `scripts/check_model.py` can enforce this in a
+model written in any language: it checks that a document defining elements
+carries exactly one status glyph before its first `##`, and never reads the
+words.
+
+**A draft catalogue is not an architecture draft, and the distinction is the
+point of the marker.** An architecture draft is a proposal about how something
+should be structured. A draft catalogue is a list of things somebody said
+exist, written down so they can be checked. Presenting the second as the first
+is the failure this exists to prevent: a Requester who is shown a catalogue
+and hears "architecture" approves a description nobody has verified, and an
+agent that reads one will build on a system that was mentioned once in a
+meeting.
+
+**So a draft catalogue's tables carry two extra columns**, and they earn their
+width:
+
+| Column | Holds |
+| ------ | ----- |
+| `Source` | Which reference document or conversation the element came from — § Reference documents. An element with no source in a draft catalogue is an invention |
+| `Notes` | What is uncertain, contested or awaiting confirmation. Two names for what may be one thing; a figure nobody could stand behind; a system whose owner is unknown |
+
+At the gate, `Source` stays — provenance does not expire. **`Notes` is
+emptied**, because a note that survives its own gate is one of three things: a
+fact, which belongs in the model; a question, which belongs in the
+open-questions log; or something nobody cared about, which belongs nowhere.
+
+**Mixed documents are normal, and the status is the weakest part.** A
+validated layer that a new initiative adds elements to is `◐` until that
+initiative's gate — not `●` with an asterisk. A reader who trusts a `●`
+document must be able to trust all of it.
 
 ### Element IDs
 
@@ -85,6 +168,7 @@ services" table holds. Anywhere else, a backticked ID is a reference.
 | Information | `DOBJ` Data Object |
 | Application | `ASVC` Application Service · `ACMP` Application Component |
 | Technology | `TSVC` Technology Service · `NODE` Node · `ART` Artifact |
+| Implementation & Migration | `PLAT` Plateau · `GAP` Gap |
 | Canvas (VPC) | `JOB` Job · `PAIN` Pain · `GAIN` Gain · `PREL` Pain Reliever · `GCRE` Gain Creator |
 | Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
 
@@ -145,7 +229,9 @@ it in front of them instead of letting it pass as an edited column.
 #### Never-reused starts at the gate
 
 **An identifier is draft until the gate that approves its element, and
-permanent afterwards.**
+permanent afterwards.** Which of the two a reader is looking at is declared at
+the top of the document — § Document status — so this rule is visible rather
+than remembered.
 
 | The element was | Removing it means |
 | --------------- | ----------------- |
@@ -298,6 +384,46 @@ initiative"** (ideally linked to the initiative that will deliver it). This
 keeps the whole set verifiable against the code at any time — an outsider
 should be able to open any EA document and check it against the repo.
 
+### Reference documents
+
+`architecture/reference/` holds the material the model was built from, exactly
+as it was provided: meeting transcripts, presentations, specifications,
+spreadsheets, whatever somebody sent. **It is not part of the model.** Nothing
+in it defines an element or carries an identifier, and the validators do not
+read it — a transcript in which somebody says `CAP3` is a person talking, not
+a definition.
+
+It exists so that a claim in the model can be taken back to what it came from.
+A figure a Requester queries eighteen months later is answerable from the deck
+it was read off; a sentence in a layer document that no longer makes sense can
+be checked against the conversation it was written from.
+
+**Naming.** `YYYY-MM-DD-<short-description>.<ext>`, in plain ASCII with
+hyphens — `2026-08-24-operations-review-transcript.md`,
+`2026-03-02-target-operating-model.pptx`.
+
+The date is, in order of preference: **when the meeting happened**; failing
+that, **when the document was shared**; failing that, **when it was added to
+the repository**. Take the first one that can be established, and say which in
+the index when it is not the first.
+
+**The original filename is preserved in the index, not on disk.** A file
+called `BigView Strategy FINAL v3.pptx` keeps that name in a column where it
+is searchable and matches the sender's copy; on disk it becomes a dated slug,
+because spaces and capitals in a path break links, tooling and half the
+shells anyone will use on it. Renaming loses nothing as long as the index
+carries what was renamed.
+
+**Every file gets a row in `architecture/reference/README.md`**: the date and
+what fixed it, the original name, who provided it, and what in the model was
+derived from it. A reference document nothing derives from is still worth
+keeping and its row says so — the index is a record of what was received, not
+only of what was used.
+
+**Reference documents are not published.** The portal and the PDF exist to
+hand a reader the model; a raw transcript carries everything else that was in
+the room that day, to an audience that was not.
+
 ### ArchiMate on Mermaid
 
 ArchiMate has no native Mermaid profile — no icons, no standard shapes — so
@@ -409,6 +535,10 @@ that's exactly the kind of call the `record-decision` skill is for.
   `_[← <Layer> layer](./README.md) · [EA home](../README.md)_`
   (scope docs link to the scope index instead).
 - State the **ArchiMate elements/viewpoint** covered near the top.
+- Then the **status line**, where the document defines elements — § Document
+  status. It sits in the preamble, before the first `##`, because that is
+  where a validator looks for it and where a reader meets it before anything
+  it might be believed for.
 - A **"How to read this document"** section next: the legend diagram and the
   glyph / shape / element / ID-prefix table.
 - Then one section per element group, each **opening with its diagram**,

@@ -62,7 +62,12 @@ REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
 MODEL_DIR = "architecture"
 # Narrative folders inside the model directory. They are *about* the model
 # rather than part of it, and are deliberately not read.
-NARRATIVE = {"scope", "decisions", "reviews", "engagements"}
+#
+# `reference` is the strongest case of the four: it holds source documents
+# exactly as they were provided - transcripts, decks, specifications - and a
+# transcript in which somebody says "CAP3" is a person talking, not a model
+# defining an element. Parsing it would invent references nobody wrote.
+NARRATIVE = {"scope", "decisions", "reviews", "engagements", "reference"}
 # Directories that are tooling rather than repository content. `.git` is
 # obvious; `.claude`, `.agents`, `.gemini`, `.codex` and `.copilot` hold
 # agent-local material — installed and vendored third-party skills, worktrees,
@@ -131,6 +136,21 @@ TABLE_SEP_RE = re.compile(r"^\|[\s:|-]+\|\s*$")
 # A catalogue cell that leads with the element's name in bold, before any gloss.
 NAME_LEAD_RE = re.compile(r"^\*\*(.+?)\*\*")
 
+# How far a document has been validated, declared in its preamble. The glyph
+# carries the meaning and the words beside it are prose in whatever language
+# the model is written in, which is the same arrangement the element notation
+# uses: `architecture-document-style` fixes the glyph and fixes nothing about
+# the sentence around it.
+STATUS_GLYPHS = {
+    "\u25cb": "not started",      # empty circle
+    "\u25d0": "draft catalogue",  # half-filled
+    "\u25cf": "validated",        # filled
+}
+# The preamble is everything before the first level-2 heading: the title, the
+# nav line, and the metadata lines under it. A status glyph is looked for
+# there and nowhere else, so a diagram further down cannot be mistaken for one.
+PREAMBLE_END_RE = re.compile(r"^##\s", re.M)
+
 # A fenced Mermaid block. Matched on the raw text, before fences are stripped.
 MERMAID_RE = re.compile(
     r"^(?P<ticks>`{3,})mermaid[^\n]*\n(?P<body>.*?)^(?P=ticks)`*[ \t]*$",
@@ -152,6 +172,25 @@ NODE_ID_RE = re.compile(r"\[(" + _ID + r")\]\s*$")
 
 def strip_code(text: str) -> str:
     return FENCE_RE.sub("", text)
+
+
+def preamble(text: str) -> str:
+    """Everything before the first level-2 heading."""
+    match = PREAMBLE_END_RE.search(text)
+    return text[: match.start()] if match else text
+
+
+def status_of(text: str) -> tuple[str, int]:
+    """(status name, how many status glyphs the preamble carried).
+
+    A count of one is the good case. Zero means the document never declared
+    how far it has been validated; more than one means it declared two things
+    and a reader cannot tell which. `check_model.py` judges both.
+    """
+    found = [g for g in preamble(text) if g in STATUS_GLYPHS]
+    if len(found) != 1:
+        return "", len(found)
+    return STATUS_GLYPHS[found[0]], 1
 
 
 def split_retired(text: str) -> tuple[str, str]:
@@ -375,6 +414,7 @@ class Element:
     doc: str  # repository-relative path of the defining document
     layer: str  # the numbered folder it was defined in — `1_strategy`
     layer_no: str  # `1`
+    status: str  # its document's declared status - `draft catalogue`, `validated`
     retired: bool
     attrs: dict[str, str] = field(default_factory=dict)
 
@@ -400,6 +440,9 @@ class ParsedProject:
     references: list[tuple[str, Path]]
     domains: set[str]
     skipped: int
+    # Repository-relative document path -> (status name, glyph count). Every
+    # document the model parse reads, whether or not it defines anything.
+    statuses: dict[str, tuple[str, int]] = field(default_factory=dict)
     elements: dict[str, Element] = field(default_factory=dict)
     edges: list[Edge] = field(default_factory=list)
     # (document, element) — where each element is spoken about. Kept apart
@@ -420,6 +463,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     retired: dict[str, Path] = {}
     references: list[tuple[str, Path]] = []
     domains: set[str] = set()
+    statuses: dict[str, tuple[str, int]] = {}
     skipped = 0
     elements: dict[str, Element] = {}
     edges: list[Edge] = []
@@ -433,6 +477,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         if scope:
             domains.add(scope)
         skipped += unvalidated_tables(text)
+        statuses[str(md_file.relative_to(REPO_ROOT)).replace("\\", "/")] = status_of(text)
         live_text, retired_text = split_retired(text)
 
         for element in definitions_in(live_text):
@@ -483,6 +528,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
                 doc=doc,
                 layer=layer,
                 layer_no=layer_no,
+                status=statuses[doc][0],
                 retired=element in retired_here,
                 attrs=attrs,
             )
@@ -524,6 +570,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         retired=retired,
         references=references,
         domains=domains,
+        statuses=statuses,
         skipped=skipped,
         elements=elements,
         edges=edges,

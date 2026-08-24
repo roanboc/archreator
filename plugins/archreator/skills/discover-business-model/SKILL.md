@@ -134,6 +134,13 @@ so a misread segment surfaces in minutes rather than at the gate.
 **→ Produces** `architecture/0_business-design/1_value-proposition-canvas.md`,
 `architecture/0_business-design/2_business-model-canvas.md`.
 
+The canvases open `◐ Draft catalogue` and carry `Source` and `Notes` until
+Gate 0 grants them — `architecture-document-style` § Document status. A canvas
+is the most tempting document in the model to read as settled, because it
+looks finished the moment it is drawn; the marker is what says it is not.
+Anything the Requester provided is filed in `architecture/reference/` first,
+and the `Source` column points there.
+
 ### 3 — Verify fit before presenting
 
 Check, and fix or flag — never quietly present an unfit canvas:
