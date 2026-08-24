@@ -15,7 +15,8 @@ A portal serves the reader who will follow a link. This one serves the reader
 who will not: the executive who wants the architecture in a mail attachment,
 the auditor who needs a dated copy, the workshop that happens away from a
 screen. It is the same rendering as the portal — `mkdocs.yml` already builds
-`print_page/`, one page carrying every document — printed rather than served.
+`print_page/`, one page carrying every document — printed rather than served,
+with the document's headings as its bookmarks so a reader can navigate it.
 
 **No new renderer.** The PDF is produced by a headless Chromium-family browser
 printing that page, so it looks like the portal because it *is* the portal. A
@@ -208,7 +209,17 @@ def render(browser: str, page: Path, output: Path) -> int:
     if output.exists():
         output.unlink()
     finished = browser_run(
-        browser, page, ["--no-pdf-header-footer", f"--print-to-pdf={output}"]
+        browser,
+        page,
+        [
+            "--no-pdf-header-footer",
+            # Bookmarks, built from the heading structure. Without them a
+            # reader opens a hundred pages with an empty navigation pane and
+            # no way through but scrolling. A browser too old to know the
+            # switch ignores it and prints what it printed before.
+            "--generate-pdf-document-outline",
+            f"--print-to-pdf={output}",
+        ],
     )
     if finished is None:
         return 1

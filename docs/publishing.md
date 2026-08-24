@@ -179,7 +179,9 @@ way to publish.
 The PDF needs a Chromium-family browser — Chromium, Chrome or Edge — which it
 finds on `PATH`, at the usual install location, or wherever `--browser` and
 `CHROME_PATH` point. There is no second renderer: the PDF is the portal's own
-print page, printed. Without a browser the export still builds that page and
+print page, printed. The document's headings become its bookmarks, so a reader
+opens a hundred pages with a navigation tree rather than a scrollbar; a
+browser too old to know the switch prints the same document without them. Without a browser the export still builds that page and
 says where it is, so any browser's Print → Save as PDF produces the same
 document by hand.
 
