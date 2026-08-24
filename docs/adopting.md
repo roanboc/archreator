@@ -73,8 +73,8 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
 - `scripts/` — the two validators, run before every push, and the three tools:
   the projection, the documentation portal and the PDF export
 - `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a
-  website, and the issue form a reader of that website raises a question
-  through. Nothing deploys it; where the built folder goes is your call. See
+  website, the pull-request template a change is described in, and the issue
+  form a reader of that website raises a question through. Nothing deploys it; where the built folder goes is your call. See
   [`docs/publishing.md`](./publishing.md)
 
 Then follow the bootstrap checklist by hand, or install the skills and let
