@@ -73,11 +73,19 @@ flowchart TD
 | `architecture/scope/README.md`'s index and `open-questions.md` | The Approvals tables inside them |
 | A decision record's **Status** line | A decision record's Context, Options, Decision, Consequences |
 | Layer README state tables | Anything a Requester approved at a gate |
+| — | `architecture/roadmap/`, which describes an intent rather than a present |
 
 A merged scope document records what was approved on a date. If it becomes
 wrong it is not corrected — it is superseded by a later one, which is the
 whole reason the index is chronological. Editing it erases the evidence that a
 gate was passed against different information.
+
+**The roadmap is neither rewritable nor immutable here — it is simply not this
+skill's subject.** It describes where the architecture is going, so it cannot
+have drifted from what shipped; what it can do is go out of date, and that is
+`plan-the-transition`'s job and its own initiative. What this skill does owe
+it is a reading: a plateau the restatement reveals as already reached should
+be reported, not silently left saying Planned.
 
 - **One carve-out: link targets, not words.** When a later change moves a
   file, repair the path and leave every word alone, link text included. A

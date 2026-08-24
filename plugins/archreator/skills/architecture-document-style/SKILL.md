@@ -35,8 +35,8 @@ language, what a document may contain, and how it links — are in
 ## ⌖ Where this sits
 
 **Realizes no process.** It is the rulebook every process complies with, and
-the most-cited skill in the corpus: thirteen of the other thirteen reach for
-it. Nothing here is a step.
+the most-cited skill in the corpus — every skill that writes or edits a model
+document reaches for it. Nothing here is a step.
 
 ## ※ Rules
 # EA documentation style
@@ -56,6 +56,12 @@ it. Nothing here is a step.
   when the analysis order genuinely changes.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
+- `architecture/roadmap/` is not a layer and carries no layer number. Its
+  documents are numbered in analysis order like a layer's are, because a gap
+  cannot be derived before the plateau it is measured against exists. It is
+  **the only folder in the model that describes a future**; every numbered
+  layer describes the current state, and that division is what lets a reader
+  trust a layer document without checking its date.
 
 ### Element IDs
 
@@ -85,6 +91,7 @@ services" table holds. Anywhere else, a backticked ID is a reference.
 | Information | `DOBJ` Data Object |
 | Application | `ASVC` Application Service · `ACMP` Application Component |
 | Technology | `TSVC` Technology Service · `NODE` Node · `ART` Artifact |
+| Implementation & Migration | `PLAT` Plateau · `GAP` Gap |
 | Canvas (VPC) | `JOB` Job · `PAIN` Pain · `GAIN` Gain · `PREL` Pain Reliever · `GCRE` Gain Creator |
 | Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
 

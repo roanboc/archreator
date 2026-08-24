@@ -165,6 +165,7 @@ strategy. If changes are requested, revise from Step 2 and present again.
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
 | `process-and-capability-levels` | Theme 4, on an organization | Levelled capabilities seeded from a named reference model, detailed below level 2 only where a pain justifies it |
+| `discover-current-landscape` | Gate 1 is granted and the subject already runs — an organization with processes, applications and infrastructure nobody has written down | A described baseline in layers 2–5, which is what a later change is actually aligned against |
 | `align-change-through-layers` | Gate 1 is granted, and the original request is still unbuilt | The implementation initiative, which now finds the strategy current |
 
 ## ✎ Worked example

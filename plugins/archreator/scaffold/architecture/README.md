@@ -26,6 +26,7 @@ this order — strategy first, technology last — and captured in a
 | 4   | [4_application/](./4_application/README.md) | Application layer        | Which software services and components realize the business services?       |
 | 5   | [5_technology/](./5_technology/README.md)   | Technology layer         | What runs it all — runtimes, tooling, build, hosting, deployment?            |
 | —   | [domains/](./domains/README.md)             | _the same layers, nested_ | Which business lines own their own model, and what they expose to each other |
+| —   | [roadmap/](./roadmap/README.md)             | Implementation & Migration | Where should this go, what stands in the way, and in what order?              |
 
 Layer `0` is the odd one out: it holds no ArchiMate elements at all, only
 the Value Proposition and Business Model canvases the architecture is
@@ -67,9 +68,14 @@ Rules that make the ladder work:
 Files inside each layer folder are numbered the same way; each layer README
 explains its own analysis order. Delivered initiatives (ArchiMate
 Implementation & Migration viewpoint) are documented per initiative in
-[../scope/](./scope/README.md), not here — the EA describes the **current**
-(or **target**, while unimplemented) state; scope documents describe the
-**changes** that produce it.
+[../scope/](./scope/README.md), not here — the numbered layers describe the
+**current** state; scope documents describe the **changes** that produce it.
+
+Where the architecture is *going* is neither of those, and it has a folder of
+its own: [roadmap/](./roadmap/README.md) holds the target plateaus, the gaps
+between them and today, and the order the gaps are closed in. **It is the only
+place in the model permitted to describe a future**, which is what lets every
+numbered layer be read as a description of now without qualification.
 
 ## Notation conventions
 
@@ -122,6 +128,7 @@ legend says which is which.
 | Information | `▦` Data Object |
 | Application | `⊞` Application Component · `⬮` Application Service · `⊸` Application Interface |
 | Technology | `⬒` Node · `⬯` Technology Service · `⎔` Artifact |
+| Implementation & Migration | `≡` Plateau · `⊘` Gap |
 | Canvas (VPC) | `◍` Customer Segment · `⚙` Job · `✖` Pain · `✔` Gain · `▣` Product · `⊖` Pain Reliever · `⊕` Gain Creator |
 | Canvas (BMC) | `⧉` Key Partner · `⚙` Key Activity · `▤` Key Resource · `⊸` Channel · `⇄` Customer Relationship · `▲` Revenue Stream · `▼` Cost |
 
@@ -159,6 +166,8 @@ element appears.
 | Stadium (cont.) | `id([" "])` | Application Service, Technology Service |
 | Parallelogram (cont.) | `id[/" "/]` | Artifact |
 | Trapezoid | `id[/" "\]` | Value, Pain Reliever, Gain Creator, Revenue Stream |
+| Subroutine | `id[[" "]]` (cont.) | Plateau |
+| Circle | `id((" "))` | Gap |
 | Inverted trapezoid | `id[\" "/]` | Cost |
 
 ### 4. Layer colour, and the tone ramp inside it
@@ -193,6 +202,7 @@ technology, not one motivation element from another.
 | Business | Actor `#fffbb5` → Role `#f7f099` → Service `#efe57d` → Interface `#e5d95f` → Contract/Collaboration `#d9cc4a` |
 | Application | Service `#c2f0ff` → Data Object `#c2f0ff` → Component `#9adcf0` |
 | Technology | Service `#c9e7b7` → Artifact `#dcefd0` → Node `#a9d68f` |
+| Implementation & Migration | Plateau `#ffe8e8` → Gap `#ffd6d6` |
 
 Strokes darken with the fill. Text stays `#333` throughout — every fill above
 is light enough to carry it in both GitHub themes.

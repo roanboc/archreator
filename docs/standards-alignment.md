@@ -45,6 +45,18 @@ its space, and the table says which those are.
 | **The four bands** — Strategic, Operational, Support, Evaluation | ISO 9001:2015 clause structure — Leadership and Planning, Operation, Support, Performance evaluation | Cite | — | |
 | **SIPOC** | Six Sigma | Adopted | yes | |
 
+## Baseline, target and transition
+
+| archreator | Established | Verdict | Named in the skill | Note |
+| ---------- | ----------- | ------- | ----------------- | ---- |
+| **Landscape sweep** — filling layers 2–5 from the estate rather than from a requirement | TOGAF Phases B, C and D, **Baseline Architecture** half | Cite | — | Good match on subject. TOGAF interleaves baseline and target in the same phase; archreator separates them into two processes, because only one of them can be validated against something that exists |
+| **Coverage declaration** — what the sweep deliberately did not reach | TOGAF's *scope* and *level of detail* decisions in the Statement of Architecture Work | Cite | — | Approximate. The archreator form is an obligation on the model rather than a project artifact — it lives in the layer README, where a reader meets it, not in a document about the engagement |
+| **Plateau** | ArchiMate **Plateau** (Implementation & Migration) | Adopted | yes | The standard name and the standard meaning: a relatively stable state the architecture passes through |
+| **Gap** | ArchiMate **Gap**; TOGAF **gap analysis** | Adopted | yes | Also standard. What archreator adds is that a gap must name the baseline element it is measured from, which makes a gap register checkable rather than a wish list |
+| **The sequence** — initiatives ordered by dependency, without dates | TOGAF Phase E and F — Opportunities and Solutions, Migration Planning; the **Architecture Roadmap** | Cite | — | Approximate. TOGAF's roadmap carries work packages and timing; this one carries order and preconditions, and refuses dates on the grounds that a stale date stops a document being read |
+| **`architecture/roadmap/` as the only folder describing a future** | Adjacent only: TOGAF's Transition Architectures | **Ours** | — | The partition is archreator's. Confining intent to one folder so that every other document can be read as present tense without qualification has no standard equivalent, and it exists to serve the agent that reads the model, not the architect who writes it |
+| **A roadmap approves direction, not work** | Adjacent only: the distinction between an approved roadmap and an approved project in most stage-gate governance | **Ours** | yes | Stated as a rule rather than left to practice, because an agent handed a roadmap will otherwise treat it as a backlog it has been told to build |
+
 ## Governance
 
 | archreator | Established | Verdict | Named in the skill | Note |

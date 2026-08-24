@@ -88,7 +88,7 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 | Gate                     | Approved by | Date         | What was approved                          |
 | ------------------------ | ----------- | ------------ | ------------------------------------------- |
 | Gate 0 — Business model  | <Requester> | <YYYY-MM-DD> | <the canvases — or "N/A — <why>">          |
-| Gate 1 — Strategy        | <Requester> | <YYYY-MM-DD> | <the strategy layer — or "N/A — <why>">    |
+| Gate 1 — Strategy        | <Requester> | <YYYY-MM-DD> | <the strategy layer, or the target and the sequence — or "N/A — <why>"> |
 | Gate 2 — Business        | <Requester> | <YYYY-MM-DD> | <the docs/sections presented at the gate>  |
 | Gate 3 — Solution design | <Requester> | <YYYY-MM-DD> | <the solution design — or "N/A — not requested"> |
 
@@ -149,6 +149,12 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   construction (`document-style` § What the document contains).
 - **Out of scope is as important as in scope** — it is where the next
   initiative's backlog lives. Pair each meaningful exclusion with a gap note.
+- **Where the project keeps a roadmap, gap notes have somewhere to go.** A gap
+  note expires with the document it was written in; a row in
+  `architecture/roadmap/` does not. Where the initiative closes gaps the
+  roadmap already carries, name them here and mark them there in the same
+  change — `plan-the-transition` § 6 — Bind the roadmap to the spine holds
+  both halves. A project with no roadmap keeps its gap notes and loses nothing.
 - **A merged scope document is a historical record.** Follow-up work gets a
   new numbered document.
 - **The record is what it says, not where its links point.** When a later

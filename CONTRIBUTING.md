@@ -30,7 +30,9 @@ projects run through. In practice:
   It is granted in the sibling repository's scope document, then
   implemented here.
 - **Gate 1 — Strategy** applies when the change adds or shifts a
-  Stakeholder, Driver, Goal, or Principle of the method itself.
+  Stakeholder, Driver, Goal, or Principle of the method itself — and when an
+  initiative sets a direction rather than building one, which is the same
+  approval pointed at a target instead of a strategy layer.
 - **Gate 3 — Solution design** is the Requester's option at Gate 2.
 
 Pure bug fixes skip the gates, per the method's own rule.
