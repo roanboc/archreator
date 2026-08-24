@@ -121,8 +121,8 @@ It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
 `architecture/` — with `scope/` and `decisions/` inside it — and `scripts/`,
 the two validators and the three tools with their own README. It also holds
 `mkdocs.yml` and `overrides/`, which render the model as a website, and
-`.github/`, which carries the issue form a reader of that website raises a
-question through. `CLAUDE.md`
+`.github/`, which carries the pull-request template a change is described in
+and the issue form a reader of that website raises a question through. `CLAUDE.md`
 and `GEMINI.md` come with it too, each holding nothing but an `@AGENTS.md`
 import so the host that reads only its own filename still finds the entry
 point. Copy them as they are and leave them alone; content in one of them is
@@ -141,7 +141,7 @@ Then, in one pass, so the first commit is coherent:
 | `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running; placeholders left here are what make later sessions guess |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `CONTRIBUTING.md` | Leave § Development workflow as its TEMPLATE comment until a stack exists, rather than inventing commands |
-| `mkdocs.yml` | The site name, the description and the repository URL, so every published page carries a link back to the file that produced it. Left as it ships, the portal still builds — without those links. Nothing here publishes anything: `scripts/build_docs.py` writes a folder, and where it goes is the Requester's call |
+| `mkdocs.yml` | The site name, the description, the repository URL — so every published page carries a link back to the file that produced it — and `theme.language` when the project documents in something other than English. Left as it ships, the portal still builds — without those links. Nothing here publishes anything: `scripts/build_docs.py` writes a folder, and where it goes is the Requester's call |
 | Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
 
 **⚖ Judgement.** The optional files are a decision, not a default:

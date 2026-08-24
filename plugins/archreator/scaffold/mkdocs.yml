@@ -49,6 +49,9 @@ hooks:
 theme:
   name: material
   custom_dir: overrides
+  # The theme's own strings — search, navigation, the print view. Set it to
+  # the language this project documents in (`document-style` decides that
+  # once); the theme override's few words stay English either way.
   language: en
   icon:
     repo: fontawesome/brands/git-alt
