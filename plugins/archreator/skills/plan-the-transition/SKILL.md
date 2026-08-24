@@ -97,6 +97,12 @@ flowchart TD
   before something else can start is the method's business; how much change
   the organization can absorb at once is the Requester's, and asking is
   cheaper than discovering.
+- **The roadmap declares its own standing.** Its documents define elements, so
+  they carry a status line like any others: `◐ Draft catalogue` while the
+  target is being drafted, `● Validated at Gate 1` once the Requester has
+  settled it (`architecture-document-style` § Document status). A roadmap
+  nobody has approved and one that was agreed last quarter are read very
+  differently, and only the marker says which is on the screen.
 - **Nothing here is approved to build.** Gate 1 approves the destination and
   the order. Every initiative on the roadmap runs the spine, and no gate is
   skipped because the roadmap already named it.

@@ -57,6 +57,16 @@ its space, and the table says which those are.
 | **`architecture/roadmap/` as the only folder describing a future** | Adjacent only: TOGAF's Transition Architectures | **Ours** | — | The partition is archreator's. Confining intent to one folder so that every other document can be read as present tense without qualification has no standard equivalent, and it exists to serve the agent that reads the model, not the architect who writes it |
 | **A roadmap approves direction, not work** | Adjacent only: the distinction between an approved roadmap and an approved project in most stage-gate governance | **Ours** | yes | Stated as a rule rather than left to practice, because an agent handed a roadmap will otherwise treat it as a backlog it has been told to build |
 
+## Provenance and standing
+
+| archreator | Established | Verdict | Named in the skill | Note |
+| ---------- | ----------- | ------- | ----------------- | ---- |
+| **Document status** — `○` not started, `◐` draft catalogue, `●` validated at a gate | Adjacent only: document control and revision status in records management; ISO/IEC/IEEE 42010's *architecture description* has no equivalent | **Ours** | yes | The distinction being marked is not maturity but *authority*: whether a person with the standing to say so has agreed the document is true. No architecture standard marks that on the document itself, and every one of them assumes a reader who knows which is which |
+| **Draft catalogue** — elements identified with notes, not an architecture draft | Adjacent only: an inventory, a discovery log, TOGAF's Baseline Architecture *before* it is validated | **Ours** | yes | The naming is the whole contribution. "Draft architecture" invites a reader to critique the structure; "draft catalogue" tells them the structure is not the claim — the existence of the items is, and it has not been checked |
+| **`Source` and `Notes` columns, and emptying `Notes` at the gate** | Adjacent only: issue logs, RAID logs | **Ours** | yes | The rule that a note cannot survive its gate is the part worth having: it forces every open thread to become a fact, a logged question, or an admission that nobody cared |
+| **`architecture/reference/`** — provided source material, dated and indexed | TOGAF **Architecture Repository**, loosely; ISO/IEC/IEEE 42010 *architecture rationale* | Cite | yes | Approximate. TOGAF's repository is a governed store of reference models and standards; this is narrower and more mundane — the actual documents a client handed over, kept so a claim can be taken back to them |
+| **Date precedence** — the meeting, else the sharing, else the filing | Adjacent only: archival description practice, which distinguishes creation from accession date | Cite | yes | The archival distinction is the same one, and the ordering here is the practical form of it: prefer the date the content is *about* over the date it arrived |
+
 ## Governance
 
 | archreator | Established | Verdict | Named in the skill | Note |

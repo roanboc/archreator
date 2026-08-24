@@ -147,8 +147,21 @@ resolve, that every leveled ID has a parent, and that no identifier is reused.
 
 Beside the numbered layers sit the folders that are not layers:
 `architecture/scope/` (one document per initiative), `architecture/decisions/`
-(calls smaller than an initiative), `architecture/domains/` (Depth 3 only) and
-`architecture/roadmap/` (where it is going).
+(calls smaller than an initiative), `architecture/domains/` (Depth 3 only),
+`architecture/roadmap/` (where it is going) and `architecture/reference/` (the
+transcripts, decks and documents the model was built from, kept as they
+arrived, dated, indexed, and never published).
+
+**Every document that defines an element says how far it has been validated**,
+with one of three glyphs in its preamble: `○` not started, `◐` a draft
+catalogue, `●` validated at a named gate on a named date. The middle one is
+the one that matters. A draft catalogue is a list of things somebody said
+exist, written down with notes so they can be checked — it is *not* an
+architecture draft, and on the page the two are identical. A Requester shown a
+catalogue and told "architecture" approves a description nobody verified; an
+agent that reads one builds on a system mentioned once in a meeting. The
+marker is what separates them, and `check_model.py` fails a document that
+defines elements without declaring one.
 
 The Markdown is the model, and the readers who never open a repository are
 served by rendering it rather than by keeping a second copy: one command

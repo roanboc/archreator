@@ -10,13 +10,21 @@ method's own model rather than papered over.
 Two questions, because these are the two that a table cannot answer:
 
     python3 scripts/query_model.py trace CAP3      # what would this touch?
-    python3 scripts/query_model.py coverage        # what is not grounded?
+    python3 scripts/query_model.py coverage        # what is not grounded, and
+                                                   # what is not yet approved?
 
 **`trace` is a traversal.** "What does retiring this capability affect?" is not
 a lookup — the answer is reached by following relationships across layers, and
 following them by hand across a hundred Markdown files is how a real dependency
 gets missed. `stack-selection` § A persisted projection needs one of four
 triggers names a genuinely transitive question as one of the four.
+
+`coverage` also separates what a Requester has approved from what has only
+been written down. A catalogue of elements somebody mentioned in a meeting and
+a layer approved at a gate are the same shape on the page, and an agent that
+reads the second kind out of the first will build confidently on nothing. The
+document's own declared status is what tells them apart, and it is carried
+through the projection onto every element defined there.
 
 **`coverage` is a report, and deliberately not a gate.** Every element must
 name what realizes it, and that rule is the one the validators do not enforce:
@@ -122,6 +130,8 @@ def trace(projects: list[dict], wanted: str, depth: int) -> int:
 
     print(f"{label(element, element['id'])}")
     print(f"  defined in {element['doc']}")
+    if element["status"] and element["status"] != "validated":
+        print(f"  {element['status'].upper()} — not approved at a gate")
     if element["realized_by"]:
         print(f"  realized by {element['realized_by']}")
     if element["retired"]:
@@ -242,11 +252,31 @@ def coverage(projects: list[dict]) -> int:
         ]
         silent = sorted({e["doc"] for e in live if not grounds[catalogue_of(e)]})
 
+        draft = [e for e in live if e["status"] and e["status"] != "validated"]
+        undeclared = [e for e in live if not e["status"]]
+
         print(f"{project['model']} — {len(live)} live element(s), {retired} retired")
+        print(f"  validated             {len(live) - len(draft) - len(undeclared):4d}")
+        print(f"  draft, not approved   {len(draft):4d}")
+        if undeclared:
+            print(f"  status undeclared     {len(undeclared):4d}")
         print(f"  grounded              {len(grounded):4d}")
         print(f"  pending, on purpose   {len(pending):4d}")
         print(f"  blank beside grounded {len(gaps):4d}")
         print()
+
+        if draft:
+            by_status: dict[str, set[str]] = defaultdict(set)
+            for element in draft:
+                by_status[element["status"]].add(element["doc"])
+            print("  Not approved at any gate. Nothing here may be built on, and")
+            print("  every identifier in it can still be renumbered:")
+            for status in sorted(by_status):
+                print(f"    {status}")
+                for doc in sorted(by_status[status]):
+                    count = sum(1 for e in draft if e["doc"] == doc)
+                    print(f"      {doc}  ({count} element(s))")
+            print()
 
         if gaps:
             print("  Their own catalogue grounds other rows and leaves these blank.")

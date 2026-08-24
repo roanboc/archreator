@@ -27,6 +27,7 @@ this order — strategy first, technology last — and captured in a
 | 5   | [5_technology/](./5_technology/README.md)   | Technology layer         | What runs it all — runtimes, tooling, build, hosting, deployment?            |
 | —   | [domains/](./domains/README.md)             | _the same layers, nested_ | Which business lines own their own model, and what they expose to each other |
 | —   | [roadmap/](./roadmap/README.md)             | Implementation & Migration | Where should this go, what stands in the way, and in what order?              |
+| —   | [reference/](./reference/README.md)         | _none — source material_ | What was this built from — which transcript, deck or document said so?         |
 
 Layer `0` is the odd one out: it holds no ArchiMate elements at all, only
 the Value Proposition and Business Model canvases the architecture is
@@ -76,6 +77,33 @@ its own: [roadmap/](./roadmap/README.md) holds the target plateaus, the gaps
 between them and today, and the order the gaps are closed in. **It is the only
 place in the model permitted to describe a future**, which is what lets every
 numbered layer be read as a description of now without qualification.
+
+And what all of it was *built from* is in [reference/](./reference/README.md):
+the transcripts, decks and documents somebody provided, kept as they arrived.
+Not the model, not published, and not read by the validators — it is what a
+claim in the model can be taken back to when somebody asks where it came from.
+
+## Document status
+
+Every document that defines an element declares, in its preamble, how far it
+has been validated:
+
+| Glyph | Status | A reader may |
+| ----- | ------ | ------------ |
+| `○` | **Not started** | Take nothing from it. The document exists so the gap is visible |
+| `◐` | **Draft catalogue** | Read it as a list of things somebody said exist, with notes. Not approved, identifiers still draft, nothing here to be built on |
+| `●` | **Validated** | Rely on it. Confirmed on a named date by its gate — or, where no gate covers the layer, by the recorded decision that routed it elsewhere. Identifiers permanent |
+
+**A draft catalogue is not an architecture draft.** An architecture draft
+proposes how something should be structured; a draft catalogue records what
+somebody said is there, so that it can be checked. A catalogue and an approved
+layer are the same shape on the page, and this marker is the only thing
+separating them — which is why a document defining elements without one fails
+`scripts/check_model.py`.
+
+Draft catalogues carry `Source` and `Notes` columns; at the gate `Source`
+stays and `Notes` is emptied. The full rule, and what each glyph obliges, is
+in the `architecture-document-style` skill § Document status.
 
 ## Notation conventions
 

@@ -136,6 +136,13 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   that did not apply is written `N/A — <why>` rather than deleted, so a reader
   can tell a skipped gate from a forgotten one. **An approval that isn't
   recorded didn't happen.**
+- **A granted gate promotes the documents it covered.** Recording the approval
+  is half of it; the other half is moving each covered document's status line
+  from `◐ Draft catalogue` to `● Validated`, with the gate and the date, and
+  emptying its `Notes` column (`architecture-document-style` § Document
+  status). The Approvals row and the status lines say the same thing in the
+  two places a reader looks, and a row without the lines leaves the model
+  claiming nothing was approved.
 - **"What was approved" names the documents put in front of the Requester**,
   not the topic in the abstract. The gate presentation links them in full
   (`align-change-through-layers` § Show the Requester what they are approving);
@@ -184,6 +191,9 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 - The document is numbered, named and added to the index in the same change.
 - Every layer has a verdict, and every gate has a row.
+- Every document a granted gate covered says `●`, with that gate and that date.
+- Anything the Requester provided is filed in `architecture/reference/` and
+  indexed there, and the elements derived from it name it.
 - Deliverables name artifacts, not intentions.
 - Every meaningful exclusion has a gap note.
 - Open questions, where any exist, link the document the interpretation was

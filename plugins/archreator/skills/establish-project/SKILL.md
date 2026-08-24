@@ -118,8 +118,9 @@ into every step below.
 
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
 It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
-`architecture/` — with `scope/` and `decisions/` inside it — and `scripts/`,
-the two validators and the three tools with their own README. It also holds
+`architecture/` — with `scope/`, `decisions/`, `roadmap/` and `reference/`
+inside it — and `scripts/`, the two validators and the four tools with their
+own README. It also holds
 `mkdocs.yml` and `overrides/`, which render the model as a website, and
 `.github/`, which carries the pull-request template a change is described in
 and the issue form a reader of that website raises a question through. `CLAUDE.md`

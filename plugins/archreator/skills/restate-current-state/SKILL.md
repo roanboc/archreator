@@ -73,6 +73,7 @@ flowchart TD
 | `architecture/scope/README.md`'s index and `open-questions.md` | The Approvals tables inside them |
 | A decision record's **Status** line | A decision record's Context, Options, Decision, Consequences |
 | Layer README state tables | Anything a Requester approved at a gate |
+| Status lines that no longer match what was approved | The gate and date a status line records |
 | — | `architecture/roadmap/`, which describes an intent rather than a present |
 
 A merged scope document records what was approved on a date. If it becomes

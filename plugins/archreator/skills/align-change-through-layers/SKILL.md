@@ -127,6 +127,16 @@ unconsidered layer from an unaffected one.
 still arrives here, still walks the layers, and still stops at its own Gate 2.
 A roadmap read as pre-approval has removed every gate in this table.
 
+**A granted gate moves a status line, and that is what makes it visible.** An
+element added or changed by this initiative sits in a document marked
+`◐ Draft catalogue` until the gate covering its layer is granted; the moment it
+is, the document says `● Validated at <gate>, <date>` and its `Notes` column is
+emptied — `architecture-document-style` § Document status. Changing the marker
+before the approval is the one edit that makes the model lie about its own
+standing, and changing it afterwards is not optional: a layer that stays `◐`
+after its gate tells every later reader not to rely on something a Requester
+approved.
+
 **This table is the single source for which gate applies when.** `CONTRIBUTING.md`,
 `architecture/scope/README.md` and `write-scope-document` point here rather than
 restating it.

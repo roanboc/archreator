@@ -70,9 +70,16 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 
 - `architecture/` — everything architectural: the numbered ArchiMate layers
   describing the current state, `architecture/roadmap/` — the one place the
-  model describes a future — `architecture/domains/` (Depth 3 only),
-  `architecture/scope/` — one document per initiative — and
-  `architecture/decisions/` for calls smaller than an initiative.
+  model describes a future — `architecture/reference/` — the transcripts,
+  decks and documents it was built from, kept as they arrived —
+  `architecture/domains/` (Depth 3 only), `architecture/scope/` — one document
+  per initiative — and `architecture/decisions/` for calls smaller than an
+  initiative.
+- **Every document that defines an element says how far it has been
+  validated**, with `○` not started, `◐` a draft catalogue of things somebody
+  said exist, or `●` validated at a named gate on a named date. A draft
+  catalogue is not an architecture draft and must never be read as one;
+  `scripts/check_model.py` fails a defining document that declares nothing.
 - `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
   development workflow.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every

@@ -88,6 +88,14 @@ flowchart TD
   to the team that probably has it. This is the
   `architecture-document-style` § Grounding rule doing the work it was written
   for.
+- **What a sweep produces is a draft catalogue, and it says so on every
+  document.** Elements gathered from a licence list and a Tuesday conversation
+  are things somebody said exist, not an architecture anybody has agreed. Each
+  document opens `◐ Draft catalogue` and its tables carry `Source` and `Notes`
+  columns until the gate that validates them —
+  `architecture-document-style` § Document status. A sweep that produces
+  documents indistinguishable from approved layers has done the opposite of
+  its job: it has made the model less trustworthy while appearing to fill it.
 - **Describe what runs, not what should run.** The estate includes things
   nobody would design that way. They go in as they are, without commentary.
   Judgement about the gap between this and a sane target belongs to
@@ -147,9 +155,21 @@ written down somewhere nobody calls documentation.
 Interviews come after this, and they are for what the evidence cannot answer:
 ownership, intent, and which of two contradictory sources is the live one.
 
+**Anything you are handed is filed before it is read.** A deck, a transcript,
+an inventory spreadsheet, an architecture document from a previous attempt —
+each goes into `architecture/reference/` under its dated name, with its row in
+that folder's index, *then* gets read. Filing afterwards means filing what you
+remembered to keep; the source that turns out to matter is usually the one
+nobody expected to need again.
+
+That folder is also what makes the rest of this skill honest. Every element
+written in Step 3 or Step 5 names its source, and a source that is a document
+has somewhere to point.
+
 **← Needs** the boundary from Step 1.
 
-**→ Produces** an evidence list, each item noting where it came from.
+**→ Produces** `architecture/reference/`, filled and indexed, and an evidence
+list.
 
 ### 3 — Describe business and information
 
@@ -172,9 +192,16 @@ them as actors holding roles. Record each one with its autonomy level and
 decision rights the way any other actor is recorded — this is the moment they
 are most likely to be found, and the moment they are most likely to be missed.
 
+Every element carries its `Source` — the reference document, or the person and
+the conversation — and its `Notes`: two names that may be one thing, a figure
+nobody could stand behind, a process nobody could describe the same way twice.
+The notes are the most valuable thing a sweep produces, because they are what
+the gate is actually for.
+
 **← Needs** the evidence from Step 2.
 
-**→ Produces** `architecture/2_business/` and `architecture/3_information/`.
+**→ Produces** `architecture/2_business/` and `architecture/3_information/`,
+each document opening `◐ Draft catalogue`.
 
 ### 4 — Write the scope document, present Gate 2
 
@@ -197,8 +224,15 @@ Name the counts, and name what was consolidated into what: a Requester who
 recognises their organization in forty elements will tell you so, and one who
 does not will say which forty are wrong.
 
-Record the approval in the Approvals table. If changes are requested, revise
-from Step 3 and present again.
+Record the approval in the Approvals table. **Then change the status line of
+every document it covered from `◐` to `● Validated at Gate 2`, on that date,
+and empty the `Notes` column** — each note is now a fact that goes into the
+model, a question that goes into the open-questions log, or something nobody
+cared about. `Source` stays; provenance does not expire.
+
+If changes are requested, revise from Step 3 and present again — the documents
+stay `◐` until they are actually approved, and moving a status line early is
+the one edit in this skill that would make the model lie.
 
 **← Needs** the layers from Step 3.
 
@@ -219,7 +253,8 @@ saying so is most of the value an estate model has.
 
 **← Needs** the evidence from Step 2, and Gate 2.
 
-**→ Produces** `architecture/4_application/` and `architecture/5_technology/`.
+**→ Produces** `architecture/4_application/` and `architecture/5_technology/`,
+each document opening `◐ Draft catalogue` until Step 6 grants Gate 3.
 
 ### 6 — Present Gate 3
 
@@ -294,6 +329,10 @@ the sweep found the estate, not the ambition.
 - Fixing the estate while describing it — rationalizing duplicate systems,
   renaming things to what they should have been called, quietly leaving out
   the embarrassing parts.
+- Handing over documents that look like approved architecture and are a list
+  of things three people mentioned.
+- Reading a document somebody sent and not filing it, so the model's only
+  record of where a claim came from is that an agent once read something.
 - Assigning an owner to an application because some team probably has it.
 - Sweeping until the questions run out, rather than to the boundary that was
   agreed.
@@ -305,7 +344,10 @@ the sweep found the estate, not the ambition.
 - The boundary is written down, and every layer README swept carries a
   Coverage section saying what was not reached.
 - Every element names what it was read from, or is marked Pending with what is
-  missing.
+  missing, and every document handed over carries a source in
+  `architecture/reference/` or names the conversation instead.
+- Every document opened `◐ Draft catalogue` and now says `●` with the gate and
+  the date it was granted, with `Notes` emptied and `Source` kept.
 - The process catalogue is levelled, with a focus table.
 - AI actors found in the estate are modeled as actors holding roles, with
   autonomy levels and decision rights.
