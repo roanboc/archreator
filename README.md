@@ -15,24 +15,25 @@ explicit gates before a line of code exists.
 
 ## The problem
 
-Writing code *was* a bottleneck. Anyone who has lost three days to an arcane
-API or a week to boilerplate knows that "coding was never the hard part" is
-the story told backwards. It was hard — and while it was hard, it hid
-everything standing behind it. A team could misunderstand the problem for
-months and still look busy.
+Building software was hard, and slow. That was the visible problem, and it
+covered for everything behind it — a requirement nobody had pinned down,
+business context that lived in one person's head, an assumption three people
+each understood differently. None of it had to be settled, because the build
+was always the thing running late.
 
-AI removed that bottleneck faster than anyone planned for, and what it
-uncovered is the constraint that was always next in line: **nobody writes down
-what they actually meant.** An agent handed an unstated assumption does not
-stop and ask. It fills the gap with something plausible and builds on it,
-confidently, at speed. You get a working implementation of the wrong thing, in
-an afternoon.
+AI took that delay away faster than anyone planned for, and what it was
+covering is now the whole problem. **Vague requirements and missing context
+no longer slow a project down — they get built.** An agent handed an
+assumption nobody stated does not stop and ask. It fills the gap with
+something plausible and carries on, at speed, and you get a working version of
+the wrong thing in an afternoon. Understanding the problem, and which solution
+actually fits it, is the part that stays human.
 
-So the thing worth building now is not a faster way to produce code. It is a
-framework for getting your own assumptions out where they can be argued with —
-who you serve, what you offer, who does what, and which system realizes each
-piece — written down early enough that disagreeing is still cheap. The fix
-isn't a better prompt.
+So the thing worth building now is not a faster way to produce software. It is
+a way to get your own assumptions written down where people can disagree with
+them — who you serve, what you offer, who does what, and which system does
+each piece — early, while disagreeing is still cheap. The fix isn't a better
+prompt.
 
 ## How it works
 
