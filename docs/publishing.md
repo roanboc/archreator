@@ -116,6 +116,11 @@ whether this is available to you at all:
 | The **giscus app** installed on the repository | It is what posts on a reader's behalf |
 | A **GitHub account** per commenter | Anyone who can read the repository can comment; nobody else can |
 
+This is the same question bootstrap already asked. A project that answered
+*public GitHub repository* can have comments; every other answer cannot, which
+is why `establish-project` wires the values on that answer and leaves them
+unset otherwise.
+
 giscus.app generates the four values from the repository name. They go in
 `mkdocs.yml` and nothing else changes:
 
@@ -199,13 +204,26 @@ folder opens by double-clicking `index.html`, survives being zipped, and is
 served correctly by anything: a shared drive, an intranet path, an S3 bucket,
 an nginx already running, GitHub Pages.
 
-Nothing in the scaffold publishes it, deliberately. A shipped workflow that
-fails until somebody enables Pages is worse than no workflow, and for most
-organizations Pages is the wrong answer anyway — a private repository's model
-published there stops being private. So the method builds the folder and stops.
-Where it goes is the organization's call, and a disclosure decision rather than
-a technical one: **decide who the portal is for**, and record the call with
-`record-decision` when it is not obvious.
+**The scaffold ships the workflow that publishes it, switched off.** Two files
+sit in `.github/workflows-available/`, which the automation host does not read,
+and `establish-project` moves what the answer to *where does this project live?*
+selects — `checks.yml` for any GitHub repository, `publish-docs.yml` for a
+public one. A project that answered anything else, or had not decided, has
+neither, and the method builds the folder and stops exactly as it always did.
+
+The two reasons it was not always this way are both still true, and both are
+what the design is shaped around. **A workflow that fails until somebody
+enables Pages is worse than no workflow** — so nothing is active until it is
+moved, and bootstrap says what Pages needs before it moves it. **A private
+repository's model published to Pages stops being private** — so publishing is
+offered on the public answer only, which on the free plan is also the only
+answer Pages serves.
+
+What has not changed is whose call it is. Where the portal goes is the
+organization's, and it is a disclosure decision rather than a technical one:
+**decide who the portal is for**, record it in
+`architecture/5_technology/2_deployment.md`, and reach for `record-decision`
+when the reasoning is worth keeping.
 
 Three recipes, in the order most projects need them:
 
@@ -213,51 +231,12 @@ Three recipes, in the order most projects need them:
 | -- | -- |
 | **Hand it over** | `python3 scripts/build_docs.py`, then send or copy `.docs/site/`. Zipped, it opens on any machine with a browser and no tooling at all |
 | **Host it anywhere** | Point a static host at `.docs/site/`, or sync it: `aws s3 sync .docs/site s3://…`, `rsync -a .docs/site/ server:/var/www/model/` |
-| **Publish it to GitHub Pages** | `uv run mkdocs gh-deploy --config-file mkdocs.yml` — one command, pushes the built site to the `gh-pages` branch. Run it when you mean to, or from the workflow below |
+| **Publish it to GitHub Pages** | Switch Pages on (Settings → Pages → Source: GitHub Actions), then activate the shipped workflow: `git mv .github/workflows-available/publish-docs.yml .github/workflows/`. For a one-off, `uv run mkdocs gh-deploy --config-file mkdocs.yml` pushes the built site to the `gh-pages` branch without any workflow at all |
 
-The workflow, for a project that wants it on every push. It is not shipped:
-copy it into `.github/workflows/publish-docs.yml` deliberately, and switch
-Pages on first (Settings → Pages → Source: GitHub Actions), or the runs go
-red.
-
-```yaml
-name: Publish docs
-
-on:
-  push:
-    branches: [main]
-    paths: ["architecture/**", "*.md", "mkdocs.yml", "overrides/**", "scripts/**"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - run: uv run scripts/build_docs.py
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .docs/site
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
+On a host that is not GitHub — Azure DevOps, GitLab, anything self-run — the
+pipeline is yours to write, and it is three lines: check out, run
+`scripts/build_docs.py`, publish `.docs/site/`. The scaffold ships no template
+for it, because a template nobody can test is a guess with a filename.
 
 Until it is hosted somewhere, **the PDF is the distribution channel**: it is a
 file you can attach to a mail, and it is the same rendering. A portal nobody
