@@ -9,19 +9,30 @@ explicit gates before a line of code exists.
 [![Docs check](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml)
 [![Skills check](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-15-7e57c2)](./plugins/archreator/skills/README.md)
+[![Skills](https://img.shields.io/badge/skills-17-7e57c2)](./plugins/archreator/skills/README.md)
 
 ---
 
 ## The problem
 
-Most software doesn't fail because the code was hard. It fails because the
-problem was misunderstood — and an agent amplifies that, confidently, at
-speed. You get a working implementation of the wrong thing, in an afternoon.
+Writing code *was* a bottleneck. Anyone who has lost three days to an arcane
+API or a week to boilerplate knows that "coding was never the hard part" is
+the story told backwards. It was hard — and while it was hard, it hid
+everything standing behind it. A team could misunderstand the problem for
+months and still look busy.
 
-The fix isn't a better prompt. It's writing down what an agent would otherwise
-have to guess: who you serve, what you offer, who does what, and which system
-realizes each piece.
+AI removed that bottleneck faster than anyone planned for, and what it
+uncovered is the constraint that was always next in line: **nobody writes down
+what they actually meant.** An agent handed an unstated assumption does not
+stop and ask. It fills the gap with something plausible and builds on it,
+confidently, at speed. You get a working implementation of the wrong thing, in
+an afternoon.
+
+So the thing worth building now is not a faster way to produce code. It is a
+framework for getting your own assumptions out where they can be argued with —
+who you serve, what you offer, who does what, and which system realizes each
+piece — written down early enough that disagreeing is still cheap. The fix
+isn't a better prompt.
 
 ## How it works
 
@@ -115,7 +126,7 @@ says exactly what lands in your project either way.
 
 | | |
 | --- | --- |
-| **15 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
+| **17 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
 | **A scaffold** | Six layer folders, the notation, two validators, and placeholder entry points. A working project before you've written anything. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
 | **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
 | **A portal and a PDF, when you need them** | The same documents as a searchable website and as one printable document, for the people who will never open a repository. Both are rebuilt from the Markdown and thrown away. [How it works](./docs/publishing.md) |
