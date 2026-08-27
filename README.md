@@ -43,25 +43,35 @@ and only then gets built.
 
 ```mermaid
 flowchart TB
-  req(["A requirement"]):::human
+  subgraph RULE["&nbsp;&nbsp;Yours to rule&nbsp;&nbsp;"]
+    direction LR
+    req(["A requirement"]):::human
+    intention["<b>Intention</b><br/>why, and for whom"]:::ai
+    gA{{"You approve<br/>the direction"}}:::gate
+    operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
+    gB{{"You approve —<br/>before any code exists"}}:::gate
+    req --> intention --> gA --> operation --> gB
+    gA -.->|"changes"| intention
+    gB -.->|"changes"| operation
+  end
 
-  intention["<b>Intention</b><br/>why, and for whom"]:::ai
-  gA{{"You approve the direction"}}:::gate
-  operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
-  gB{{"You approve —<br/>before any code exists"}}:::gate
-  realization["<b>Realization</b><br/>what builds it"]:::ai
-  gC{{"You review the design"}}:::gateopt
+  subgraph DELEGATE["&nbsp;&nbsp;Safe to delegate&nbsp;&nbsp;"]
+    direction LR
+    realization["<b>Realization</b><br/>what builds it"]:::ai
+    gC{{"See the<br/>design first?"}}:::gateopt
+    build["Builds it"]:::ai
+    realization --> gC --> build
+  end
 
-  build["Implements"]:::ai
-  review{{"You review the code"}}:::gate
-  merged(["Merged"]):::done
+  subgraph JUDGE["&nbsp;&nbsp;Yours to judge&nbsp;&nbsp;"]
+    direction LR
+    review{{"You review<br/>the code"}}:::gate
+    value(["Value you can check"]):::done
+    again(["...and the next<br/>requirement"]):::human
+    review --> value --> again
+  end
 
-  req --> intention --> gA --> operation --> gB --> realization --> gC
-  gC --> build --> review --> merged
-  gA -.->|"changes"| intention
-  gB -.->|"changes"| operation
-  review -.->|"changes"| build
-
+  RULE --> DELEGATE --> JUDGE
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
@@ -69,11 +79,15 @@ flowchart TB
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
-**You own every red box; the blue ones are the agent's.** The dotted edges are
-the loops that can't be skipped — a gate you decline sends the work back
-*before any code exists*, and a review you decline sends it back *before
-anything merges*. The dashed gate is the optional one: you can ask to see the
-design before it is built, or let the pull request carry it.
+**The top lane is the one you rule.** The agent drafts Intention and
+Operation; you settle them. The dotted edges are the loops that can't be
+skipped — a gate you decline sends the work back *before any code exists*.
+Only once that is agreed does the second lane start, and it is the part you
+can hand over: what builds it, and the building. The dashed gate is optional —
+ask to see the design first, or let the pull request carry it.
+
+**And what comes back is not "merged".** It is something you can check against
+what you asked for, which is also where the next requirement starts.
 
 Drawn in the method's own palette: cyan is always an AI actor, here and in
 every model you'll build, so you never mistake one for a person.
