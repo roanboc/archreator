@@ -46,6 +46,7 @@ plain `python3`, install them once instead:
 """
 import argparse
 import importlib.util
+import json
 import re
 import shutil
 import subprocess
@@ -59,7 +60,38 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from model_graph import EXCLUDED_DIRS, MODEL_DIR, REPO_ROOT, find_projects  # noqa: E402
 
 
-def stage_navigator(site: Path) -> list[str]:
+def federation(project: Path) -> list[dict]:
+    """The federation index, read from the document that owns it.
+
+    Read **by position**: cell 1 names the model, cell 2 what it models, cell 3
+    the directory its projection is published in. No header word is
+    interpreted, which is the same rule the catalogues and the relationship
+    tables follow and for the same reason — a model may be written in any
+    language.
+
+    A row counts only when its third cell looks like somewhere a projection
+    could be: an absolute URL for a model in another repository, or a relative
+    path for one published beside this one. That test is what tells the index
+    apart from the prose tables around it without reading a heading.
+    """
+    doc = project / MODEL_DIR / FEDERATION_DOC
+    if not doc.is_file():
+        return []
+    found = []
+    for line in doc.read_text(encoding="utf-8").splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 3 or not cells[0] or not cells[2]:
+            continue
+        location = cells[2]
+        if not (location.startswith(("http://", "https://", "./", "../"))):
+            continue
+        found.append({"name": cells[0], "subject": cells[1], "projection": location})
+    return found
+
+
+def stage_navigator(project: Path, site: Path) -> list[str]:
     """Put the graph navigator, the projection and sql.js into the built site.
 
     **The page is never published without a way to say what is wrong with it.**
@@ -92,7 +124,15 @@ def stage_navigator(site: Path) -> list[str]:
     # the traversal the page shares with `query_model.py`.
     import build_model
 
-    projects = build_model.collect()
+    # **This project's projection, not the repository's.** `collect()` finds
+    # every model in the repository, and publishing all of them under one
+    # project's portal would put another model's elements at this model's
+    # address — the restating the federation rule exists to prevent, done by a
+    # build step instead of by an author. A repository holding several models
+    # publishes several projections, and the federation index is what joins
+    # them.
+    mine = build_model.project_name(project)
+    projects = [p for p in build_model.collect() if p["project"] == mine]
     if projects:
         build_model.write_sqlite(projects, target / "model.db")
         build_model.write_json(projects, target / "model.json")
@@ -104,6 +144,22 @@ def stage_navigator(site: Path) -> list[str]:
     traversal = Path(__file__).resolve().parent / "neighbourhood.sql"
     if traversal.is_file():
         shutil.copy2(traversal, target / traversal.name)
+
+    # The federation index, derived. Absent when this model is not the topmost
+    # of a federation, which is most models — and the navigator then reads its
+    # own projection and behaves exactly as it would have.
+    members = federation(project)
+    if members:
+        (target / FEDERATION_JSON).write_text(
+            json.dumps({"schema": 1, "models": members}, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        notes.append(
+            f"{NAVIGATOR}/: federating {len(members)} model(s) named in "
+            f"{MODEL_DIR}/{FEDERATION_DOC}"
+        )
+    else:
+        (target / FEDERATION_JSON).unlink(missing_ok=True)
 
     if all((target / name).is_file() for name in SQLJS_FILES):
         return notes
@@ -161,6 +217,11 @@ SQLJS_VERSION = "1.13.0"
 SQLJS_URL = (
     f"https://github.com/sql-js/sql.js/releases/download/v{SQLJS_VERSION}/sqljs-wasm.zip"
 )
+# The federation index, authored in the topmost model of a federation and
+# derived into the site beside the navigator. Authored, so it is Markdown and
+# it is committed; derived, so the JSON is neither.
+FEDERATION_DOC = "federation.md"
+FEDERATION_JSON = "federation.json"
 SQLJS_FILES = {
     "sql-wasm.js": "694ca5b36aa3e6e71f417819d7df390b65343665fcfa5c69015ca33d93d291b3",
     "sql-wasm.wasm": "0734155c83e493983d1f2ff5b09a4fab6e35a32e9449c7e4e545756439f62d73",
@@ -376,7 +437,7 @@ def main() -> int:
     code = run_mkdocs(project, arguments)
     if code == 0 and not args.serve:
         site = shown(project / SITE)
-        for note in stage_navigator(project / SITE):
+        for note in stage_navigator(project, project / SITE):
             print(f"  {note}")
         print(
             f"Portal built into {site}/. Open {site}/index.html to read it, "

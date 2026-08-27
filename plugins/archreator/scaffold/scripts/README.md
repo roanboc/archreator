@@ -47,8 +47,15 @@ reason the query is a file. `query_model.py trace` and the page answer the same
 question, and answering it twice in two languages is how the two answers start
 disagreeing — with the browser's being the one nobody tests.
 
-Nothing about it is committed except the page: the database is derived, and
-sql.js is fetched. **If the fetch fails the portal still builds** and the page
+**A federation is a list, not a central model.** Where
+`architecture/federation.md` names other models — which only the topmost model
+of a federation does — the build derives `navigator/federation.json` from it and
+the page loads every projection it names, reporting by name each one it could
+not reach. There is no central store: the union exists while the page is open
+and is gone when it closes.
+
+Nothing about it is committed except the page and the index: the database is
+derived, the manifest is derived, and sql.js is fetched. **If the fetch fails the portal still builds** and the page
 says what is missing, because a model that will not publish because a graph
 viewer could not download a library is a bad trade.
 

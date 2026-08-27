@@ -242,6 +242,37 @@ Until it is hosted somewhere, **the PDF is the distribution channel**: it is a
 file you can attach to a mail, and it is the same rendering. A portal nobody
 has hosted has not widened the audience by one reader.
 
+## The graph, and the federation
+
+The portal renders documents. `navigator/`, published beside them, renders the
+**graph**: every element as a node coloured by its layer, filtered to one layer
+at a time, and walked outward from whatever the reader clicks — which is
+`query_model.py trace` with a viewport, running the same query.
+
+Two files go up with it, at a path another model can rely on:
+
+| `<site>/navigator/model.json` | The projection, and the interchange format. Carries a schema number and the commit it was built from |
+| `<site>/navigator/model.db` | The same thing as SQLite, for a reader that queries rather than parses |
+
+**A model publishes its own projection, never its repository's.** A repository
+holding several models publishes several, at several addresses.
+
+**Federating them is a list of locations and nothing else.** The topmost model
+of a federation — the organization, or the parent business function where no
+organization is modeled — fills in `architecture/federation.md` naming each
+model and where its projection is published. The build derives the manifest the
+page reads; the page fetches what it names and shows it alongside.
+
+There is no central model, and there is not meant to be one. A model holding
+every other model's elements would restate what those models own, which the
+tier rule forbids, and its owner would need approval rights over elements they
+did not write. The union exists while somebody has the page open.
+
+It reaches what the web reaches: **public projections only**, because a static
+page cannot authenticate and giving it a way to would trade away the property
+that makes it worth having. What it cannot fetch it names, by model and reason,
+and no build fails over it.
+
 ## Leaving documents out of the PDF
 
 A portal is complete by definition — it is the model, rendered. A document

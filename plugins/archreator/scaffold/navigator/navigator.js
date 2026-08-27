@@ -42,6 +42,7 @@
   var root = null;
   var hidden = new Set();  // layer groups switched off
   var camera = { x: 0, y: 0, k: 1 };
+  var unreachable = [];    // federated models that could not be fetched
 
   function say(html, fail) {
     statusBox.classList.remove("hidden");
@@ -245,11 +246,14 @@
         '" x2="' + q.x + '" y2="' + q.y + '"><title>' + esc(edge.src + " — " +
         edge.rel + " — " + edge.dst) + "</title></line>");
     });
-    // Labels are drawn only when they can be read. Below that they overlap into
-    // a grey smear that hides the shape the graph is there to show — the
-    // tooltip and the detail panel still name every node.
+    // Labels are drawn only when they can be read. Past that they overlap into
+    // a grey smear; short of it, an unlabelled graph is a shape rather than
+    // information, which is the worse failure of the two. The thresholds are
+    // tuned against the opening view — one layer of a real model, around a
+    // hundred elements — and the tooltip and detail panel name every node
+    // either way.
     var count = Object.keys(shown).length;
-    var labels = count <= 70 || camera.k >= 1.15;
+    var labels = count <= 110 || camera.k >= 0.9;
     Object.keys(shown).forEach(function (id) {
       var node = shown[id], p = positions[id];
       if (!p) return;
@@ -385,6 +389,73 @@
     loadProject(event.target.value);
   });
 
+  /* ---- federation --------------------------------------------------------
+   *
+   * Where a `federation.json` sits beside this page, the models it names are
+   * loaded into the database this page already has — INSERT ... SELECT from
+   * each fetched projection, so no column mapping is written twice. The
+   * projection's own schema is the schema; nothing here restates it.
+   *
+   * Where there is no index, none of this runs and the page reads its own
+   * projection exactly as it would have. A project that is not in a federation
+   * should not have to know what one is.
+   */
+
+  function copyInto(source, present) {
+    ["nodes", "edges", "mentions"].forEach(function (table) {
+      var got = source.exec("SELECT * FROM " + table);
+      if (!got.length) return;
+      var columns = got[0].columns;
+      var placeholders = columns.map(function () { return "?"; }).join(",");
+      var insert = db.prepare(
+        "INSERT INTO " + table + " (" + columns.join(",") + ") VALUES (" + placeholders + ")");
+      got[0].values.forEach(function (row) {
+        // A model already in this database is not loaded twice: the topmost
+        // model of a federation lists itself, and it is the one already open.
+        var project = row[columns.indexOf("project")];
+        if (present[project]) return;
+        insert.bind(row);
+        insert.step();
+        insert.reset();
+      });
+      insert.free();
+    });
+  }
+
+  function federate(SQL) {
+    return fetch("./federation.json").then(function (response) {
+      if (!response.ok) return null;      // no index: not a federation
+      return response.json();
+    }).catch(function () {
+      return null;
+    }).then(function (index) {
+      if (!index || !Array.isArray(index.models)) return;
+      var present = {};
+      rows("SELECT DISTINCT project FROM nodes").forEach(function (r) {
+        present[r.project] = true;
+      });
+      return Promise.all(index.models.map(function (model) {
+        var base = model.projection.replace(/\/?$/, "/");
+        return fetch(base + "model.db").then(function (response) {
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          return response.arrayBuffer();
+        }).then(function (buffer) {
+          var other = new SQL.Database(new Uint8Array(buffer));
+          try {
+            copyInto(other, present);
+          } finally {
+            other.close();
+          }
+          rows("SELECT DISTINCT project FROM nodes").forEach(function (r) {
+            present[r.project] = true;
+          });
+        }).catch(function (error) {
+          unreachable.push(model.name + " — " + error.message);
+        });
+      }));
+    });
+  }
+
   /* ---- start ------------------------------------------------------------- */
 
   function fail(what, why) {
@@ -414,6 +485,8 @@
   ]).then(function (loaded) {
     db = new loaded[0].Database(new Uint8Array(loaded[1]));
     sql = loaded[2];
+    return federate(loaded[0]).then(function () { return loaded[0]; });
+  }).then(function () {
     var projects = rows("SELECT DISTINCT project FROM nodes ORDER BY project")
       .map(function (r) { return r.project; });
     if (!projects.length) {
@@ -428,9 +501,21 @@
     }).join("");
     picker.parentElement.hidden = projects.length < 2;
     controls.hidden = false;
+    var federated = projects.length > 1
+      ? " " + projects.length + " models, shown one at a time — a relationship does not " +
+        "cross a model, so these are several graphs rather than one."
+      : "";
     document.getElementById("subtitle").textContent =
       "Opens on the model's first layer — switch the others on at the left. Click an " +
-      "element to see what it is; walk outward to see what a change to it would touch.";
+      "element to see what it is; walk outward to see what a change to it would touch." +
+      federated;
+    if (unreachable.length) {
+      var box = document.createElement("p");
+      box.className = "warn";
+      box.textContent = unreachable.length + " model(s) in the index could not be " +
+        "reached and are not shown: " + unreachable.join("; ") + ".";
+      document.querySelector("header").appendChild(box);
+    }
     loadProject(projects[0]);
   }).catch(function (error) {
     fail("The projection could not be read.",

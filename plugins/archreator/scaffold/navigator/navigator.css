@@ -49,6 +49,8 @@ header, footer { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--line); 
 footer { border-bottom: 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
 h1 { font-size: 1.05rem; margin: 0; }
 #subtitle { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.85rem; }
+.warn { margin: 0.45rem 0 0; font-size: 0.85rem; color: var(--ink); background: #fff4d6; border: 1px solid #e6c96a; border-radius: 5px; padding: 0.35rem 0.55rem; }
+@media (prefers-color-scheme: dark) { .warn { background: #3a3320; border-color: #6b5c2a; } }
 
 main { flex: 1; display: flex; min-height: 0; }
 aside {
