@@ -27,11 +27,30 @@ green for them, and nothing breaks if they are never run.
 | `check_links.py` | Executable. Every relative Markdown link and every HTML `href`, `src` and `#fragment` points at something that exists |
 | `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, a levelled ID has its parent defined, every document that defines an element declares how far it has been validated, and no relationship table restates an element's name differently from the catalogue that defines it |
 | `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. Every edge carries where it was declared and whether it is pending. `--inventory` prints one line per element instead |
-| `query_model.py` | Executable. Reads the projection and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
+| `query_model.py` | Executable. Reads `model.db` and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
 | `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
 | `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text. What the PDF leaves out is the `print-site` `exclude` list in `mkdocs.yml`; `--config mkdocs-<audience>.yml` exports a second PDF from a config that inherits it |
+| `neighbourhood.sql` | Data, read by `query_model.py` **and by the navigator**. The traversal itself — everything within N hops of one element, as a recursive CTE. It is a file rather than a function because two readers execute it, one of them in a browser, and a walk written twice drifts |
 | `model_graph.py` | Library, imported by the others. The single parse of the document convention — element IDs, catalogue tables, relationship tables, and the resolution of a bare identifier inside a domain |
 | `element-prefixes.json` | Data, read by `model_graph.py`. The element-ID prefixes and what each stands for |
+
+## The navigator
+
+`../navigator/` is the same projection with a picture: one static page that
+draws the model, filters it by layer, and walks outward from any element to
+show what a change to it would touch. `build_docs.py` copies it into the built
+site, writes `model.db` beside it, and fetches sql.js — the only way to read
+SQLite in a browser — against a pinned digest.
+
+**It runs `neighbourhood.sql`, not a traversal of its own.** That is the whole
+reason the query is a file. `query_model.py trace` and the page answer the same
+question, and answering it twice in two languages is how the two answers start
+disagreeing — with the browser's being the one nobody tests.
+
+Nothing about it is committed except the page: the database is derived, and
+sql.js is fetched. **If the fetch fails the portal still builds** and the page
+says what is missing, because a model that will not publish because a graph
+viewer could not download a library is a bad trade.
 
 `build_docs.py` and `export_pdf.py` need MkDocs, which they declare inline:
 `uv run scripts/build_docs.py` fetches it into a throwaway environment and

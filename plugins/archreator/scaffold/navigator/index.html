@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model navigator</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='4' r='2.5' fill='%23e6d6f5' stroke='%23555'/%3E%3Ccircle cx='12' cy='6' r='2.5' fill='%23fffbb5' stroke='%23555'/%3E%3Ccircle cx='7' cy='12' r='2.5' fill='%23c2f0ff' stroke='%23555'/%3E%3Cpath d='M4 4 12 6 7 12Z' fill='none' stroke='%23888'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./navigator.css">
+</head>
+<body>
+<header>
+  <h1>Model navigator</h1>
+  <p id="subtitle">Reading the projection…</p>
+</header>
+
+<main>
+  <aside id="controls" hidden>
+    <label class="field">
+      <span>Model</span>
+      <select id="project"></select>
+    </label>
+
+    <fieldset>
+      <legend>Layers</legend>
+      <div id="layers"></div>
+      <button type="button" id="all-layers" class="link">all</button>
+      <button type="button" id="no-layers" class="link">none</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Relationships</legend>
+      <label><input type="checkbox" id="show-identifier" checked> structure (from the identifier)</label>
+      <label><input type="checkbox" id="show-pending" checked> planned, not yet true</label>
+    </fieldset>
+
+    <fieldset id="focus-box">
+      <legend>Focus</legend>
+      <p id="focus-none">Select an element to walk outward from it.</p>
+      <div id="focus-on" hidden>
+        <p><strong id="focus-name"></strong></p>
+        <label class="field">
+          <span>Hops</span>
+          <input type="range" id="depth" min="1" max="4" value="2">
+          <output id="depth-out">2</output>
+        </label>
+        <button type="button" id="clear-focus">show everything again</button>
+      </div>
+    </fieldset>
+
+    <p id="counts"></p>
+  </aside>
+
+  <div id="canvas-wrap">
+    <svg id="graph" role="img" aria-label="The model as a graph"></svg>
+    <div id="status"></div>
+  </div>
+
+  <aside id="detail" hidden></aside>
+</main>
+
+<footer>
+  <p>
+    Rendered from <code id="dbname">model.db</code>, which is regenerated from the
+    Markdown under <code>architecture/</code> on every build. The documents are the
+    source of truth; this is a view of them. Every element below links to the file
+    that defines it.
+  </p>
+</footer>
+
+<script src="./sql-wasm.js"></script>
+<script src="./navigator.js"></script>
+</body>
+</html>

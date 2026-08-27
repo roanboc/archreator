@@ -58,6 +58,74 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from model_graph import EXCLUDED_DIRS, MODEL_DIR, REPO_ROOT, find_projects  # noqa: E402
 
+
+def stage_navigator(site: Path) -> list[str]:
+    """Put the graph navigator, the projection and sql.js into the built site.
+
+    **The page is never published without a way to say what is wrong with it.**
+    Three things have to arrive: the page itself, which is in this repository;
+    the projection, which is built from the Markdown; and sql.js, which is
+    fetched. Only the third can fail, and when it does the portal still builds
+    and the navigator explains itself. A model that will not publish because a
+    graph viewer could not download a library is a bad trade — the documents
+    are what a reader came for.
+    """
+    import hashlib
+    import io
+    import urllib.request
+    import zipfile
+
+    notes: list[str] = []
+    # Beside the scripts, not inside the project. A repository holding several
+    # trees keeps one copy of the tooling for all of them — the same
+    # arrangement `neighbourhood.sql` is found by.
+    source = Path(__file__).resolve().parent.parent / NAVIGATOR
+    if not source.is_dir():
+        return notes
+    target = site / NAVIGATOR
+    target.mkdir(parents=True, exist_ok=True)
+    for path in sorted(source.iterdir()):
+        if path.is_file():
+            shutil.copy2(path, target / path.name)
+
+    # The projection, built from the Markdown like everything else here, and
+    # the traversal the page shares with `query_model.py`.
+    import build_model
+
+    projects = build_model.collect()
+    if projects:
+        build_model.write_sqlite(projects, target / "model.db")
+        build_model.write_json(projects, target / "model.json")
+    else:
+        notes.append(
+            f"{NAVIGATOR}/: the model defines no elements, so the navigator will "
+            f"say so rather than draw an empty graph"
+        )
+    traversal = Path(__file__).resolve().parent / "neighbourhood.sql"
+    if traversal.is_file():
+        shutil.copy2(traversal, target / traversal.name)
+
+    if all((target / name).is_file() for name in SQLJS_FILES):
+        return notes
+    try:
+        with urllib.request.urlopen(SQLJS_URL, timeout=60) as response:
+            archive = zipfile.ZipFile(io.BytesIO(response.read()))
+        for name, digest in SQLJS_FILES.items():
+            blob = archive.read(name)
+            got = hashlib.sha256(blob).hexdigest()
+            if got != digest:
+                raise ValueError(f"{name}: expected {digest}, got {got}")
+            (target / name).write_bytes(blob)
+    except Exception as error:  # noqa: BLE001 - any failure degrades the same way
+        for name in SQLJS_FILES:
+            (target / name).unlink(missing_ok=True)
+        notes.append(
+            f"{NAVIGATOR}/: sql.js {SQLJS_VERSION} could not be fetched ({error}). "
+            f"The portal is built and the navigator page will explain what is "
+            f"missing; re-run with network access to complete it"
+        )
+    return notes
+
 # What lands in the portal: the model, and the documents that frame it. Every
 # Markdown file directly in the project root is published too, which is how
 # `README.md` becomes the front page. A project that keeps documentation
@@ -84,6 +152,19 @@ DERIVED = ".docs"
 STAGING = f"{DERIVED}/src"
 SITE = f"{DERIVED}/site"
 CONFIG = "mkdocs.yml"
+# The graph navigator, and what it needs beside it. The page is ours; sql.js is
+# not, and the difference is why one is copied and the other is fetched.
+NAVIGATOR = "navigator"
+# Pinned by version *and* by digest. A release tag can be moved; a SHA-256
+# cannot, and this is a binary nobody reviewing a pull request will read.
+SQLJS_VERSION = "1.13.0"
+SQLJS_URL = (
+    f"https://github.com/sql-js/sql.js/releases/download/v{SQLJS_VERSION}/sqljs-wasm.zip"
+)
+SQLJS_FILES = {
+    "sql-wasm.js": "694ca5b36aa3e6e71f417819d7df390b65343665fcfa5c69015ca33d93d291b3",
+    "sql-wasm.wasm": "0734155c83e493983d1f2ff5b09a4fab6e35a32e9449c7e4e545756439f62d73",
+}
 # The packages `mkdocs.yml` names. Reported by import name, installed under
 # another, so both are carried.
 REQUIRED = {"mkdocs": "mkdocs", "material": "mkdocs-material",
@@ -295,10 +376,12 @@ def main() -> int:
     code = run_mkdocs(project, arguments)
     if code == 0 and not args.serve:
         site = shown(project / SITE)
+        for note in stage_navigator(project / SITE):
+            print(f"  {note}")
         print(
-            f"Portal built into {site}/. Open {site}/index.html to read it, hand "
-            f"the folder to whoever will host it, or run --serve to rebuild as "
-            f"you edit."
+            f"Portal built into {site}/. Open {site}/index.html to read it, "
+            f"{site}/{NAVIGATOR}/ for the graph, hand the folder to whoever will "
+            f"host it, or run --serve to rebuild as you edit."
         )
     return code
 
