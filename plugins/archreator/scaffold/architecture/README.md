@@ -241,6 +241,35 @@ never mistake it for a person. And an element borrowed from another layer for
 context keeps its home layer's colour, shape and glyph, so it is recognisable
 as a visitor.
 
+### 5. Relationships are declared in tables; a diagram renders them
+
+**A diagram is a rendering.** Nothing reads one — the projection builds the
+graph from catalogue columns and relationship tables, and a relationship drawn
+in Mermaid and written nowhere else is invisible to every tool and to every
+reader who is not looking at that document.
+
+Two places declare one:
+
+- **A catalogue column**, when its cell is a list of identifiers and nothing
+  else. The header is the relationship's name.
+- **A `## Relationships` table**, beside the diagram it explains, for anything
+  a single row cannot carry — above all a relationship between two peers in one
+  layer, which a catalogue has no column shape for.
+
+Its columns are fixed by position: 1 and 3 hold the two identifiers, 2 and 4
+describe them as `<glyph> «Archetype» <name>`, 5 is the relationship, and
+anything after is notes. No header word is read, so the table works in a model
+written in any language. The worked example is in
+`architecture-document-style` § The relationship table, and not here — a
+specimen identifier in the scaffold ships into every generated project as a
+reference to an element nobody defined. **Each end names its archetype and its name because a table cell
+has no glyph, shape or colour to carry the type** — and because the name is a
+copy of what the catalogue owns, `scripts/check_model.py` holds the two in step.
+The `architecture-document-style` skill is the single source for the full rule.
+
+**Dashed edges mean Pending in a diagram; a table says it in words**, with the
+same `Pending — future initiative` marker the grounding rule uses.
+
 ### Drawing rules
 
 - **Diagram first, then the tables and prose that describe it.** Every

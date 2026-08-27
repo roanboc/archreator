@@ -90,7 +90,9 @@ CREATE TABLE edges(
     src     TEXT NOT NULL,
     dst     TEXT NOT NULL,
     rel     TEXT,
-    doc     TEXT
+    doc     TEXT,
+    origin  TEXT NOT NULL DEFAULT 'catalogue',
+    pending INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE mentions(
     project TEXT NOT NULL,
@@ -151,7 +153,14 @@ def collect() -> list[dict]:
                     for element in sorted(parsed.elements.values(), key=lambda e: e.id)
                 ],
                 "edges": [
-                    {"src": edge.src, "dst": edge.dst, "rel": edge.rel, "doc": edge.doc}
+                    {
+                        "src": edge.src,
+                        "dst": edge.dst,
+                        "rel": edge.rel,
+                        "doc": edge.doc,
+                        "origin": edge.origin,
+                        "pending": edge.pending,
+                    }
                     for edge in parsed.edges
                 ],
                 "mentions": [list(mention) for mention in parsed.mentions],
@@ -210,9 +219,18 @@ def write_sqlite(projects: list[dict], path: Path) -> None:
                 ],
             )
             connection.executemany(
-                "INSERT INTO edges(project, src, dst, rel, doc) VALUES(?,?,?,?,?)",
+                "INSERT INTO edges(project, src, dst, rel, doc, origin, pending)"
+                " VALUES(?,?,?,?,?,?,?)",
                 [
-                    (name, edge["src"], edge["dst"], edge["rel"], edge["doc"])
+                    (
+                        name,
+                        edge["src"],
+                        edge["dst"],
+                        edge["rel"],
+                        edge["doc"],
+                        edge["origin"],
+                        int(edge["pending"]),
+                    )
                     for edge in project["edges"]
                 ],
             )
@@ -250,6 +268,40 @@ def suspect_names(projects: list[dict]) -> list[str]:
                     f"after the ID may not be the name column"
                 )
     return notes
+
+
+def label_census(projects: list[dict]) -> list[str]:
+    """How many distinct words the model uses for a relationship, and how thinly.
+
+    The projection carries a relationship label verbatim and maps it onto
+    nothing — see the module docstring, and `stack-selection` on why a guess at
+    ArchiMate's vocabulary is worse than an honest string. That decision is
+    right and it has a cost: nothing stops one model calling the same
+    relationship four things.
+
+    So this **reports** and never enforces. A controlled list would have to be
+    translated into every language a model can be written in, which is the one
+    thing the parse refuses to do. A count, printed where the author will see
+    it, is enough for somebody to converge on their own — and a label used once
+    is not a defect, it is just the thing worth looking at first.
+    """
+    counts: dict[str, int] = {}
+    for project in projects:
+        for edge in project["edges"]:
+            if edge["origin"] == "identifier":
+                continue  # structure, not a word anybody chose
+            counts[edge["rel"]] = counts.get(edge["rel"], 0) + 1
+    if not counts:
+        return []
+    once = sorted(label for label, n in counts.items() if n == 1)
+    lines = [
+        f"{sum(counts.values())} stated relationship(s) using "
+        f"{len(counts)} distinct label(s); {len(once)} used exactly once."
+    ]
+    if once:
+        shown = ", ".join(once[:8])
+        lines.append(f"  used once: {shown}{', …' if len(once) > 8 else ''}")
+    return lines
 
 
 def print_inventory(projects: list[dict]) -> None:
@@ -313,6 +365,9 @@ def main() -> int:
             f"{len(project['edges'])} edge(s), {len(project['mentions'])} mention(s)"
         )
     print(f"Projection written to {out}/model.json and {out}/model.db.")
+
+    for line in label_census(projects):
+        print(line)
 
     notes = suspect_names(projects)
     if notes:

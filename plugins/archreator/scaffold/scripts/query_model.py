@@ -50,14 +50,12 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from model_graph import REPO_ROOT
+from model_graph import PENDING_MARKERS, REPO_ROOT
 
 DEFAULT_OUT = REPO_ROOT / ".model"
-# Markers that say an element is grounded in nothing *on purpose*. The
-# convention is the method's, and it is written in whatever language the model
-# is; these are the two the corpus uses today. An unrecognised marker degrades
-# to "not grounded", which is the safe direction to be wrong in.
-PENDING_MARKERS = ("pending", "pendiente")
+# `PENDING_MARKERS` comes from `model_graph` rather than being restated here:
+# the projection reads the same convention to decide whether a relationship is
+# live, and one convention written down twice drifts.
 # How far `trace` walks by default. Two hops crosses one layer boundary in each
 # direction, which is the blast radius a person can still hold in their head.
 DEFAULT_DEPTH = 2

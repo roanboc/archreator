@@ -374,6 +374,67 @@ customer profile and the Strategy fill for the value map, as in
 The canvas-block-to-ArchiMate-element mapping lives in that same README and
 is not restated anywhere else.
 
+### The relationship table
+
+An element's relationships are **declared**, in one of two places, and a
+diagram renders what was declared. A relationship whose only home is a Mermaid
+block is a fact living inside a rendering, which `P1` does not allow — and it
+is invisible to everything except a person reading that one document.
+
+**A catalogue column declares the relationships a row can carry.** One row per
+element, and a column naming what it points at:
+
+| ID | Application service | Realizes | Provided by |
+| -- | ------------------- | -------- | ----------- |
+| `ASVC1` | **Layer-by-layer alignment** | `BSVC1` | `ACMP1` |
+
+The column header is the relationship, carried verbatim into the projection —
+`Realizes`, `Realiza`, `Serves`. Nothing maps it onto ArchiMate's vocabulary,
+because a guess there is worse than an honest string.
+
+**A cell declares only when it is a list of identifiers and nothing else.**
+`` `ACMP7`, `ACMP8` `` declares two relationships; "A row in `BOBJ3`'s Approvals
+table" is prose that mentions one. This is what separates a relationship column
+from an attribute column — `Maturity` holds the word "Established" and
+`Realizes` holds identifiers, and both are columns of the same catalogue.
+
+**A relationship table declares everything a row cannot.** A catalogue has one
+row per element, so it has no shape at all for a relationship between two peers
+in the same layer — which is most of them. Give the document a `## Relationships`
+section beside the diagram that renders it:
+
+| From | From element | To | To element | Relationship |
+| ---- | ------------ | -- | ---------- | ------------ |
+| `CAP5` | ✦ «Capability» Learn from an engagement | `CAP1` | ✦ «Capability» Discover a subject from nothing | precedes |
+
+**Read by position, never by header word.** Columns 1 and 3 hold the
+identifiers; 2 and 4 describe them; 5 is the relationship; anything after is
+notes. A table whose first header is `ID` is a catalogue and is never read as
+this, which is what keeps a catalogue with a `Realizes` column from being
+mistaken for one. Headers are prose in whatever language the model is written
+in, and nothing here reads them — the same arrangement that puts an element's
+name in a catalogue's second cell.
+
+**Each end names its archetype and its name, and both are copies.** A node in a
+diagram drops its stereotype because glyph, shape and colour carry the type
+three times with a legend one screen above; a table cell has none of those, and
+`CAP5` alone tells a reader nothing. So the archetype and the name are written
+out — and because both are facts owned elsewhere, `check_model.py` holds the
+**name** against the catalogue that defines the element and fails on a
+mismatch. It is `P1`'s escape clause used exactly as `element-prefixes.json`
+uses it: one unavoidable copy, with a check on it.
+
+The **archetype is deliberately not checked**, and the glyph is optional. An
+archetype cannot drift away from the prefix sitting in the cell beside it, and
+the word for it is language-dependent where the prefix is not — `«Capability»`
+in one model is `«Capacidad»` in another, and a registry of English names
+cannot judge either.
+
+**A relationship that is not true yet says so in words** — the same
+`Pending — future initiative` marker the grounding rule uses — in the notes
+column. Never with a dashed arrow: that is a diagram device, and diagrams are
+not read.
+
 ### Grounding rule (the most important one)
 
 Every EA element must name the code artifact that realizes it — a page, a

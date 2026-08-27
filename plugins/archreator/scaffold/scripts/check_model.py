@@ -26,6 +26,15 @@ Four things are checked, per project:
 - **Orphan levels** — a leveled ID (`CAP1.2`, `BPROC7.2.1`) has the element
   one level up defined too. A hierarchical identifier that names a parent
   nobody wrote is the same defect as a dangling reference.
+- **A restated name that has drifted** — a relationship table writes each
+  end's archetype and name beside its identifier, so the person approving it
+  can read it without holding every catalogue open. The name is a copy of a
+  fact the defining catalogue owns, and this is what holds the two in step:
+  rename an element and every table naming it fails until it is updated. It is
+  `P1`'s escape clause used the way `element-prefixes.json` uses it — one
+  unavoidable copy, with a check on it. The **archetype** is deliberately not
+  checked: it cannot drift away from the prefix sitting in the cell beside it,
+  and the word for it is language-dependent where the prefix is not.
 - **Undeclared status** — a document that defines an element says in its
   preamble how far it has been validated, with one of the three glyphs in
   `architecture-document-style` § Document status. A catalogue of elements
@@ -76,6 +85,8 @@ Deliberately not checked:
 import sys
 from pathlib import Path
 
+import re
+
 from model_graph import (
     MODEL_DIR,
     REPO_ROOT,
@@ -85,6 +96,16 @@ from model_graph import (
     parse_project,
     qualifier_of,
 )
+
+
+def _normalised(name: str) -> str:
+    """A name reduced to what a comparison should care about.
+
+    Whitespace runs and letter case are formatting; a different word is a
+    rename. Comparing raw strings would fail a document over two spaces, and a
+    check that fails wrongly teaches people to ignore the checks that do not.
+    """
+    return re.sub(r"\s+", " ", name).strip().casefold()
 
 
 def check_project(project: Path) -> tuple[list[str], int, int]:
@@ -132,6 +153,21 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
             )
         elif not status:  # pragma: no cover - unreachable while count == 1
             errors.append(f"{doc}: unrecognised status glyph")
+
+    for said, md_file in parsed.restatements:
+        canonical = parsed.names.get(said.element)
+        if not canonical or not said.written:
+            # Nothing to hold it against: either the element is defined as a
+            # bolded lead-in with no catalogue row, or the cell was left blank.
+            # A missing description is a legibility problem for a reader to
+            # notice, not a false failure to manufacture here.
+            continue
+        if _normalised(said.written) != _normalised(canonical):
+            errors.append(
+                f"{md_file.relative_to(REPO_ROOT)}: `{said.element}` is written "
+                f'here as "{said.written}" and defined as "{canonical}". The '
+                f"catalogue that defines an element owns its name"
+            )
 
     seen: set[tuple[str, Path]] = set()
     for reference, md_file in parsed.references:
