@@ -38,40 +38,23 @@ prompt.
 ## How it works
 
 A requirement never becomes code directly. It walks down six architecture
-layers — grouped into three questions — stops wherever a human has to decide,
-and only then gets built.
+layers — grouped into three questions — in two halves: the one you rule, and
+the one you can hand over.
+
+### First — what you are actually asking for
 
 ```mermaid
-flowchart TB
-  subgraph RULE["&nbsp;&nbsp;Yours to rule&nbsp;&nbsp;"]
-    direction LR
-    req(["A requirement"]):::human
-    intention["<b>Intention</b><br/>why, and for whom"]:::ai
-    gA{{"You approve<br/>the direction"}}:::gate
-    operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
-    gB{{"You approve —<br/>before any code exists"}}:::gate
-    req --> intention --> gA --> operation --> gB
-    gA -.->|"changes"| intention
-    gB -.->|"changes"| operation
-  end
+flowchart LR
+  req(["A requirement"]):::human
+  intention["<b>Intention</b><br/>why, and for whom"]:::ai
+  gA{{"You approve<br/>the direction"}}:::gate
+  operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
+  gB{{"You approve —<br/>before any code exists"}}:::gate
+  out(["A sharper requirement —<br/>agreed, and written down"]):::done
 
-  subgraph DELEGATE["&nbsp;&nbsp;Safe to delegate&nbsp;&nbsp;"]
-    direction LR
-    realization["<b>Realization</b><br/>what builds it"]:::ai
-    gC{{"See the<br/>design first?"}}:::gateopt
-    build["Builds it"]:::ai
-    realization --> gC --> build
-  end
-
-  subgraph JUDGE["&nbsp;&nbsp;Yours to judge&nbsp;&nbsp;"]
-    direction LR
-    review{{"You review<br/>the code"}}:::gate
-    value(["Value you can check"]):::done
-    again(["...and the next<br/>requirement"]):::human
-    review --> value --> again
-  end
-
-  RULE --> DELEGATE --> JUDGE
+  req --> intention --> gA --> operation --> gB --> out
+  gA -.->|"changes"| intention
+  gB -.->|"changes"| operation
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
@@ -79,15 +62,41 @@ flowchart TB
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
-**The top lane is the one you rule.** The agent drafts Intention and
-Operation; you settle them. The dotted edges are the loops that can't be
-skipped — a gate you decline sends the work back *before any code exists*.
-Only once that is agreed does the second lane start, and it is the part you
-can hand over: what builds it, and the building. The dashed gate is optional —
-ask to see the design first, or let the pull request carry it.
+**This half pays for itself even if nothing gets built.** The agent drafts;
+you settle. What you end up holding is your own requirement, sharper than the
+one you arrived with — who it serves, what it has to do, and which of your
+assumptions turned out to disagree with each other. The dotted edges are the
+loops that can't be skipped, and neither gate here is about code.
 
-**And what comes back is not "merged".** It is something you can check against
-what you asked for, which is also where the next requirement starts.
+### Then — what gets built from it
+
+```mermaid
+flowchart LR
+  inp(["What you agreed"]):::done
+  realization["<b>Realization</b><br/>what builds it"]:::ai
+  gC{{"Want to see<br/>the design first?"}}:::gateopt
+  build["Builds it"]:::ai
+  check{{"You check<br/>the delivery"}}:::gate
+  out(["The outcome you asked for,<br/>and the next requirement"]):::done
+
+  inp --> realization --> gC --> build --> check --> out
+  check -.->|"changes"| build
+  classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
+  classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
+  classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
+  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
+  classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
+```
+
+**Nobody asks you to read the code.** What comes back to you is the working
+thing, and the question is whether it does what you asked for. If you *are*
+technical, or someone on your side is, the pull request is right there and the
+dashed gate will show you the design before it is built — but that is an
+option you take, not a toll you pay.
+
+Each half is bounded, and each ends in something worth having: the first in
+understanding, the second in the outcome. That is also why the second picture
+ends where the first one began.
 
 Drawn in the method's own palette: cyan is always an AI actor, here and in
 every model you'll build, so you never mistake one for a person.
