@@ -36,11 +36,23 @@ green for them, and nothing breaks if they are never run.
 
 ## The navigator
 
-`../navigator/` is the same projection with a picture: one static page that
-draws the model, filters it by layer, and walks outward from any element to
-show what a change to it would touch. `build_docs.py` copies it into the built
-site, writes `model.db` beside it, and fetches sql.js — the only way to read
-SQLite in a browser — against a pinned digest.
+`../navigator/` is the same projection with a picture: one static page where
+every element is a labelled box, laid out by ArchiMate layer or by connection,
+searchable, and walkable outward from anything to show what a change to it
+would touch. Selecting a box shows its catalogue row, **the paragraphs the
+documents write about it**, and every relationship it has. `build_docs.py`
+copies it into the built site, writes `model.db` beside it, and fetches sql.js —
+the only way to read SQLite in a browser — against a pinned digest.
+
+**Search is faceted rather than clever.** No language model runs in a static
+page, so `type:`, `layer:`, `model:`, `status:` and `grounded:` suggest the
+values *this* model has, with counts. A reader learns the vocabulary from the
+thing they are searching, which is the only vocabulary that will match.
+
+**An arrangement can be kept.** Drag boxes, then save the view — in the
+reader's own browser, as an exported file, or committed to
+`architecture/views/` for a view a team agrees on. **The page never writes to
+the model**: it reads a view and cannot create one in the repository.
 
 **It runs `neighbourhood.sql`, not a traversal of its own.** That is the whole
 reason the query is a file. `query_model.py trace` and the page answer the same

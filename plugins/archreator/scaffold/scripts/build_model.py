@@ -70,7 +70,7 @@ REALIZATION_HEADERS = {
 # may not have — so it gets a number to compare rather than a shape to guess
 # at. Bump it when a consumer that knew the old shape would misread the new
 # one; adding a field nobody has to read is not that.
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SCHEMA = """
 CREATE TABLE nodes(
@@ -104,6 +104,13 @@ CREATE TABLE edges(
     -- crosses a federation boundary, and read as `project` when it is.
     dst_project TEXT NOT NULL DEFAULT ''
 );
+CREATE TABLE excerpts(
+    project TEXT NOT NULL,
+    element TEXT NOT NULL,
+    doc     TEXT NOT NULL,
+    heading TEXT,
+    body    TEXT NOT NULL
+);
 CREATE TABLE mentions(
     project TEXT NOT NULL,
     doc     TEXT NOT NULL,
@@ -112,6 +119,7 @@ CREATE TABLE mentions(
 CREATE INDEX edges_src ON edges(project, src);
 CREATE INDEX edges_dst ON edges(project, dst);
 CREATE INDEX mentions_element ON mentions(project, element);
+CREATE INDEX excerpts_element ON excerpts(project, element);
 """
 
 
@@ -175,6 +183,15 @@ def collect() -> list[dict]:
                     for edge in parsed.edges
                 ],
                 "mentions": [list(mention) for mention in parsed.mentions],
+                "excerpts": [
+                    {
+                        "element": excerpt.element,
+                        "doc": excerpt.doc,
+                        "heading": excerpt.heading,
+                        "body": excerpt.text,
+                    }
+                    for excerpt in parsed.excerpts
+                ],
             }
         )
     return collected
@@ -273,6 +290,14 @@ def write_sqlite(projects: list[dict], path: Path) -> None:
             connection.executemany(
                 "INSERT INTO mentions(project, doc, element) VALUES(?,?,?)",
                 [(name, doc, element) for doc, element in project["mentions"]],
+            )
+            connection.executemany(
+                "INSERT INTO excerpts(project, element, doc, heading, body)"
+                " VALUES(?,?,?,?,?)",
+                [
+                    (name, e["element"], e["doc"], e["heading"], e["body"])
+                    for e in project["excerpts"]
+                ],
             )
         connection.commit()
     finally:

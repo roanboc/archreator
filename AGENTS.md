@@ -77,8 +77,11 @@ fetches: a validator reading a sibling repository on every pull request would
 be slow, would fail when somebody else's site was down, and would let another
 team's push break this build.
 
-`scaffold/navigator/` is the projection with a picture — one static page that
-draws the model, filters it by layer and walks outward from any element.
+`scaffold/navigator/` is the projection with a picture — one static page where
+every element is a labelled box, laid out by layer or by connection, searchable
+by facet, and walkable outward from anything. Selecting a box shows what the
+documents say about it; an arrangement can be saved as a view. It reads and
+never writes.
 `build_docs.py` publishes it with the portal. It executes
 `scaffold/scripts/neighbourhood.sql`, the same traversal `query_model.py` runs,
 because a walk implemented once per reader drifts.

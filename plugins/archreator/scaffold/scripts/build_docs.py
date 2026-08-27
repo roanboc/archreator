@@ -148,6 +148,24 @@ def stage_navigator(project: Path, site: Path) -> list[str]:
     # The federation index, derived. Absent when this model is not the topmost
     # of a federation, which is most models — and the navigator then reads its
     # own projection and behaves exactly as it would have.
+    curated = []
+    views_dir = project / MODEL_DIR / VIEWS_DIR
+    if views_dir.is_dir():
+        for path in sorted(views_dir.glob("*.json")):
+            try:
+                body = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError) as error:
+                notes.append(f"{MODEL_DIR}/{VIEWS_DIR}/{path.name}: not read ({error})")
+                continue
+            curated.append({"name": body.get("name", path.stem), "view": body.get("view", body)})
+    if curated:
+        (target / VIEWS_JSON).write_text(
+            json.dumps({"schema": 1, "views": curated}, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8")
+        notes.append(f"{NAVIGATOR}/: publishing {len(curated)} curated view(s)")
+    else:
+        (target / VIEWS_JSON).unlink(missing_ok=True)
+
     members = federation(project)
     if members:
         (target / FEDERATION_JSON).write_text(
@@ -222,6 +240,11 @@ SQLJS_URL = (
 # it is committed; derived, so the JSON is neither.
 FEDERATION_DOC = "federation.md"
 FEDERATION_JSON = "federation.json"
+# Views a team agreed on, committed as files and published read-only. The
+# navigator can apply one and can never write one: a view is a lens, and a page
+# that could add files to `architecture/` would be a model editor.
+VIEWS_DIR = "views"
+VIEWS_JSON = "views.json"
 SQLJS_FILES = {
     "sql-wasm.js": "694ca5b36aa3e6e71f417819d7df390b65343665fcfa5c69015ca33d93d291b3",
     "sql-wasm.wasm": "0734155c83e493983d1f2ff5b09a4fab6e35a32e9449c7e4e545756439f62d73",

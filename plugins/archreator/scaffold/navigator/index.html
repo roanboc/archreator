@@ -4,13 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Model navigator</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='4' r='2.5' fill='%23e6d6f5' stroke='%23555'/%3E%3Ccircle cx='12' cy='6' r='2.5' fill='%23fffbb5' stroke='%23555'/%3E%3Ccircle cx='7' cy='12' r='2.5' fill='%23c2f0ff' stroke='%23555'/%3E%3Cpath d='M4 4 12 6 7 12Z' fill='none' stroke='%23888'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='7' height='4' rx='1' fill='%23e6d6f5' stroke='%23555'/%3E%3Crect x='8' y='7' width='7' height='4' rx='1' fill='%23fffbb5' stroke='%23555'/%3E%3Crect x='2' y='11' width='7' height='4' rx='1' fill='%23c2f0ff' stroke='%23555'/%3E%3Cpath d='M5 6v1.5h8M11 11v-0.5' fill='none' stroke='%23888'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="./navigator.css">
 </head>
 <body>
 <header>
-  <h1>Model navigator</h1>
-  <p id="subtitle">Reading the projection…</p>
+  <div class="brand">
+    <h1>Model navigator</h1>
+    <p id="subtitle">Reading the projection…</p>
+  </div>
+  <div class="search" id="search-box" hidden>
+    <input id="q" type="search" placeholder="Search elements — try a name, or type:  layer:  status:" autocomplete="off" spellcheck="false">
+    <kbd>/</kbd>
+    <div id="suggest" hidden></div>
+  </div>
 </header>
 
 <main>
@@ -18,6 +25,13 @@
     <label class="field">
       <span>Model</span>
       <select id="project"></select>
+    </label>
+    <label class="field">
+      <span>Layout</span>
+      <select id="layout">
+        <option value="layered">Layered — by ArchiMate layer</option>
+        <option value="force">Force — by connection</option>
+      </select>
     </label>
 
     <fieldset>
@@ -31,6 +45,7 @@
       <legend>Relationships</legend>
       <label><input type="checkbox" id="show-identifier" checked> structure (from the identifier)</label>
       <label><input type="checkbox" id="show-pending" checked> planned, not yet true</label>
+      <label><input type="checkbox" id="show-labels"> label every relationship</label>
     </fieldset>
 
     <fieldset id="focus-box">
@@ -47,11 +62,37 @@
       </div>
     </fieldset>
 
+    <fieldset>
+      <legend>Views</legend>
+      <select id="view-list"><option value="">— saved views —</option></select>
+      <div class="row">
+        <button type="button" id="view-save">save current</button>
+        <button type="button" id="view-delete" title="Delete the selected view">delete</button>
+      </div>
+      <div class="row">
+        <button type="button" id="view-export">export</button>
+        <button type="button" id="view-import">import</button>
+        <input type="file" id="view-file" accept="application/json" hidden>
+      </div>
+      <p class="hint">A view is a lens — filters, focus, layout and the boxes you moved. It never changes the model.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Legend</legend>
+      <div id="legend"></div>
+    </fieldset>
+
     <p id="counts"></p>
   </aside>
 
   <div id="canvas-wrap">
     <svg id="graph" role="img" aria-label="The model as a graph"></svg>
+    <div id="toolbar">
+      <button type="button" id="nav-back" title="Back">◀</button>
+      <button type="button" id="nav-forward" title="Forward">▶</button>
+      <button type="button" id="fit-view" title="Fit to view">⤢</button>
+      <button type="button" id="png" title="Export what is on screen as a PNG">PNG</button>
+    </div>
     <div id="status"></div>
   </div>
 
@@ -60,10 +101,10 @@
 
 <footer>
   <p>
-    Rendered from <code id="dbname">model.db</code>, which is regenerated from the
-    Markdown under <code>architecture/</code> on every build. The documents are the
-    source of truth; this is a view of them. Every element below links to the file
-    that defines it.
+    Rendered from <code>model.db</code>, regenerated from the Markdown under
+    <code>architecture/</code> on every build. The documents are the source of truth;
+    this is a view of them, and it never writes to them. Every element links back to
+    the file that defines it.
   </p>
 </footer>
 

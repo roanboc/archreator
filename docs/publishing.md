@@ -245,9 +245,19 @@ has hosted has not widened the audience by one reader.
 ## The graph, and the federation
 
 The portal renders documents. `navigator/`, published beside them, renders the
-**graph**: every element as a node coloured by its layer, filtered to one layer
-at a time, and walked outward from whatever the reader clicks — which is
-`query_model.py trace` with a viewport, running the same query.
+**graph**: every element as a labelled box coloured by its layer, laid out by
+layer or by connection, and walked outward from whatever the reader clicks —
+which is `query_model.py trace` with a viewport, running the same query.
+
+Selecting a box opens a panel carrying the element's catalogue row, the
+paragraphs the documents write about it **verbatim**, and every relationship it
+has. Search suggests the types, layers and statuses the model actually
+contains. An arrangement can be saved as a view — in the reader's browser, as a
+file, or committed under `architecture/views/` for one a team agrees on.
+
+The page reads and never writes. A view committed to the repository arrives in
+a pull request like any other change; the navigator can apply one and has no
+way to create one.
 
 Two files go up with it, at a path another model can rely on:
 

@@ -437,6 +437,76 @@ def _is_relationship_table(headers: list[str], rows: list[list[str]]) -> bool:
     )
 
 
+# How much of a paragraph is worth carrying, and how many per document. A panel
+# is for orienting a reader, not for reproducing the document — the document is
+# one click away and is the thing that must be read when it matters. The cap is
+# per document rather than per element because an element discussed in six
+# places is being discussed *about* six different things, and dropping the
+# sixth would hide a whole document from the reader rather than trimming a
+# repetition.
+EXCERPT_CHARS = 600
+EXCERPTS_PER_DOCUMENT = 6
+# A Markdown heading, whatever its level. The heading a paragraph sits under is
+# most of what tells a reader where they are.
+HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*$")
+
+
+def prose_blocks(text: str) -> list[tuple[str, str]]:
+    """(heading, paragraph) for every prose block, tables and fences dropped.
+
+    A paragraph that names an element is what a reader wants when they select
+    it: for a goal or a principle it *is* the definition, because the method
+    writes those as a bolded lead-in followed by prose rather than as a
+    catalogue row. No special case is needed for that — the definition is a
+    paragraph like any other, and it arrives because it names the element.
+
+    Table rows are excluded because the projection already carries them, cell
+    by cell, under their own headers. Carrying them twice would put the same
+    fact in the panel in two shapes.
+    """
+    blocks: list[tuple[str, str]] = []
+    heading = ""
+    current: list[str] = []
+    # Everything before the first level-2 heading is the document's preamble —
+    # its title, its nav line, its status. That is metadata about the document
+    # rather than anything it says about an element, and a status line naming
+    # eleven identifiers would otherwise become an excerpt on all eleven.
+    started = False
+
+    def flush() -> None:
+        if current:
+            joined = " ".join(line.strip() for line in current).strip()
+            if joined:
+                blocks.append((heading, joined))
+            current.clear()
+
+    for line in text.splitlines():
+        match = HEADING_RE.match(line)
+        if match:
+            flush()
+            heading = match.group(2)
+            started = started or len(match.group(1)) >= 2
+            continue
+        if not started:
+            continue
+        if not line.strip() or line.lstrip().startswith("|"):
+            flush()
+            continue
+        current.append(line)
+    flush()
+    return blocks
+
+
+@dataclass
+class Excerpt:
+    """One paragraph of the model that speaks about one element."""
+
+    element: str
+    doc: str
+    heading: str
+    text: str
+
+
 @dataclass
 class Restatement:
     """One end of a relationship table row, as that row wrote it down.
@@ -662,6 +732,9 @@ class ParsedProject:
     # or not `detail` was asked for, because `check_model.py` needs it to judge
     # a restatement and validation does not run in detail.
     names: dict[str, str] = field(default_factory=dict)
+    # What the documents say about each element, in their own words. Read only
+    # in detail: a validator has no use for prose.
+    excerpts: list[Excerpt] = field(default_factory=list)
     # Every place a document wrote an element's name down beside its
     # identifier. The identifier is authoritative; these are copies, and
     # `check_model.py` is what holds them in step.
@@ -687,6 +760,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     edges: list[Edge] = []
     names: dict[str, str] = {}
     restatements: list[tuple[Restatement, Path]] = []
+    excerpts: list[Excerpt] = []
 
     model_root = project / MODEL_DIR
 
@@ -822,6 +896,20 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         # A relationship table, which is where everything a row cannot carry
         # goes — above all a relationship between two peers in one layer, for
         # which a catalogue has one row each and no column at all.
+        seen_here: dict[str, int] = {}
+        for heading, block in prose_blocks(live_text):
+            for reference in dict.fromkeys(REFERENCE_RE.findall(block)):
+                model, _ = foreign_of(reference)
+                if model:
+                    continue
+                key = f"{scope}.{reference}" if scope else reference
+                if seen_here.get(key, 0) >= EXCERPTS_PER_DOCUMENT:
+                    continue
+                seen_here[key] = seen_here.get(key, 0) + 1
+                body = block if len(block) <= EXCERPT_CHARS else (
+                    block[:EXCERPT_CHARS].rsplit(" ", 1)[0] + " …")
+                excerpts.append(Excerpt(element=key, doc=doc, heading=heading, text=body))
+
         for rows in rel_tables:
             for source, target, label, pending, _, _ in relationship_rows(rows):
                 src_model, src_local = foreign_of(source)
@@ -871,4 +959,5 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         mentions=mentions,
         names=names,
         restatements=restatements,
+        excerpts=excerpts,
     )
