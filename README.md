@@ -38,36 +38,42 @@ prompt.
 ## How it works
 
 A requirement never becomes code directly. It walks down six architecture
-layers, stops wherever a human has to decide, and only then gets built.
+layers — grouped into three questions — stops wherever a human has to decide,
+and only then gets built.
 
 ```mermaid
-flowchart LR
-  subgraph A["&nbsp;&nbsp;Your agent works&nbsp;&nbsp;"]
-    design["Aligns six layers"]:::ai
-    build["Implements"]:::ai
-  end
-  subgraph H["&nbsp;&nbsp;You decide&nbsp;&nbsp;"]
-    ask(["A requirement"]):::human
-    gate{{"Gates 0-3"}}:::gate
-    review{{"Review"}}:::gate
-    merged(["Merged"]):::done
-  end
-  ask --> design --> gate
-  gate --> build --> review
-  review --> merged
-  gate -.->|changes| design
-  review -.->|changes| build
+flowchart TB
+  req(["A requirement"]):::human
+
+  intention["<b>Intention</b><br/>why, and for whom"]:::ai
+  gA{{"You approve the direction"}}:::gate
+  operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
+  gB{{"You approve —<br/>before any code exists"}}:::gate
+  realization["<b>Realization</b><br/>what builds it"]:::ai
+  gC{{"You review the design"}}:::gateopt
+
+  build["Implements"]:::ai
+  review{{"You review the code"}}:::gate
+  merged(["Merged"]):::done
+
+  req --> intention --> gA --> operation --> gB --> realization --> gC
+  gC --> build --> review --> merged
+  gA -.->|"changes"| intention
+  gB -.->|"changes"| operation
+  review -.->|"changes"| build
 
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
+  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
-**You own both ends; the middle is the agent's.** The dotted edges are the two
-loops that can't be skipped — a gate you decline sends the work back *before
-any code exists*, and a review you decline sends it back *before anything
-merges*.
+**You own every red box; the blue ones are the agent's.** The dotted edges are
+the loops that can't be skipped — a gate you decline sends the work back
+*before any code exists*, and a review you decline sends it back *before
+anything merges*. The dashed gate is the optional one: you can ask to see the
+design before it is built, or let the pull request carry it.
 
 Drawn in the method's own palette: cyan is always an AI actor, here and in
 every model you'll build, so you never mistake one for a person.
@@ -77,14 +83,19 @@ every model you'll build, so you never mistake one for a person.
 Numbered in the order they're assessed. Deriving one before the layer above it
 is agreed is the mistake the whole method exists to prevent.
 
-| # | Layer | The question it answers |
-| - | ----- | ----------------------- |
-| 0 | Business design | Who are the customers, and how does each offering pay? |
-| 1 | Strategy | Why does this exist, and what must it be able to do? |
-| 2 | Business | Who does what, and which services are offered? |
-| 3 | Information | What information exists, and where does it live? |
-| 4 | Application | Which software realizes each business service? |
-| 5 | Technology | What runs it all — runtimes, build, hosting? |
+| Group | # | Layer | The question it answers |
+| ----- | - | ----- | ----------------------- |
+| **Intention** | 0 | Business design | Who are the customers, and how does each offering pay? |
+| **Intention** | 1 | Strategy | Why does this exist, and what must it be able to do? |
+| **Operation** | 2 | Business | Who does what, and which services are offered? |
+| **Operation** | 3 | Information | What information exists, and where does it live? |
+| **Realization** | 4 | Application | Which software realizes each business service? |
+| **Realization** | 5 | Technology | What runs it all — runtimes, build, hosting? |
+
+The groups are a way to read the six, not a seventh thing to learn. The line
+between **Operation** and **Realization** is the one that matters: it is where
+the method stops and asks, and everything above it is agreed before any code
+exists.
 
 You don't fill in all six for a weekend project. **One method, three depths** —
 an app, an organization, or an enterprise — and the agent tells you which one
