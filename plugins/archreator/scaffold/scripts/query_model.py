@@ -171,9 +171,9 @@ def trace(projects: list[dict], wanted: str, depth: int) -> int:
         print()
 
     print(
-        f"{len(seen) - 1} element(s) within {depth} hop(s). Edge labels are the words the "
-        f"diagrams use, carried through unmapped — the projection does not guess at "
-        f"ArchiMate relationship types."
+        f"{len(seen) - 1} element(s) within {depth} hop(s). An edge label is the column "
+        f"header or the relationship cell it was declared in, carried through unmapped — "
+        f"the projection does not guess at ArchiMate relationship types."
     )
     return 0
 
