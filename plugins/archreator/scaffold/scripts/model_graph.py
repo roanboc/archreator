@@ -71,6 +71,9 @@ REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
 # The layered model's directory name, in every project tree and in the
 # scaffold the skills emit.
 MODEL_DIR = "architecture"
+# What a model consumes from models it does not own. Read by `check_model.py`
+# to resolve a foreign reference without cloning anything.
+IMPORTS_DOC = "imports.md"
 # Narrative folders inside the model directory. They are *about* the model
 # rather than part of it, and are deliberately not read.
 #
@@ -118,9 +121,23 @@ PREFIXES = sorted(PREFIX_TYPES, key=len, reverse=True)
 _LOCAL = r"(?:" + "|".join(PREFIXES) + r")\d+(?:\.\d+)*"
 # A full ID prepends the domain path, when there is one (`SALES.CAP1.2`).
 _ID = r"(?:[A-Z][A-Z0-9]*\.)*" + _LOCAL
+# A foreign identifier names the model it belongs to first, separated by two
+# colons: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
+#
+# Two colons rather than a third meaning for the dot. The dot already separates
+# the domain path (before the prefix) from the catalogue's levels (after it),
+# and a grammar where one character means three things stops being readable.
+# The model name is the one the federation index gives it, which is the point:
+# a model you may reference is a model you have declared you federate with.
+FOREIGN_SEP = "::"
+_MODEL = r"[A-Za-z0-9][A-Za-z0-9._/-]*"
+_ANY_ID = r"(?:" + _MODEL + FOREIGN_SEP + r")?" + _ID
 
-# A backticked ID anywhere in the prose or a table cell is a reference.
-REFERENCE_RE = re.compile(r"`(" + _ID + r")`")
+# A backticked ID anywhere in the prose or a table cell is a reference — of
+# this model's own elements, or of a model it federates with.
+REFERENCE_RE = re.compile(r"`(" + _ANY_ID + r")`")
+# Splits a foreign reference into (model, identifier).
+FOREIGN_RE = re.compile(r"^(" + _MODEL + r")" + FOREIGN_SEP + r"(" + _ID + r")$")
 # A table row whose first cell is a bare backticked ID defines that element.
 # A *domain-qualified* first cell is a reference instead — that is what a
 # domain charter's "Consumed services" table holds. A *leveled* first cell
@@ -219,6 +236,12 @@ def definitions_in(text: str) -> set[str]:
     return set(TABLE_DEF_RE.findall(text)) | set(BULLET_DEF_RE.findall(text))
 
 
+def foreign_of(element: str) -> tuple[str, str]:
+    """(model, identifier) for a foreign reference, ("", element) otherwise."""
+    match = FOREIGN_RE.match(element)
+    return (match.group(1), match.group(2)) if match else ("", element)
+
+
 def qualifier_of(element: str) -> str:
     """The domain path of an ID, or "" when it is unqualified.
 
@@ -269,6 +292,20 @@ def unvalidated_tables(text: str) -> int:
 
 def _excluded(path: Path) -> bool:
     return bool(EXCLUDED_DIRS & set(path.parts))
+
+
+def project_key(project: Path) -> str:
+    """How a model is named in a federation index and in a foreign reference.
+
+    Its path from the repository root — `product-archreator`,
+    `product-archreator/site` — or `.` for a repository that holds one model at
+    its root. The same string `build_model.project_name()` writes into the
+    projection, so an identifier a reader sees and an identifier a document
+    writes are the same identifier.
+    """
+    if project == REPO_ROOT:
+        return "."
+    return str(project.relative_to(REPO_ROOT)).replace("\\", "/")
 
 
 def find_projects() -> list[Path]:
@@ -340,7 +377,7 @@ def _name_of(cell: str) -> str:
 # A table cell that is nothing but one backticked identifier. Anchored at both
 # ends, because a cell that *mentions* an identifier in a sentence is prose and
 # a cell that *is* one is an end of a relationship.
-CELL_ID_RE = re.compile(r"^`(" + _ID + r")`$")
+CELL_ID_RE = re.compile(r"^`(" + _ANY_ID + r")`$")
 # The separators a list of identifiers is written with. Punctuation only: a
 # conjunction is a word, and which word it is depends on the language.
 _SEP = r"[\s,;/·+&—–-]*"
@@ -351,7 +388,7 @@ _SEP = r"[\s,;/·+&—–-]*"
 # holds the word "Established", and both are columns of the same catalogue. A
 # cell of prose that happens to name an identifier is somebody talking about an
 # element, which the projection already models as a mention.
-CELL_ID_LIST_RE = re.compile(r"^" + _SEP + r"(?:`" + _ID + r"`" + _SEP + r")+$")
+CELL_ID_LIST_RE = re.compile(r"^" + _SEP + r"(?:`" + _ANY_ID + r"`" + _SEP + r")+$")
 
 
 def _table_blocks(text: str) -> list[tuple[int, int, list[str], list[list[str]]]]:
@@ -521,6 +558,39 @@ def bullet_definitions(text: str) -> dict[str, str]:
     }
 
 
+def imports_of(project: Path) -> dict[str, tuple[str, str]]:
+    """Foreign element -> (the name this model writes for it, the revision read).
+
+    Read by position from `architecture/imports.md`: cell 1 the foreign
+    identifier, cell 2 its name, cell 3 the revision it was read at. A row
+    counts only when its first cell is a bare backticked foreign identifier,
+    which is the same test that tells a relationship table's ends apart from
+    prose.
+
+    **This is how a reference to another repository resolves, and it resolves
+    against the declaration rather than against the truth.** Fetching the
+    upstream on every pull request would be slow, would fail when somebody
+    else's site was down, and would let their push break this build. What is
+    checked here is that the dependency was written down; whether the row is
+    still current is asked by a command somebody runs.
+    """
+    doc = project / MODEL_DIR / IMPORTS_DOC
+    if not doc.is_file():
+        return {}
+    found: dict[str, tuple[str, str]] = {}
+    for line in strip_code(doc.read_text(encoding="utf-8")).splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = _cells(line)
+        if len(cells) < 3:
+            continue
+        match = CELL_ID_RE.match(cells[0])
+        if not match or FOREIGN_SEP not in match.group(1):
+            continue
+        found[match.group(1)] = (node_name(cells[1]), _plain(cells[2]))
+    return found
+
+
 @dataclass
 class Element:
     """One element of the model, as the documents define it."""
@@ -555,6 +625,10 @@ class Edge:
     # wrote down on purpose filters the third out; one that wants structure
     # keeps it.
     origin: str = "catalogue"
+    # The model the far end belongs to. This edge's own model for all but a
+    # reference that crosses a federation boundary, which is why it defaults
+    # rather than being passed everywhere.
+    dst_project: str = ""
     # The relationship is not true yet. Declared in words with the marker the
     # method already uses for an element grounded in nothing on purpose - never
     # inferred from how an arrow was drawn, because diagrams are renderings.
@@ -570,6 +644,9 @@ class ParsedProject:
     duplicates: list[str]
     retired: dict[str, Path]
     references: list[tuple[str, Path]]
+    # (model, identifier, document) for every reference that names an element
+    # in a model this one does not own.
+    foreign: list[tuple[str, str, Path]]
     domains: set[str]
     skipped: int
     # Repository-relative document path -> (status name, glyph count). Every
@@ -602,6 +679,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     duplicates: list[str] = []
     retired: dict[str, Path] = {}
     references: list[tuple[str, Path]] = []
+    foreign: list[tuple[str, str, Path]] = []
     domains: set[str] = set()
     statuses: dict[str, tuple[str, int]] = {}
     skipped = 0
@@ -649,6 +727,10 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
 
         defined_here = definitions_in(text)
         for reference in cited:
+            model, local = foreign_of(reference)
+            if model:
+                foreign.append((model, local, md_file))
+                continue
             if not qualifier_of(reference) and reference in defined_here:
                 continue
             references.append((reference, md_file))
@@ -668,6 +750,11 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         for rows in rel_tables:
             for _, _, _, _, src_said, dst_said in relationship_rows(rows):
                 for said in (src_said, dst_said):
+                    if FOREIGN_SEP in said.element:
+                        # A foreign element's name is checked against the
+                        # import row that declares it, not against a catalogue
+                        # this model does not have.
+                        continue
                     key = f"{scope}.{said.element}" if scope else said.element
                     restatements.append((Restatement(key, said.written), md_file))
 
@@ -716,6 +803,14 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
                     for marker in PENDING_MARKERS
                 )
                 for target in cited:
+                    model, local = foreign_of(target)
+                    if model:
+                        edges.append(
+                            Edge(src=src, dst=local, rel=header, doc=doc,
+                                 origin="catalogue", pending=pending,
+                                 dst_project=model)
+                        )
+                        continue
                     dst = qualify(target) if not qualifier_of(target) else target
                     if dst == src:
                         continue
@@ -729,11 +824,15 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         # which a catalogue has one row each and no column at all.
         for rows in rel_tables:
             for source, target, label, pending, _, _ in relationship_rows(rows):
-                src = qualify(source) if not qualifier_of(source) else source
-                dst = qualify(target) if not qualifier_of(target) else target
+                src_model, src_local = foreign_of(source)
+                dst_model, dst_local = foreign_of(target)
+                src = src_local if src_model else (
+                    qualify(source) if not qualifier_of(source) else source)
+                dst = dst_local if dst_model else (
+                    qualify(target) if not qualifier_of(target) else target)
                 edges.append(
                     Edge(src=src, dst=dst, rel=label, doc=doc,
-                         origin="table", pending=pending)
+                         origin="table", pending=pending, dst_project=dst_model)
                 )
 
 
@@ -763,6 +862,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         duplicates=duplicates,
         retired=retired,
         references=references,
+        foreign=foreign,
         domains=domains,
         statuses=statuses,
         skipped=skipped,

@@ -70,6 +70,13 @@ to one element would touch, `coverage` for what names no realizing artifact.
 Both are tools rather than gates, and both find nothing here: the scaffold has
 no elements.
 
+A reference can name an element in another model — `other-model::CAP1` — and
+`check_model.py` resolves it against that model when it is in the same
+repository, or against `architecture/imports.md` when it is not. Nothing
+fetches: a validator reading a sibling repository on every pull request would
+be slow, would fail when somebody else's site was down, and would let another
+team's push break this build.
+
 `scaffold/navigator/` is the projection with a picture — one static page that
 draws the model, filters it by layer and walks outward from any element.
 `build_docs.py` publishes it with the portal. It executes

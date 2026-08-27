@@ -88,12 +88,16 @@ from pathlib import Path
 import re
 
 from model_graph import (
+    FOREIGN_SEP,
+    IMPORTS_DOC,
     MODEL_DIR,
     REPO_ROOT,
     domain_of,
     find_projects,
+    imports_of,
     parent_of,
     parse_project,
+    project_key,
     qualifier_of,
 )
 
@@ -108,7 +112,59 @@ def _normalised(name: str) -> str:
     return re.sub(r"\s+", " ", name).strip().casefold()
 
 
-def check_project(project: Path) -> tuple[list[str], int, int]:
+def check_foreign(project: Path, parsed, known: dict) -> list[str]:
+    """Every reference that names another model resolves, or is declared.
+
+    Two cases, and they are genuinely different rather than one case with a
+    fallback:
+
+    - **The model is in this repository.** Its definitions are already parsed,
+      so the reference resolves exactly, and an import row restating the
+      element's name is held against the real one.
+    - **The model is elsewhere.** Nothing here can see it. The reference must
+      be declared in `architecture/imports.md`, which is what turns "somebody
+      typed an identifier" into "this model states a dependency". Whether the
+      declaration still matches the upstream is a question for a command
+      somebody runs, never for a check that would make network calls on every
+      pull request.
+    """
+    errors: list[str] = []
+    declared = imports_of(project)
+    seen: set[tuple[str, str, Path]] = set()
+    for model, element, md_file in parsed.foreign:
+        if (model, element, md_file) in seen:
+            continue
+        seen.add((model, element, md_file))
+        rel = md_file.relative_to(REPO_ROOT)
+        reference = f"{model}{FOREIGN_SEP}{element}"
+        here = known.get(model)
+        if here is not None:
+            if element not in here.defined and element not in here.retired:
+                errors.append(
+                    f"{rel}: `{reference}` names no element in `{model}`, which "
+                    f"is in this repository and was checked directly"
+                )
+                continue
+            if reference in declared:
+                written = declared[reference][0]
+                real = here.names.get(element, "")
+                if written and real and _normalised(written) != _normalised(real):
+                    errors.append(
+                        f"{project.name}/{MODEL_DIR}/{IMPORTS_DOC}: `{reference}` is "
+                        f'written here as "{written}" and defined as "{real}". The '
+                        f"model that defines an element owns its name"
+                    )
+            continue
+        if reference not in declared:
+            errors.append(
+                f"{rel}: `{reference}` names a model outside this repository and "
+                f"is not declared in {MODEL_DIR}/{IMPORTS_DOC}. Nothing here can "
+                f"see it, so a reference to it has to be a stated dependency"
+            )
+    return errors
+
+
+def check_project(project: Path, known: dict | None = None) -> tuple[list[str], int, int]:
     """Return (errors, definition count, unvalidated-table count)."""
     parsed = parse_project(project)
     errors: list[str] = sorted(parsed.duplicates)
@@ -190,6 +246,8 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
         else:
             errors.append(f"{rel}: `{reference}` is not defined in this project")
 
+    errors.extend(check_foreign(project, parsed, known or {}))
+
     return errors, len(parsed.defined), parsed.skipped
 
 
@@ -204,8 +262,12 @@ def main() -> int:
             pass
     all_errors: list[str] = []
     summary: list[str] = []
+    # Every model in the repository, parsed before any is judged: a reference
+    # that crosses from one to another can only be resolved by something that
+    # has both.
+    known = {project_key(project): parse_project(project) for project in find_projects()}
     for project in find_projects():
-        errors, defined, skipped = check_project(project)
+        errors, defined, skipped = check_project(project, known)
         rel = project.relative_to(REPO_ROOT) if project != REPO_ROOT else Path(".")
         if not defined:
             # An unfilled template scaffold: its layer READMEs are full of

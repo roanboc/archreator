@@ -97,6 +97,8 @@ button.link { border: 0; background: none; color: var(--accent); padding: 0 0.35
 .node text { font-size: 9px; fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--bg); stroke-width: 2.5px; }
 .node.dim { opacity: 0.16; }
 .node.root circle { stroke: var(--accent); stroke-width: 2.5; }
+/* A node from another model, reached across a federation boundary. */
+.node.elsewhere circle { stroke-dasharray: 2 2; stroke-width: 1.5; }
 .edge { stroke: var(--edge); fill: none; }
 .edge.identifier { stroke-dasharray: 1 3; }
 .edge.pending { stroke-dasharray: 5 4; }

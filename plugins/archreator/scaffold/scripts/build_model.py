@@ -70,7 +70,7 @@ REALIZATION_HEADERS = {
 # may not have — so it gets a number to compare rather than a shape to guess
 # at. Bump it when a consumer that knew the old shape would misread the new
 # one; adding a field nobody has to read is not that.
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SCHEMA = """
 CREATE TABLE nodes(
@@ -93,13 +93,16 @@ CREATE TABLE nodes(
     PRIMARY KEY (project, id)
 );
 CREATE TABLE edges(
-    project TEXT NOT NULL,
-    src     TEXT NOT NULL,
-    dst     TEXT NOT NULL,
-    rel     TEXT,
-    doc     TEXT,
-    origin  TEXT NOT NULL DEFAULT 'catalogue',
-    pending INTEGER NOT NULL DEFAULT 0
+    project     TEXT NOT NULL,
+    src         TEXT NOT NULL,
+    dst         TEXT NOT NULL,
+    rel         TEXT,
+    doc         TEXT,
+    origin      TEXT NOT NULL DEFAULT 'catalogue',
+    pending     INTEGER NOT NULL DEFAULT 0,
+    -- The model the far end belongs to. Empty for all but a reference that
+    -- crosses a federation boundary, and read as `project` when it is.
+    dst_project TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE mentions(
     project TEXT NOT NULL,
@@ -167,6 +170,7 @@ def collect() -> list[dict]:
                         "doc": edge.doc,
                         "origin": edge.origin,
                         "pending": edge.pending,
+                        "dst_project": edge.dst_project,
                     }
                     for edge in parsed.edges
                 ],
@@ -250,8 +254,8 @@ def write_sqlite(projects: list[dict], path: Path) -> None:
                 ],
             )
             connection.executemany(
-                "INSERT INTO edges(project, src, dst, rel, doc, origin, pending)"
-                " VALUES(?,?,?,?,?,?,?)",
+                "INSERT INTO edges(project, src, dst, rel, doc, origin, pending,"
+                " dst_project) VALUES(?,?,?,?,?,?,?,?)",
                 [
                     (
                         name,
@@ -261,6 +265,7 @@ def write_sqlite(projects: list[dict], path: Path) -> None:
                         edge["doc"],
                         edge["origin"],
                         int(edge["pending"]),
+                        edge["dst_project"],
                     )
                     for edge in project["edges"]
                 ],

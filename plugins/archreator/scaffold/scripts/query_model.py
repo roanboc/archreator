@@ -135,7 +135,7 @@ def trace(connection: sqlite3.Connection, wanted: str, depth: int, scope: str) -
 
     rows = connection.execute(
         NEIGHBOURHOOD_SQL.read_text(encoding="utf-8"),
-        {"project": element["project"], "root": element["id"], "depth": depth},
+        {"root": f"{element['project']}::{element['id']}", "depth": depth},
     ).fetchall()
 
     # The query returns the subgraph; this arranges it into rings, so the
@@ -151,9 +151,19 @@ def trace(connection: sqlite3.Connection, wanted: str, depth: int, scope: str) -
             if row[f"{near}_hop"] >= row[f"{far}_hop"] or row[far] in seen:
                 continue
             marker = " (pending)" if row["pending"] else ""
+            # A neighbour in another model is shown as being in one. Silently
+            # printing a bare identifier would make a federated walk read as
+            # though everything it found were local, which is the misreading
+            # this whole initiative was about.
+            elsewhere = (
+                f"  [{row[f'{far}_model']}]"
+                if row[f"{far}_model"] and row[f"{far}_model"] != element["project"]
+                else ""
+            )
             rings[row[f"{far}_hop"]].append(
                 f"  {arrow} {row['rel']}{marker} {arrow} "
-                f"{label(row[far], row[f'{far}_name'], row[f'{far}_type'])}"
+                f"{label(row[f'{far}_local'] or row[far], row[f'{far}_name'], row[f'{far}_type'])}"
+                f"{elsewhere}"
             )
             seen.add(row[far])
 
@@ -185,7 +195,8 @@ def trace(connection: sqlite3.Connection, wanted: str, depth: int, scope: str) -
     print(
         "The walk is undirected: a catalogue states a connection from whichever end "
         "owns the row, so an arrow here shows which way it was written, not which "
-        "way it matters."
+        "way it matters. It crosses models: a neighbour in another one carries its "
+        "name in brackets."
     )
     return 0
 

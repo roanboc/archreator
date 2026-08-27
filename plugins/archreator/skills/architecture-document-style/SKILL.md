@@ -298,6 +298,41 @@ referenced from outside it. Referencing another domain's internal process or
 resource by ID reaches through the contract and is a modeling error — take
 it up with that domain's charter instead.
 
+### Crossing a model boundary
+
+An identifier is scoped to its model. Two models may each own a `G1`, which is
+deliberate — globally unique numbering would make every new model a merge
+conflict against every other — and it is why a bare identifier can only ever
+mean something inside the model that wrote it.
+
+**A reference to another model names that model first, separated by two
+colons**: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
+
+Two colons rather than a third meaning for the dot. The dot already separates
+the domain path (before the prefix) from the catalogue's levels (after it), and
+one character meaning three things stops being readable. Read outwards: model,
+then domain path, then prefix, then levels — each separator appears at most
+once, and always in that order.
+
+**The model's name is the one the federation index gives it.** That is the
+point rather than a convenience: a model you may reference is a model you have
+declared you federate with, in `architecture/federation.md`. There is no way to
+reach into something you never said you depend on.
+
+**How it resolves depends on where the other model is**, and the two cases are
+genuinely different:
+
+| The model is | Resolution | What can go wrong |
+| ------------ | ---------- | ----------------- |
+| **In this repository** | Against that model's own definitions, exactly and immediately | A stale identifier fails the build, like any other |
+| **In another repository** | Against a row in `architecture/imports.md` declaring it | The row can be internally consistent and out of date |
+
+Nothing fetches anything. A validator that read a sibling repository on every
+pull request would be slow, would fail when somebody else's site was down, and
+would let another team's push break this build. What is checked is that the
+dependency was **stated** — and the name the import row restates is held
+against the upstream only when the upstream is here to be read.
+
 ### What belongs at which tier
 
 A model that federates — an organization with applications built under it —

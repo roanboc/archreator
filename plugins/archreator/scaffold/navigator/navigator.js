@@ -90,13 +90,25 @@
     return found;
   }
 
+  /* Everything, keyed by a qualified identifier.
+   *
+   * Two models may each own a `G1`, so the key a node is looked up by has to
+   * carry the model — the same qualification `neighbourhood.sql` walks on and
+   * a document writes when it references across a boundary. The model picker
+   * became a filter rather than a loader when relationships started crossing:
+   * a neighbour in another model has to be drawable, or a federated walk shows
+   * a hole where the answer was.
+   */
   function loadProject(name) {
     project = name;
     nodes = rows(
-      "SELECT id, name, type, layer_group AS grp, doc, status, realized_by, retired," +
-      " domain FROM nodes WHERE project = :p ORDER BY id", { ":p": name });
+      "SELECT project || '::' || id AS gid, project, id, name, type," +
+      " layer_group AS grp, doc, status, realized_by, retired, domain" +
+      " FROM nodes ORDER BY project, id");
     edges = rows(
-      "SELECT src, dst, rel, origin, pending FROM edges WHERE project = :p", { ":p": name });
+      "SELECT project || '::' || src AS src," +
+      " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS dst," +
+      " rel, origin, pending FROM edges");
     view = null;
     root = null;
     var opening = openingGroups();
@@ -113,7 +125,7 @@
 
   /* Walk outward from one element — the shared query, not a local traversal. */
   function focusOn(id, depth) {
-    var found = rows(sql, { ":project": project, ":root": id, ":depth": depth });
+    var found = rows(sql, { ":root": id, ":depth": depth });
     var keep = new Set([id]);
     found.forEach(function (row) { keep.add(row.src); keep.add(row.dst); });
     view = keep;
@@ -121,9 +133,9 @@
     reframe();
     document.getElementById("focus-on").hidden = false;
     document.getElementById("focus-none").hidden = true;
-    var element = nodes.find(function (n) { return n.id === id; });
+    var element = nodes.find(function (n) { return n.gid === id; });
     document.getElementById("focus-name").textContent =
-      id + (element && element.name ? " · " + element.name : "");
+      (element ? element.id : id) + (element && element.name ? " · " + element.name : "");
   }
 
   function clearFocus() {
@@ -146,12 +158,10 @@
       // A ring start beats random: the simulation converges from it in far
       // fewer ticks, and the result is stable between reloads.
       var angle = (index / count) * Math.PI * 2;
-      positions[node.id] = {
+      positions[node.gid] = {
         x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, vx: 0, vy: 0
       };
     });
-    var index = {};
-    live.forEach(function (n, i) { index[n.id] = i; });
     var links = edges.filter(function (e) {
       return positions[e.src] && positions[e.dst];
     });
@@ -161,7 +171,7 @@
       // a quadtree would be optimising the wrong thing.
       for (var a = 0; a < live.length; a++) {
         for (var b = a + 1; b < live.length; b++) {
-          var p = positions[live[a].id], q = positions[live[b].id];
+          var p = positions[live[a].gid], q = positions[live[b].gid];
           var dx = q.x - p.x, dy = q.y - p.y;
           var d2 = dx * dx + dy * dy || 0.01;
           var force = 2600 / d2;
@@ -179,7 +189,7 @@
         p.vx += fx; p.vy += fy; q.vx -= fx; q.vy -= fy;
       });
       live.forEach(function (node) {
-        var p = positions[node.id];
+        var p = positions[node.gid];
         p.vx -= p.x * 0.002; p.vy -= p.y * 0.002;   // gentle centring
         p.x += p.vx * cooling; p.y += p.vy * cooling;
         p.vx *= 0.82; p.vy *= 0.82;
@@ -213,11 +223,14 @@
 
   function visible(node) {
     if (hidden.has(node.grp || "")) return false;
-    return !view || view.has(node.id);
+    if (view) return view.has(node.gid);
+    // Outside a focus, one model at a time: a federated graph drawn whole is
+    // several hairballs rather than one.
+    return node.project === project;
   }
 
   function visibleIds() {
-    return nodes.filter(visible).map(function (n) { return n.id; });
+    return nodes.filter(visible).map(function (n) { return n.gid; });
   }
 
   function reframe() {
@@ -229,7 +242,7 @@
     var showIdentifier = document.getElementById("show-identifier").checked;
     var showPending = document.getElementById("show-pending").checked;
     var shown = {};
-    nodes.forEach(function (n) { if (visible(n)) shown[n.id] = n; });
+    nodes.forEach(function (n) { if (visible(n)) shown[n.gid] = n; });
 
     var parts = ['<g transform="translate(' + camera.x + ',' + camera.y + ') scale(' + camera.k + ')">'];
     var drawn = 0;
@@ -257,12 +270,13 @@
     Object.keys(shown).forEach(function (id) {
       var node = shown[id], p = positions[id];
       if (!p) return;
-      var size = node.id === root ? 9 : 6;
-      parts.push('<g class="node' + (node.id === root ? " root" : "") +
+      var size = node.gid === root ? 9 : 6;
+      parts.push('<g class="node' + (node.gid === root ? " root" : "") +
+        (node.project !== project ? " elsewhere" : "") +
         '" data-id="' + esc(id) + '" transform="translate(' + p.x + ',' + p.y + ')">' +
         '<circle r="' + size + '" fill="' + colour(node.grp) + '"></circle>' +
-        (labels ? '<text x="' + (size + 3) + '" y="3">' + esc(id) + "</text>" : "") +
-        "<title>" + esc(id + (node.name ? " · " + node.name : "")) + "</title></g>");
+        (labels ? '<text x="' + (size + 3) + '" y="3">' + esc(node.id) + "</text>" : "") +
+        "<title>" + esc(node.gid + (node.name ? " · " + node.name : "")) + "</title></g>");
     });
     parts.push("</g>");
     svg.innerHTML = parts.join("");
@@ -297,13 +311,18 @@
   }
 
   function showDetail(id) {
-    var node = nodes.find(function (n) { return n.id === id; });
+    var node = nodes.find(function (n) { return n.gid === id; });
     if (!node) return;
     detail.hidden = false;
-    var docHref = "../" + node.doc.split("/").slice(1).join("/").replace(/\.md$/, "/");
+    // A document in another model is published under that model's own portal,
+    // which this page cannot address. Naming it beats linking somewhere wrong.
+    var docHref = node.project === project
+      ? "../" + node.doc.split("/").slice(1).join("/").replace(/\.md$/, "/")
+      : "";
     detail.innerHTML =
       "<h2>" + esc(node.name || node.id) + "</h2>" +
       '<p class="kind">' + esc(node.id) + " · " + esc(node.type || "?") +
+      (node.project !== project ? ' · <span class="badge">' + esc(node.project) + "</span>" : "") +
       (node.retired ? ' · <span class="badge">retired</span>' : "") + "</p>" +
       "<dl>" +
       (node.status && node.status !== "validated"
@@ -311,11 +330,13 @@
           "</span> — not approved at a gate</dd>" : "") +
       (node.realized_by ? "<dt>Realized by</dt><dd>" + esc(node.realized_by) + "</dd>" : "") +
       (node.domain ? "<dt>Domain</dt><dd>" + esc(node.domain) + "</dd>" : "") +
-      "<dt>Defined in</dt><dd><a href=\"" + esc(docHref) + "\">" + esc(node.doc) + "</a></dd>" +
+      "<dt>Defined in</dt><dd>" + (docHref
+        ? "<a href=\"" + esc(docHref) + "\">" + esc(node.doc) + "</a>"
+        : esc(node.doc) + " <span class=\"badge\">another model</span>") + "</dd>" +
       "</dl>" +
       '<p><button type="button" id="walk">walk outward from here</button></p>';
     document.getElementById("walk").addEventListener("click", function () {
-      focusOn(id, Number(document.getElementById("depth").value));
+      focusOn(node.gid, Number(document.getElementById("depth").value));
     });
   }
 
