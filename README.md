@@ -9,53 +9,94 @@ explicit gates before a line of code exists.
 [![Docs check](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml)
 [![Skills check](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-15-7e57c2)](./plugins/archreator/skills/README.md)
+[![Skills](https://img.shields.io/badge/skills-17-7e57c2)](./plugins/archreator/skills/README.md)
 
 ---
 
 ## The problem
 
-Most software doesn't fail because the code was hard. It fails because the
-problem was misunderstood — and an agent amplifies that, confidently, at
-speed. You get a working implementation of the wrong thing, in an afternoon.
+Building software was hard, and slow. That was the visible problem, and it
+covered for everything behind it — a requirement nobody had pinned down,
+business context that lived in one person's head, an assumption three people
+each understood differently. None of it had to be settled, because the build
+was always the thing running late.
 
-The fix isn't a better prompt. It's writing down what an agent would otherwise
-have to guess: who you serve, what you offer, who does what, and which system
-realizes each piece.
+AI took that delay away faster than anyone planned for, and what it was
+covering is now the whole problem. **Vague requirements and missing context
+no longer slow a project down — they get built.** An agent handed an
+assumption nobody stated does not stop and ask. It fills the gap with
+something plausible and carries on, at speed, and you get a working version of
+the wrong thing in an afternoon. Understanding the problem, and which solution
+actually fits it, is the part that stays human.
+
+So the thing worth building now is not a faster way to produce software. It is
+a way to get your own assumptions written down where people can disagree with
+them — who you serve, what you offer, who does what, and which system does
+each piece — early, while disagreeing is still cheap. The fix isn't a better
+prompt.
 
 ## How it works
 
 A requirement never becomes code directly. It walks down six architecture
-layers, stops wherever a human has to decide, and only then gets built.
+layers — grouped into three questions — in two halves: the one you rule, and
+the one you can hand over.
+
+### First — what you are actually asking for
 
 ```mermaid
 flowchart LR
-  subgraph A["&nbsp;&nbsp;Your agent works&nbsp;&nbsp;"]
-    design["Aligns six layers"]:::ai
-    build["Implements"]:::ai
-  end
-  subgraph H["&nbsp;&nbsp;You decide&nbsp;&nbsp;"]
-    ask(["A requirement"]):::human
-    gate{{"Gates 0-3"}}:::gate
-    review{{"Review"}}:::gate
-    merged(["Merged"]):::done
-  end
-  ask --> design --> gate
-  gate --> build --> review
-  review --> merged
-  gate -.->|changes| design
-  review -.->|changes| build
+  req(["A requirement"]):::human
+  intention["<b>Intention</b><br/>why, and for whom"]:::ai
+  gA{{"You approve<br/>the direction"}}:::gate
+  operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
+  gB{{"You approve —<br/>before any code exists"}}:::gate
+  out(["A sharper requirement —<br/>agreed, and written down"]):::done
 
+  req --> intention --> gA --> operation --> gB --> out
+  gA -.->|"changes"| intention
+  gB -.->|"changes"| operation
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
+  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
-**You own both ends; the middle is the agent's.** The dotted edges are the two
-loops that can't be skipped — a gate you decline sends the work back *before
-any code exists*, and a review you decline sends it back *before anything
-merges*.
+**This half pays for itself even if nothing gets built.** The agent drafts;
+you settle. What you end up holding is your own requirement, sharper than the
+one you arrived with — who it serves, what it has to do, and which of your
+assumptions turned out to disagree with each other. The dotted edges are the
+loops that can't be skipped, and neither gate here is about code.
+
+### Then — what gets built from it
+
+```mermaid
+flowchart LR
+  inp(["What you agreed"]):::done
+  realization["<b>Realization</b><br/>what builds it"]:::ai
+  gC{{"Want to see<br/>the design first?"}}:::gateopt
+  build["Builds it"]:::ai
+  check{{"You check<br/>the delivery"}}:::gate
+  out(["The outcome you asked for,<br/>and the next requirement"]):::done
+
+  inp --> realization --> gC --> build --> check --> out
+  check -.->|"changes"| build
+  classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
+  classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
+  classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
+  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
+  classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
+```
+
+**Nobody asks you to read the code.** What comes back to you is the working
+thing, and the question is whether it does what you asked for. If you *are*
+technical, or someone on your side is, the pull request is right there and the
+dashed gate will show you the design before it is built — but that is an
+option you take, not a toll you pay.
+
+Each half is bounded, and each ends in something worth having: the first in
+understanding, the second in the outcome. That is also why the second picture
+ends where the first one began.
 
 Drawn in the method's own palette: cyan is always an AI actor, here and in
 every model you'll build, so you never mistake one for a person.
@@ -65,14 +106,19 @@ every model you'll build, so you never mistake one for a person.
 Numbered in the order they're assessed. Deriving one before the layer above it
 is agreed is the mistake the whole method exists to prevent.
 
-| # | Layer | The question it answers |
-| - | ----- | ----------------------- |
-| 0 | Business design | Who are the customers, and how does each offering pay? |
-| 1 | Strategy | Why does this exist, and what must it be able to do? |
-| 2 | Business | Who does what, and which services are offered? |
-| 3 | Information | What information exists, and where does it live? |
-| 4 | Application | Which software realizes each business service? |
-| 5 | Technology | What runs it all — runtimes, build, hosting? |
+| Group | # | Layer | The question it answers |
+| ----- | - | ----- | ----------------------- |
+| **Intention** | 0 | Business design | Who are the customers, and how does each offering pay? |
+| **Intention** | 1 | Strategy | Why does this exist, and what must it be able to do? |
+| **Operation** | 2 | Business | Who does what, and which services are offered? |
+| **Operation** | 3 | Information | What information exists, and where does it live? |
+| **Realization** | 4 | Application | Which software realizes each business service? |
+| **Realization** | 5 | Technology | What runs it all — runtimes, build, hosting? |
+
+The groups are a way to read the six, not a seventh thing to learn. The line
+between **Operation** and **Realization** is the one that matters: it is where
+the method stops and asks, and everything above it is agreed before any code
+exists.
 
 You don't fill in all six for a weekend project. **One method, three depths** —
 an app, an organization, or an enterprise — and the agent tells you which one
@@ -115,7 +161,7 @@ says exactly what lands in your project either way.
 
 | | |
 | --- | --- |
-| **15 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
+| **17 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
 | **A scaffold** | Six layer folders, the notation, two validators, and placeholder entry points. A working project before you've written anything. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
 | **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
 | **A portal and a PDF, when you need them** | The same documents as a searchable website and as one printable document, for the people who will never open a repository. Both are rebuilt from the Markdown and thrown away. [How it works](./docs/publishing.md) |
