@@ -44,8 +44,8 @@ other copy the method allows: written once, and checked.
 
 ## What this cannot do
 
-**It cannot reach a private repository**, and neither can the navigator. A
-model you cannot publish is a model nobody can federate with.
+**It cannot reach a private repository.** A model you cannot publish is a
+model nobody can federate with.
 
 **It cannot tell you the upstream changed.** It can only tell you this model
 disagrees with itself. The two are different failures and only one of them is

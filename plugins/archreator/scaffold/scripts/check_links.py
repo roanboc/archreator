@@ -96,26 +96,6 @@ def is_expected_forward_reference(resolved: Path) -> bool:
     return bool(NUMBERED_EA_DOC_RE.match(resolved.name))
 
 
-def is_fetched_asset(resolved: Path) -> bool:
-    """A file the portal build downloads into the navigator, rather than ships.
-
-    `build_docs.py` fetches sql.js against a pinned digest and writes it beside
-    the navigator in the built site. It is deliberately not committed — a
-    binary nobody reviewing a pull request will read has no business in a
-    repository of Markdown and standard-library Python — so the page links to
-    something that exists only after a build.
-
-    The list is imported from the build rather than restated here: two places
-    naming the same files is how one of them goes stale, and this one would
-    fail silently by exempting a link that had stopped being fetched.
-    """
-    try:
-        from build_docs import NAVIGATOR, SQLJS_FILES
-    except Exception:  # pragma: no cover - a project may not ship the portal
-        return False
-    return resolved.name in SQLJS_FILES and NAVIGATOR in resolved.parts
-
-
 def ids_in(html_file: Path) -> set[str]:
     if html_file not in _ids_cache:
         try:
@@ -136,7 +116,7 @@ def check_markdown(md_file: Path) -> list[str]:
         if not path_part:
             continue
         resolved = (md_file.parent / path_part).resolve()
-        if resolved.exists() or is_expected_forward_reference(resolved) or is_fetched_asset(resolved):
+        if resolved.exists() or is_expected_forward_reference(resolved):
             continue
         errors.append(f"{md_file.relative_to(REPO_ROOT)}: broken link -> {target}")
     return errors
@@ -157,8 +137,6 @@ def check_html(html_file: Path) -> list[str]:
             continue
         resolved = (html_file.parent / path_part).resolve()
         if not resolved.exists():
-            if is_fetched_asset(resolved):
-                continue
             errors.append(f"{rel}: broken link -> {target}")
             continue
         if fragment and resolved.suffix == ".html" and fragment not in ids_in(resolved):

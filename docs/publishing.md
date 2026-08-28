@@ -242,46 +242,30 @@ Until it is hosted somewhere, **the PDF is the distribution channel**: it is a
 file you can attach to a mail, and it is the same rendering. A portal nobody
 has hosted has not widened the audience by one reader.
 
-## The graph, and the federation
+## The brief, and the federation
 
-The portal renders documents. `navigator/`, published beside them, renders the
-**graph**: every element as a labelled box coloured by its layer, laid out by
-layer or by connection, and walked outward from whatever the reader clicks —
-which is `query_model.py trace` with a viewport, running the same query.
+The portal renders the documents and the PDF prints them. Neither answers "what
+do I need to know about *this*" - and `scripts/build_brief.py` is the third
+rendering, for the reader who has a question rather than an afternoon.
 
-Selecting a box opens a panel carrying the element's catalogue row, the
-paragraphs the documents write about it **verbatim**, and every relationship it
-has. Search suggests the types, layers and statuses the model actually
-contains. An arrangement can be saved as a view — in the reader's browser, as a
-file, or committed under `architecture/views/` for one a team agrees on.
+```bash
+python3 scripts/build_brief.py --element BSVC1 --depth 2
+```
 
-The page reads and never writes. A view committed to the repository arrives in
-a pull request like any other change; the navigator can apply one and has no
-way to create one.
+It writes one Markdown file into `.docs/briefs/`: the elements in scope, the
+views showing how they depend on each other from business down to technology,
+what the documents already say about each, and what the scope left out.
 
-Two files go up with it, at a path another model can rely on:
+**Everything it writes is disposable and says so.** So does the PDF. Both carry
+the revision they were generated from and a line naming the repository as the
+model, because a generated document that does not announce itself gets
+committed, emailed, and quoted long after it stopped being true.
 
-| `<site>/navigator/model.json` | The projection, and the interchange format. Carries a schema number and the commit it was built from |
-| `<site>/navigator/model.db` | The same thing as SQLite, for a reader that queries rather than parses |
-
-**A model publishes its own projection, never its repository's.** A repository
-holding several models publishes several, at several addresses.
-
-**Federating them is a list of locations and nothing else.** The topmost model
-of a federation — the organization, or the parent business function where no
-organization is modeled — fills in `architecture/federation.md` naming each
-model and where its projection is published. The build derives the manifest the
-page reads; the page fetches what it names and shows it alongside.
-
-There is no central model, and there is not meant to be one. A model holding
-every other model's elements would restate what those models own, which the
-tier rule forbids, and its owner would need approval rights over elements they
-did not write. The union exists while somebody has the page open.
-
-It reaches what the web reaches: **public projections only**, because a static
-page cannot authenticate and giving it a way to would trade away the property
-that makes it worth having. What it cannot fetch it names, by model and reason,
-and no build fails over it.
+**A model still publishes its own projection** at `<site>/projection/model.json`
+and `model.db`, with a schema number and the commit they were built from, so a
+second model can read it without cloning anything. `architecture/federation.md`
+in the topmost model of a federation names the models that belong together -
+which is also what gives `other-model::CAP1` a model name to resolve against.
 
 ## Leaving documents out of the PDF
 

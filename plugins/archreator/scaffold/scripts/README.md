@@ -28,48 +28,40 @@ green for them, and nothing breaks if they are never run.
 | `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, a levelled ID has its parent defined, every document that defines an element declares how far it has been validated, no relationship table restates an element's name differently from the catalogue that defines it, and every reference that names another model either resolves in this repository or is declared in `architecture/imports.md` |
 | `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. Every edge carries where it was declared and whether it is pending. `--inventory` prints one line per element instead |
 | `query_model.py` | Executable. Reads `model.db` and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
-| `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
+| `build_brief.py` | Executable. Writes one disposable Markdown brief into `.docs/briefs/` for a named scope — the elements in it, generated views of how they depend on each other across the layers, and what the documents already say |
+| `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, publishes this model's projection under `site/projection/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
 | `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text. What the PDF leaves out is the `print-site` `exclude` list in `mkdocs.yml`; `--config mkdocs-<audience>.yml` exports a second PDF from a config that inherits it |
-| `neighbourhood.sql` | Data, read by `query_model.py` **and by the navigator**. The traversal itself — everything within N hops of one element, as a recursive CTE, walking a model-qualified identifier so it crosses a federation boundary without knowing it did. It is a file rather than a function because two readers execute it, one of them in a browser, and a walk written twice drifts |
+| `neighbourhood.sql` | Data, read by `query_model.py` **and by `build_brief.py`**. The traversal itself — everything within N hops of one element, as a recursive CTE, walking a model-qualified identifier so it crosses a federation boundary without knowing it did. It is a file rather than a function because two readers execute it, and a walk written twice drifts |
 | `model_graph.py` | Library, imported by the others. The single parse of the document convention — element IDs, catalogue tables, relationship tables, and the resolution of a bare identifier inside a domain |
 | `element-prefixes.json` | Data, read by `model_graph.py`. The element-ID prefixes and what each stands for |
 
-## The navigator
+## Briefs
 
-`../navigator/` is the same projection with a picture: one static page where
-every element is a labelled box, laid out by ArchiMate layer or by connection,
-searchable, and walkable outward from anything to show what a change to it
-would touch. Selecting a box shows its catalogue row, **the paragraphs the
-documents write about it**, and every relationship it has. `build_docs.py`
-copies it into the built site, writes `model.db` beside it, and fetches sql.js —
-the only way to read SQLite in a browser — against a pinned digest.
+`build_brief.py` is for a reader with a question about one part of the model.
+Name a scope and it writes a single Markdown document into `.docs/briefs/`:
+the elements in it, **generated views of how they depend on each other across
+the layers**, and the paragraphs the documents already write about them.
 
-**Search is faceted rather than clever.** No language model runs in a static
-page, so `type:`, `layer:`, `model:`, `status:` and `grounded:` suggest the
-values *this* model has, with counts. A reader learns the vocabulary from the
-thing they are searching, which is the only vocabulary that will match.
+```bash
+python3 scripts/build_brief.py --element BSVC1 --depth 2
+python3 scripts/build_brief.py --domain SALES
+```
 
-**An arrangement can be kept.** Drag boxes, then save the view — in the
-reader's own browser, as an exported file, or committed to
-`architecture/views/` for a view a team agrees on. **The page never writes to
-the model**: it reads a view and cannot create one in the repository.
+The walk is `neighbourhood.sql`, the same traversal `query_model.py trace`
+runs. The prose is the model's own, carried verbatim - nothing is summarized,
+because a paraphrase in a generated document is a claim nobody approved.
 
-**It runs `neighbourhood.sql`, not a traversal of its own.** That is the whole
-reason the query is a file. `query_model.py trace` and the page answer the same
-question, and answering it twice in two languages is how the two answers start
-disagreeing — with the browser's being the one nobody tests.
+**A brief is disposable and says so on its face.** It carries the revision it
+was generated from and a line telling a reader that the repository is the
+model. It is never committed: `.docs/` is gitignored, and a brief that gets
+mailed around and quoted eight months later is the second source of truth this
+method exists to prevent.
 
-**A federation is a list, not a central model.** Where
-`architecture/federation.md` names other models — which only the topmost model
-of a federation does — the build derives `navigator/federation.json` from it and
-the page loads every projection it names, reporting by name each one it could
-not reach. There is no central store: the union exists while the page is open
-and is gone when it closes.
-
-Nothing about it is committed except the page and the index: the database is
-derived, the manifest is derived, and sql.js is fetched. **If the fetch fails the portal still builds** and the page
-says what is missing, because a model that will not publish because a graph
-viewer could not download a library is a bad trade.
+**A generated view never replaces an authored one.** The layer documents keep
+their own diagrams - those are curated selections, and the notation says a
+selection that looks complete is worse than several honest parts. A brief adds
+the view nobody drew: the chain from business and information down to
+application and technology, which lives in no single document.
 
 `build_docs.py` and `export_pdf.py` need MkDocs, which they declare inline:
 `uv run scripts/build_docs.py` fetches it into a throwaway environment and

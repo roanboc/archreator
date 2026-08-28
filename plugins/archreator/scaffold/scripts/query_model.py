@@ -3,7 +3,7 @@
 
 `build_model.py` writes the model as nodes and edges so that a consumer which
 cannot read Markdown can use it. This is one of two such consumers — the other
-is the navigator, and **they read the same database with the same query.**
+is `build_brief.py`, and **they read the same database with the same query.**
 
 Two questions, because these are the two that a table cannot answer:
 
@@ -20,9 +20,9 @@ genuinely transitive question as one of the four, and says how to answer it:
 "a `nodes`/`edges` pair traversed with recursive CTEs. At the scale a model
 reaches, SQLite *is* the graph database."
 
-That query is in a file rather than in this one because a browser has to run
-it too. A walk implemented once here and once in JavaScript would drift, and
-the copy that drifted would be the one in the browser, which nothing tests.
+That query is in a file rather than in this one because a second tool runs
+it: `build_brief.py` asks the same question to decide what belongs in a brief.
+A walk implemented once per reader drifts, and the drift is silent.
 
 `coverage` also separates what a Requester has approved from what has only
 been written down. A catalogue of elements somebody mentioned in a meeting and
@@ -66,7 +66,7 @@ DEFAULT_OUT = REPO_ROOT / ".model"
 # How far `trace` walks by default. Two hops crosses one layer boundary in each
 # direction, which is the blast radius a person can still hold in their head.
 DEFAULT_DEPTH = 2
-# The traversal, shared with the navigator. See the module docstring.
+# The traversal, shared with `build_brief.py`. See the module docstring.
 NEIGHBOURHOOD_SQL = Path(__file__).resolve().parent / "neighbourhood.sql"
 
 
