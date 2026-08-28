@@ -187,6 +187,12 @@ revise from Step 2 and present again, leaving the status lines where they are.
 
 ## ⚠ Anti-patterns
 
+- **Writing down a reading of a person.** A transcript summary records
+  decisions, constraints, numbers and names — never who seemed frustrated or
+  whose team is difficult. A repository keeps a sentence long after anyone can
+  correct it. See `architecture-document-style` § A summary of a meeting
+  records facts, not judgements.
+
 - Filling an element from what a project like this usually wants.
 - Re-asking a question the Requester already answered on an approved canvas.
 - Twenty goals, because nobody checks a change against twenty.

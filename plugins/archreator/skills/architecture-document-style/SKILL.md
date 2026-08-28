@@ -56,7 +56,7 @@ document reaches for it. Nothing here is a step.
   when the analysis order genuinely changes.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
-- `architecture/roadmap/` is not a layer and carries no layer number. Its
+- `architecture/6_transition/` is not a layer and carries no layer number. Its
   documents are numbered in analysis order like a layer's are, because a gap
   cannot be derived before the plateau it is measured against exists. It is
   **the only folder in the model that describes a future**; every numbered
@@ -519,6 +519,41 @@ only of what was used.
 **Reference documents are not published.** The portal and the PDF exist to
 hand a reader the model; a raw transcript carries everything else that was in
 the room that day, to an audience that was not.
+
+#### A summary of a meeting records facts, not judgements
+
+A transcript is the commonest thing in `reference/`, and what gets written down
+*from* one is where a model quietly acquires claims nobody would have approved.
+
+**Write down what can be checked**: decisions taken, constraints stated,
+numbers quoted, systems and teams named, dates, owners, what somebody
+committed to, what was explicitly left open.
+
+**Do not write down readings of people**: who seemed frustrated, who is
+difficult to work with, whose team is disorganised, what a tone implied, who
+appeared not to understand their own process. Nor the emotional weather of the
+room — tension, resistance, enthusiasm — as though it were a finding.
+
+Three reasons, and the third is the one that matters:
+
+- **A judgement is unfalsifiable.** "Operations pushed back" can be checked;
+  "operations were defensive" cannot, so nobody can correct it.
+- **It is usually wrong.** A reading of a person from one meeting, written by
+  somebody with a stake in the outcome, is a guess wearing the clothes of an
+  observation.
+- **A repository keeps it.** Long after everyone has forgotten the meeting and
+  the context that made the reading seem fair, the sentence is still there,
+  searchable, attached to a named person, in a document a new colleague reads
+  to learn what the organization is like.
+
+Where a difficulty is real and architecturally relevant, it is written as what
+it is: a constraint, a risk, an assessment, a driver — an `ASM` or a `DRV`
+element with a source, not an aside about somebody. "Two teams disagree on who
+owns customer data" is a finding. "Team A is territorial" is not.
+
+**Nothing checks this.** No validator can tell a fact from a judgement, and one
+that claimed to would be the worst kind of wrong. It is a rule a writer follows
+and a reviewer reads for.
 
 ### ArchiMate on Mermaid
 

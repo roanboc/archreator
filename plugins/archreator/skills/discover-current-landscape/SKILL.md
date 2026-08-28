@@ -321,6 +321,12 @@ the sweep found the estate, not the ambition.
 
 ## ⚠ Anti-patterns
 
+- **Writing down a reading of a person.** A transcript summary records
+  decisions, constraints, numbers and names — never who seemed frustrated or
+  whose team is difficult. A repository keeps a sentence long after anyone can
+  correct it. See `architecture-document-style` § A summary of a meeting
+  records facts, not judgements.
+
 - Inventing a requirement so that the spine has something to align, when what
   is actually wanted is a description of what exists.
 - Recording the org chart as the process catalogue. Departments are not

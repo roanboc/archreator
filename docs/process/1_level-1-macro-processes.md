@@ -90,7 +90,7 @@ flowchart TD
 The only process whose output describes a future. Everything else in the model —
 every layer document, every validator, every restatement — is held to describing
 what is true now, and that rule is worth keeping precisely because one place is
-exempt from it. The exemption is a folder, `architecture/roadmap/`, and it is the
+exempt from it. The exemption is a folder, `architecture/6_transition/`, and it is the
 whole of `BPROC5`'s output.
 
 It reuses Gate 1 rather than adding a fifth gate. The reasoning is in
