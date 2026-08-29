@@ -3,8 +3,8 @@
 _[← Project home](../README.md)_
 
 Two validators that keep this project's architecture documents honest, and
-four tools — one for the reader who queries the model, three for the readers a
-repository does not reach. They came with the
+five tools — the projection they all read, two for a reader with a question,
+and two for the readers a repository does not reach. They came with the
 scaffold, so this project has had them since its first commit, and CI should
 run both validators on every pull request.
 
@@ -14,12 +14,13 @@ python3 scripts/check_model.py    # element-ID references resolve
 python3 scripts/build_model.py    # project the model into .model/
 python3 scripts/query_model.py coverage      # what is grounded, and what is not
 python3 scripts/query_model.py trace CAP3    # what a change to one element touches
+python3 scripts/build_brief.py --element CAP3 --depth 2   # one scope, as a brief
 python3 scripts/build_docs.py     # the model as a website, in .docs/site/
 python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 ```
 
 Both validators exit `0` when everything resolves and `1` otherwise, printing
-what failed. The other four are tools rather than gates: nothing has to be
+what failed. The other five are tools rather than gates: nothing has to be
 green for them, and nothing breaks if they are never run.
 
 | File | What it is |
@@ -48,7 +49,7 @@ python3 scripts/build_brief.py --domain SALES
 ```
 
 The walk is `neighbourhood.sql`, the same traversal `query_model.py trace`
-runs. The prose is the model's own, carried verbatim - nothing is summarized,
+runs. The prose is the model's own, carried verbatim — nothing is summarized,
 because a paraphrase in a generated document is a claim nobody approved.
 
 **A brief is disposable and says so on its face.** It carries the revision it
@@ -58,7 +59,7 @@ mailed around and quoted eight months later is the second source of truth this
 method exists to prevent.
 
 **A generated view never replaces an authored one.** The layer documents keep
-their own diagrams - those are curated selections, and the notation says a
+their own diagrams — those are curated selections, and the notation says a
 selection that looks complete is worse than several honest parts. A brief adds
 the view nobody drew: the chain from business and information down to
 application and technology, which lives in no single document.

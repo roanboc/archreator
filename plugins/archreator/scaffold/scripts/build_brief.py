@@ -332,6 +332,17 @@ def brief(connection, rows, scope, dropped, args) -> str:
         motive = motivation_view(rows, edges)
         if motive:
             out += ["## Why it exists", "", motive, ""]
+        if not view and not motive:
+            # Say it rather than print nothing. A scope narrowed to one layer
+            # has no chain to draw, and a reader who asked for the view the
+            # brief exists for should learn that instead of wondering.
+            out += [
+                "> **No cross-layer view.** Nothing in this scope depends on "
+                "anything in another layer — usually because the scope is one "
+                "layer wide. Widen it with a larger `--depth`, or drop "
+                "`--layer`, to see the chain down.",
+                "",
+            ]
 
     by_layer = defaultdict(list)
     for row in rows:

@@ -440,6 +440,15 @@ table" is prose that mentions one. This is what separates a relationship column
 from an attribute column — `Maturity` holds the word "Established" and
 `Realizes` holds identifiers, and both are columns of the same catalogue.
 
+**This is the one place a reference is a bare identifier.** § Identifiers asks a
+reference in prose or an ordinary cell to carry `ID — Name`, so a reader is
+never sent looking. A relationship column is read by a parser before it is read
+by a person, and a name inside it turns the cell into prose the parse stops
+seeing — silently, because a column that declares nothing looks exactly like a
+column that has nothing to declare. The name belongs in the row's own name
+column, and in cells 2 and 4 of the relationship table below, where it is
+checked against the catalogue rather than trusted.
+
 **A relationship table declares everything a row cannot.** A catalogue has one
 row per element, so it has no shape at all for a relationship between two peers
 in the same layer — which is most of them. Give the document a `## Relationships`
