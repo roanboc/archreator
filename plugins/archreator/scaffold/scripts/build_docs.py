@@ -142,8 +142,10 @@ def unpublished_links(project: Path, wanted: dict[Path, Path]) -> list[str]:
     the person making it should simply know which links it costs.
     """
     staged = set(wanted)
-    notes: list[str] = []
-    for relative, source in sorted(wanted.items()):
+    # A document routinely links the same unpublished file twice - a nav line
+    # and a sentence. That is one thing to know about, not two.
+    notes: set[str] = set()
+    for relative, source in wanted.items():
         if source.suffix.lower() != ".md":
             continue
         for match in PORTAL_LINK_RE.finditer(source.read_text(encoding="utf-8", errors="replace")):
@@ -154,8 +156,8 @@ def unpublished_links(project: Path, wanted: dict[Path, Path]) -> list[str]:
             if not resolved.is_file() or not resolved.is_relative_to(project):
                 continue
             if resolved.relative_to(project) not in staged:
-                notes.append(f"{relative} → {resolved.relative_to(project)}")
-    return notes
+                notes.add(f"{relative} → {resolved.relative_to(project)}")
+    return sorted(notes)
 
 
 def stage(project: Path, staging: Path) -> tuple[int, int, int]:
