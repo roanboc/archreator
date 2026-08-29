@@ -196,9 +196,9 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   indexed there, and the elements derived from it name it.
 - Deliverables name artifacts, not intentions.
 - Every meaningful exclusion has a gap note.
-- Open questions, where any exist, link the document the interpretation was
-  applied in — and the project's open-questions log, where it keeps one,
-  carries the same row.
+- Open questions, where any exist, state the concrete response expected and
+  link the document where the interpretation was applied. The project's
+  open-questions log, where it keeps one, carries the same question once.
 
 ## Optional: the open-questions log
 
@@ -207,7 +207,29 @@ a board, a client, a compliance owner — benefits from one living index at
 `architecture/scope/open-questions.md`, listing every adopted interpretation
 across all scope documents that still needs confirmation.
 
-Where the project keeps one, every new or resolved row is mirrored there in
-the same change, and `align-change-through-layers` Step 0 reads it before
-starting anything. A project with nobody to reconcile with can skip the file:
-the section inside each scope document is enough.
+Where the project keeps one, every new question and every rejected adopted
+interpretation is mirrored there in the same change, and
+`align-change-through-layers` Step 0 reads it before starting anything. A
+project with nobody to reconcile with can skip the file: the section inside
+each scope document is enough.
+
+Group pending questions under headings that combine the layer number and
+name — for example `### 1 — Strategy` — in architectural order. Do not make a
+reader translate a numeric `Layer` column. A question that affects several
+layers appears once under the earliest layer it blocks and names the other
+affected layers in its interpretation.
+
+Write one question for one underlying uncertainty. Before adding it, search
+the log for the same decision expressed differently; consolidate the links
+and affected layers into the existing row instead of repeating it. State the
+expected response explicitly. Prefer a yes/no confirmation such as “Is the
+adopted interpretation correct?” when acceptance is genuinely binary; when it
+is not, ask for the exact missing choice, value, owner, date, or wording rather
+than “Please clarify”.
+
+An accepted adopted interpretation is no longer an open question: remove its
+row after applying the confirmation to the model. Use **Resolved** only when
+the adopted interpretation was rejected, because that exception is useful
+history. Record both the rejected interpretation and the accepted answer, and
+keep the architecture layer and stable question number so the correction can
+be traced.

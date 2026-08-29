@@ -109,16 +109,16 @@ traceable without pretending they are architecture.
 ```mermaid
 flowchart LR
   subgraph PROFILE["Customer profile"]
-    seg(["◍ <Who we serve> [CS1]"]):::motivation
-    job{{"⚙ <What they're trying to do> [JOB1]"}}:::motivation
-    pain>"✖ <What hurts today> [PAIN1]"]:::motivation
-    gain[["✔ <What they'd call a win> [GAIN1]"]]:::motivation
+    seg(["◍ <Who we serve> [CS#]"]):::motivation
+    job{{"⚙ <What they're trying to do> [JOB#]"}}:::motivation
+    pain>"✖ <What hurts today> [PAIN#]"]:::motivation
+    gain[["✔ <What they'd call a win> [GAIN#]"]]:::motivation
   end
 
   subgraph VALUEMAP["Value map"]
-    prod["▣ <What we offer> [PROD1]"]:::strategy
-    prel[/"⊖ <How it removes the pain> [PREL1]"\]:::strategy
-    gcre[/"⊕ <How it produces the gain> [GCRE1]"\]:::strategy
+    prod["▣ <What we offer> [PROD#]"]:::strategy
+    prel[/"⊖ <How it removes the pain> [PREL#]"\]:::strategy
+    gcre[/"⊕ <How it produces the gain> [GCRE#]"\]:::strategy
   end
 
   seg -->|performs| job
