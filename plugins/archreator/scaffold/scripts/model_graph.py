@@ -167,6 +167,14 @@ LAYER_DIR_RE = re.compile(r"^(\d)_(.+)$")
 # `query_model.py` reads it for grounding, and the projection reads it to decide
 # whether an edge is live. Two copies of one convention drift silently.
 PENDING_MARKERS = ("pending", "pendiente")
+# The same marker, anchored to the start of a cell — which is how the grounding
+# rule writes it: `**Pending — future initiative**` is the cell, not a remark
+# inside one. A row-level read has to be stricter than a cell-level one,
+# because a catalogue row is prose as well as data. Unanchored, "a **pending**
+# relationship reads as a live one" marks the row that describes the problem,
+# and "stops de**pending** on their availability" marks a stakeholder who is
+# not pending at all. Both are real rows in these models.
+PENDING_MARK_RE = re.compile(r"^\W*(?:" + "|".join(PENDING_MARKERS) + r")\b", re.I)
 
 # The name in a bolded lead-in definition: `**G1 — Legible guidance.**`
 BULLET_NAME_RE = re.compile(r"\*\*(" + _ID + r")\s+—\s+(.+?)\*\*", re.S)
@@ -871,8 +879,18 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         # the module docstring gives.
         for element, (_, attrs, refs) in named.items():
             src = qualify(element)
+            # **A row that says Pending says it about its relationships too.**
+            # An element marked `Pending — future initiative` does not exist
+            # yet, so nothing it points at is true today either. The marker
+            # cannot live in the relationship cell — a cell stops declaring the
+            # moment it holds anything but identifiers, so a word written there
+            # deletes the edge rather than qualifying it. It is read from the
+            # row instead, in whichever column the grounding rule put it.
+            row_pending = any(
+                PENDING_MARK_RE.match(value) for value in attrs.values()
+            )
             for header, cited in refs.items():
-                pending = any(
+                pending = row_pending or any(
                     marker in attrs.get(header, "").lower()
                     for marker in PENDING_MARKERS
                 )

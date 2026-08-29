@@ -486,6 +486,20 @@ cannot judge either.
 column. Never with a dashed arrow: that is a diagram device, and diagrams are
 not read.
 
+**A catalogue row says it once, for the whole row, and the marker leads a
+cell.** An element that does not exist yet points at nothing that is true yet,
+so the marker written for the grounding rule marks every relationship the row
+declares — `**Pending — future initiative**` in a `State` or `Note` column, and
+the parse reads it. Two rules make that safe and both are load-bearing:
+
+- **It cannot go in the relationship cell.** A cell declares only when it holds
+  identifiers and nothing else, so a word written beside one does not qualify
+  the relationship — it deletes it.
+- **It must start the cell it is in.** A catalogue row is prose as well as
+  data, and a sentence *about* pending work is not a pending row. Anchored to
+  the start, "**Pending** — no contributor base exists yet" marks the row and
+  "stops depending on their availability" does not.
+
 ### Grounding rule (the most important one)
 
 Every EA element must name the code artifact that realizes it — a page, a
