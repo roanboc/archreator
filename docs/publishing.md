@@ -249,12 +249,20 @@ do I need to know about *this*" - and `scripts/build_brief.py` is the third
 rendering, for the reader who has a question rather than an afternoon.
 
 ```bash
-python3 scripts/build_brief.py --element BSVC1 --depth 2
+python3 scripts/build_brief.py --element BSVC1 --depth 2 --focus business
+python3 scripts/build_brief.py --element DOBJ4 --focus information
+python3 scripts/build_brief.py --domain SALES --focus impact
 ```
 
 It writes one Markdown file into `.docs/briefs/`: the elements in scope, the
 views showing how they depend on each other from business down to technology,
 what the documents already say about each, and what the scope left out.
+
+Before generating, the `answer-architecture-question` skill confirms whether
+the reader needs Business and operations, Information and data, Solution and
+technology, End-to-end impact, or a Decision overview. The corresponding
+`--focus` value makes that choice reproducible; omitting it retains the
+existing all-elements behavior.
 
 **Everything it writes is disposable and says so.** So does the PDF. Both carry
 the revision they were generated from and a line naming the repository as the

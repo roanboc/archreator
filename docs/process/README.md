@@ -99,7 +99,7 @@ flowchart TD
 | `BPROC1` | Operational | Establish the architecture model | Turns a subject nobody has modeled into a populated, approved model the next change can be judged against | `BPROC1.1` · `BPROC1.2` · `BPROC1.3` · `BPROC1.4` · `BPROC1.5` |
 | `BPROC5` | Operational | Plan the transition | Turns an approved description of today into a destination, the distance to it, and the order that distance is closed in | `BPROC5.1` |
 | `BPROC2` | Operational | Deliver an architected change | Turns a Requester's requirement into merged code whose architecture documents are still true | `BPROC2.1` · `BPROC2.2` · `BPROC2.3` |
-| `BPROC3` | Support | Keep the model true | Turns a model that has drifted from what shipped back into a description of today | `BPROC3.1` · `BPROC3.2` |
+| `BPROC3` | Support | Keep the model true and readable | Keeps the model truthful and turns one reader question into a bounded reading of it | `BPROC3.1` · `BPROC3.2` · `BPROC3.3` |
 | `BPROC4` | Evaluation | Learn from the engagement | Turns what the method failed to cover into proposals, before the memory of it evaporates | `BPROC4.1` |
 
 The four bands are the classification
@@ -131,6 +131,7 @@ Every level-2 process, and how far down it is detailed.
 | `BPROC2.3` | Hand over for review | Level 2 | — | One step and one template |
 | `BPROC3.1` | Restate the current state | Level 2 | — | No pain raised. Revisit when one is |
 | `BPROC3.2` | Record a decision | Level 2 | — | One document, one template |
+| `BPROC3.3` | Answer an architecture question | Level 2 | — | One confirmed focus, one resolved scope and one disposable brief |
 | `BPROC4.1` | Run the engagement retrospective | Level 2 | — | Six questions, no sequence between them |
 
 One branch of twelve is detailed to level 3. That ratio is the point of the

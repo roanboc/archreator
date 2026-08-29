@@ -137,7 +137,7 @@ host, all carried into every step below.
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
 It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
 `architecture/` — with `scope/`, `decisions/`, `6_transition/` and `reference/`
-inside it — and `scripts/`, the two validators and the four tools with their
+inside it — and `scripts/`, the two validators and the five tools with their
 own README. It also holds
 `mkdocs.yml` and `overrides/`, which render the model as a website, and
 `.github/`, which carries the pull-request template a change is described in,

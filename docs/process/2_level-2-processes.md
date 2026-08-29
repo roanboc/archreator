@@ -51,6 +51,7 @@ already names.
 | -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
 | `BPROC3.1` | Restate the current state | Turns a model carrying its own history into one that reads as a description of today | The model has accumulated shipped "Pending"s, superseded elements and resolved questions | `BPROC2.2`; elapsed time | A model carrying its own history | Layer documents that read as a description of today; a Retired section; **Gate 2** recorded | Requester; the next `BPROC2.1` | Agent | `restate-current-state` |
 | `BPROC3.2` | Record a decision | Turns a call too small for an initiative into a rationale the next reader can find | A call too small for an initiative but too consequential to leave unrecorded | Requester; Agent | The constraint, risk or requirement that made the call non-obvious | A numbered decision record, indexed | The next reader who asks "why this and not the alternative?" | Agent | `record-decision` |
+| `BPROC3.3` | Answer an architecture question | Turns one reader question into a focused, disposable view of the model | A reader asks about an element, domain, concern, impact or decision | Reader; the current model | A confirmed focus and a resolved model scope | A generated Markdown brief carrying the relevant model facts and its boundary | The reader | Agent | `answer-architecture-question` |
 
 ## `BPROC4` — Learn from the engagement
 

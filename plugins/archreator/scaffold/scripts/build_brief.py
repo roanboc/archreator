@@ -9,6 +9,7 @@ a scope, get a document.
     python3 scripts/build_brief.py --element BSVC1 --depth 2
     python3 scripts/build_brief.py --domain SALES
     python3 scripts/build_brief.py --layer Application --type "Application Component"
+    python3 scripts/build_brief.py --element DOBJ4 --focus information
 
 **The walk is `neighbourhood.sql`**, the same traversal `query_model.py trace`
 runs. One question — what is connected to this — asked by two readers and
@@ -72,9 +73,52 @@ LAYER_FILL = {
 # The brief says what it dropped rather than drawing it — see § the boundary.
 MAX_IN_VIEW = 45
 
+FOCUS_PRESETS = {
+    "business": {
+        "label": "Business and operations",
+        "primary": {"Motivation", "Strategy", "Business"},
+        "support": {"Information", "Application"},
+        "emphasis": "why the organisation exists and how it delivers value",
+        "deemphasized": "technology and unrelated solution detail",
+        "heading": "How the operating model fits together",
+    },
+    "information": {
+        "label": "Information and data",
+        "primary": {"Business", "Information", "Application"},
+        "support": {"Strategy", "Technology"},
+        "emphasis": "information use, flow, ownership and realizing applications",
+        "deemphasized": "unrelated motivation and technology detail",
+        "heading": "How information is used and realized",
+    },
+    "solution": {
+        "label": "Solution and technology",
+        "primary": {"Application", "Technology"},
+        "support": {"Business", "Information"},
+        "emphasis": "applications, integrations, platforms and deployment",
+        "deemphasized": "unrelated strategy and operating-model detail",
+        "heading": "How the solution is realized and deployed",
+    },
+    "impact": {
+        "label": "End-to-end impact",
+        "primary": set(LAYER_ORDER),
+        "support": set(),
+        "emphasis": "the connected dependency chain across every layer",
+        "deemphasized": "elements outside the requested traversal",
+        "heading": "How this reaches across the layers",
+    },
+    "decision": {
+        "label": "Decision overview",
+        "primary": {"Motivation", "Strategy", "Business", "Implementation & Migration"},
+        "support": {"Information", "Application", "Technology"},
+        "emphasis": "the reason, affected capabilities, solution impacts and transition",
+        "deemphasized": "implementation detail not directly affected by the decision",
+        "heading": "How the decision reaches the architecture",
+    },
+}
+
 
 def connect(out_dir: Path) -> sqlite3.Connection | None:
-    path = out_dir / "model.db"
+    path = (out_dir / "model.db").resolve()
     if not path.is_file():
         import build_model
 
@@ -169,6 +213,52 @@ def edges_within(connection, ids: set[str]) -> list[sqlite3.Row]:
         " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS d,"
         " rel, origin, pending FROM edges").fetchall()
     return [r for r in rows if r["s"] in ids and r["d"] in ids and r["s"] != r["d"]]
+
+
+def apply_focus(connection, rows: list[sqlite3.Row], focus: str | None,
+                anchor_id: str | None = None) -> tuple[list[sqlite3.Row], list[str]]:
+    """Apply a reader viewpoint after scope selection, without changing facts.
+
+    Primary-layer elements survive. Supporting-layer elements survive only
+    when directly connected to a primary element. The named anchor always
+    survives and acts as primary context even when its layer is not primary
+    for the chosen viewpoint.
+    """
+    if not focus or focus == "impact":
+        return rows, []
+
+    preset = FOCUS_PRESETS[focus]
+    by_id = {gid(row): row for row in rows}
+    primary = {
+        element for element, row in by_id.items()
+        if (row["layer_group"] or "—") in preset["primary"]
+    }
+    if anchor_id:
+        primary.update(
+            element for element, row in by_id.items()
+            if row["id"].upper() == anchor_id.upper()
+        )
+
+    kept = set(primary)
+    candidates = {
+        element for element, row in by_id.items()
+        if (row["layer_group"] or "—") in preset["support"]
+    }
+    all_edges = connection.execute(
+        "SELECT project || '::' || src AS s,"
+        " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS d"
+        " FROM edges"
+    ).fetchall()
+    for edge in all_edges:
+        if edge["s"] in primary and edge["d"] in candidates:
+            kept.add(edge["d"])
+        if edge["d"] in primary and edge["s"] in candidates:
+            kept.add(edge["s"])
+
+    # A focus with no primary-layer match still returns the protected anchor.
+    focused = [row for row in rows if gid(row) in kept]
+    excluded = sorted(set(by_id) - kept)
+    return focused, excluded
 
 
 def mermaid_id(value: str) -> str:
@@ -284,7 +374,7 @@ def motivation_view(rows: list[sqlite3.Row], edges: list[sqlite3.Row]) -> str:
     return "\n".join(lines)
 
 
-def brief(connection, rows, scope, dropped, args) -> str:
+def brief(connection, rows, scope, dropped, focus_dropped, args) -> str:
     ids = {gid(r) for r in rows}
     edges = edges_within(connection, ids)
     revision = ""
@@ -306,6 +396,20 @@ def brief(connection, rows, scope, dropped, args) -> str:
         "to answer one question. Regenerate it rather than keeping it, and do "
         "not quote it as a record.",
         "",
+    ]
+    if args.focus:
+        preset = FOCUS_PRESETS[args.focus]
+        out += [
+            "| | |",
+            "| --- | --- |",
+            f"| **Focus** | {preset['label']} |",
+            f"| **Anchor / scope** | {scope} |",
+            f"| **Depth** | {args.depth} relationship hop(s) |",
+            f"| **Emphasizes** | {preset['emphasis']} |",
+            f"| **De-emphasizes** | {preset['deemphasized']} |",
+            "",
+        ]
+    out += [
         f"{len(rows)} element(s), {len(edges)} relationship(s) between them.",
         "",
     ]
@@ -320,7 +424,8 @@ def brief(connection, rows, scope, dropped, args) -> str:
     else:
         view = layered_view(rows, edges)
         if view:
-            out += ["## How this reaches across the layers", "",
+            heading = FOCUS_PRESETS[args.focus]["heading"] if args.focus else "How this reaches across the layers"
+            out += [f"## {heading}", "",
                     "Only relationships that **cross** a layer are drawn, and only the "
                     "elements that have one. The relationships inside a layer are what each "
                     "layer document already diagrams; the chain down is what no document "
@@ -352,7 +457,7 @@ def brief(connection, rows, scope, dropped, args) -> str:
         out += [f"### {group}", ""]
         for row in sorted(by_layer[group], key=lambda r: r["id"]):
             out += element_section(connection, row, edges, ids)
-    out += boundary(connection, rows, dropped, ids)
+    out += boundary(connection, rows, dropped, focus_dropped, ids, args.focus)
     return "\n".join(out) + "\n"
 
 
@@ -394,7 +499,7 @@ def element_section(connection, row, edges, ids) -> list[str]:
     return out
 
 
-def boundary(connection, rows, dropped, ids) -> list[str]:
+def boundary(connection, rows, dropped, focus_dropped, ids, focus=None) -> list[str]:
     """What the scope left out. A brief that looks complete is the failure mode."""
     out = ["## What this leaves out", ""]
     total = connection.execute("SELECT COUNT(*) FROM nodes").fetchone()[0]
@@ -404,6 +509,11 @@ def boundary(connection, rows, dropped, ids) -> list[str]:
         out += [f"{len(dropped)} element(s) the walk reached were cut by the filters: " +
                 ", ".join(f"`{d.split('::')[-1]}`" for d in sorted(dropped)[:20]) +
                 ("…" if len(dropped) > 20 else "") + ".", ""]
+    if focus_dropped:
+        label = FOCUS_PRESETS[focus]["label"] if focus else "the selected focus"
+        out += [f"{len(focus_dropped)} reached element(s) were de-emphasized by **{label}**: " +
+                ", ".join(f"`{d.split('::')[-1]}`" for d in focus_dropped[:20]) +
+                ("…" if len(focus_dropped) > 20 else "") + ".", ""]
     just_outside = connection.execute(
         "SELECT DISTINCT project || '::' || src AS s,"
         " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS d"
@@ -437,6 +547,8 @@ def main() -> int:
     parser.add_argument("--layer", help="only this layer group — Business, Application, …")
     parser.add_argument("--type", help="only this element type — Capability, Node, …")
     parser.add_argument("--project", help="only models whose path contains this")
+    parser.add_argument("--focus", choices=FOCUS_PRESETS,
+                        help="reader viewpoint: business, information, solution, impact or decision")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="where model.db is")
     parser.add_argument("--to", type=Path, default=DERIVED, help="where to write the brief")
     parser.add_argument("--stdout", action="store_true", help="print it instead of writing it")
@@ -455,7 +567,11 @@ def main() -> int:
             if scope:
                 print(f"Nothing in scope for {scope}.")
             return 1
-        body = brief(connection, rows, scope, dropped, args)
+        rows, focus_dropped = apply_focus(connection, rows, args.focus, args.element)
+        if not rows:
+            print(f"Nothing remains in scope for the {args.focus} focus.")
+            return 1
+        body = brief(connection, rows, scope, dropped, focus_dropped, args)
     finally:
         connection.close()
 
@@ -464,6 +580,8 @@ def main() -> int:
         return 0
     slug = re.sub(r"\W+", "-", (args.element or args.domain or args.layer or
                                 args.type or args.project)).strip("-").lower()
+    if args.focus:
+        slug += f"-{args.focus}"
     args.to.mkdir(parents=True, exist_ok=True)
     path = args.to / f"{slug}.md"
     path.write_text(body, encoding="utf-8")
