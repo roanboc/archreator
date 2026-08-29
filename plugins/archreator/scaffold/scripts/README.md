@@ -3,8 +3,8 @@
 _[← Project home](../README.md)_
 
 Two validators that keep this project's architecture documents honest, and
-four tools — one for the reader who queries the model, three for the readers a
-repository does not reach. They came with the
+five tools — the projection they all read, two for a reader with a question,
+and two for the readers a repository does not reach. They came with the
 scaffold, so this project has had them since its first commit, and CI should
 run both validators on every pull request.
 
@@ -14,24 +14,55 @@ python3 scripts/check_model.py    # element-ID references resolve
 python3 scripts/build_model.py    # project the model into .model/
 python3 scripts/query_model.py coverage      # what is grounded, and what is not
 python3 scripts/query_model.py trace CAP3    # what a change to one element touches
+python3 scripts/build_brief.py --element CAP3 --depth 2   # one scope, as a brief
 python3 scripts/build_docs.py     # the model as a website, in .docs/site/
 python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 ```
 
 Both validators exit `0` when everything resolves and `1` otherwise, printing
-what failed. The other four are tools rather than gates: nothing has to be
+what failed. The other five are tools rather than gates: nothing has to be
 green for them, and nothing breaks if they are never run.
 
 | File | What it is |
 | ---- | ---------- |
 | `check_links.py` | Executable. Every relative Markdown link and every HTML `href`, `src` and `#fragment` points at something that exists |
-| `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, a levelled ID has its parent defined, and every document that defines an element declares how far it has been validated |
-| `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. `--inventory` prints one line per element instead |
-| `query_model.py` | Executable. Reads the projection and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
-| `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
+| `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, a levelled ID has its parent defined, every document that defines an element declares how far it has been validated, no relationship table restates an element's name differently from the catalogue that defines it, and every reference that names another model either resolves in this repository or is declared in `architecture/imports.md` |
+| `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. Every edge carries where it was declared and whether it is pending. `--inventory` prints one line per element instead |
+| `query_model.py` | Executable. Reads `model.db` and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
+| `build_brief.py` | Executable. Writes one disposable Markdown brief into `.docs/briefs/` for a named scope — the elements in it, generated views of how they depend on each other across the layers, and what the documents already say |
+| `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, publishes this model's projection under `site/projection/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
 | `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text. What the PDF leaves out is the `print-site` `exclude` list in `mkdocs.yml`; `--config mkdocs-<audience>.yml` exports a second PDF from a config that inherits it |
-| `model_graph.py` | Library, imported by the others. The single parse of the document convention — element IDs, catalogue tables, Mermaid edges |
+| `neighbourhood.sql` | Data, read by `query_model.py` **and by `build_brief.py`**. The traversal itself — everything within N hops of one element, as a recursive CTE, walking a model-qualified identifier so it crosses a federation boundary without knowing it did. It is a file rather than a function because two readers execute it, and a walk written twice drifts |
+| `model_graph.py` | Library, imported by the others. The single parse of the document convention — element IDs, catalogue tables, relationship tables, and the resolution of a bare identifier inside a domain |
 | `element-prefixes.json` | Data, read by `model_graph.py`. The element-ID prefixes and what each stands for |
+
+## Briefs
+
+`build_brief.py` is for a reader with a question about one part of the model.
+Name a scope and it writes a single Markdown document into `.docs/briefs/`:
+the elements in it, **generated views of how they depend on each other across
+the layers**, and the paragraphs the documents already write about them.
+
+```bash
+python3 scripts/build_brief.py --element BSVC1 --depth 2
+python3 scripts/build_brief.py --domain SALES
+```
+
+The walk is `neighbourhood.sql`, the same traversal `query_model.py trace`
+runs. The prose is the model's own, carried verbatim — nothing is summarized,
+because a paraphrase in a generated document is a claim nobody approved.
+
+**A brief is disposable and says so on its face.** It carries the revision it
+was generated from and a line telling a reader that the repository is the
+model. It is never committed: `.docs/` is gitignored, and a brief that gets
+mailed around and quoted eight months later is the second source of truth this
+method exists to prevent.
+
+**A generated view never replaces an authored one.** The layer documents keep
+their own diagrams — those are curated selections, and the notation says a
+selection that looks complete is worse than several honest parts. A brief adds
+the view nobody drew: the chain from business and information down to
+application and technology, which lives in no single document.
 
 `build_docs.py` and `export_pdf.py` need MkDocs, which they declare inline:
 `uv run scripts/build_docs.py` fetches it into a throwaway environment and

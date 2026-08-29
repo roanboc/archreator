@@ -158,7 +158,7 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   initiative's backlog lives. Pair each meaningful exclusion with a gap note.
 - **Where the project keeps a roadmap, gap notes have somewhere to go.** A gap
   note expires with the document it was written in; a row in
-  `architecture/roadmap/` does not. Where the initiative closes gaps the
+  `architecture/6_transition/` does not. Where the initiative closes gaps the
   roadmap already carries, name them here and mark them there in the same
   change — `plan-the-transition` § 6 — Bind the roadmap to the spine holds
   both halves. A project with no roadmap keeps its gap notes and loses nothing.

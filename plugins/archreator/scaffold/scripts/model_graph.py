@@ -12,9 +12,17 @@ and applies its four checks; `build_model.py` imports it and writes the
 projection. This module only reads Markdown and returns what it found.
 
 **Two levels of detail.** `parse_project()` returns what validation needs —
-definitions, references, retirements, domains. `parse_project(detail=True)`
-additionally reads element names, the remaining table columns, and the typed
-edges drawn in Mermaid, none of which a validator has any use for.
+definitions, references, retirements, domains, and the names a restatement is
+checked against. `parse_project(detail=True)` additionally reads the remaining
+table columns and builds the edges, which a validator has no use for.
+
+**A relationship is read from where it was declared, never from a diagram.**
+Two surfaces declare one: a catalogue column whose cell is a list of
+identifiers, and a relationship table, recognised by its first and third
+columns holding an identifier on every row. Mermaid is not parsed at all —
+a diagram is a rendering of what the tables say, and a fact whose only home is
+a rendering is the one `P1` forbids. Initiative 6 transcribed the corpus onto
+the two surfaces and removed the reader.
 
 **Structure is read from the identifier, never from a heading.** An element's
 type comes from its ID prefix, its group from the registry beside this file,
@@ -27,10 +35,13 @@ opaque text and never interpreted.
 
 Deliberately not done here:
 
-- **No inference of relationship semantics.** A Mermaid edge label is carried
-  verbatim — `habilita`, `precede a`, `serves`. Mapping those onto ArchiMate's
+- **No inference of relationship semantics.** A relationship's name — a column
+  header, or a relationship table's third cell — is carried verbatim:
+  `habilita`, `precede a`, `serves`. Mapping those onto ArchiMate's
   relationship vocabulary would be a guess, and a wrong guess in a projection
-  is worse than an honest string.
+  is worse than an honest string. `build_model.py` reports how many distinct
+  ones a corpus uses, which is the honest alternative to a controlled list
+  nobody could translate.
 - **No parse of the narrative folders.** Same reasoning as `check_model.py`:
   a merged scope document is immutable and will outlive the elements it names.
 - **No caching and no incremental parse.** A whole model is a few hundred
@@ -60,6 +71,9 @@ REPO_ROOT = _find_repo_root(Path(__file__).resolve().parent)
 # The layered model's directory name, in every project tree and in the
 # scaffold the skills emit.
 MODEL_DIR = "architecture"
+# What a model consumes from models it does not own. Read by `check_model.py`
+# to resolve a foreign reference without cloning anything.
+IMPORTS_DOC = "imports.md"
 # Narrative folders inside the model directory. They are *about* the model
 # rather than part of it, and are deliberately not read.
 #
@@ -107,9 +121,23 @@ PREFIXES = sorted(PREFIX_TYPES, key=len, reverse=True)
 _LOCAL = r"(?:" + "|".join(PREFIXES) + r")\d+(?:\.\d+)*"
 # A full ID prepends the domain path, when there is one (`SALES.CAP1.2`).
 _ID = r"(?:[A-Z][A-Z0-9]*\.)*" + _LOCAL
+# A foreign identifier names the model it belongs to first, separated by two
+# colons: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
+#
+# Two colons rather than a third meaning for the dot. The dot already separates
+# the domain path (before the prefix) from the catalogue's levels (after it),
+# and a grammar where one character means three things stops being readable.
+# The model name is the one the federation index gives it, which is the point:
+# a model you may reference is a model you have declared you federate with.
+FOREIGN_SEP = "::"
+_MODEL = r"[A-Za-z0-9][A-Za-z0-9._/-]*"
+_ANY_ID = r"(?:" + _MODEL + FOREIGN_SEP + r")?" + _ID
 
-# A backticked ID anywhere in the prose or a table cell is a reference.
-REFERENCE_RE = re.compile(r"`(" + _ID + r")`")
+# A backticked ID anywhere in the prose or a table cell is a reference — of
+# this model's own elements, or of a model it federates with.
+REFERENCE_RE = re.compile(r"`(" + _ANY_ID + r")`")
+# Splits a foreign reference into (model, identifier).
+FOREIGN_RE = re.compile(r"^(" + _MODEL + r")" + FOREIGN_SEP + r"(" + _ID + r")$")
 # A table row whose first cell is a bare backticked ID defines that element.
 # A *domain-qualified* first cell is a reference instead — that is what a
 # domain charter's "Consumed services" table holds. A *leveled* first cell
@@ -129,12 +157,34 @@ LOCAL_PREFIX_RE = re.compile(r"^([A-Z][A-Z0-9]*?)\d")
 # A numbered layer folder — `1_strategy`, `1_estrategia`. The digit is the
 # layer and survives translation; the slug does not.
 LAYER_DIR_RE = re.compile(r"^(\d)_(.+)$")
+# Markers that say something is not true yet - an element grounded in nothing on
+# purpose, or a relationship that is planned rather than live. The convention is
+# the method's, and it is written in whatever language the model is; these are
+# the two the corpus uses today. An unrecognised marker degrades to "not
+# pending", which is the safe direction to be wrong in.
+#
+# It lives here rather than in a consumer because there are now two of them:
+# `query_model.py` reads it for grounding, and the projection reads it to decide
+# whether an edge is live. Two copies of one convention drift silently.
+PENDING_MARKERS = ("pending", "pendiente")
+
 # The name in a bolded lead-in definition: `**G1 — Legible guidance.**`
 BULLET_NAME_RE = re.compile(r"\*\*(" + _ID + r")\s+—\s+(.+?)\*\*", re.S)
 # A table's separator row, which is what marks the line above it as headers.
 TABLE_SEP_RE = re.compile(r"^\|[\s:|-]+\|\s*$")
 # A catalogue cell that leads with the element's name in bold, before any gloss.
 NAME_LEAD_RE = re.compile(r"^\*\*(.+?)\*\*")
+
+# The name inside a relationship table's description cell:
+# `✦ «Capability» Learn from an engagement` yields `Learn from an engagement`.
+#
+# A leading run of non-word characters is the glyph, and `\w` is Unicode-aware,
+# so a name opening with an accented letter survives and a glyph does not. The
+# stereotype is optional and is dropped with its guillemets. Neither the glyph
+# nor the stereotype is checked: an archetype cannot drift away from the prefix
+# in the cell beside it, and the word for it is language-dependent where the
+# prefix is not. See `architecture-document-style` § The relationship table.
+NODE_DESC_RE = re.compile(r"^[^\w«]*\s*(?:«[^»]*»\s*)?(.*?)\s*$", re.S)
 
 # How far a document has been validated, declared in its preamble. The glyph
 # carries the meaning and the words beside it are prose in whatever language
@@ -150,25 +200,6 @@ STATUS_GLYPHS = {
 # nav line, and the metadata lines under it. A status glyph is looked for
 # there and nowhere else, so a diagram further down cannot be mistaken for one.
 PREAMBLE_END_RE = re.compile(r"^##\s", re.M)
-
-# A fenced Mermaid block. Matched on the raw text, before fences are stripped.
-MERMAID_RE = re.compile(
-    r"^(?P<ticks>`{3,})mermaid[^\n]*\n(?P<body>.*?)^(?P=ticks)`*[ \t]*$",
-    re.DOTALL | re.MULTILINE,
-)
-# A Mermaid node declaration. The shape brackets vary by element type — see
-# `architecture/README.md` § Shapes — so this matches the variable name and
-# the first quoted label, whatever brackets sit between them.
-MERMAID_NODE_RE = re.compile(r'^\s*(\w+)\s*[\[({>/\\]+\s*"([^"]*)"', re.M)
-# A Mermaid edge, with the optional `|label|` the notation puts relationships
-# in. Covers the arrow forms the notation actually uses: solid, dotted and
-# thick, which is every form in the corpus.
-MERMAID_EDGE_RE = re.compile(
-    r"^\s*(\w+)\s*(?:-{2,3}>|-\.-+>|={2,3}>)\s*(?:\|([^|]*)\|)?\s*(\w+)", re.M
-)
-# The identifier a node label ends with: `✦ Fundación de datos [CAP2.3]`.
-NODE_ID_RE = re.compile(r"\[(" + _ID + r")\]\s*$")
-
 
 def strip_code(text: str) -> str:
     return FENCE_RE.sub("", text)
@@ -203,6 +234,12 @@ def split_retired(text: str) -> tuple[str, str]:
 
 def definitions_in(text: str) -> set[str]:
     return set(TABLE_DEF_RE.findall(text)) | set(BULLET_DEF_RE.findall(text))
+
+
+def foreign_of(element: str) -> tuple[str, str]:
+    """(model, identifier) for a foreign reference, ("", element) otherwise."""
+    match = FOREIGN_RE.match(element)
+    return (match.group(1), match.group(2)) if match else ("", element)
 
 
 def qualifier_of(element: str) -> str:
@@ -255,6 +292,20 @@ def unvalidated_tables(text: str) -> int:
 
 def _excluded(path: Path) -> bool:
     return bool(EXCLUDED_DIRS & set(path.parts))
+
+
+def project_key(project: Path) -> str:
+    """How a model is named in a federation index and in a foreign reference.
+
+    Its path from the repository root — `product-archreator`,
+    `product-archreator/site` — or `.` for a repository that holds one model at
+    its root. The same string `build_model.project_name()` writes into the
+    projection, so an identifier a reader sees and an identifier a document
+    writes are the same identifier.
+    """
+    if project == REPO_ROOT:
+        return "."
+    return str(project.relative_to(REPO_ROOT)).replace("\\", "/")
 
 
 def find_projects() -> list[Path]:
@@ -323,8 +374,207 @@ def _name_of(cell: str) -> str:
     return _plain(match.group(1)) if match else _plain(cell)
 
 
-def table_definitions(text: str) -> dict[str, tuple[str, dict[str, str]]]:
-    """Map each ID defined in a catalogue table to its name and its columns.
+# A table cell that is nothing but one backticked identifier. Anchored at both
+# ends, because a cell that *mentions* an identifier in a sentence is prose and
+# a cell that *is* one is an end of a relationship.
+CELL_ID_RE = re.compile(r"^`(" + _ANY_ID + r")`$")
+# The separators a list of identifiers is written with. Punctuation only: a
+# conjunction is a word, and which word it is depends on the language.
+_SEP = r"[\s,;/·+&—–-]*"
+# A cell that is a list of identifiers and nothing else — `ASVC1`,
+# `PROD1, PROD2`, `ACMP7`, `ACMP8`. **This is what tells a relationship column
+# apart from an attribute column**, and the distinction is the difference
+# between a graph and a pile of noise: `Realizes` holds identifiers, `Maturity`
+# holds the word "Established", and both are columns of the same catalogue. A
+# cell of prose that happens to name an identifier is somebody talking about an
+# element, which the projection already models as a mention.
+CELL_ID_LIST_RE = re.compile(r"^" + _SEP + r"(?:`" + _ANY_ID + r"`" + _SEP + r")+$")
+
+
+def _table_blocks(text: str) -> list[tuple[int, int, list[str], list[list[str]]]]:
+    """Every Markdown table in the text, as (first line, last line, headers, rows).
+
+    One walker, because there are now three questions to ask of a table - is it
+    a catalogue, is it a relationship table, does it have an ID column - and
+    three loops finding tables three ways is how they start disagreeing about
+    what a table is.
+    """
+    blocks = []
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        if not TABLE_SEP_RE.match(line) or index == 0:
+            continue
+        header_line = lines[index - 1]
+        if not TABLE_ROW_RE.match(header_line):
+            continue
+        end = index + 1
+        rows = []
+        while end < len(lines) and TABLE_ROW_RE.match(lines[end]):
+            rows.append(_cells(lines[end]))
+            end += 1
+        blocks.append((index - 1, end - 1, [_plain(c) for c in _cells(header_line)], rows))
+    return blocks
+
+
+def _is_relationship_table(headers: list[str], rows: list[list[str]]) -> bool:
+    """Columns 1 and 3 hold a bare identifier on every row, and it is no catalogue.
+
+    Recognised by **position**, never by a header word: a model may be written
+    in any language, and `architecture-document-style` fixes the column order
+    exactly as it fixes the name into a catalogue's second cell.
+
+    The catalogue test comes first and settles the only ambiguity that matters.
+    A catalogue row's first cell is also a bare identifier, and a catalogue with
+    a `Realizes` column has a second identifier-bearing column - so without this
+    guard a perfectly ordinary catalogue could be read as a relationship table
+    and every element in it would stop being defined.
+    """
+    if not rows or ID_HEADER_RE.match("| " + (headers[0] if headers else "") + " |"):
+        return False
+    return all(
+        len(row) >= 5 and CELL_ID_RE.match(row[0]) and CELL_ID_RE.match(row[2])
+        for row in rows
+    )
+
+
+# How much of a paragraph is worth carrying, and how many per document. A panel
+# is for orienting a reader, not for reproducing the document — the document is
+# one click away and is the thing that must be read when it matters. The cap is
+# per document rather than per element because an element discussed in six
+# places is being discussed *about* six different things, and dropping the
+# sixth would hide a whole document from the reader rather than trimming a
+# repetition.
+EXCERPT_CHARS = 600
+EXCERPTS_PER_DOCUMENT = 6
+# A Markdown heading, whatever its level. The heading a paragraph sits under is
+# most of what tells a reader where they are.
+HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*$")
+
+
+def prose_blocks(text: str) -> list[tuple[str, str]]:
+    """(heading, paragraph) for every prose block, tables and fences dropped.
+
+    A paragraph that names an element is what a reader wants when they select
+    it: for a goal or a principle it *is* the definition, because the method
+    writes those as a bolded lead-in followed by prose rather than as a
+    catalogue row. No special case is needed for that — the definition is a
+    paragraph like any other, and it arrives because it names the element.
+
+    Table rows are excluded because the projection already carries them, cell
+    by cell, under their own headers. Carrying them twice would put the same
+    fact in the panel in two shapes.
+    """
+    blocks: list[tuple[str, str]] = []
+    heading = ""
+    current: list[str] = []
+    # Everything before the first level-2 heading is the document's preamble —
+    # its title, its nav line, its status. That is metadata about the document
+    # rather than anything it says about an element, and a status line naming
+    # eleven identifiers would otherwise become an excerpt on all eleven.
+    started = False
+
+    def flush() -> None:
+        if current:
+            joined = " ".join(line.strip() for line in current).strip()
+            if joined:
+                blocks.append((heading, joined))
+            current.clear()
+
+    for line in text.splitlines():
+        match = HEADING_RE.match(line)
+        if match:
+            flush()
+            heading = match.group(2)
+            started = started or len(match.group(1)) >= 2
+            continue
+        if not started:
+            continue
+        if not line.strip() or line.lstrip().startswith("|"):
+            flush()
+            continue
+        current.append(line)
+    flush()
+    return blocks
+
+
+@dataclass
+class Excerpt:
+    """One paragraph of the model that speaks about one element."""
+
+    element: str
+    doc: str
+    heading: str
+    text: str
+
+
+@dataclass
+class Restatement:
+    """One end of a relationship table row, as that row wrote it down.
+
+    The identifier is authoritative; `written` is the reader's copy of a name
+    the catalogue owns, and `check_model.py` compares the two. See
+    `architecture-document-style` § The relationship table.
+    """
+
+    element: str
+    written: str
+
+
+def relationship_rows(
+    rows: list[list[str]],
+) -> list[tuple[str, str, str, bool, Restatement, Restatement]]:
+    """(source, target, relationship, source restatement, target restatement)."""
+    found = []
+    for row in rows:
+        src = CELL_ID_RE.match(row[0]).group(1)
+        dst = CELL_ID_RE.match(row[2]).group(1)
+        rest = " ".join(row[4:]).lower()
+        found.append(
+            (
+                src,
+                dst,
+                _plain(row[4]) or "relates to",
+                any(marker in rest for marker in PENDING_MARKERS),
+                Restatement(src, node_name(row[1])),
+                Restatement(dst, node_name(row[3])),
+            )
+        )
+    return found
+
+
+def node_name(cell: str) -> str:
+    """The element name out of a description cell, glyph and stereotype dropped."""
+    match = NODE_DESC_RE.match(_plain(cell))
+    return match.group(1).strip() if match else _plain(cell)
+
+
+def split_relationship_tables(text: str) -> tuple[str, list[list[list[str]]]]:
+    """Return (text with relationship tables blanked out, those tables' rows).
+
+    **This runs before anything else reads the document**, and it has to. A
+    relationship table's first cell is a bare backticked identifier, which is
+    exactly the shape `TABLE_DEF_RE` treats as a definition - so an unsplit
+    relationship table would register every source element as defined a second
+    time and fail a valid document on duplicates.
+
+    Blanked rather than deleted, so every line number and every other
+    line-oriented reading of the document is left where it was.
+    """
+    lines = text.splitlines(keepends=True)
+    tables: list[list[list[str]]] = []
+    for start, end, headers, rows in _table_blocks(text):
+        if not _is_relationship_table(headers, rows):
+            continue
+        tables.append(rows)
+        for index in range(start, end + 1):
+            lines[index] = "\n" if lines[index].endswith("\n") else ""
+    return "".join(lines), tables
+
+
+def table_definitions(
+    text: str,
+) -> dict[str, tuple[str, dict[str, str], dict[str, list[str]]]]:
+    """Map each ID defined in a catalogue table to its name, columns and references.
 
     **Only tables whose first header is `ID` are read.** An identifier
     legitimately appears in the first column of other tables — a capability
@@ -338,30 +588,35 @@ def table_definitions(text: str) -> dict[str, tuple[str, dict[str, str]]]:
     the second on is carried under its own header as opaque text — headers are
     prose in whatever language the model is written in, so interpreting them
     here would make this parser monolingual.
+
+    **The third return is what turns a catalogue into a graph.** Every
+    backticked identifier in a column other than the ID and the name is a
+    relationship this element declares, and the column header is what it is
+    called. They are collected from the *raw* cell, because `_plain` strips the
+    backticks that tell an identifier apart from a word that looks like one.
     """
-    found: dict[str, tuple[str, dict[str, str]]] = {}
-    headers: list[str] = []
-    is_catalogue = False
-    lines = text.splitlines()
-    for index, line in enumerate(lines):
-        if TABLE_SEP_RE.match(line):
-            header_line = lines[index - 1] if index else ""
-            if TABLE_ROW_RE.match(header_line or ""):
-                headers = [_plain(cell) for cell in _cells(header_line)]
-                is_catalogue = ID_HEADER_RE.match(header_line) is not None
+    found: dict[str, tuple[str, dict[str, str], dict[str, list[str]]]] = {}
+    for _, _, headers, rows in _table_blocks(text):
+        if not ID_HEADER_RE.match("| " + (headers[0] if headers else "") + " |"):
             continue
-        match = TABLE_DEF_RE.match(line)
-        if not match or not headers or not is_catalogue:
-            continue
-        cells = _cells(line)
-        if len(cells) < 2:
-            continue
-        attrs = {
-            headers[i]: _plain(cells[i])
-            for i in range(1, min(len(cells), len(headers)))
-            if headers[i]
-        }
-        found[match.group(1)] = (_name_of(cells[1]), attrs)
+        for cells in rows:
+            match = TABLE_DEF_RE.match("| " + " | ".join(cells) + " |")
+            if not match or len(cells) < 2:
+                continue
+            attrs, refs = {}, {}
+            for index in range(1, min(len(cells), len(headers))):
+                header = headers[index]
+                if not header:
+                    continue
+                attrs[header] = _plain(cells[index])
+                if index == 1:
+                    # The name cell. An identifier inside it is the element
+                    # talking about itself, not a relationship it declares.
+                    continue
+                cell = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", cells[index])
+                if CELL_ID_LIST_RE.match(cell):
+                    refs[header] = REFERENCE_RE.findall(cell)
+            found[match.group(1)] = (_name_of(cells[1]), attrs, refs)
     return found
 
 
@@ -373,30 +628,37 @@ def bullet_definitions(text: str) -> dict[str, str]:
     }
 
 
-def mermaid_edges(text: str) -> list[tuple[str, str, str]]:
-    """Typed edges (source ID, target ID, label) drawn in Mermaid.
+def imports_of(project: Path) -> dict[str, tuple[str, str]]:
+    """Foreign element -> (the name this model writes for it, the revision read).
 
-    This is the only place a relationship between two elements is written
-    machine-readably: a table column names a relationship in prose, but a
-    diagram names both ends. The label is carried verbatim — see the module
-    docstring on why it is not mapped onto ArchiMate's vocabulary.
+    Read by position from `architecture/imports.md`: cell 1 the foreign
+    identifier, cell 2 its name, cell 3 the revision it was read at. A row
+    counts only when its first cell is a bare backticked foreign identifier,
+    which is the same test that tells a relationship table's ends apart from
+    prose.
 
-    Runs on the raw text, before `strip_code`, because the diagrams live
-    inside the fences everything else deliberately drops.
+    **This is how a reference to another repository resolves, and it resolves
+    against the declaration rather than against the truth.** Fetching the
+    upstream on every pull request would be slow, would fail when somebody
+    else's site was down, and would let their push break this build. What is
+    checked here is that the dependency was written down; whether the row is
+    still current is asked by a command somebody runs.
     """
-    edges: list[tuple[str, str, str]] = []
-    for block in MERMAID_RE.finditer(text):
-        body = block.group("body")
-        ids: dict[str, str] = {}
-        for node in MERMAID_NODE_RE.finditer(body):
-            match = NODE_ID_RE.search(node.group(2))
-            if match:
-                ids[node.group(1)] = match.group(1)
-        for edge in MERMAID_EDGE_RE.finditer(body):
-            source, label, target = edge.group(1), edge.group(2), edge.group(3)
-            if source in ids and target in ids:
-                edges.append((ids[source], ids[target], (label or "").strip()))
-    return edges
+    doc = project / MODEL_DIR / IMPORTS_DOC
+    if not doc.is_file():
+        return {}
+    found: dict[str, tuple[str, str]] = {}
+    for line in strip_code(doc.read_text(encoding="utf-8")).splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = _cells(line)
+        if len(cells) < 3:
+            continue
+        match = CELL_ID_RE.match(cells[0])
+        if not match or FOREIGN_SEP not in match.group(1):
+            continue
+        found[match.group(1)] = (node_name(cells[1]), _plain(cells[2]))
+    return found
 
 
 @dataclass
@@ -425,8 +687,22 @@ class Edge:
 
     src: str
     dst: str
-    rel: str  # `decomposes` | `references` | a verbatim Mermaid edge label
+    rel: str  # the column header or the relationship cell, carried verbatim
     doc: str
+    # How firmly this was stated. `catalogue` is a column of a catalogue row,
+    # `table` a row of a relationship table, `identifier` the decomposition a
+    # levelled ID already carries. A consumer that wants only what somebody
+    # wrote down on purpose filters the third out; one that wants structure
+    # keeps it.
+    origin: str = "catalogue"
+    # The model the far end belongs to. This edge's own model for all but a
+    # reference that crosses a federation boundary, which is why it defaults
+    # rather than being passed everywhere.
+    dst_project: str = ""
+    # The relationship is not true yet. Declared in words with the marker the
+    # method already uses for an element grounded in nothing on purpose - never
+    # inferred from how an arrow was drawn, because diagrams are renderings.
+    pending: bool = False
 
 
 @dataclass
@@ -438,6 +714,9 @@ class ParsedProject:
     duplicates: list[str]
     retired: dict[str, Path]
     references: list[tuple[str, Path]]
+    # (model, identifier, document) for every reference that names an element
+    # in a model this one does not own.
+    foreign: list[tuple[str, str, Path]]
     domains: set[str]
     skipped: int
     # Repository-relative document path -> (status name, glyph count). Every
@@ -449,6 +728,17 @@ class ParsedProject:
     # from `edges` because one end is a document rather than an element, and
     # mixing the two would make the element graph untraversable.
     mentions: list[tuple[str, str]] = field(default_factory=list)
+    # Element ID -> the name its own catalogue row gives it. Collected whether
+    # or not `detail` was asked for, because `check_model.py` needs it to judge
+    # a restatement and validation does not run in detail.
+    names: dict[str, str] = field(default_factory=dict)
+    # What the documents say about each element, in their own words. Read only
+    # in detail: a validator has no use for prose.
+    excerpts: list[Excerpt] = field(default_factory=list)
+    # Every place a document wrote an element's name down beside its
+    # identifier. The identifier is authoritative; these are copies, and
+    # `check_model.py` is what holds them in step.
+    restatements: list[tuple[Restatement, Path]] = field(default_factory=list)
 
 
 def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
@@ -462,17 +752,26 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     duplicates: list[str] = []
     retired: dict[str, Path] = {}
     references: list[tuple[str, Path]] = []
+    foreign: list[tuple[str, str, Path]] = []
     domains: set[str] = set()
     statuses: dict[str, tuple[str, int]] = {}
     skipped = 0
     elements: dict[str, Element] = {}
     edges: list[Edge] = []
+    names: dict[str, str] = {}
+    restatements: list[tuple[Restatement, Path]] = []
+    excerpts: list[Excerpt] = []
 
     model_root = project / MODEL_DIR
 
     for md_file in model_files(project):
-        raw = md_file.read_text(encoding="utf-8")
-        text = strip_code(raw)
+        # Relationship tables come out first, before any other reading of the
+        # document. Their first cell is a bare backticked identifier, which is
+        # what `TABLE_DEF_RE` treats as a definition — left in, every source
+        # element would be reported as defined twice.
+        text, rel_tables = split_relationship_tables(
+            strip_code(md_file.read_text(encoding="utf-8"))
+        )
         scope = domain_of(md_file, project)
         if scope:
             domains.add(scope)
@@ -493,26 +792,56 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         for element in definitions_in(retired_text):
             retired[f"{scope}.{element}" if scope else element] = md_file
 
+        # A relationship table was blanked out of `text` above, so its
+        # identifiers are added back here. They are references — the row points
+        # at two elements and defines neither.
+        cited = list(REFERENCE_RE.findall(text))
+        for rows in rel_tables:
+            cited.extend(REFERENCE_RE.findall(" ".join(" ".join(r) for r in rows)))
+
         defined_here = definitions_in(text)
-        for reference in REFERENCE_RE.findall(text):
+        for reference in cited:
+            model, local = foreign_of(reference)
+            if model:
+                foreign.append((model, local, md_file))
+                continue
             if not qualifier_of(reference) and reference in defined_here:
                 continue
             references.append((reference, md_file))
 
-        if not detail:
-            continue
-
         doc = str(md_file.relative_to(REPO_ROOT)).replace("\\", "/")
-        layer_no, layer = layer_of(md_file, model_root)
         named = table_definitions(live_text)
         bullets = bullet_definitions(live_text)
         retired_here = definitions_in(retired_text)
+
+        # Names and restatements are collected whether or not `detail` was
+        # asked for: `check_model.py` holds a written name against the
+        # catalogue that owns it, and validation never runs in detail.
+        for element, (name, _, _) in named.items():
+            names.setdefault(f"{scope}.{element}" if scope else element, name)
+        for element, name in bullets.items():
+            names.setdefault(f"{scope}.{element}" if scope else element, name)
+        for rows in rel_tables:
+            for _, _, _, _, src_said, dst_said in relationship_rows(rows):
+                for said in (src_said, dst_said):
+                    if FOREIGN_SEP in said.element:
+                        # A foreign element's name is checked against the
+                        # import row that declares it, not against a catalogue
+                        # this model does not have.
+                        continue
+                    key = f"{scope}.{said.element}" if scope else said.element
+                    restatements.append((Restatement(key, said.written), md_file))
+
+        if not detail:
+            continue
+
+        layer_no, layer = layer_of(md_file, model_root)
 
         for element in sorted(definitions_in(live_text) | retired_here):
             key = f"{scope}.{element}" if scope else element
             if key in elements:
                 continue
-            name, attrs = named.get(element, ("", {}))
+            name, attrs, _ = named.get(element, ("", {}, {}))
             if not name:
                 name = bullets.get(element, "")
             prefix = prefix_of(element)
@@ -533,23 +862,75 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
                 attrs=attrs,
             )
 
-        for source, target, label in mermaid_edges(raw):
-            src = f"{scope}.{source}" if scope else source
-            dst = f"{scope}.{target}" if scope else target
-            # An unlabelled edge from a parent to its own child is the
-            # decomposition the identifier already carries, drawn so a reader
-            # can see it. Emitting both would double every level of every
-            # catalogue.
-            if not label and parent_of(dst) == src:
-                continue
-            edges.append(Edge(src=src, dst=dst, rel=label or "relates to", doc=doc))
+        def qualify(element: str) -> str:
+            return f"{scope}.{element}" if scope else element
+
+        # A catalogue column, which is where a relationship across the layers
+        # is written: one row per element, and a column naming what it points
+        # at. The header is the relationship, carried verbatim for the reason
+        # the module docstring gives.
+        for element, (_, attrs, refs) in named.items():
+            src = qualify(element)
+            for header, cited in refs.items():
+                pending = any(
+                    marker in attrs.get(header, "").lower()
+                    for marker in PENDING_MARKERS
+                )
+                for target in cited:
+                    model, local = foreign_of(target)
+                    if model:
+                        edges.append(
+                            Edge(src=src, dst=local, rel=header, doc=doc,
+                                 origin="catalogue", pending=pending,
+                                 dst_project=model)
+                        )
+                        continue
+                    dst = qualify(target) if not qualifier_of(target) else target
+                    if dst == src:
+                        continue
+                    edges.append(
+                        Edge(src=src, dst=dst, rel=header, doc=doc,
+                             origin="catalogue", pending=pending)
+                    )
+
+        # A relationship table, which is where everything a row cannot carry
+        # goes — above all a relationship between two peers in one layer, for
+        # which a catalogue has one row each and no column at all.
+        seen_here: dict[str, int] = {}
+        for heading, block in prose_blocks(live_text):
+            for reference in dict.fromkeys(REFERENCE_RE.findall(block)):
+                model, _ = foreign_of(reference)
+                if model:
+                    continue
+                key = f"{scope}.{reference}" if scope else reference
+                if seen_here.get(key, 0) >= EXCERPTS_PER_DOCUMENT:
+                    continue
+                seen_here[key] = seen_here.get(key, 0) + 1
+                body = block if len(block) <= EXCERPT_CHARS else (
+                    block[:EXCERPT_CHARS].rsplit(" ", 1)[0] + " …")
+                excerpts.append(Excerpt(element=key, doc=doc, heading=heading, text=body))
+
+        for rows in rel_tables:
+            for source, target, label, pending, _, _ in relationship_rows(rows):
+                src_model, src_local = foreign_of(source)
+                dst_model, dst_local = foreign_of(target)
+                src = src_local if src_model else (
+                    qualify(source) if not qualifier_of(source) else source)
+                dst = dst_local if dst_model else (
+                    qualify(target) if not qualifier_of(target) else target)
+                edges.append(
+                    Edge(src=src, dst=dst, rel=label, doc=doc,
+                         origin="table", pending=pending, dst_project=dst_model)
+                )
+
 
     mentions: list[tuple[str, str]] = []
     if detail:
         for key, element in elements.items():
             if element.parent:
                 edges.append(
-                    Edge(src=element.parent, dst=key, rel="decomposes", doc=element.doc)
+                    Edge(src=element.parent, dst=key, rel="decomposes",
+                         doc=element.doc, origin="identifier")
                 )
         seen: set[tuple[str, str]] = set()
         for reference, md_file in references:
@@ -569,10 +950,14 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         duplicates=duplicates,
         retired=retired,
         references=references,
+        foreign=foreign,
         domains=domains,
         statuses=statuses,
         skipped=skipped,
         elements=elements,
         edges=edges,
         mentions=mentions,
+        names=names,
+        restatements=restatements,
+        excerpts=excerpts,
     )

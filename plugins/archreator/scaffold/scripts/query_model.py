@@ -2,10 +2,8 @@
 """Ask the projection the two questions a model is kept for.
 
 `build_model.py` writes the model as nodes and edges so that a consumer which
-cannot read Markdown can use it. This is that consumer. Until it existed the
-projection was built and read by nothing, which is a derived store with no
-justification — the honest state of affairs, and recorded as such in the
-method's own model rather than papered over.
+cannot read Markdown can use it. This is one of two such consumers — the other
+is `build_brief.py`, and **they read the same database with the same query.**
 
 Two questions, because these are the two that a table cannot answer:
 
@@ -13,11 +11,18 @@ Two questions, because these are the two that a table cannot answer:
     python3 scripts/query_model.py coverage        # what is not grounded, and
                                                    # what is not yet approved?
 
-**`trace` is a traversal.** "What does retiring this capability affect?" is not
-a lookup — the answer is reached by following relationships across layers, and
-following them by hand across a hundred Markdown files is how a real dependency
-gets missed. `stack-selection` § A persisted projection needs one of four
-triggers names a genuinely transitive question as one of the four.
+**`trace` is a traversal, and the traversal lives in `neighbourhood.sql`.**
+"What does retiring this capability affect?" is not a lookup — the answer is
+reached by following relationships across layers, and following them by hand
+across a hundred Markdown files is how a real dependency gets missed.
+`stack-selection` § A persisted projection needs one of four triggers names a
+genuinely transitive question as one of the four, and says how to answer it:
+"a `nodes`/`edges` pair traversed with recursive CTEs. At the scale a model
+reaches, SQLite *is* the graph database."
+
+That query is in a file rather than in this one because a second tool runs
+it: `build_brief.py` asks the same question to decide what belongs in a brief.
+A walk implemented once per reader drifts, and the drift is silent.
 
 `coverage` also separates what a Requester has approved from what has only
 been written down. A catalogue of elements somebody mentioned in a meeting and
@@ -34,7 +39,7 @@ looks ungrounded and **always exits 0**. A person reads the list and decides.
 Wiring it into CI as a gate would recreate exactly the failure mode the method
 argues against, which is why no `--strict` flag is offered.
 
-Both commands read `.model/model.json`. When it is absent the projection is
+Both commands read `.model/model.db`. When it is absent the projection is
 built first, so a caller never has to run two commands to ask one question.
 
 **One caveat inherited from the projection.** `realized_by` is the single
@@ -46,89 +51,79 @@ finding it has not earned.
 """
 import argparse
 import json
+import sqlite3
 import sys
 from collections import defaultdict
 from pathlib import Path
 
-from model_graph import REPO_ROOT
+from model_graph import PENDING_MARKERS, REPO_ROOT
 
 DEFAULT_OUT = REPO_ROOT / ".model"
-# Markers that say an element is grounded in nothing *on purpose*. The
-# convention is the method's, and it is written in whatever language the model
-# is; these are the two the corpus uses today. An unrecognised marker degrades
-# to "not grounded", which is the safe direction to be wrong in.
-PENDING_MARKERS = ("pending", "pendiente")
+# `PENDING_MARKERS` comes from `model_graph` rather than being restated here:
+# the projection reads the same convention to decide whether a relationship is
+# live, and one convention written down twice drifts.
+#
 # How far `trace` walks by default. Two hops crosses one layer boundary in each
 # direction, which is the blast radius a person can still hold in their head.
 DEFAULT_DEPTH = 2
+# The traversal, shared with `build_brief.py`. See the module docstring.
+NEIGHBOURHOOD_SQL = Path(__file__).resolve().parent / "neighbourhood.sql"
 
 
-def load(out_dir: Path) -> list[dict]:
+def connect(out_dir: Path) -> sqlite3.Connection | None:
     """The projection, built first if it is not there yet."""
-    path = out_dir / "model.json"
+    path = out_dir / "model.db"
     if not path.is_file():
         import build_model
 
         projects = build_model.collect()
         if not projects:
-            return []
+            return None
         out_dir.mkdir(parents=True, exist_ok=True)
-        build_model.write_json(projects, path)
+        build_model.write_json(projects, out_dir / "model.json")
+        build_model.write_sqlite(projects, path)
         print(f"(projection was missing — built {path.relative_to(REPO_ROOT)})\n")
-    return json.loads(path.read_text(encoding="utf-8"))["projects"]
+    connection = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    connection.row_factory = sqlite3.Row
+    return connection
 
 
-def find(projects: list[dict], wanted: str) -> list[tuple[dict, dict]]:
-    """Every (project, element) whose ID or local ID matches, case-insensitively.
+def find(connection: sqlite3.Connection, wanted: str, scope: str) -> list[sqlite3.Row]:
+    """Every element whose ID or local ID matches, case-insensitively.
 
     A model is scoped per project and two projects may each own a `G1`, so this
     returns every match and the caller decides what to do with more than one.
     """
     needle = wanted.strip().strip("`").upper()
-    found = []
-    for project in projects:
-        for element in project["elements"]:
-            if needle in (element["id"].upper(), element["local"].upper()):
-                found.append((project, element))
-    return found
+    return connection.execute(
+        "SELECT * FROM nodes WHERE (upper(id) = ? OR upper(local) = ?)"
+        " AND project LIKE ? ORDER BY project, id",
+        (needle, needle, f"%{scope}%"),
+    ).fetchall()
 
 
-def neighbours(project: dict) -> tuple[dict, dict]:
-    """Outgoing and incoming edges, indexed by element ID."""
-    out, into = defaultdict(list), defaultdict(list)
-    for edge in project["edges"]:
-        out[edge["src"]].append(edge)
-        into[edge["dst"]].append(edge)
-    return out, into
-
-
-def label(element: dict | None, element_id: str) -> str:
-    if not element:
+def label(element_id: str, name: str, kind: str) -> str:
+    if not kind and not name:
         # An edge may name an ID the parse never saw defined; check_model.py is
         # what reports that, so here it is shown rather than swallowed.
         return f"{element_id} (undefined)"
-    name = element["name"] or "—"
-    kind = element["type"] or element["prefix"]
-    return f"{element_id} · {kind} · {name}"
+    return f"{element_id} · {kind or '?'} · {name or '—'}"
 
 
-def trace(projects: list[dict], wanted: str, depth: int) -> int:
-    matches = find(projects, wanted)
+def trace(connection: sqlite3.Connection, wanted: str, depth: int, scope: str) -> int:
+    matches = find(connection, wanted, scope)
     if not matches:
         print(f"No element `{wanted}` in any project. Try `coverage` for what is there.")
         return 0
     if len(matches) > 1:
         print(f"`{wanted}` is defined in {len(matches)} projects:")
-        for project, element in matches:
-            print(f"  {project['project']}: {label(element, element['id'])}")
+        for row in matches:
+            print(f"  {row['project']}: {label(row['id'], row['name'], row['type'])}")
         print("\nNarrow it with --project, naming any part of the path above.")
         return 0
 
-    project, element = matches[0]
-    by_id = {e["id"]: e for e in project["elements"]}
-    out, into = neighbours(project)
-
-    print(f"{label(element, element['id'])}")
+    element = matches[0]
+    print(label(element["id"], element["name"], element["type"]))
     print(f"  defined in {element['doc']}")
     if element["status"] and element["status"] != "validated":
         print(f"  {element['status'].upper()} — not approved at a gate")
@@ -138,44 +133,70 @@ def trace(projects: list[dict], wanted: str, depth: int) -> int:
         print("  RETIRED")
     print()
 
-    # Breadth-first, so the nearest ring is printed before the far one and a
-    # reader can stop at the depth they trust.
-    seen = {element["id"]}
-    frontier = [element["id"]]
-    for hop in range(1, depth + 1):
-        ring: list[str] = []
-        lines: list[str] = []
-        for node in frontier:
-            for edge in out.get(node, []):
-                if edge["dst"] not in seen:
-                    lines.append(f"  → {edge['rel']} → {label(by_id.get(edge['dst']), edge['dst'])}")
-                    ring.append(edge["dst"])
-                    seen.add(edge["dst"])
-            for edge in into.get(node, []):
-                if edge["src"] not in seen:
-                    lines.append(f"  ← {edge['rel']} ← {label(by_id.get(edge['src']), edge['src'])}")
-                    ring.append(edge["src"])
-                    seen.add(edge["src"])
-        if not lines:
-            break
-        print(f"Hop {hop} — {len(lines)} element(s):")
-        for line in sorted(lines):
+    rows = connection.execute(
+        NEIGHBOURHOOD_SQL.read_text(encoding="utf-8"),
+        {"root": f"{element['project']}::{element['id']}", "depth": depth},
+    ).fetchall()
+
+    # The query returns the subgraph; this arranges it into rings, so the
+    # nearest is printed before the far one and a reader can stop at the depth
+    # they trust.
+    rings: dict[int, list[str]] = defaultdict(list)
+    seen: set[str] = {element["id"]}
+    for row in rows:
+        for near, far, arrow in (
+            ("src", "dst", "→"),
+            ("dst", "src", "←"),
+        ):
+            if row[f"{near}_hop"] >= row[f"{far}_hop"] or row[far] in seen:
+                continue
+            marker = " (pending)" if row["pending"] else ""
+            # A neighbour in another model is shown as being in one. Silently
+            # printing a bare identifier would make a federated walk read as
+            # though everything it found were local, which is the misreading
+            # this whole initiative was about.
+            elsewhere = (
+                f"  [{row[f'{far}_model']}]"
+                if row[f"{far}_model"] and row[f"{far}_model"] != element["project"]
+                else ""
+            )
+            rings[row[f"{far}_hop"]].append(
+                f"  {arrow} {row['rel']}{marker} {arrow} "
+                f"{label(row[f'{far}_local'] or row[far], row[f'{far}_name'], row[f'{far}_type'])}"
+                f"{elsewhere}"
+            )
+            seen.add(row[far])
+
+    for hop in sorted(rings):
+        print(f"Hop {hop} — {len(rings[hop])} element(s):")
+        for line in sorted(rings[hop]):
             print(line)
         print()
-        frontier = ring
 
-    docs = sorted({doc for doc, target in project["mentions"] if target == element["id"]})
-    elsewhere = [doc for doc in docs if doc != element["doc"]]
-    if elsewhere:
-        print(f"Named in {len(elsewhere)} other document(s):")
-        for doc in elsewhere:
+    docs = [
+        row["doc"]
+        for row in connection.execute(
+            "SELECT DISTINCT doc FROM mentions WHERE project = ? AND element = ?"
+            " AND doc <> ? ORDER BY doc",
+            (element["project"], element["id"], element["doc"]),
+        )
+    ]
+    if docs:
+        print(f"Named in {len(docs)} other document(s):")
+        for doc in docs:
             print(f"  {doc}")
         print()
 
     print(
-        f"{len(seen) - 1} element(s) within {depth} hop(s). Edge labels are the words the "
-        f"diagrams use, carried through unmapped — the projection does not guess at "
-        f"ArchiMate relationship types."
+        f"{len(seen) - 1} element(s) within {depth} hop(s). An edge label is the column "
+        f"header or the relationship cell it was declared in, carried through unmapped — "
+        f"the projection does not guess at ArchiMate relationship types."
+    )
+    print(
+        "The walk is undirected: a catalogue states a connection from whichever end "
+        "owns the row, so an arrow here shows which way it was written, not which "
+        "way it matters. It crosses models: a neighbour in another one carries its "
+        "name in brackets."
     )
     return 0
 
@@ -205,7 +226,7 @@ def catalogue_of(element: dict) -> tuple[str, frozenset]:
     return element["doc"], frozenset(element["attrs"])
 
 
-def coverage(projects: list[dict]) -> int:
+def coverage(connection: sqlite3.Connection) -> int:
     """What is grounded, what says it is not yet, and what neither.
 
     **The unit is the catalogue table, not the element and not the document.**
@@ -229,13 +250,21 @@ def coverage(projects: list[dict]) -> int:
     Markdown, which is the one thing a consumer of the projection should not
     do. An honest silence beats a confident list of non-findings.
     """
+    projects = [
+        row["project"]
+        for row in connection.execute("SELECT DISTINCT project FROM nodes ORDER BY project")
+    ]
     if not projects:
         print("No model found — nothing to report.")
         return 0
 
     for project in projects:
-        live = [e for e in project["elements"] if not e["retired"]]
-        retired = len(project["elements"]) - len(live)
+        rows = [
+            dict(row, attrs=json.loads(row["attrs"] or "{}"))
+            for row in connection.execute("SELECT * FROM nodes WHERE project = ?", (project,))
+        ]
+        live = [e for e in rows if not e["retired"]]
+        retired = len(rows) - len(live)
 
         # Which tables model realization at all: the ones where at least one row
         # filled the column in.
@@ -255,7 +284,7 @@ def coverage(projects: list[dict]) -> int:
         draft = [e for e in live if e["status"] and e["status"] != "validated"]
         undeclared = [e for e in live if not e["status"]]
 
-        print(f"{project['model']} — {len(live)} live element(s), {retired} retired")
+        print(f"{project} — {len(live)} live element(s), {retired} retired")
         print(f"  validated             {len(live) - len(draft) - len(undeclared):4d}")
         print(f"  draft, not approved   {len(draft):4d}")
         if undeclared:
@@ -287,13 +316,13 @@ def coverage(projects: list[dict]) -> int:
             for doc in sorted(by_doc):
                 print(f"    {doc}")
                 for element in sorted(by_doc[doc], key=lambda e: e["id"]):
-                    print(f"      {label(element, element['id'])}")
+                    print(f"      {label(element['id'], element['name'], element['type'])}")
             print()
 
         if pending:
             print("  Explicitly pending — the list a Requester can work through:")
             for element in sorted(pending, key=lambda e: e["id"]):
-                print(f"    {label(element, element['id'])}")
+                print(f"    {label(element['id'], element['name'], element['type'])}")
             print()
 
         if silent:
@@ -321,7 +350,7 @@ def main() -> int:
         "--out",
         type=Path,
         default=DEFAULT_OUT,
-        help="directory holding model.json (default: .model/)",
+        help="directory holding model.db (default: .model/)",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -340,15 +369,16 @@ def main() -> int:
     sub.add_parser("coverage", help="what is grounded, pending, unfound or unreferenced")
 
     args = parser.parse_args()
-    projects = load(args.out)
-    if args.command == "trace":
-        if args.project:
-            projects = [p for p in projects if args.project in p["project"]]
-        if not projects:
-            print("No model found — nothing to trace.")
-            return 0
-        return trace(projects, args.element, max(1, args.depth))
-    return coverage(projects)
+    connection = connect(args.out)
+    if connection is None:
+        print("No model found — nothing to query.")
+        return 0
+    try:
+        if args.command == "trace":
+            return trace(connection, args.element, max(1, args.depth), args.project)
+        return coverage(connection)
+    finally:
+        connection.close()
 
 
 if __name__ == "__main__":

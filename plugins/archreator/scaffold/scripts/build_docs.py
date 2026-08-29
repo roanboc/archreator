@@ -58,6 +58,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from model_graph import EXCLUDED_DIRS, MODEL_DIR, REPO_ROOT, find_projects  # noqa: E402
 
+
 # What lands in the portal: the model, and the documents that frame it. Every
 # Markdown file directly in the project root is published too, which is how
 # `README.md` becomes the front page. A project that keeps documentation
@@ -84,10 +85,38 @@ DERIVED = ".docs"
 STAGING = f"{DERIVED}/src"
 SITE = f"{DERIVED}/site"
 CONFIG = "mkdocs.yml"
+# Where a model's projection is published, so a second model can read it
+# without cloning anything. It used to sit under the graph navigator that read
+# it; the navigator is gone and the projection is not — federation, and the
+# `other-model::CAP1` grammar that resolves against it, are what it is for.
+PROJECTION = "projection"
 # The packages `mkdocs.yml` names. Reported by import name, installed under
 # another, so both are carried.
 REQUIRED = {"mkdocs": "mkdocs", "material": "mkdocs-material",
             "mkdocs_print_site_plugin": "mkdocs-print-site-plugin"}
+
+
+def stage_projection(project: Path, site: Path) -> list[str]:
+    """Publish this model's projection beside its portal.
+
+    **This model's, never the repository's.** `collect()` finds every model in
+    the repository, and publishing all of them under one model's address would
+    put another model's elements at this model's URL — the restating the
+    federation rule forbids an author from doing, done by a build step instead.
+    A repository holding several models publishes several projections, and
+    `architecture/federation.md` is what names them.
+    """
+    import build_model
+
+    mine = build_model.project_name(project)
+    projects = [p for p in build_model.collect() if p["project"] == mine]
+    if not projects:
+        return [f"{PROJECTION}/: this model defines no elements, so none is published"]
+    target = site / PROJECTION
+    target.mkdir(parents=True, exist_ok=True)
+    build_model.write_json(projects, target / "model.json")
+    build_model.write_sqlite(projects, target / "model.db")
+    return []
 
 
 def shown(path: Path) -> str:
@@ -297,6 +326,8 @@ def main() -> int:
     code = run_mkdocs(project, arguments)
     if code == 0 and not args.serve:
         site = shown(project / SITE)
+        for note in stage_projection(project, project / SITE):
+            print(f"  {note}")
         print(
             f"Portal built into {site}/. Open {site}/index.html to read it, hand "
             f"the folder to whoever will host it, or run --serve to rebuild as "

@@ -148,6 +148,14 @@ plugins:
     enumerate_headings: false
     enumerate_figures: false
     print_page_title: "The whole model"
+    # **The PDF says what it is on its own cover.** A generated document that
+    # does not announce itself gets mailed around and quoted long after it
+    # stopped being true, which is `RULE7` — a rendering is never the model —
+    # failing in the one place nobody can see it fail. Same reason a brief
+    # carries the same line.
+    add_full_urls: false
+    path_to_pdf: ""
+    cover_page_template: "overrides/pdf-cover.tpl"
     # Documents the PDF leaves out. They stay in the portal — this is about
     # what belongs in a document handed to someone, not about hiding a page.
     # Paths are globs, relative to the project root, e.g.

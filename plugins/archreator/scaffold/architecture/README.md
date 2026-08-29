@@ -25,8 +25,8 @@ this order — strategy first, technology last — and captured in a
 | 3   | [3_information/](./3_information/README.md) | Passive structure (data) | What information exists, where does it live, how does it flow?               |
 | 4   | [4_application/](./4_application/README.md) | Application layer        | Which software services and components realize the business services?       |
 | 5   | [5_technology/](./5_technology/README.md)   | Technology layer         | What runs it all — runtimes, tooling, build, hosting, deployment?            |
+| 6   | [6_transition/](./6_transition/README.md) | Implementation & Migration | Where should this go, what stands in the way, and in what order?              |
 | —   | [domains/](./domains/README.md)             | _the same layers, nested_ | Which business lines own their own model, and what they expose to each other |
-| —   | [roadmap/](./roadmap/README.md)             | Implementation & Migration | Where should this go, what stands in the way, and in what order?              |
 | —   | [reference/](./reference/README.md)         | _none — source material_ | What was this built from — which transcript, deck or document said so?         |
 
 Layer `0` is the odd one out: it holds no ArchiMate elements at all, only
@@ -60,7 +60,7 @@ Rules that make the ladder work:
   initiative — Depth 1 → 2 makes the organization the subject and fills the
   canvases; Depth 2 → 3 splits the model into domains. Descoping collapses
   the tree. Both are the Requester's call, recorded like any other change.
-- **Every depth still gets all six layer folders.** A layer with nothing to
+- **Every depth still gets all seven layer folders.** A layer with nothing to
   say yet is marked "not started" in its README's table, not deleted — an
   unfilled layer is a known gap, a missing folder is an unknown one.
 - **Depth is about the subject, not the effort.** A large application is
@@ -73,7 +73,7 @@ Implementation & Migration viewpoint) are documented per initiative in
 **current** state; scope documents describe the **changes** that produce it.
 
 Where the architecture is *going* is neither of those, and it has a folder of
-its own: [roadmap/](./roadmap/README.md) holds the target plateaus, the gaps
+its own: [6_transition/](./6_transition/README.md) holds the target plateaus, the gaps
 between them and today, and the order the gaps are closed in. **It is the only
 place in the model permitted to describe a future**, which is what lets every
 numbered layer be read as a description of now without qualification.
@@ -240,6 +240,35 @@ Application cyan even inside a business diagram, because a reader should
 never mistake it for a person. And an element borrowed from another layer for
 context keeps its home layer's colour, shape and glyph, so it is recognisable
 as a visitor.
+
+### 5. Relationships are declared in tables; a diagram renders them
+
+**A diagram is a rendering.** Nothing reads one — the projection builds the
+graph from catalogue columns and relationship tables, and a relationship drawn
+in Mermaid and written nowhere else is invisible to every tool and to every
+reader who is not looking at that document.
+
+Two places declare one:
+
+- **A catalogue column**, when its cell is a list of identifiers and nothing
+  else. The header is the relationship's name.
+- **A `## Relationships` table**, beside the diagram it explains, for anything
+  a single row cannot carry — above all a relationship between two peers in one
+  layer, which a catalogue has no column shape for.
+
+Its columns are fixed by position: 1 and 3 hold the two identifiers, 2 and 4
+describe them as `<glyph> «Archetype» <name>`, 5 is the relationship, and
+anything after is notes. No header word is read, so the table works in a model
+written in any language. The worked example is in
+`architecture-document-style` § The relationship table, and not here — a
+specimen identifier in the scaffold ships into every generated project as a
+reference to an element nobody defined. **Each end names its archetype and its name because a table cell
+has no glyph, shape or colour to carry the type** — and because the name is a
+copy of what the catalogue owns, `scripts/check_model.py` holds the two in step.
+The `architecture-document-style` skill is the single source for the full rule.
+
+**Dashed edges mean Pending in a diagram; a table says it in words**, with the
+same `Pending — future initiative` marker the grounding rule uses.
 
 ### Drawing rules
 

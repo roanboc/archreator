@@ -69,7 +69,7 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 -->
 
 - `architecture/` — everything architectural: the numbered ArchiMate layers
-  describing the current state, `architecture/roadmap/` — the one place the
+  describing the current state, `architecture/6_transition/` — the one place the
   model describes a future — `architecture/reference/` — the transcripts,
   decks and documents it was built from, kept as they arrived —
   `architecture/domains/` (Depth 3 only), `architecture/scope/` — one document

@@ -12,7 +12,7 @@ more: worked examples of the method applied to real organizations live in
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The seventeen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/plugin.json`](./plugins/archreator/plugin.json) · [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests. The two plugin manifests are the same fact in the two places hosts look for it, and `check_skills.py` holds them together |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model, and [`install_skills.py`](./plugins/archreator/scripts/install_skills.py), which copies the skills into `.agents/skills/` for a host that installs no plugin. Both stay out of `scaffold/` because a downstream project has no skills |
-| `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), the reference folder its sources are kept in, [the validators, the projection and the query tool that reads it, the portal and the PDF export](./plugins/archreator/scaffold/scripts/README.md), the `mkdocs.yml` and `overrides/` those last two read, a `.github/` holding the pull-request template, the question form and the two workflows it ships switched off, a `.gitignore`, and placeholder `AGENTS.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |
+| `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), the reference folder its sources are kept in, [the validators, the projection and the two readers of it, the portal and the PDF export](./plugins/archreator/scaffold/scripts/README.md), the `mkdocs.yml` and `overrides/` those last two read, a `.github/` holding the pull-request template, the question form and the two workflows it ships switched off, a `.gitignore`, and placeholder `AGENTS.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, how to adopt it, [how a model is published](./docs/publishing.md), and [the format every skill follows](./docs/skill-format.md). The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The public site, deployed to <https://roanboc.github.io/archreator/> — a landing page, [a get-started page](./site/start.html) with the install recipe per host, and the stylesheet both share |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
@@ -69,6 +69,21 @@ edges, for consumers that cannot read Markdown tables, and
 to one element would touch, `coverage` for what names no realizing artifact.
 Both are tools rather than gates, and both find nothing here: the scaffold has
 no elements.
+
+A reference can name an element in another model — `other-model::CAP1` — and
+`check_model.py` resolves it against that model when it is in the same
+repository, or against `architecture/imports.md` when it is not. Nothing
+fetches: a validator reading a sibling repository on every pull request would
+be slow, would fail when somebody else's site was down, and would let another
+team's push break this build.
+
+`scaffold/scripts/build_brief.py` is the reader the graph navigator turned out
+not to be: name a scope — an element and a depth, a domain, a layer — and it
+writes one Markdown brief into `.docs/briefs/` with the elements that matter,
+generated ArchiMate views of how they depend on each other across the layers,
+and the paragraphs the documents already write. Disposable, never committed,
+stamped with the revision it came from. The graph navigator that preceded it is
+deleted; a reader arrives with a question rather than a canvas.
 
 `scaffold/scripts/build_docs.py` and `export_pdf.py` are the last two tools:
 the model as a website and as one PDF, for readers who are not in the

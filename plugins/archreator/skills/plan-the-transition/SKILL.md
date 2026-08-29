@@ -1,6 +1,6 @@
 ---
 name: plan-the-transition
-description: Procedure — run this when the Requester wants to know where the architecture should go and in what order, rather than how to deliver one change. Turns an approved baseline into named target plateaus, a derived gap register and a sequence of initiatives, recorded in architecture/roadmap/ and approved at Gate 1. Use it for target state, to-be architecture, gap analysis, transition planning, a roadmap, or when changes keep arriving with nothing to judge their priority against.
+description: Procedure — run this when the Requester wants to know where the architecture should go and in what order, rather than how to deliver one change. Turns an approved baseline into named target plateaus, a derived gap register and a sequence of initiatives, recorded in architecture/6_transition/ and approved at Gate 1. Use it for target state, to-be architecture, gap analysis, transition planning, a roadmap, or when changes keep arriving with nothing to judge their priority against.
 metadata:
   archreator:
     kind: gated-procedure
@@ -83,7 +83,7 @@ flowchart TD
 
 - **The roadmap is the only place the model describes a future.** The numbered
   layers describe today and are kept that way by `restate-current-state`;
-  `architecture/roadmap/` describes intent, and is the reason the two never
+  `architecture/6_transition/` describes intent, and is the reason the two never
   have to be mixed. A target element written into a numbered layer breaks the
   one property that makes the current-state documents trustworthy.
 - **A gap is derived, never asserted.** Every gap names the baseline it starts
@@ -134,7 +134,7 @@ is plannable *within that boundary*, and the roadmap simply says so.
 
 Work backwards from the strategy layer's goals. For each goal, ask what would
 have to be true of the architecture for the goal to be met, and name that
-state. That is a plateau, and it belongs in `architecture/roadmap/`.
+state. That is a plateau, and it belongs in `architecture/6_transition/`.
 
 Keep them few. Two or three plateaus for a two-year horizon is a plan a
 Requester can hold in their head and argue with; eleven is a backlog with
@@ -149,7 +149,7 @@ done, it does not belong here.
 
 **← Needs** the strategy layer, and the baseline from Step 1.
 
-**→ Produces** the plateaus in `architecture/roadmap/`.
+**→ Produces** the plateaus in `architecture/6_transition/`.
 
 ### 3 — Derive the gap register
 
@@ -170,7 +170,7 @@ to close it in three years without knowing it was a decision.
 
 **← Needs** the plateaus, and the current-state layers.
 
-**→ Produces** the gap register in `architecture/roadmap/`.
+**→ Produces** the gap register in `architecture/6_transition/`.
 
 ### 4 — Sequence the initiatives
 
@@ -189,7 +189,7 @@ stale dates stops being read.
 
 **← Needs** the gap register.
 
-**→ Produces** the sequence in `architecture/roadmap/`.
+**→ Produces** the sequence in `architecture/6_transition/`.
 
 ### 5 — Write the scope document, present Gate 1
 
@@ -286,7 +286,7 @@ with why, for the same reason.
   such, not as gaps.
 - The sequence orders initiatives by dependency, and the Requester's ordering
   choices are recorded with their reasons.
-- Nothing in `architecture/roadmap/` has leaked into the numbered layers.
+- Nothing in `architecture/6_transition/` has leaked into the numbered layers.
 - The scope document records Gate 1 as granted, naming the roadmap documents
   shown, and the presentation said plainly that the work itself is not
   approved.

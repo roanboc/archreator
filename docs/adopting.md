@@ -68,8 +68,8 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
   bootstrap skill runs
 - `CLAUDE.md` and `GEMINI.md` — one line each, importing `AGENTS.md`, so
   the host that reads only its own filename still finds the entry point
-- `architecture/` — layer READMEs for the six layers, plus `scope/` and
-  `decisions/`
+- `architecture/` — layer READMEs for the six description layers and for
+  `6_transition/`, plus `scope/` and `decisions/`
 - `scripts/` — the two validators, run before every push, and the three tools:
   the projection, the documentation portal and the PDF export
 - `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a

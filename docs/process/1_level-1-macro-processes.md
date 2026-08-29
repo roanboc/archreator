@@ -90,7 +90,7 @@ flowchart TD
 The only process whose output describes a future. Everything else in the model —
 every layer document, every validator, every restatement — is held to describing
 what is true now, and that rule is worth keeping precisely because one place is
-exempt from it. The exemption is a folder, `architecture/roadmap/`, and it is the
+exempt from it. The exemption is a folder, `architecture/6_transition/`, and it is the
 whole of `BPROC5`'s output.
 
 It reuses Gate 1 rather than adding a fifth gate. The reasoning is in
@@ -137,7 +137,7 @@ Turns a model that has drifted from what shipped back into a description of toda
 ```mermaid
 flowchart TD
   drift(["The model no longer reads as a description of today"])
-  call(["One consequential call, smaller than an initiative"])
+  onecall(["One consequential call, smaller than an initiative"])
   p31["⚙ Restate the current state [BPROC3.1]"]
   g2b{{"❖ Gate 2 — the restatement"}}
   p32["⚙ Record a decision [BPROC3.2]"]
@@ -146,11 +146,11 @@ flowchart TD
 
   drift --> p31 --> g2b -->|approved| back
   g2b -->|changes requested| p31
-  call --> p32 --> rec
+  onecall --> p32 --> rec
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
   classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class p31,p32,drift,call,back,rec business
+  class p31,p32,drift,onecall,back,rec business
   class g2b implementation
 ```
 

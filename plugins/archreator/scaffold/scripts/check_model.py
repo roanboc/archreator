@@ -26,6 +26,15 @@ Four things are checked, per project:
 - **Orphan levels** — a leveled ID (`CAP1.2`, `BPROC7.2.1`) has the element
   one level up defined too. A hierarchical identifier that names a parent
   nobody wrote is the same defect as a dangling reference.
+- **A restated name that has drifted** — a relationship table writes each
+  end's archetype and name beside its identifier, so the person approving it
+  can read it without holding every catalogue open. The name is a copy of a
+  fact the defining catalogue owns, and this is what holds the two in step:
+  rename an element and every table naming it fails until it is updated. It is
+  `P1`'s escape clause used the way `element-prefixes.json` uses it — one
+  unavoidable copy, with a check on it. The **archetype** is deliberately not
+  checked: it cannot drift away from the prefix sitting in the cell beside it,
+  and the word for it is language-dependent where the prefix is not.
 - **Undeclared status** — a document that defines an element says in its
   preamble how far it has been validated, with one of the three glyphs in
   `architecture-document-style` § Document status. A catalogue of elements
@@ -76,18 +85,86 @@ Deliberately not checked:
 import sys
 from pathlib import Path
 
+import re
+
 from model_graph import (
+    FOREIGN_SEP,
+    IMPORTS_DOC,
     MODEL_DIR,
     REPO_ROOT,
     domain_of,
     find_projects,
+    imports_of,
     parent_of,
     parse_project,
+    project_key,
     qualifier_of,
 )
 
 
-def check_project(project: Path) -> tuple[list[str], int, int]:
+def _normalised(name: str) -> str:
+    """A name reduced to what a comparison should care about.
+
+    Whitespace runs and letter case are formatting; a different word is a
+    rename. Comparing raw strings would fail a document over two spaces, and a
+    check that fails wrongly teaches people to ignore the checks that do not.
+    """
+    return re.sub(r"\s+", " ", name).strip().casefold()
+
+
+def check_foreign(project: Path, parsed, known: dict) -> list[str]:
+    """Every reference that names another model resolves, or is declared.
+
+    Two cases, and they are genuinely different rather than one case with a
+    fallback:
+
+    - **The model is in this repository.** Its definitions are already parsed,
+      so the reference resolves exactly, and an import row restating the
+      element's name is held against the real one.
+    - **The model is elsewhere.** Nothing here can see it. The reference must
+      be declared in `architecture/imports.md`, which is what turns "somebody
+      typed an identifier" into "this model states a dependency". Whether the
+      declaration still matches the upstream is a question for a command
+      somebody runs, never for a check that would make network calls on every
+      pull request.
+    """
+    errors: list[str] = []
+    declared = imports_of(project)
+    seen: set[tuple[str, str, Path]] = set()
+    for model, element, md_file in parsed.foreign:
+        if (model, element, md_file) in seen:
+            continue
+        seen.add((model, element, md_file))
+        rel = md_file.relative_to(REPO_ROOT)
+        reference = f"{model}{FOREIGN_SEP}{element}"
+        here = known.get(model)
+        if here is not None:
+            if element not in here.defined and element not in here.retired:
+                errors.append(
+                    f"{rel}: `{reference}` names no element in `{model}`, which "
+                    f"is in this repository and was checked directly"
+                )
+                continue
+            if reference in declared:
+                written = declared[reference][0]
+                real = here.names.get(element, "")
+                if written and real and _normalised(written) != _normalised(real):
+                    errors.append(
+                        f"{project.name}/{MODEL_DIR}/{IMPORTS_DOC}: `{reference}` is "
+                        f'written here as "{written}" and defined as "{real}". The '
+                        f"model that defines an element owns its name"
+                    )
+            continue
+        if reference not in declared:
+            errors.append(
+                f"{rel}: `{reference}` names a model outside this repository and "
+                f"is not declared in {MODEL_DIR}/{IMPORTS_DOC}. Nothing here can "
+                f"see it, so a reference to it has to be a stated dependency"
+            )
+    return errors
+
+
+def check_project(project: Path, known: dict | None = None) -> tuple[list[str], int, int]:
     """Return (errors, definition count, unvalidated-table count)."""
     parsed = parse_project(project)
     errors: list[str] = sorted(parsed.duplicates)
@@ -133,6 +210,21 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
         elif not status:  # pragma: no cover - unreachable while count == 1
             errors.append(f"{doc}: unrecognised status glyph")
 
+    for said, md_file in parsed.restatements:
+        canonical = parsed.names.get(said.element)
+        if not canonical or not said.written:
+            # Nothing to hold it against: either the element is defined as a
+            # bolded lead-in with no catalogue row, or the cell was left blank.
+            # A missing description is a legibility problem for a reader to
+            # notice, not a false failure to manufacture here.
+            continue
+        if _normalised(said.written) != _normalised(canonical):
+            errors.append(
+                f"{md_file.relative_to(REPO_ROOT)}: `{said.element}` is written "
+                f'here as "{said.written}" and defined as "{canonical}". The '
+                f"catalogue that defines an element owns its name"
+            )
+
     seen: set[tuple[str, Path]] = set()
     for reference, md_file in parsed.references:
         if (reference, md_file) in seen:
@@ -154,6 +246,8 @@ def check_project(project: Path) -> tuple[list[str], int, int]:
         else:
             errors.append(f"{rel}: `{reference}` is not defined in this project")
 
+    errors.extend(check_foreign(project, parsed, known or {}))
+
     return errors, len(parsed.defined), parsed.skipped
 
 
@@ -168,8 +262,12 @@ def main() -> int:
             pass
     all_errors: list[str] = []
     summary: list[str] = []
+    # Every model in the repository, parsed before any is judged: a reference
+    # that crosses from one to another can only be resolved by something that
+    # has both.
+    known = {project_key(project): parse_project(project) for project in find_projects()}
     for project in find_projects():
-        errors, defined, skipped = check_project(project)
+        errors, defined, skipped = check_project(project, known)
         rel = project.relative_to(REPO_ROOT) if project != REPO_ROOT else Path(".")
         if not defined:
             # An unfilled template scaffold: its layer READMEs are full of

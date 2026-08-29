@@ -136,7 +136,7 @@ host, all carried into every step below.
 
 Copy the scaffold whole from `scaffold/` in the plugin into the project root.
 It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
-`architecture/` — with `scope/`, `decisions/`, `roadmap/` and `reference/`
+`architecture/` — with `scope/`, `decisions/`, `6_transition/` and `reference/`
 inside it — and `scripts/`, the two validators and the four tools with their
 own README. It also holds
 `mkdocs.yml` and `overrides/`, which render the model as a website, and
@@ -205,7 +205,7 @@ that the checks are noise.
 
 ### 3 — Set the layers to the declared depth
 
-All six layer folders stay, at every depth. What changes is their **declared
+All seven layer folders stay, at every depth. What changes is their **declared
 state**: a layer the project is not filling in yet gets "not started" in its
 README table, not a deletion. An unfilled layer is a known gap; a missing
 folder is an unknown one.

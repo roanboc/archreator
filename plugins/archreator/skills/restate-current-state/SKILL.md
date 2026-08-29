@@ -74,7 +74,7 @@ flowchart TD
 | A decision record's **Status** line | A decision record's Context, Options, Decision, Consequences |
 | Layer README state tables | Anything a Requester approved at a gate |
 | Status lines that no longer match what was approved | The gate and date a status line records |
-| — | `architecture/roadmap/`, which describes an intent rather than a present |
+| — | `architecture/6_transition/`, which describes an intent rather than a present |
 
 A merged scope document records what was approved on a date. If it becomes
 wrong it is not corrected — it is superseded by a later one, which is the

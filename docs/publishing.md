@@ -242,6 +242,31 @@ Until it is hosted somewhere, **the PDF is the distribution channel**: it is a
 file you can attach to a mail, and it is the same rendering. A portal nobody
 has hosted has not widened the audience by one reader.
 
+## The brief, and the federation
+
+The portal renders the documents and the PDF prints them. Neither answers "what
+do I need to know about *this*" - and `scripts/build_brief.py` is the third
+rendering, for the reader who has a question rather than an afternoon.
+
+```bash
+python3 scripts/build_brief.py --element BSVC1 --depth 2
+```
+
+It writes one Markdown file into `.docs/briefs/`: the elements in scope, the
+views showing how they depend on each other from business down to technology,
+what the documents already say about each, and what the scope left out.
+
+**Everything it writes is disposable and says so.** So does the PDF. Both carry
+the revision they were generated from and a line naming the repository as the
+model, because a generated document that does not announce itself gets
+committed, emailed, and quoted long after it stopped being true.
+
+**A model still publishes its own projection** at `<site>/projection/model.json`
+and `model.db`, with a schema number and the commit they were built from, so a
+second model can read it without cloning anything. `architecture/federation.md`
+in the topmost model of a federation names the models that belong together -
+which is also what gives `other-model::CAP1` a model name to resolve against.
+
 ## Leaving documents out of the PDF
 
 A portal is complete by definition — it is the model, rendered. A document

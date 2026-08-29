@@ -56,7 +56,7 @@ document reaches for it. Nothing here is a step.
   when the analysis order genuinely changes.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
-- `architecture/roadmap/` is not a layer and carries no layer number. Its
+- `architecture/6_transition/` is not a layer and carries no layer number. Its
   documents are numbered in analysis order like a layer's are, because a gap
   cannot be derived before the plateau it is measured against exists. It is
   **the only folder in the model that describes a future**; every numbered
@@ -301,6 +301,41 @@ referenced from outside it. Referencing another domain's internal process or
 resource by ID reaches through the contract and is a modeling error — take
 it up with that domain's charter instead.
 
+### Crossing a model boundary
+
+An identifier is scoped to its model. Two models may each own a `G1`, which is
+deliberate — globally unique numbering would make every new model a merge
+conflict against every other — and it is why a bare identifier can only ever
+mean something inside the model that wrote it.
+
+**A reference to another model names that model first, separated by two
+colons**: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
+
+Two colons rather than a third meaning for the dot. The dot already separates
+the domain path (before the prefix) from the catalogue's levels (after it), and
+one character meaning three things stops being readable. Read outwards: model,
+then domain path, then prefix, then levels — each separator appears at most
+once, and always in that order.
+
+**The model's name is the one the federation index gives it.** That is the
+point rather than a convenience: a model you may reference is a model you have
+declared you federate with, in `architecture/federation.md`. There is no way to
+reach into something you never said you depend on.
+
+**How it resolves depends on where the other model is**, and the two cases are
+genuinely different:
+
+| The model is | Resolution | What can go wrong |
+| ------------ | ---------- | ----------------- |
+| **In this repository** | Against that model's own definitions, exactly and immediately | A stale identifier fails the build, like any other |
+| **In another repository** | Against a row in `architecture/imports.md` declaring it | The row can be internally consistent and out of date |
+
+Nothing fetches anything. A validator that read a sibling repository on every
+pull request would be slow, would fail when somebody else's site was down, and
+would let another team's push break this build. What is checked is that the
+dependency was **stated** — and the name the import row restates is held
+against the upstream only when the upstream is here to be read.
+
 ### What belongs at which tier
 
 A model that federates — an organization with applications built under it —
@@ -381,6 +416,76 @@ customer profile and the Strategy fill for the value map, as in
 The canvas-block-to-ArchiMate-element mapping lives in that same README and
 is not restated anywhere else.
 
+### The relationship table
+
+An element's relationships are **declared**, in one of two places, and a
+diagram renders what was declared. A relationship whose only home is a Mermaid
+block is a fact living inside a rendering, which `P1` does not allow — and it
+is invisible to everything except a person reading that one document.
+
+**A catalogue column declares the relationships a row can carry.** One row per
+element, and a column naming what it points at:
+
+| ID | Application service | Realizes | Provided by |
+| -- | ------------------- | -------- | ----------- |
+| `ASVC1` | **Layer-by-layer alignment** | `BSVC1` | `ACMP1` |
+
+The column header is the relationship, carried verbatim into the projection —
+`Realizes`, `Realiza`, `Serves`. Nothing maps it onto ArchiMate's vocabulary,
+because a guess there is worse than an honest string.
+
+**A cell declares only when it is a list of identifiers and nothing else.**
+`` `ACMP7`, `ACMP8` `` declares two relationships; "A row in `BOBJ3`'s Approvals
+table" is prose that mentions one. This is what separates a relationship column
+from an attribute column — `Maturity` holds the word "Established" and
+`Realizes` holds identifiers, and both are columns of the same catalogue.
+
+**This is the one place a reference is a bare identifier.** § Identifiers asks a
+reference in prose or an ordinary cell to carry `ID — Name`, so a reader is
+never sent looking. A relationship column is read by a parser before it is read
+by a person, and a name inside it turns the cell into prose the parse stops
+seeing — silently, because a column that declares nothing looks exactly like a
+column that has nothing to declare. The name belongs in the row's own name
+column, and in cells 2 and 4 of the relationship table below, where it is
+checked against the catalogue rather than trusted.
+
+**A relationship table declares everything a row cannot.** A catalogue has one
+row per element, so it has no shape at all for a relationship between two peers
+in the same layer — which is most of them. Give the document a `## Relationships`
+section beside the diagram that renders it:
+
+| From | From element | To | To element | Relationship |
+| ---- | ------------ | -- | ---------- | ------------ |
+| `CAP5` | ✦ «Capability» Learn from an engagement | `CAP1` | ✦ «Capability» Discover a subject from nothing | precedes |
+
+**Read by position, never by header word.** Columns 1 and 3 hold the
+identifiers; 2 and 4 describe them; 5 is the relationship; anything after is
+notes. A table whose first header is `ID` is a catalogue and is never read as
+this, which is what keeps a catalogue with a `Realizes` column from being
+mistaken for one. Headers are prose in whatever language the model is written
+in, and nothing here reads them — the same arrangement that puts an element's
+name in a catalogue's second cell.
+
+**Each end names its archetype and its name, and both are copies.** A node in a
+diagram drops its stereotype because glyph, shape and colour carry the type
+three times with a legend one screen above; a table cell has none of those, and
+`CAP5` alone tells a reader nothing. So the archetype and the name are written
+out — and because both are facts owned elsewhere, `check_model.py` holds the
+**name** against the catalogue that defines the element and fails on a
+mismatch. It is `P1`'s escape clause used exactly as `element-prefixes.json`
+uses it: one unavoidable copy, with a check on it.
+
+The **archetype is deliberately not checked**, and the glyph is optional. An
+archetype cannot drift away from the prefix sitting in the cell beside it, and
+the word for it is language-dependent where the prefix is not — `«Capability»`
+in one model is `«Capacidad»` in another, and a registry of English names
+cannot judge either.
+
+**A relationship that is not true yet says so in words** — the same
+`Pending — future initiative` marker the grounding rule uses — in the notes
+column. Never with a dashed arrow: that is a diagram device, and diagrams are
+not read.
+
 ### Grounding rule (the most important one)
 
 Every EA element must name the code artifact that realizes it — a page, a
@@ -430,6 +535,41 @@ only of what was used.
 **Reference documents are not published.** The portal and the PDF exist to
 hand a reader the model; a raw transcript carries everything else that was in
 the room that day, to an audience that was not.
+
+#### A summary of a meeting records facts, not judgements
+
+A transcript is the commonest thing in `reference/`, and what gets written down
+*from* one is where a model quietly acquires claims nobody would have approved.
+
+**Write down what can be checked**: decisions taken, constraints stated,
+numbers quoted, systems and teams named, dates, owners, what somebody
+committed to, what was explicitly left open.
+
+**Do not write down readings of people**: who seemed frustrated, who is
+difficult to work with, whose team is disorganised, what a tone implied, who
+appeared not to understand their own process. Nor the emotional weather of the
+room — tension, resistance, enthusiasm — as though it were a finding.
+
+Three reasons, and the third is the one that matters:
+
+- **A judgement is unfalsifiable.** "Operations pushed back" can be checked;
+  "operations were defensive" cannot, so nobody can correct it.
+- **It is usually wrong.** A reading of a person from one meeting, written by
+  somebody with a stake in the outcome, is a guess wearing the clothes of an
+  observation.
+- **A repository keeps it.** Long after everyone has forgotten the meeting and
+  the context that made the reading seem fair, the sentence is still there,
+  searchable, attached to a named person, in a document a new colleague reads
+  to learn what the organization is like.
+
+Where a difficulty is real and architecturally relevant, it is written as what
+it is: a constraint, a risk, an assessment, a driver — an `ASM` or a `DRV`
+element with a source, not an aside about somebody. "Two teams disagree on who
+owns customer data" is a finding. "Team A is territorial" is not.
+
+**Nothing checks this.** No validator can tell a fact from a judgement, and one
+that claimed to would be the worst kind of wrong. It is a rule a writer follows
+and a reviewer reads for.
 
 ### ArchiMate on Mermaid
 

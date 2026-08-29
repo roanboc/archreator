@@ -51,7 +51,7 @@ for it once, from evidence rather than from a requirement, by the
 — which stops where a declared boundary says, so a reader can tell what was left
 out from what was missed.
 
-*Where is it going?* That lives in `architecture/roadmap/`, the one folder
+*Where is it going?* That lives in `architecture/6_transition/`, the one folder
 permitted to describe a future: target plateaus, the gaps between them and
 today, and the order the gaps are closed in. The
 [`plan-the-transition` skill](../plugins/archreator/skills/plan-the-transition/SKILL.md)
@@ -148,7 +148,7 @@ resolve, that every leveled ID has a parent, and that no identifier is reused.
 Beside the numbered layers sit the folders that are not layers:
 `architecture/scope/` (one document per initiative), `architecture/decisions/`
 (calls smaller than an initiative), `architecture/domains/` (Depth 3 only),
-`architecture/roadmap/` (where it is going) and `architecture/reference/` (the
+`architecture/6_transition/` (where it is going) and `architecture/reference/` (the
 transcripts, decks and documents the model was built from, kept as they
 arrived, dated, indexed, and never published).
 
