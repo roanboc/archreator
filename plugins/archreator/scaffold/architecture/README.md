@@ -25,8 +25,8 @@ this order — strategy first, technology last — and captured in a
 | 3   | [3_information/](./3_information/README.md) | Passive structure (data) | What information exists, where does it live, how does it flow?               |
 | 4   | [4_application/](./4_application/README.md) | Application layer        | Which software services and components realize the business services?       |
 | 5   | [5_technology/](./5_technology/README.md)   | Technology layer         | What runs it all — runtimes, tooling, build, hosting, deployment?            |
+| 6   | [6_transition/](./6_transition/README.md) | Implementation & Migration | Where should this go, what stands in the way, and in what order?              |
 | —   | [domains/](./domains/README.md)             | _the same layers, nested_ | Which business lines own their own model, and what they expose to each other |
-| 6   | [6_transition/](./6_transition/README.md)             | Implementation & Migration | Where should this go, what stands in the way, and in what order?              |
 | —   | [reference/](./reference/README.md)         | _none — source material_ | What was this built from — which transcript, deck or document said so?         |
 
 Layer `0` is the odd one out: it holds no ArchiMate elements at all, only
@@ -60,7 +60,7 @@ Rules that make the ladder work:
   initiative — Depth 1 → 2 makes the organization the subject and fills the
   canvases; Depth 2 → 3 splits the model into domains. Descoping collapses
   the tree. Both are the Requester's call, recorded like any other change.
-- **Every depth still gets all six layer folders.** A layer with nothing to
+- **Every depth still gets all seven layer folders.** A layer with nothing to
   say yet is marked "not started" in its README's table, not deleted — an
   unfilled layer is a known gap, a missing folder is an unknown one.
 - **Depth is about the subject, not the effort.** A large application is

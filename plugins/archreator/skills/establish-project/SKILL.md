@@ -205,7 +205,7 @@ that the checks are noise.
 
 ### 3 — Set the layers to the declared depth
 
-All six layer folders stay, at every depth. What changes is their **declared
+All seven layer folders stay, at every depth. What changes is their **declared
 state**: a layer the project is not filling in yet gets "not started" in its
 README table, not a deletion. An unfilled layer is a known gap; a missing
 folder is an unknown one.
