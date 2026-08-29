@@ -42,19 +42,19 @@ approval that mattered happened wherever the call was taken.
 
 ```mermaid
 flowchart LR
-  call(["One consequential call, smaller than an initiative"])
+  onecall(["One consequential call, smaller than an initiative"])
   doc[/"architecture/decisions/n_slug.md"/]
   idx[/"decisions/README.md — the index"/]
   row(["The layer row it explains, linked both ways"])
   reader(["A reader asking: why this, and not the alternative?"])
 
-  call --> doc --> idx
+  onecall --> doc --> idx
   doc <--> row
   doc --> reader
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
   classDef artifact fill:#eef2f7,stroke:#9fb0c4,color:#333
-  class call,row,reader business
+  class onecall,row,reader business
   class doc,idx artifact
 ```
 

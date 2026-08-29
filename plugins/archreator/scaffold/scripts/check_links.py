@@ -4,7 +4,15 @@
 Two file kinds are validated:
 
 **Markdown** (`*.md`) — relative `[text](target)` links must resolve to a
-real file. Two categories are deliberately not flagged:
+real file, and a fragment on a Markdown target (`page.md#a-heading`) must
+match a heading in it. The anchor test is deliberately **permissive**: a
+fragment passes if it matches the heading slug under either the portal's
+rule or GitHub's, an explicit `{#id}`, or an `id=` on embedded HTML. A
+validator that rejects a working link teaches people to ignore it, and the
+two renderers of these documents do not agree on how a heading with a glyph
+or a backtick becomes a slug.
+
+Two categories are deliberately not flagged:
 
 - Links inside fenced code blocks or inline code spans — skill files quote
   illustrative link syntax (e.g. `./<n>_*.md`) as examples, not real links.
@@ -26,6 +34,7 @@ are never checked in either kind.
 """
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 def _find_repo_root(start: Path) -> Path:
@@ -68,6 +77,11 @@ EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "data:", "javascr
 TEMPLATE_RE = re.compile(r"\{[{%]")
 
 _ids_cache: dict[Path, set[str]] = {}
+_anchor_cache: dict[Path, set[str]] = {}
+# An ATX heading. Trailing `#`s are decoration and are not part of the text.
+HEADING_RE = re.compile(r"^(#{1,6})[ \t]+(.+?)[ \t]*#*$", re.MULTILINE)
+# An `attr_list` identifier written onto a heading: `## Title {#custom-id}`.
+ATTR_ID_RE = re.compile(r"\s*\{#([^}\s]+)[^}]*\}\s*$")
 
 
 def is_external(target: str) -> bool:
@@ -96,6 +110,58 @@ def is_expected_forward_reference(resolved: Path) -> bool:
     return bool(NUMBERED_EA_DOC_RE.match(resolved.name))
 
 
+def _slug(text: str, keep_unicode: bool) -> str:
+    """One heading, as a fragment.
+
+    `keep_unicode=False` is Python-Markdown's `toc` slugify, which the portal
+    uses: fold to ASCII, drop everything that is not a word character, space or
+    hyphen, lowercase, and join on hyphens. `keep_unicode=True` is GitHub's,
+    which keeps the accented and non-Latin characters instead of dropping them.
+    Both are computed and either satisfies the check.
+    """
+    if not keep_unicode:
+        text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[^\w\s-]", "", text, flags=re.UNICODE).strip().lower()
+    return re.sub(r"[\s]+", "-", text)
+
+
+def anchors_in(md_file: Path) -> set[str]:
+    """Every fragment a reader could reach in one Markdown document."""
+    if md_file in _anchor_cache:
+        return _anchor_cache[md_file]
+    try:
+        text = FENCE_RE.sub("", md_file.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError):
+        _anchor_cache[md_file] = set()
+        return _anchor_cache[md_file]
+
+    found: set[str] = set(ID_RE.findall(text))
+    seen: dict[str, int] = {}
+    for _, heading in HEADING_RE.findall(text):
+        explicit = ATTR_ID_RE.search(heading)
+        if explicit:
+            found.add(explicit.group(1))
+            heading = ATTR_ID_RE.sub("", heading)
+        # The heading's rendered text: code spans keep their contents, links
+        # keep their label, emphasis markers go.
+        heading = re.sub(r"`([^`]*)`", r"\1", heading)
+        heading = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", heading)
+        heading = re.sub(r"[*_]{1,3}", "", heading)
+        for slug in (_slug(heading, False), _slug(heading, True)):
+            if not slug:
+                continue
+            found.add(slug)
+            # A repeated heading is disambiguated by a counter, and the two
+            # renderers spell it differently. Accept both.
+            count = seen.get(slug, 0)
+            seen[slug] = count + 1
+            if count:
+                found.add(f"{slug}_{count}")
+                found.add(f"{slug}-{count}")
+    _anchor_cache[md_file] = found
+    return found
+
+
 def ids_in(html_file: Path) -> set[str]:
     if html_file not in _ids_cache:
         try:
@@ -112,13 +178,17 @@ def check_markdown(md_file: Path) -> list[str]:
         target = match.group(1).strip()
         if not target or is_external(target) or target.startswith("#"):
             continue
-        path_part = target.split("#", 1)[0]
+        path_part, _, fragment = target.partition("#")
         if not path_part:
             continue
         resolved = (md_file.parent / path_part).resolve()
-        if resolved.exists() or is_expected_forward_reference(resolved):
+        if is_expected_forward_reference(resolved):
             continue
-        errors.append(f"{md_file.relative_to(REPO_ROOT)}: broken link -> {target}")
+        if not resolved.exists():
+            errors.append(f"{md_file.relative_to(REPO_ROOT)}: broken link -> {target}")
+            continue
+        if fragment and resolved.suffix == ".md" and fragment not in anchors_in(resolved):
+            errors.append(f"{md_file.relative_to(REPO_ROOT)}: missing anchor -> {target}")
     return errors
 
 
