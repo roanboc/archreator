@@ -73,5 +73,11 @@ its own initiative through the skill, not a quiet edit.
 Glyph, shape and colour follow
 [`../README.md` § Notation conventions](../README.md#notation-conventions),
 which stays the single source. Both element types take the Implementation &
-Migration rose, ramped from plateau to gap. A **dashed edge** means the state
-is not reached yet, which in this folder is most of them.
+Migration rose, ramped from plateau to gap.
+
+**Edges here are solid, and that is not an exception to the notation.** A
+dashed edge means the *relationship* is pending — and the dependency between
+two plateaus is true today whether or not either is reached: the later one
+needs the earlier one now, and will still need it after both arrive. What is
+not reached yet is a plateau's own **Status**, which its row carries in words.
+Drawing that on the edge would state it twice and state it wrongly.
