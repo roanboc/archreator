@@ -55,13 +55,13 @@ determines access", not "be secure").
 
 ```mermaid
 flowchart TB
-  stakeholder(["◍ <Who cares> [STK1]"]):::motivation
-  driver{{"✳ <What pressures them> [DRV1]"}}:::motivation
-  goal("◎ <What must become true> [G1]"):::motivation
+  stakeholder(["◍ <Who cares> [STK#]"]):::motivation
+  driver{{"✳ <What pressures them> [DRV#]"}}:::motivation
+  goal("◎ <What must become true> [G#]"):::motivation
 
-  vs[["⇉ <Stage 1 → Stage 2 → …> [VS1]"]]:::strategy
-  cap["✦ <What we must be able to do> [CAP1]"]:::strategy
-  res[("▤ <What it's built with> [RES1]")]:::strategy
+  vs[["⇉ <Stage 1 → Stage 2 → …> [VS#]"]]:::strategy
+  cap["✦ <What we must be able to do> [CAP#]"]:::strategy
+  res[("▤ <What it's built with> [RES#]")]:::strategy
 
   stakeholder -->|concerned with| driver
   driver -->|influences| goal

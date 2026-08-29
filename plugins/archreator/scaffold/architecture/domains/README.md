@@ -138,12 +138,12 @@ flowchart TB
   end
 
   subgraph D1["Domain — <name>"]
-    d1svc(["⬭ <Exposed service> [BSVC1]"]):::business
+    d1svc(["⬭ <Exposed service> [BSVC#]"]):::business
   end
 
   subgraph D2["Domain — <name>"]
-    d2svc(["⬭ <Exposed service> [BSVC1]"]):::business
-    d2proc{{"⚙ <Internal — not exposed> [BPROC1]"}}:::business
+    d2svc(["⬭ <Exposed service> [BSVC#]"]):::business
+    d2proc{{"⚙ <Internal — not exposed> [BPROC#]"}}:::business
   end
 
   goal -->|realized by| d1svc
