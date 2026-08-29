@@ -132,29 +132,34 @@ one branch detailed to level 3, in
 
 ## `BPROC3` — Keep the model true
 
-Turns a model that has drifted from what shipped back into a description of today.
+Keeps a model truthful, records the calls that explain it, and turns one
+reader question into a bounded reading without changing the model.
 
 ```mermaid
 flowchart TD
   drift(["The model no longer reads as a description of today"])
   onecall(["One consequential call, smaller than an initiative"])
+  question(["A reader has one architecture question"])
   p31["⚙ Restate the current state [BPROC3.1]"]
   g2b{{"❖ Gate 2 — the restatement"}}
   p32["⚙ Record a decision [BPROC3.2]"]
+  p33["⚙ Answer an architecture question [BPROC3.3]"]
   back(["A model that describes today"])
   rec(["A rationale a future reader can find"])
+  brief(["A focused, disposable brief"])
 
   drift --> p31 --> g2b -->|approved| back
   g2b -->|changes requested| p31
   onecall --> p32 --> rec
+  question --> p33 --> brief
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
   classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class p31,p32,drift,onecall,back,rec business
+  class p31,p32,p33,drift,onecall,question,back,rec,brief business
   class g2b implementation
 ```
 
-The two children share a band and nothing else. They answer different triggers, run
+The three children share a band and nothing else. They answer different triggers, run
 independently, and never hand off to one another, which is why the band has no
 internal sequence.
 

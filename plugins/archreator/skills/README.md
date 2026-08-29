@@ -2,7 +2,7 @@
 
 _[← Repository README](../../../README.md)_
 
-The seventeen skills that are the archreator method. Your coding agent picks
+The eighteen skills that are the archreator method. Your coding agent picks
 them up automatically from their `description:` frontmatter — you don't
 invoke them by name in normal use, they surface when their situation
 applies.
@@ -90,6 +90,7 @@ Turning a model that has drifted back into a description of today.
 | ----- | ---- | ----------------- |
 | [`restate-current-state`](./restate-current-state/SKILL.md) | ⚙ Procedure | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
 | [`record-decision`](./record-decision/SKILL.md) | ▤ Document | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
+| [`answer-architecture-question`](./answer-architecture-question/SKILL.md) | ⚙ Procedure | A reader wants a focused, disposable brief about one element, domain, concern, impact or decision |
 
 ## Learning from the engagement — `BPROC4`
 

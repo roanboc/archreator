@@ -55,6 +55,7 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 | `write-pr-description` | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
 | `restate-current-state` | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
 | `record-decision` | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
+| `answer-architecture-question` | A reader wants a focused, disposable brief about one element, domain, concern, impact or decision |
 | `run-retrospective` | An initiative or engagement just finished — capture what the method didn't cover before it evaporates |
 | `document-style` | Writing or editing any document at all — the language, what it may contain, and how it links |
 | `architecture-document-style` | Editing anything under `architecture/` — numbering, element IDs, tiers, ArchiMate-on-Mermaid, actors, the grounding rule |
@@ -105,12 +106,13 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing. Four tools sit beside them, none of them a
+Both must be green before pushing. Five tools sit beside them, none of them a
 gate:
 
 ```bash
 python3 scripts/build_model.py    # the model as nodes and edges, in .model/
 python3 scripts/query_model.py coverage    # what is grounded, and what is not
+python3 scripts/build_brief.py --element CAP1 --focus impact  # one question, as a brief
 python3 scripts/build_docs.py     # the model as a website, in .docs/site/
 python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 ```
@@ -118,7 +120,7 @@ python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 `query_model.py` answers the questions a table cannot — `trace <ID>` for what a
 change to one element would touch, `coverage` for what names no realizing
 artifact — and reads the projection `build_model.py` writes. The last two are
-for a reader who is not in this repository. All four are regenerated from the
+for a reader who is not in this repository. All five are regenerated from the
 Markdown under `architecture/`, which stays the source of truth.
 
 ## Conventions

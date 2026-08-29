@@ -14,7 +14,7 @@ python3 scripts/check_model.py    # element-ID references resolve
 python3 scripts/build_model.py    # project the model into .model/
 python3 scripts/query_model.py coverage      # what is grounded, and what is not
 python3 scripts/query_model.py trace CAP3    # what a change to one element touches
-python3 scripts/build_brief.py --element CAP3 --depth 2   # one scope, as a brief
+python3 scripts/build_brief.py --element CAP3 --depth 2 --focus impact  # one question, as a brief
 python3 scripts/build_docs.py     # the model as a website, in .docs/site/
 python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
 ```
@@ -29,7 +29,7 @@ green for them, and nothing breaks if they are never run.
 | `check_model.py` | Executable. Every backticked element ID resolves to a definition, none is defined twice, none is both live and retired, a levelled ID has its parent defined, every document that defines an element declares how far it has been validated, no relationship table restates an element's name differently from the catalogue that defines it, and every reference that names another model either resolves in this repository or is declared in `architecture/imports.md` |
 | `build_model.py` | Executable. Writes `.model/model.json` and `.model/model.db` — the model as nodes and edges, for a rendered view or a report. Every edge carries where it was declared and whether it is pending. `--inventory` prints one line per element instead |
 | `query_model.py` | Executable. Reads `model.db` and answers the two questions a table cannot. `trace <ID>` follows relationships outward and says what a change to one element would touch; `coverage` reports what names a realizing artifact, what is explicitly Pending, and what its own catalogue leaves blank beside grounded neighbours. Builds the projection first if it is missing |
-| `build_brief.py` | Executable. Writes one disposable Markdown brief into `.docs/briefs/` for a named scope — the elements in it, generated views of how they depend on each other across the layers, and what the documents already say |
+| `build_brief.py` | Executable. Writes one disposable Markdown brief into `.docs/briefs/` for a named scope and optional reader focus — the relevant elements, generated views of how they depend on each other, and what the documents already say |
 | `build_docs.py` | Executable. Stages the documents into `.docs/src/` and builds the portal into `.docs/site/`, publishes this model's projection under `site/projection/`, and reports links pointing at files it does not publish. `--serve` rebuilds as the model is edited. Also the staging hook `mkdocs.yml` runs |
 | `export_pdf.py` | Executable. Prints the portal's single-page view to `.docs/architecture.pdf` with a headless browser, and checks that the diagrams were drawn rather than left as source text. What the PDF leaves out is the `print-site` `exclude` list in `mkdocs.yml`; `--config mkdocs-<audience>.yml` exports a second PDF from a config that inherits it |
 | `neighbourhood.sql` | Data, read by `query_model.py` **and by `build_brief.py`**. The traversal itself — everything within N hops of one element, as a recursive CTE, walking a model-qualified identifier so it crosses a federation boundary without knowing it did. It is a file rather than a function because two readers execute it, and a walk written twice drifts |
@@ -46,7 +46,15 @@ the layers**, and the paragraphs the documents already write about them.
 ```bash
 python3 scripts/build_brief.py --element BSVC1 --depth 2
 python3 scripts/build_brief.py --domain SALES
+python3 scripts/build_brief.py --element BSVC1 --focus business
+python3 scripts/build_brief.py --element DOBJ4 --focus information
+python3 scripts/build_brief.py --domain SALES --focus impact
 ```
+
+`--focus` accepts `business`, `information`, `solution`, `impact` or
+`decision`. It keeps every reached element in the focus's primary layers and
+only directly connected context from its supporting layers. The anchor always
+stays. Omitting `--focus` preserves the unfiltered legacy view.
 
 The walk is `neighbourhood.sql`, the same traversal `query_model.py trace`
 runs. The prose is the model's own, carried verbatim — nothing is summarized,
