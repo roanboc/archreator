@@ -70,12 +70,12 @@ values, consider a `record-decision` alongside the scope document.
 
 ```mermaid
 flowchart TB
-  actorH(["⚇ <Who> (Human) [ACT1]"]):::business
-  actorAI(["⚇ <Who, and at what autonomy> (AI) [ACT2]"]):::application
-  role["⚉ <Role they play> [ROLE1]"]:::business
-  svc(["⬭ <What's offered> [BSVC1]"]):::business
-  proc{{"⚙ <How it's delivered> [BPROC1]"}}:::business
-  obj["▧ <What's handled> [BOBJ1]"]:::business
+  actorH(["⚇ <Who> (Human) [ACT#]"]):::business
+  actorAI(["⚇ <Who, and at what autonomy> (AI) [ACT#]"]):::application
+  role["⚉ <Role they play> [ROLE#]"]:::business
+  svc(["⬭ <What's offered> [BSVC#]"]):::business
+  proc{{"⚙ <How it's delivered> [BPROC#]"}}:::business
+  obj["▧ <What's handled> [BOBJ#]"]:::business
 
   actorH -->|assigned to| role
   actorAI -->|assigned to| role

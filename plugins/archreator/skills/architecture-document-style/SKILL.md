@@ -173,15 +173,18 @@ services" table holds. Anywhere else, a backticked ID is a reference.
 | Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
 
 Every document's "How to read this document" table repeats the prefixes it
-uses, expanded — `STK1` = Stakeholder 1 — which is § Write it out applied to
-identifiers.
+uses, expanded — `STK#` = Stakeholder — which is § Write it out applied to
+identifiers. Examples use `#` (and `#.#` for levels), never a plausible real
+identifier that pollutes searches for actual elements.
 
 Rules: an ID is assigned once and **never reused** after the element is
 removed (a dangling reference should fail loudly, not silently point at
 something else); numbering is per prefix, not global — and per parent inside
 a leveled catalogue; and an element's ID never changes when it is renamed.
-Referencing an element in prose or a table cell means writing its ID —
-`relieves GAIN2` — not repeating its description.
+Referencing an element in prose or a table cell means writing its stable ID
+and short name — `relieves GAIN2 — Faster approval` — without repeating its
+full description. Cross-document references link that visible pair to the
+element definition; multiple references are one per line.
 
 #### Levels number hierarchically
 
@@ -191,9 +194,9 @@ any catalogue with levels behaves the same way.
 
 | Level | Capability | Process | Product |
 | ----- | ---------- | ------- | ------- |
-| **1** | `CAP1` | `BPROC1` | `PROD1` |
-| **2** | `CAP1.2` | `BPROC1.3` | `PROD1.2` |
-| **3** | `CAP1.2.1` | `BPROC1.3.4` | — |
+| **1** | `CAP#` | `BPROC#` | `PROD#` |
+| **2** | `CAP#.#` | `BPROC#.#` | `PROD#.#` |
+| **3** | `CAP#.#.#` | `BPROC#.#.#` | — |
 
 The last segment is numbered **per parent, not across the level**: the second
 child of `CAP1` is `CAP1.2` and the second child of `CAP2` is `CAP2.2`. So
@@ -361,10 +364,14 @@ model contains, not which directory holds it.
 ### Canvas notation
 
 The canvases in `0_business-design/` are Strategyzer artifacts, not
-ArchiMate, so they are written as **tables, one per canvas**, not as
-diagrams — a nine-block grid is unreadable in Mermaid and a table diffs
-cleanly. Each canvas gets its own `###` heading naming the segment or
-product it belongs to.
+ArchiMate. Keep a **table as the detailed, diffable source for each canvas**.
+Each Business Model Canvas also carries a Mermaid overview in the traditional
+nine-block arrangement: Key Partners; Key Activities above Key Resources;
+Value Propositions; Customer Relationships above Channels; Customer Segments;
+and Cost Structure and Revenue Streams across the bottom. Populate it from
+the same rows and show `ID — Name`; do not invent arrows between blocks or add
+facts that exist only in the diagram. Each canvas gets its own `###` heading
+naming the segment or product it belongs to.
 
 Where a canvas *is* drawn — a layer view showing fit — the canvas block name
 is the element type: it goes in the legend (`«Pain»`, `«Gain Creator»`,

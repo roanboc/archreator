@@ -117,7 +117,7 @@ with four devices, and this section is the **single source** for all of them.
 <glyph> <description> [<ID>]
 ```
 
-`✦ Business understanding [CAP1]`, then `✦ Model stewardship [CAP2]`.
+`✦ <Capability name> [CAP#]`. The `#` marks an example, not an element.
 
 **One line, always.** A label spanning two lines needs the viewer to render
 `<br>`, and whether it does depends on that viewer's HTML-label setting — so

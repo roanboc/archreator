@@ -60,6 +60,11 @@ nothing but the text. So spell things out:
   `CS1` (Customer Segment 1 — business and solution designers), or sits in a
   table whose adjacent column gives the name. Never a bare `CS1` in prose
   the first time.
+- **A cross-reference shows identity and meaning.** Write the ID and short
+  element name together — `[CS1 — Business and solution designers](...)` —
+  rather than linking a bare ID. When one field references several elements,
+  put one linked `ID — Name` on each line. A portal tooltip may repeat the name
+  as a convenience, but never carries information absent from Markdown or PDF.
 - **An abbreviation worth using is worth defining.** If the organization has
   its own jargon, it belongs in the glossary in
   `2_business/5_domain-context-and-rules.md`, not only in the head of

@@ -141,6 +141,11 @@ looks finished the moment it is drawn; the marker is what says it is not.
 Anything the Requester provided is filed in `architecture/reference/` first,
 and the `Source` column points there.
 
+For every product or service, place a traditional nine-block Mermaid Business
+Model Canvas immediately before its detailed table. The diagram is a compact
+view of the table, not a second model: use the same `ID — Name` entries, keep
+cost and revenue at the bottom, and resolve any mismatch in favor of the table.
+
 ### 3 — Verify fit before presenting
 
 Check, and fix or flag — never quietly present an unfit canvas:
