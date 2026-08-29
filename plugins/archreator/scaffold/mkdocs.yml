@@ -51,7 +51,8 @@ theme:
   custom_dir: overrides
   # The theme's own strings — search, navigation, the print view. Set it to
   # the language this project documents in (`document-style` decides that
-  # once); the theme override's few words stay English either way.
+  # once). The diagram viewer's few words default to English and can be
+  # translated under `extra.diagram_zoom`; see docs/publishing.md.
   language: en
   icon:
     repo: fontawesome/brands/git-alt

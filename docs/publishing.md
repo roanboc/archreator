@@ -164,6 +164,40 @@ changed nothing — it belongs in the page, in
 link that opens a proper question sits on every page whether or not comments
 are switched on.
 
+## Reading a dense diagram
+
+A diagram often needs more room than the page column can give it. Click one —
+or focus it and press Enter — to move that already-rendered diagram into a
+full-screen viewer. The mouse wheel, `+` and `−` zoom around the point of
+interest; dragging moves it; **Fit** or `0` restores the initial frame; `Esc`
+closes it and returns keyboard focus to the diagram.
+
+The viewer reads and writes no model facts. Material renders Mermaid into a
+closed shadow root, so the viewer moves the host element itself into the
+overlay and returns that exact node to its source position on close. It adds
+no renderer, library, network request or generated artifact, and it is absent
+from the print page and PDF.
+
+Its controls default to English. A project documenting in another language
+sets the labels beside the theme language in `mkdocs.yml`:
+
+```yaml
+extra:
+  diagram_zoom:
+    open: Abrir diagrama a pantalla completa
+    title: Visor de diagramas
+    controls: Controles del diagrama
+    out: Alejar
+    fit: Ajustar
+    in: Acercar
+    close: Cerrar el visor
+    hint: Usa la rueda o + y − para acercar · arrastra para mover · Esc para cerrar
+```
+
+The interaction lives in `overrides/assets/`, separate from the template that
+holds the dialog. It follows Material's instant-navigation lifecycle, remains
+keyboard operable, traps focus while open and restores focus on close.
+
 ## Running it
 
 ```bash
