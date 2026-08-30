@@ -1,7 +1,7 @@
 {
   "name": "archreator",
-  "version": "0.1.0",
-  "description": "Enterprise-architecture-first development with human approval gates: model an organization or an application through numbered ArchiMate layers, stop at explicit Requester gates before any code, and record every initiative in a scope document.",
+  "version": "0.2.0",
+  "description": "Human-first architecture for builders and enterprise architects, with typed workflows, focused discovery and a navigable model AI can traverse.",
   "author": {
     "name": "roanboc",
     "url": "https://github.com/roanboc"
@@ -13,13 +13,26 @@
     "architecture",
     "enterprise-architecture",
     "archimate",
-    "method",
-    "governance"
+    "ai",
+    "modeling"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "archreator",
+    "displayName": "ArChreator",
     "category": "Productivity",
-    "shortDescription": "Enterprise-architecture-first development with human approval gates"
+    "shortDescription": "Rigorous architecture people can understand",
+    "longDescription": "Use AIP-derived procedures, document templates and rulebooks to model only the context a builder or enterprise architect needs, preserve direct standard navigation, and generate focused views from current source.",
+    "developerName": "roanboc",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://roanboc.github.io/archreator/",
+    "defaultPrompt": [
+      "Help me model this initiative clearly.",
+      "What would this change affect?",
+      "Explain this architecture to a business reader."
+    ],
+    "brandColor": "#6D5BD0"
   }
 }

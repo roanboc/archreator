@@ -1,6 +1,6 @@
 ---
 name: document-style
-description: Rulebook — consult when writing or editing any document in this repository, whatever it is about — a README, a page under docs/, a contributing guide, a layer document. Covers the documentation language and how acronyms and identifiers are written out, what a document may contain (its subject rather than its own construction, and no version commentary), where a surviving note goes, and the link conventions. Architecture documents obey these too, and architecture-document-style adds the rest.
+description: Rulebook — consult when writing or editing repository documentation so it stays plain, current, compact and navigable. Architecture documents obey this rulebook and architecture-document-style adds their modeling contract.
 metadata:
   archreator:
     kind: rulebook
@@ -9,182 +9,140 @@ metadata:
 
 # ※ Document style
 
-What every document in this repository obeys, whatever it is about. Three
-rules: the language it is written in, what it may contain, and how it links.
-
-`architecture-document-style` adds everything specific to a model — element
-identifiers, notation, tiers, actors — and obeys these three as well.
+Write one document that means the same thing to the person who knows the
+subject, the person who arrives later and the agent acting on it. Brevity is
+useful only after ambiguity and duplication have been removed.
 
 ## ⊕ When to use this
 
-| The situation | What it looks like |
-| ------------- | ------------------ |
-| Writing any document | A README, a page under `docs/`, a contributing guide, a skill |
-| Editing a model document | These rules apply there too; `architecture-document-style` adds the rest |
-| Deciding what a document may hold | A sentence is about the subject, or about the act of writing it |
+- Creating or editing a README, guide, process page, decision, architecture
+  document or other maintained Markdown.
+- Simplifying documentation whose history, repeated guidance or terminology
+  obscures its subject.
+- Reviewing whether several statements or elements are genuinely distinct.
+
+Apply `architecture-document-style` as well for canonical files under
+`architecture/`.
 
 ## ⊖ When not to
 
-| The situation | Use instead |
-| ------------- | ----------- |
-| The question is about identifiers, notation, tiers or actors | `architecture-document-style` |
-| The question is how far to decompose a catalogue | `process-and-capability-levels` |
+- Source-code formatting, API syntax or generated output governed by another
+  format.
+- A temporary brief whose structure is defined by its document-template skill;
+  use these language and duplication rules without turning the brief into
+  canonical documentation.
+- Preserving an original source exactly as received. Link it as evidence
+  rather than rewriting it as though it were the model.
 
 ## ⌖ Where this sits
 
-**Realizes no process.** It is the rule every document in the repository
-complies with, and the one rulebook that is not about architecture at all.
+This rulebook realizes no process. Procedures and document templates consult
+it while producing human-readable artifacts. It sets the common writing rules;
+`architecture-document-style` adds identifiers, ownership, relationships and
+model structure.
 
 ## ※ Rules
 
-### Language
+### Use language as the interface
 
-Pick one documentation language for the project and use it consistently
-across `architecture/`, `architecture/scope/`, commit messages, and code identifiers
-(see the project's `AGENTS.md`). Whatever language is chosen, **folder and
-file names stay plain ASCII** (no accents, no non-Latin punctuation) even
-if the prose inside is written in a language that uses them — this avoids
-cross-platform path and URL-encoding issues. If ArchiMate stereotypes are
-translated, keep a correspondence table to the standard English element
-names near the top of `architecture/README.md`.
+- Use the project's documentation language consistently. Keep paths in plain
+  ASCII where a portable filename is needed.
+- Lead with the words the subject's people use. Introduce architecture or
+  technical vocabulary only when it adds precision.
+- Expand an unavoidable acronym or specialist term on first use in each
+  independently read document. A deep-linked reader should not need another
+  page merely to decode a sentence.
+- A catalogue row **defines** an element and stays ID-first so definitions sort
+  by stable identity: `ID | Name | …`. Every **reference** outside that row is
+  human-first with the ID last, such as `Order handling [BSVC1]`. A bare ID is
+  valid only in the defining row's `ID` cell; prose, relationship endpoints,
+  diagrams, briefs and other content never use it alone.
+- Machine-only metadata and explicit query arguments may use a bare ID. When
+  that identity is rendered for a reader, restore the human-first `Name [ID]`
+  form.
+- Use active, concrete sentences. State who owns or does something when the
+  identity matters.
 
-#### Write it out
+### Consolidate before enumerating
 
-**Language is the interface** — to a human reader, and to an agent that has
-nothing but the text. So spell things out:
+Fewer, well-defined ideas are easier to validate and connect than many narrow
+ones.
 
-- **Expand every acronym on its first use in each document**, then use the
-  short form freely. Per document, not per project: a reader arriving from a
-  deep link shouldn't have to hunt for what a prefix means.
-- **Element IDs are acronyms too.** First mention in a document reads
-  `CS1` (Customer Segment 1 — business and solution designers), or sits in a
-  table whose adjacent column gives the name. Never a bare `CS1` in prose
-  the first time.
-- **A cross-reference shows identity and meaning.** Write the ID and short
-  element name together — `[CS1 — Business and solution designers](...)` —
-  rather than linking a bare ID. When one field references several elements,
-  put one linked `ID — Name` on each line. A portal tooltip may repeat the name
-  as a convenience, but never carries information absent from Markdown or PDF.
-- **An abbreviation worth using is worth defining.** If the organization has
-  its own jargon, it belongs in the glossary in
-  `2_business/5_domain-context-and-rules.md`, not only in the head of
-  whoever wrote the document.
-- **Prefer the full word where it costs nothing.** "Customer segment" reads
-  better than "CS" in a sentence; the short form earns its place in tables,
-  diagrams, and cross-references where space is genuinely tight.
+- If two entries differ only in wording or degree, keep one and express the
+  variation as an attribute, measure or segment-specific value.
+- When a list becomes hard to hold in one view, first test which entries are
+  the same thing seen from different positions. Split the document only after
+  consolidating the subject.
+- Present a reasoned recommendation rather than handing the reader a long menu
+  of overlapping choices.
+- Keep distinct things distinct when they have different ownership, outcomes,
+  contracts or lifecycles. Simplicity is not loss of meaning.
 
-This costs a few characters and buys the thing the whole method is for: a
-document that means the same to the person who wrote it, the person reading
-it a year later, and the agent acting on it.
+### Describe the subject and current truth
 
-#### Consolidate before you enumerate
+A maintained document says what is true, why it matters and how it connects.
+It does not narrate how the document was drafted.
 
-**Fewer, better-defined elements beat many narrow ones.** Every element in a
-catalogue is a row someone has to read and an edge someone has to trace in a
-diagram. Ten well-named elements with clear relationships are more useful
-than thirty precise ones nobody can hold in their head.
+- Keep interpretation that helps the reader understand the subject.
+- Remove drafting history, consolidation counts, revision commentary and
+  explanations of why a heading or table was chosen. Git and temporary work
+  artifacts hold how the document changed.
+- Do not add “as of initiative” commentary or an empty section that says there
+  is nothing to report.
+- Put durable rationale in a decision record only when a future reader will
+  reasonably ask why an alternative was rejected.
+- State uncertainty beside the affected fact as **Assumption**, **Gap** or
+  **Inconsistent evidence**. Do not hide it in a generic notes section or make
+  the whole document sound provisional when only one fact is uncertain.
+- Replace obsolete current-state statements and remove resolved uncertainty.
+  Preserve history only in artifacts whose purpose is historical.
 
-Three rules follow:
+### Give the document only the structure it needs
 
-- **If two elements differ only in degree, they are one element.** The same
-  pain felt by two customer segments at different severity is one pain with
-  a severity column — not two pains. The same goes for a capability used
-  more heavily by one domain, or a rule enforced more strictly in one place.
-- **Merge before you split.** When a list grows past what fits on one screen,
-  the first question is which entries are the same thing seen from two
-  angles, not how to organise the list.
-- **This applies to what an agent proposes, not only to what it writes.**
-  Offer a consolidated recommendation, not an exhaustive menu. A Requester
-  reading five overlapping options has been handed the analysis work the
-  agent was supposed to do.
+- Start with the subject and its importance. Use headings that help a reader
+  answer a real question.
+- Use a table for facts that are meaningfully comparable, a visual for
+  relationships, flow or sequence, and prose for explanation and rationale.
+- Do not repeat a generic “How to read this document,” notation legend or
+  method explanation on every page. Add local guidance only when the document
+  would otherwise be ambiguous.
+- Remove unused template sections. Absence is clearer than “None.”
+- Keep navigation close to the title when a reader can arrive by a deep link.
 
-The reason is the diagrams. The catalogues connect to each other, and the
-value of the model is in seeing how — which is exactly what a long list
-destroys.
+### Keep one fact in one home
 
-### What the document contains: the subject, not its own construction
-
-**Every sentence in a document is either about its subject or about the act of
-writing it. The first belongs in the document; the second belongs in the scope
-document.**
-
-**This governs every document in the repository, not only those under
-`architecture/`** — a README, a page under `docs/`, a process model, a
-contributing guide. A layer document is the common case and the examples below
-are drawn from one, but nothing in the rule is specific to architecture. A
-reference page that narrates which of its entries were added last is doing the
-same thing as a layer document narrating its own drafting.
-
-| Stays — it is about the subject | Goes — it is about making the document |
-| ------------------------------- | -------------------------------------- |
-| "This diagram is the risk, drawn" | "The source material lists seven industries and eight customer types" |
-| "`BPROC1` uses no capability — Reach is the only stage the organization does nothing skilful in" | "Writing them as separate elements would have produced an unreadable catalogue" |
-| "`VAL1` is the only value every stakeholder receives" | "Twelve pains were consolidated into five" |
-| "The areas have no realizing artifact, and that is correct rather than a gap" | "Identifiers were renumbered once, here, before the gate" |
-
-Interpretation of the subject is not only allowed, it is most of what makes a
-model worth reading — the left column is the payoff of § Diagrams come first.
-What goes is the document narrating its own drafting.
-
-**The removed material is not lost; it moves to where it was already
-required.** A consolidation — what was merged into what, and how many elements
-each catalogue ended up with — is a modeling decision the Requester approves at
-a gate, so it belongs in the scope document and the gate presentation
-(`discover-business-model` § 5 — Present for approval already asks for it
-there). Writing it in
-the layer document as well is a second copy of a fact, which is DRY broken.
-
-#### Two carve-outs
-
-- **Anything awaiting validation stays inline.** A "Pending — future
-  initiative" marker, an adopted interpretation, a figure nobody has confirmed
-  — these sit in the body, where the reviewer who can correct them will see
-  them. Moving them to the end is how they stop being corrected.
-- **Provenance attaches to elements; history attaches to documents.** A table
-  cell naming the initiative that delivered an element is a trace worth
-  keeping. A sentence saying the *document* is new as of that initiative is the
-  document talking about itself. The first is a reference, the second is a
-  narrative.
-
-#### No version commentary
-
-No "as of initiative N", no note about what an unapproved proposal would
-change, no record of a draft's revisions, no "Retired — None". The document
-states what is true now; git holds how it got there and the scope documents
-hold why. A model carrying its own changelog gives a reader two accounts to
-reconcile and no way to tell which is current.
-
-#### Notes that survive go to the end
-
-A note worth keeping that belongs to no single section goes in a final
-**Additional notes** section, after the last element group — not woven between
-a diagram and the table it explains, where it displaces what the reader came
-for.
-
-### Links
-
-- Always relative, always to a specific file (`../2_business/README.md`,
-  not `../2_business/`), keeping `#anchors` when pointing at a section.
-- Human-readable link text (`[solution design](./…)`), not raw paths.
-- Each fact lives in exactly one document; everything else links to it. If
-  you are about to restate a table or diagram, link instead.
-- When renaming or moving a doc, grep the whole repo for the old path and
-  fix every reference in the same change.
-- **Skill files are the exception: they link only within the plugin's own
-  `skills/` directory.**
-  A skill points at a consuming project's documents by naming the path in a
-  code span — `` `architecture/README.md` § Modeling depth `` — never as a
-  relative link. Skills ship as a plugin, and installing one copies its
-  directory to a cache, so a link reaching outside that directory resolves
-  to nothing for anyone who installed rather than cloned.
+- Define a fact once and link to it elsewhere. A summary may orient the reader
+  but must not become a second independently maintained definition.
+- Use relative links to a specific file and retain an anchor when pointing to
+  a section. Link text should name the subject, not expose a raw path.
+- A cross-reference to a modeled element uses `Human name [ID]`, with the
+  stable anchor secondary. When several are referenced, make each
+  independently readable.
+- When moving or renaming a file, search the repository and repair its links
+  in the same change.
+- A skill links only to resources shipped inside the plugin's `skills/`
+  directory. Name consuming-project paths in code spans rather than creating a
+  link that will break after plugin installation.
 
 ## ⚠ Anti-patterns
 
-- A document narrating its own construction — what the source material held,
-  what was consolidated into what, why identifiers moved.
-- "As of initiative N", or any other version commentary. Git holds how a
-  document got here; the scope documents hold why.
-- An empty section written to say a section is empty.
-- Restating a table or diagram that another document owns, rather than
-  linking it.
-- A skill linking outside the plugin's own `skills/` directory.
+- Architecture vocabulary replacing the organization's own words without
+  adding precision.
+- A bare acronym, identifier or path that forces a second lookup, or an
+  ID-first reference outside a catalogue definition that makes a person decode
+  the machine anchor before the name.
+- Exhaustive catalogues whose entries overlap.
+- A document explaining its own construction or carrying its changelog.
+- Repeated legends, “How to read” sections or empty headings copied from a
+  template.
+- Uncertainty separated from the claim it qualifies.
+- The same table or definition maintained in several places.
+
+## ☑ Done when
+
+- A reader can identify the subject, current truth and material uncertainty
+  without knowing the method.
+- Terms and element references are understandable where encountered:
+  catalogue definitions are ID-first and references are human-first.
+- Repetition has been replaced with links, and every link resolves.
+- Every remaining section and visual earns its place.

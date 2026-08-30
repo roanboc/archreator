@@ -1,15 +1,15 @@
 {
   "name": "archreator",
-  "description": "The archreator method: enterprise-architecture-first development for organizations and applications, with explicit human approval gates.",
+  "description": "Human-first architecture with typed workflows, direct standard navigation and focused AI-assisted views.",
   "owner": {
     "name": "roanboc"
   },
   "plugins": [
     {
       "name": "archreator",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./plugins/archreator",
-      "description": "Enterprise-architecture-first development with human approval gates: model an organization or an application through numbered ArchiMate layers, stop at explicit Requester gates before any code, and record every initiative in a scope document."
+      "description": "Keep a small, human-readable architecture model while preserving rigorous discovery, workflow, navigation and traversal contracts."
     }
   ]
 }

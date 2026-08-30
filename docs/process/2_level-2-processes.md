@@ -1,79 +1,32 @@
-# Level 2 — the processes
+# ArChreator processes — Level 2
 
-_[← The process model](./README.md) · [Level 1](./1_level-1-macro-processes.md)_
+_[Process model](./README.md) · [Level 1 macro processes](./1_level-1-macro-processes.md) · [The method](../method.md)_
 
-Every level-2 process, with the full supplier-input-output-customer set. `Realized
-by` is the [grounding rule](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
-on the method's own track — a process here is realized by a written procedure, and a
-skill is a written procedure.
+**Location:** ArChreator method → Process model → Level 2. Each process's
+parent is named in its catalogue row.
 
-## `BPROC1` — Establish the architecture model
+Each row is a complete supplier-input-process-output-customer (SIPOC) contract.
+`Trigger` says when work starts, `Owner` names accountability and `Realized by`
+binds the process to executable skills.
 
-| ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
-| -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
-| `BPROC1.1` | Establish the project | Turns a fresh copy of the scaffold into a named project with a declared depth every later process relies on | A repository exists from the scaffold and has not been set up | Requester | What is being built; how deep to model it | A named project; a declared modeling depth; the first scope document | `BPROC1.2` or `BPROC1.3` | Agent | `establish-project` |
-| `BPROC1.2` | Discover the business model | Turns what the Requester knows about customers and offerings into approved canvases the strategy is derived from | The subject is an organization, not a single application | Requester | Customers, offerings, revenue, partners | A Value Proposition canvas per segment; a Business Model canvas per product; **Gate 0** recorded | `BPROC1.3` | Requester approves, Agent drafts | `discover-business-model` |
-| `BPROC1.3` | Discover the strategy | Turns approved canvases, or an empty template, into a strategy layer a change can be judged against | The strategy layer is unfilled, or a change shifts it | `BPROC1.2`; Requester | Approved canvases, or a placeholder strategy layer | A filled `1_strategy/`; the key business elements found with it; **Gate 1** recorded | `BPROC2.1` | Requester approves, Agent drafts | `discover-strategy`, shaped by `process-and-capability-levels` |
-| `BPROC1.4` | Split the model into domains | Turns one enterprise tree that has outgrown itself into domains with contracts between them | The organization has several business lines, or a change crosses a boundary | Requester; `BPROC1.3` | An enterprise-level model that has outgrown one tree | One charter per domain, with its exposed and consumed services | `BPROC2.1`; each domain's Requester | Agent | `model-domains` |
-| `BPROC1.5` | Discover the current landscape | Turns an estate that already runs into described business, information, application and technology layers a target can be measured from | The strategy is approved and the layers below it are empty | Requester; `BPROC1.3` | The running estate — repositories, licences, identity entries, runbooks, the people who operate it | A filled `2_business/` through `5_technology/`, each with a declared coverage; **Gate 2** and **Gate 3** recorded | `BPROC5.1`; `BPROC2.1` | Requester approves, Agent drafts | `discover-current-landscape`, shaped by `process-and-capability-levels` |
+## Model connected current context [BPROC1]
 
-## `BPROC5` — Plan the transition
+| ID | Name | ArchiMate type | Description | Parent | Trigger | Suppliers | Inputs | Outputs | Customers | Owner | Realized by |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| BPROC1.1 | Model current context | Business Process | Establishes the smallest useful canonical model and makes gaps or external ownership explicit. | Model connected current context [BPROC1] | A subject lacks reliable current context, or relevant context is incomplete or stale. | Builder or enterprise architect; subject and evidence owners; repository | Subject and boundary; available evidence; existing model when present | A navigable `architecture/README.md`, useful local areas and explicit gaps or external ownership | Builder; enterprise architect; every downstream process | Agent; the subject owner resolves only material gaps or inconsistencies | `model-context` |
+| BPROC1.2 | Connect cross-model context | Business Process | Resolves references and authority across independently owned models without speculative federation machinery. | Model connected current context [BPROC1] | A real question or relationship crosses enterprise, domain, solution or repository ownership. | Participating model owners and repositories; Model current context [BPROC1.1] | Authoritative models; their boundaries, stable identifiers and required cross-model relationship | Resolvable cross-model references, relationship meaning, authority boundaries and unavailable context | Readers and change owners whose work crosses the boundary; Use context to understand and plan [BPROC2]; Deliver change and keep context true [BPROC3] | Agent within each model owner's authority | `federate-context` |
 
-Fifth by identifier and second by sequence. An identifier is assigned once and never
-reused, so the number records when a process joined the model rather than where it
-runs — the rule
-[`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
-§ Never-reused starts at the gate states, applied to the method's own model. The
-pages order these sections by the flow, and the map on
-[the index page](./README.md#the-macro-process-map) is authoritative for it.
+## Use context to understand and plan [BPROC2]
 
-| ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
-| -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
-| `BPROC5.1` | Define the target and sequence the roadmap | Turns an approved description of today into a named destination, the distance to it, and the order the distance is closed in | The Requester asks where the architecture should go, or changes keep arriving with nothing to rank them against | `BPROC1.3`; `BPROC1.5`; Requester | The strategy layer's goals; the current-state layers; the gap notes left by earlier scope documents | Target plateaus, a derived gap register and a sequence of initiatives in `architecture/6_transition/`; **Gate 1** recorded | `BPROC2.1`, once per initiative on the sequence | Requester approves, Agent drafts | `plan-the-transition` |
+| ID | Name | ArchiMate type | Description | Parent | Trigger | Suppliers | Inputs | Outputs | Customers | Owner | Realized by |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| BPROC2.1 | Answer a context question | Business Process | Turns current architecture into a grounded answer or the smallest useful reading artifact. | Use context to understand and plan [BPROC2] | A reader asks for a decision, impact or understanding view. | Reader; Model connected current context [BPROC1]; authoritative model owners | The question and reader viewpoint; relevant canonical Markdown; accessible cross-model context | A grounded direct answer, or a temporary decision, impact or understanding brief with its boundary and sources | The reader or decision owner | Agent; a responsible person answers only a material unresolved decision | `answer-context-question`; `write-brief` when an artifact is useful; `record-decision` when accepted rationale must endure |
+| BPROC2.2 | Plan a roadmap | Business Process | Derives target outcomes, material gaps and a dependency-led sequence from a reliable baseline. | Use context to understand and plan [BPROC2] | A requester needs a target, material gaps and a practical sequence rather than one isolated change. | Requester; Model connected current context [BPROC1]; outcome and constraint owners | Reliable current context; target outcomes; decision horizon; dependencies and constraints | Target outcomes, material gaps and an ordered set of initiatives or plateaus; accepted direction only when requested | Requester; initiative owners; Frame and assess a change [BPROC3.1] | Agent; the requester owns material priority or acceptance decisions | `plan-roadmap`; `write-brief` when an artifact is useful |
 
-**It reuses `BPROC1.3`'s gate rather than adding one.** Gate 1 is where a Requester
-approves direction, and a sequenced target is direction. A gate of its own would add a
-row to every Approvals table in every model built on the method — including merged
-scope documents that no rule permits rewriting — to record a decision an existing gate
-already names.
+## Deliver change and keep context true [BPROC3]
 
-## `BPROC2` — Deliver an architected change
-
-| ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
-| -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
-| `BPROC2.1` | Align the change through the layers | Turns a requirement into approved changes to the upper layers, or explicit verdicts that none were needed | A Requester presents a requirement or reports a problem | Requester; `BPROC1.3` | The requirement; the current `architecture/` | Changed layer documents, or explicit "no change" verdicts; a scope document; **Gate 2** and, if requested, **Gate 3** | `BPROC2.2` | Agent | `align-change-through-layers` Steps 0–5, `write-scope-document` |
-| `BPROC2.2` | Implement and verify | Turns an approved scope document into code the architecture documents are still true of | A scope document has passed its gates | `BPROC2.1` | The approved scope document; the aligned layer documents | Code; architecture and scope documents still true to it; a green validator run | `BPROC2.3` | Agent | `align-change-through-layers` Steps 6–7, `shard-stories`, `stack-selection` |
-| `BPROC2.3` | Hand over for review | Turns a finished branch into a pull request a Reviewer can judge without reading every commit | The work is implemented and verified | `BPROC2.2` | The whole branch, `main...HEAD` | A pull request describing every change on the branch | Reviewer | Agent | `align-change-through-layers` Step 8, `write-pr-description` |
-
-## `BPROC3` — Keep the model true
-
-| ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
-| -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
-| `BPROC3.1` | Restate the current state | Turns a model carrying its own history into one that reads as a description of today | The model has accumulated shipped "Pending"s, superseded elements and resolved questions | `BPROC2.2`; elapsed time | A model carrying its own history | Layer documents that read as a description of today; a Retired section; **Gate 2** recorded | Requester; the next `BPROC2.1` | Agent | `restate-current-state` |
-| `BPROC3.2` | Record a decision | Turns a call too small for an initiative into a rationale the next reader can find | A call too small for an initiative but too consequential to leave unrecorded | Requester; Agent | The constraint, risk or requirement that made the call non-obvious | A numbered decision record, indexed | The next reader who asks "why this and not the alternative?" | Agent | `record-decision` |
-| `BPROC3.3` | Answer an architecture question | Turns one reader question into a focused, disposable view of the model | A reader asks about an element, domain, concern, impact or decision | Reader; the current model | A confirmed focus and a resolved model scope | A generated Markdown brief carrying the relevant model facts and its boundary | The reader | Agent | `answer-architecture-question` |
-
-## `BPROC4` — Learn from the engagement
-
-| ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
-| -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
-| `BPROC4.1` | Run the engagement retrospective | Turns what the method failed to cover into written proposals, before the memory of it evaporates | An initiative or engagement just finished | `BPROC2.3` | What the method did and did not cover, while it is still remembered | A retrospective note carrying proposals | Whoever maintains the method | Whoever did the work | `run-retrospective` |
-
-## The four skills that realize no process
-
-They should not be made to. A rule is not a step.
-
-| Skill | What it is |
-| ----- | ---------- |
-| [`document-style`](../../plugins/archreator/skills/document-style/SKILL.md) | The rules every document in the repository obeys, whatever it is about |
-| [`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md) | What a model adds on top of those — identifiers, notation, tiers, actors |
-| [`process-and-capability-levels`](../../plugins/archreator/skills/process-and-capability-levels/SKILL.md) | How far a catalogue decomposes, and how its levels are shaped |
-| [`stack-selection`](../../plugins/archreator/skills/stack-selection/SKILL.md) | A decision aid, reached for inside `BPROC2.2` |
-
-**Processes and skills bind many-to-many, and neither side is the other's index.**
-A process boundary is drawn by accountability — one trigger, one definable output,
-one owner role. A skill boundary is drawn by activation — when an agent reaches for
-it, and what must be in context when it does. `align-change-through-layers` spans
-all three of `BPROC2`'s children because that is the coherent unit an agent
-activates on; splitting it to match the process model would serve the diagram at the
-reader's expense.
+| ID | Name | ArchiMate type | Description | Parent | Trigger | Suppliers | Inputs | Outputs | Customers | Owner | Realized by |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| BPROC3.1 | Frame and assess a change | Business Process | Bounds a requested change, traces affected context and isolates only material unknowns or decisions. | Deliver change and keep context true [BPROC3] | A requester presents a business, product or technical change. | Requester; Model connected current context [BPROC1]; repository and model owners | Requested outcome and acceptance conditions; current model and implementation evidence | A bounded change, affected and unchanged context, risks, unknowns and required model edits | Requester; Implement and verify [BPROC3.2] | Agent; the requester provides material authorization or resolves consequential ambiguity | `deliver-change`; `write-brief` when a decision or impact artifact is useful; `record-decision` when accepted rationale must endure |
+| BPROC3.2 | Implement and verify | Business Process | Delivers the bounded outcome and verifies implementation and architecture context together. | Deliver change and keep context true [BPROC3] | The assessed change is within authority, or its necessary human decision has been resolved. | Frame and assess a change [BPROC3.1]; implementation and service owners | Bounded change; acceptance conditions; relevant implementation sources; current canonical context | Implemented work; proportionate verification evidence; canonical facts and relationships changed by the work | Requester; operators; reviewers; Refresh current context [BPROC3.3] | Agent | `deliver-change` |
+| BPROC3.3 | Refresh current context | Business Process | Removes superseded facts and leaves the canonical model describing the delivered state. | Deliver change and keep context true [BPROC3] | A delivered change or new evidence makes part of the current model stale. | Implement and verify [BPROC3.2]; model and evidence owners | Verified outcome; changed implementation; current canonical model | Current architecture with obsolete facts and resolved questions removed and navigation refreshed | Builders; enterprise architects; agents; the next Use context to understand and plan [BPROC2] or Deliver change and keep context true [BPROC3] run | Agent; the subject owner resolves only new material ambiguity | `deliver-change`; `model-context` |

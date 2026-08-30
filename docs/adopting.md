@@ -1,118 +1,63 @@
-# Adopting archreator
+# Adopting ArChreator
 
-_[← Repository README](../README.md) · [The method](./method.md)_
+_[Repository README](../README.md) · [The method](./method.md)_
 
-Three ways in, all landing at the same place — the skills drive the process
-whichever you take.
+## Install the plugin
 
-## Option A — install the plugin (recommended)
+### Claude Code
 
-Works on any project, existing or new. Pick your agent:
-
-**Claude Code**
-
-```shell
+```console
 /plugin marketplace add roanboc/archreator
 /plugin install archreator@archreator
 ```
 
-**GitHub Copilot** — the CLI, VS Code, or the Copilot app
+### GitHub Copilot
 
-```shell
+```console
 copilot plugin marketplace add roanboc/archreator
 copilot plugin install archreator@archreator
 ```
 
-**Codex CLI**
+### OpenAI Codex
 
-```shell
+```console
 codex plugin marketplace add roanboc/archreator
-codex plugin install archreator@archreator
+codex plugin add archreator@archreator
 ```
 
-Then just say what you want to model. The `establish-project` skill
-takes it from there: it asks what the project is, picks a modeling depth,
-tells you which one it picked, and writes the scaffold into your
-repository.
+### Other skill-capable agents
 
-**The plugin ships two things.** The skills — which do not touch your files
-until you ask them to — and the scaffold under
-[`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md), which `establish-project`
-copies into your project. Nothing else lands.
+Clone this repository and make the ten skill folders under
+`plugins/archreator/skills/` available through the agent's skill directory.
+Copy the files under `plugins/archreator/scaffold/` only when establishing a
+model in a repository that does not already have equivalent entry files.
 
-## Option B — install the skills on their own
+## Start or refresh a model
 
-Gemini CLI installs an extension from a repository root rather than a
-subdirectory, so it cannot take this repository's plugin. `.agents/skills/`
-is the directory every host reads, and
-[`install_skills.py`](../plugins/archreator/scripts/install_skills.py) fills
-it — from a clone of this repository:
+Ask the agent to model the initiative, solution, domain or enterprise. The
+`model-context` skill creates or refreshes `architecture/README.md`, identifies
+the model boundary and creates only the layer content needed for the request.
 
-```shell
-python3 plugins/archreator/scripts/install_skills.py
+In an existing repository, ArChreator preserves unrelated files and does not
+replace the project README. In a repository with architecture documentation,
+it first determines which facts remain current and which structure is useful.
+
+## Use the runtime directly
+
+The runtime is optional for people and useful for repeatable checks:
+
+```console
+python plugins/archreator/scripts/archreator.py --repo . check
+python plugins/archreator/scripts/archreator.py --repo . trace ACMP1 --direction both --depth 2
+python plugins/archreator/scripts/archreator.py --repo . work --name impact-order-service
+python plugins/archreator/scripts/archreator.py --repo . portal
 ```
 
-`--repo` puts them in the current project's `.agents/skills/` instead of your
-home directory, and `--dry-run` shows what would land. Restart the agent
-afterwards so it rescans.
+The commands always read current Markdown. See the
+[runtime guide](../plugins/archreator/scripts/README.md).
 
-This route ships the skills and not the scaffold, so `establish-project`
-emits the scaffold on first run exactly as it does under a plugin — or take
-Option C and copy it yourself.
+## Generated outputs
 
-## Option C — clone the scaffold directly
-
-Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It holds:
-
-- `AGENTS.md` and `README.md` — placeholders you'll fill in when the
-  bootstrap skill runs
-- `CLAUDE.md` and `GEMINI.md` — one line each, importing `AGENTS.md`, so
-  the host that reads only its own filename still finds the entry point
-- `architecture/` — layer READMEs for the six description layers and for
-  `6_transition/`, plus `scope/` and `decisions/`
-- `scripts/` — the two validators, run before every push, and the three tools:
-  the projection, the documentation portal and the PDF export
-- `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a
-  website, the pull-request template a change is described in, and the issue
-  form a reader of that website raises a question through. Nothing deploys it; where the built folder goes is your call. See
-  [`docs/publishing.md`](./publishing.md)
-
-Then follow the bootstrap checklist by hand, or install the skills and let
-`establish-project` do it.
-
-## Keeping a project in sync with the method
-
-Three things ship in this repo with different lifecycles, and only one of
-them stays in sync automatically:
-
-- **The skills**, at `plugins/archreator/skills/*/`, come with the plugin and
-  update when you run `/plugin update archreator@archreator` in Claude Code,
-  `copilot plugin update archreator` in Copilot, or
-  `codex plugin update archreator` in Codex. Installed through Option B
-  instead, they update by re-running `install_skills.py` after a `git pull`.
-- **The scaffold**, at `plugins/archreator/scaffold/`, is copied *once* into your project by
-  `establish-project`. It does not update afterwards, because a
-  scaffold that changed under a project would rewrite documents the
-  Requester already approved.
-- **The scaffold's own scripts** in `plugins/archreator/scaffold/scripts/` land in your
-  project's `scripts/`. They are the same on both sides; if the method's
-  validators change, copy the updated files across.
-
-If a scaffold change matters enough to backport (a rule that would
-retroactively affect an existing model), it becomes an initiative in your
-project like any other: assessed, approved at Gate 2, and applied by hand.
-
-## Reading order
-
-- Understand what changes: [`docs/method.md`](./method.md)
-- See what each skill is for:
-  [`plugins/archreator/skills/README.md`](../plugins/archreator/skills/README.md)
-- See it applied to a real organization:
-  [`architecture-archreator`](https://github.com/roanboc/architecture-archreator)
-
-## Contributing back
-
-Improvements to the method (a new skill, a change to an existing one, a
-rule refinement) are welcome. See [`CONTRIBUTING.md`](../CONTRIBUTING.md)
-in the root — the method itself governs how it evolves, so a proposal runs
-through the same gates it makes you run through.
+Scopes, briefs and their PDFs live under `.archreator/work/<run>/`. The portal
+lives under `.archreator/work/portal/`. Both locations are ignored and created
+only on request. See [Portal use](./portal.md).

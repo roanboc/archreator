@@ -1,136 +1,128 @@
 ---
 name: record-decision
-description: Document — write one when a choice needs a durable rationale but doesn't rise to a full scope document — architecture-significant calls like an AI actor's autonomy level, a library or pattern choice, or a tradeoff a future reader will ask "why did we do it this way?" about. Writes a numbered, indexed decision record.
+description: Document — write a durable decision record when an accepted material choice needs rationale that a future reader cannot recover from the current model alone.
 metadata:
   archreator:
     kind: document-template
-    realizes_process: BPROC3.2
+    realizes_process: BPROC2.1, BPROC3.1
     gates: none
 ---
 
-# ▤ Record a decision
+# ▤ Record a durable decision
 
-An **architecture decision record** — the pattern Michael Nygard named, and
-whose sections here parallel MADR's. A scope document captures an entire
-initiative's alignment; a decision record captures **one call**, in isolation,
-in the place a future reader will look for it.
+A decision record preserves why one material choice was made. The model keeps
+what is true; the record explains why this option was chosen over a credible
+alternative. It records a decision already made and grants no authority itself.
 
 ## ⊕ When to use this
 
-| The situation | What it looks like |
-| ------------- | ------------------ |
-| A rationale, not an element | The call does not change any layer's content by itself — it explains a value already going into a table |
-| A reader will ask why | "Why this and not the alternative?" is not answerable from the layer documents alone |
-| Smaller than an initiative | Too small for plateaus and work packages, too consequential to leave in a PR thread |
-| An AI actor's autonomy | The clearest recurring case: why a role is co-pilot rather than fully autonomous deserves a citable answer, not a table cell |
+| Situation | Observable condition |
+| --- | --- |
+| A future reader will ask why | The current fact does not explain the decisive constraint or trade-off |
+| A material alternative was rejected | Reconsidering it later would repeat costly analysis or risk |
+| Authority or autonomy was deliberately bounded | For example, an AI actor's decision rights or checkpoint level |
+| A cross-model contract chose one ownership boundary | The rationale matters to more than one repository |
 
 ## ⊖ When not to
 
-| The situation | Use instead |
-| ------------- | ----------- |
-| The change adds or alters model elements | `align-change-through-layers`, then link the decision record from the alignment row it explains |
-| Context and Consequences run past half a page | The call is initiative-sized — write a scope document |
-| The project makes only a handful of significant calls | Fold the rationale into the relevant scope document's prose; add the folder the first time a decision does not fit |
-
-A decision record supplements a scope document. It never replaces one.
+| Situation | Better route |
+| --- | --- |
+| A person has not decided yet | Use a temporary decision brief with `write-brief` |
+| The model fact is self-explanatory | Record only the fact and source |
+| The rationale concerns routine implementation detail | Keep it with code, tests or the delivery discussion |
+| The whole initiative needs coordination | Use a temporary scope brief through `deliver-change` |
 
 ## ⌖ Where this sits
 
-Realizes `BPROC3.2`, in the band that keeps the model true. It carries no
-gate: a decision record states a call that has already been made, and the
-approval that mattered happened wherever the call was taken.
+Supports the durable-rationale parts of Answer a context question [BPROC2.1]
+and Frame and assess a change [BPROC3.1]. It owns no
+gate; the accountable person or authorized procedure made the decision first.
 
 ```mermaid
 flowchart LR
-  onecall(["One consequential call, smaller than an initiative"])
-  doc[/"architecture/decisions/n_slug.md"/]
-  idx[/"decisions/README.md — the index"/]
-  row(["The layer row it explains, linked both ways"])
-  reader(["A reader asking: why this, and not the alternative?"])
-
-  onecall --> doc --> idx
-  doc <--> row
-  doc --> reader
-
-  classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef artifact fill:#eef2f7,stroke:#9fb0c4,color:#333
-  class onecall,row,reader business
-  class doc,idx artifact
+  call([Accepted material choice]) --> need{Will the rationale matter later?}
+  need -->|no| fact[Keep the current fact only]
+  need -->|yes| record["architecture/decisions/n-slug.md"]
+  record --> index[Decisions index]
+  record <--> model[Fact or contract it explains]
+  changed([Choice later changes]) --> new[New record supersedes old]
 ```
 
 ## ▤ Template
 
-Lives at `architecture/decisions/<n>_<kebab-case-slug>.md`, numbered
-chronologically across all decisions — one flat sequence, not per layer — and
-indexed in `architecture/decisions/README.md`.
+Create `architecture/decisions/` only when the first qualifying decision
+exists. Store a flat chronological sequence at
+`architecture/decisions/<n>-<short-slug>.md` and link each record from
+`architecture/decisions/README.md`.
 
 ```markdown
 # Decision <n> — <Short title>
 
-_[← Decisions index](./README.md)_
+_[Decisions](./README.md) · [Architecture](../README.md)_
 
-**Status:** Proposed | Accepted | Superseded by [decision <m>](./<m>_*.md)
-**Date:** <YYYY-MM-DD>
-**Touches:** <link the document/row this decision explains, e.g.
-[2_business/1_business-actors-and-roles.md#support-triage-agent](../2_business/1_business-actors-and-roles.md#support-triage-agent)>
+**Location:** Architecture → Decisions → Decision <n> — <Short title>.
+
+| Field | Value |
+| --- | --- |
+| Status | Proposed, Accepted, or Superseded by [decision <m>](./<m>-<slug>.md) |
+| Date | <YYYY-MM-DD> |
+| Decision owner | <Accountable role or person> |
+| Explains | <Link to the canonical fact, relationship or contract> |
 
 ## Context
 
-<What prompted the call — the constraint, the risk, the requirement that
-made this not obvious.>
+<The constraint, risk, gap or requirement that made the choice non-obvious.>
 
 ## Options considered
 
-| Option | Why not (or why) |
-| ------ | ---------------- |
-| …      | …                |
+| Option | Material benefit | Material cost or risk |
+| --- | --- | --- |
 
 ## Decision
 
-<What was chosen, in one or two sentences.>
+<The chosen option and decisive reason, in one or two sentences.>
 
 ## Consequences
 
-<What this makes easier, harder, or newly possible — including, for an
-actor's autonomy level, what oversight or audit trail it commits the
-project to.>
+<What becomes easier, harder, constrained or required.>
 ```
 
 ## ※ Rules
 
-- **Link both ways.** The layer row links to the decision record; the record
-  links back through `Touches`. One fact — the value — has one home in the
-  layer table. The record holds the *why*, never a restatement of the *what*.
-- **A decision record is a historical record once accepted.** Like a merged
-  scope document, its words do not change. A changed call gets a new numbered
-  record, and the old one's `Status` line points at it.
-- **Keep it short.** Half a page for Context and Consequences together is the
-  ceiling, and passing it is the signal that this is an initiative.
-- **Options considered earns its place.** A record with one option is a
-  statement, not a decision — name what was rejected, or the reader cannot
-  tell a choice from a default.
+- Link both ways. The canonical model owns the fact; the record owns the
+  rationale. Do not restate catalogues or create a second source of truth.
+- Name at least one credible rejected option. A statement with no alternative
+  is not a useful decision record.
+- Keep Context and Consequences together to roughly half a page. If the choice
+  needs a delivery plan, it also needs a scope or roadmap outside this record.
+- Once Accepted, do not rewrite the reasoning to match later preferences.
+  Create a new numbered record and mark the earlier one Superseded with a link.
+- A Proposed record is allowed only when the repository benefits from reviewing
+  it in place. A temporary decision request still belongs under
+  `.archreator/work/<run>/`.
+- Record the decision owner, not a generic “approved by architecture.”
 
-## ✎ Worked example
+## ⇄ Hands off to
 
-> A support-triage role is modeled as `(AI)` at **co-pilot** autonomy. The
-> layer table carries the value; the decision record carries why full autonomy
-> was rejected — an unreviewed misclassification reaches a customer — and what
-> co-pilot commits the project to: a human review queue, and an audit trail of
-> what the actor proposed against what shipped.
+| Skill | What it receives | What comes back |
+| --- | --- | --- |
+| `write-brief` | An unresolved decision | A minimal temporary request for the accountable person |
+| `deliver-change` | A decision that changes implementation or modeled behavior | Delivered work and refreshed current facts |
+| `architecture-document-style` | The fact, contract and cross-links | Consistent identifiers, ownership and navigation |
 
 ## ⚠ Anti-patterns
 
-- Restating the value in the record instead of the reasoning behind it.
-- A record with no rejected option.
-- Rewriting an accepted record instead of superseding it.
-- Numbering per layer rather than in one flat chronological sequence.
-- Creating the folder for a project that will produce two records, where the
-  scope documents would have carried the rationale perfectly well.
+- Using a permanent record to ask for a decision that has not been made.
+- Recording every tool or library choice because a template exists.
+- Repeating the chosen model value instead of explaining the trade-off.
+- An Options table with only the selected option.
+- Editing an accepted record instead of superseding it.
+- Creating an empty decisions folder or index in every project.
 
 ## ☑ Done when
 
-- The record is numbered, slugged and indexed in `decisions/README.md`.
-- `Touches` links the row it explains, and that row links back.
-- `Status` is one of Proposed, Accepted, or Superseded with a link.
-- Options considered names at least one rejected alternative.
-- Consequences say what the call commits the project to, not only what it enables.
+- The rationale is material enough to outlive the work that produced it.
+- Status, date, owner and explained fact are explicit.
+- At least one credible alternative and the consequences are recorded.
+- The model and decision link to each other without duplicating ownership.
+- An accepted changed choice has a new record and a supersession link.

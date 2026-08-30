@@ -1,50 +1,33 @@
-name: Docs check
+name: Documentation check
 
 on:
   pull_request:
     paths:
       - "**/*.md"
-      - "**/*.html"
-      - "plugins/archreator/scaffold/scripts/*.py"
-      - "plugins/archreator/scaffold/mkdocs.yml"
+      - "site/**"
+      - "plugins/archreator/portal/**"
+      - "plugins/archreator/scripts/**"
       - ".github/workflows/docs-check.yml"
   push:
     branches: [main]
     paths:
       - "**/*.md"
-      - "**/*.html"
-      - "plugins/archreator/scaffold/scripts/*.py"
-      - "plugins/archreator/scaffold/mkdocs.yml"
+      - "site/**"
+      - "plugins/archreator/portal/**"
+      - "plugins/archreator/scripts/**"
       - ".github/workflows/docs-check.yml"
 
 jobs:
-  check-docs:
+  check-reading-surfaces:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check relative Markdown and HTML links
-        run: python3 plugins/archreator/scaffold/scripts/check_links.py
-      - name: Check element-ID references
-        run: python3 plugins/archreator/scaffold/scripts/check_model.py
-
-  # The portal ships in the scaffold, so what proves it works is building it —
-  # here against the scaffold itself, which is the only project in this
-  # repository. It catches a broken `mkdocs.yml`, a theme override that no
-  # longer renders, and staging that has stopped finding the documents.
-  build-portal:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # uv reads the dependencies from the script's own inline metadata.
-      - uses: astral-sh/setup-uv@v5
-      # Not `--strict`: the scaffold's layer READMEs deliberately point at the
-      # numbered documents a downstream project writes, which is the same
-      # forward reference check_links.py exempts, and MkDocs warns about each
-      # one.
-      - name: Build the shipped documentation portal
-        run: uv run plugins/archreator/scaffold/scripts/build_docs.py
-      # The page the PDF is printed from. Printing it needs a browser and a
-      # route to the diagram library, so CI checks that the page is built and
-      # leaves the render to whoever exports the document.
-      - name: Check the page the PDF is printed from
-        run: uv run plugins/archreator/scaffold/scripts/export_pdf.py --no-build --print-page
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the repository method and documentation links
+        run: python3 plugins/archreator/scripts/check_method.py
+      - name: Check the minimal scaffold model
+        run: python3 plugins/archreator/scripts/archreator.py --repo plugins/archreator/scaffold check
+      - name: Build the portal from the minimal scaffold
+        run: python3 plugins/archreator/scripts/archreator.py --repo plugins/archreator/scaffold portal

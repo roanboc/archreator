@@ -1,125 +1,175 @@
 # The skill format
 
-_[← Repository README](../README.md) · [Contributing](../CONTRIBUTING.md)_
+_[Repository README](../README.md) · [Process model](./process/README.md)_
 
-Every skill is one markdown file with YAML frontmatter, in a folder named for
-it. One artifact serves both readers: an agent executes it, a person reviews
-it, and neither reads a translation of the other's copy.
+An ArChreator skill is a small, reviewable operating contract. Its structure
+makes activation, judgement, outputs and handoffs visible to both a person and
+an agent; it is more than a reusable prompt.
 
-The structure is fixed so a reader knows where to look and
-[`check_skills.py`](../plugins/archreator/scripts/check_skills.py) knows what
-to enforce. What that script checks is this page, expressed as code.
+Each skill is one `SKILL.md` file in a folder with the same name. The format is
+adapted from the Agent Instruction Protocol (AIP) and binds the skill to the
+supplier-input-process-output-customer (SIPOC) process model without making the
+two structures identical.
 
 ## Frontmatter
 
-| Field | Required | Holds |
-| ----- | -------- | ----- |
-| `name` | Yes | Matches the folder. Lowercase, hyphens, no leading or trailing hyphen |
-| `description` | Yes | The activation summary — the only signal an agent has before opening the file. Keyword-rich, and **no unquoted colon**, which makes the frontmatter unparseable |
+```yaml
+---
+name: model-context
+description: Procedure — run this when current architecture context is missing, incomplete or stale.
+metadata:
+  archreator:
+    kind: gated-procedure
+    realizes_process: BPROC1.1
+    gates: none
+---
+```
+
+| Field | Required | Meaning |
+| --- | --- | --- |
+| `name` | Yes | Matches the folder; lowercase words separated by hyphens |
+| `description` | Yes | The activation summary an agent sees before opening the skill |
 | `metadata.archreator.kind` | Yes | `gated-procedure`, `document-template` or `rulebook` |
-| `metadata.archreator.realizes_process` | When one applies | The level-2 process IDs from [`docs/process/`](./process/README.md) |
-| `metadata.archreator.gates` | Yes | The gates this skill stops at, or `none` |
+| `metadata.archreator.realizes_process` | When applicable | One or more level-2 process IDs, written as a comma-separated string |
+| `metadata.archreator.gates` | Yes | Conditional human gates declared by the skill, or `none` |
 
-**The description declares the kind, in its first two words.** `Procedure — run
-this when…`, `Document — write one when…`, `Rulebook — consult when…`. The
-description is the only thing loaded before a skill is chosen, so it is the only
-place a kind marker can change what the agent reaches for; the folder name, the
-metadata and the catalogue all say it too, and all three are invisible at that
-moment. The title repeats it as a glyph — `# ⚙`, `# ▤`, `# ※` — for whoever
-opens the file. `check_skills.py` checks both against `kind`.
+The description begins with the kind marker: `Procedure —`, `Document —` or
+`Rulebook —`. The title repeats the kind as `# ⚙`, `# ▤` or `# ※`.
 
-**Values are strings.** Agent Skills types `metadata.*` as string to string, so
-a list is one comma-separated string rather than a YAML sequence.
+The kinds have different jobs:
 
-The description carries the keywords that make the skill findable; the body's
-**When to use this** carries the checkable conditions. Writing the full
-condition list in both is one fact in two places.
+- A `gated-procedure` performs ordered work. The name means it can express a
+  human stop, not that every run contains one; `gates: none` is valid and
+  should be common.
+- A `document-template` defines one artifact's purpose, minimum content and
+  completion test.
+- A `rulebook` supplies constraints applied inside other work.
+
+Metadata values are strings. A list is therefore a comma-separated string,
+not a YAML sequence.
 
 ## Sections
 
-Headings open with a glyph. The glyph says what kind of section it is, the
-words are its identity — a reference names the words, and `check_skills.py`
-strips the glyph before matching.
+The glyph identifies the section kind. The heading text identifies the
+section for cross-references.
 
-| Glyph | Section | Holds | `gated-procedure` | `document-template` | `rulebook` |
-| ----- | ------- | ----- | :---------------: | :-----------------: | :--------: |
-| `⊕` | When to use this | The observable conditions | required | required | required |
-| `⊖` | When not to | Where a different skill serves | required | required | required |
-| `⌖` | Where this sits | The process realized, the gates, the diagram | required | required | optional — to say it realizes none |
-| `⚓` | Invariants | Rules holding at every step | required | — | — |
-| `⚙` | Steps | The work, numbered | required | — | — |
-| `▤` | Template | The document's shape | — | required | — |
-| `※` | Rules | The rules themselves | — | required | required |
-| `⇄` | Hands off to | Skills reached, and what returns | required | — | — |
-| `✎` | Worked example | One concrete case | optional | optional | optional |
-| `⚠` | Anti-patterns | Corrections | required | optional | optional |
-| `☑` | Done when | Checkable completion | required | required | optional — the checklist for a catalogue its rules shaped |
+| Glyph | Section | Holds | Procedure | Template | Rulebook |
+| --- | --- | --- | :---: | :---: | :---: |
+| `⊕` | When to use this | Observable activation conditions | required | required | required |
+| `⊖` | When not to | Negative space and the better route | required | required | required |
+| `⌖` | Where this sits | Process binding, gates and a small flow diagram | required | required | required |
+| `⚓` | Invariants | Rules that hold throughout execution | required | — | — |
+| `⚙` | Steps | Numbered work | required | — | — |
+| `▤` | Template | The artifact's shape | — | required | — |
+| `※` | Rules | Constraints on the artifact or work | — | required | required |
+| `⇄` | Hands off to | Skills reached, what they receive and what returns | required | optional | optional |
+| `✎` | Worked example | One concrete application | optional | optional | optional |
+| `⚠` | Anti-patterns | Plausible mistakes and their correction | required | required | required |
+| `☑` | Done when | Checkable completion conditions | required | required | optional |
 
-## Inside a step
+`When not to` and `Anti-patterns` are part of the method, not editorial extras.
+They make the skill's boundary explicit and prevent a correct procedure from
+being applied to the wrong problem.
 
-| Glyph | Marker | Holds |
-| ----- | ------ | ----- |
-| `⚖` | Judgement | The criteria to weigh, where the step is a decision rather than a mechanism |
-| `←` | Needs | What the step consumes from an earlier one |
-| `→` | Produces | What it writes, by path |
-| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely names gates it does not own to say they are `N/A` |
+## Inside a procedure step
 
-**Needs and Produces each get their own paragraph.** Consecutive lines are one
-paragraph in markdown, and the two arrows render on one line if they share it.
+Each numbered step makes its data movement explicit:
 
-## The diagram
+| Glyph | Marker | Meaning |
+| --- | --- | --- |
+| `←` | Needs | Inputs consumed from the requester, repository or an earlier step |
+| `→` | Produces | The observable output, naming a path when a file is written |
+| `⚖` | Judgement | Criteria to weigh where reasoning, rather than a fixed mechanism, is required |
+| `❖` | Gate | A conditional stop that requires a person to decide or authorize |
 
-Every **Where this sits** carries one. It summarises the whole document:
-numbered steps in sequence, the decisions between them, the gates, and the
-skills handed off to — so a reader can see the sub-process end to end before
-reading a word of it.
+`Needs` and `Produces` each use their own paragraph so the rendered document
+does not collapse them into one line. Use `Judgement` only where discretion is
+real. Automate a deterministic rule over structured input; explain a judgement
+over incomplete or contextual input.
 
-Filled boxes are this skill's steps. Unfilled ones are skills it reaches.
-Rose hexagons are gates. Glyph, shape and colour follow
-[`architecture/README.md` § Notation conventions](../plugins/archreator/scaffold/architecture/README.md#notation-conventions),
-which stays the single source for the palette.
+A `Gate` is an exception, not a phase boundary. Use one only when:
+
+- evidence contains a material gap or inconsistency that must be resolved;
+- an action needs material authorization outside the agent's authority; or
+- acceptance by a responsible person is explicitly required.
+
+Routine review, clear evidence and automated verification do not create human
+gates. Every `❖` marker matches a gate named in frontmatter; when the skill has
+no inherent stop, declare `gates: none`. Do not introduce numbered gate
+ceremonies shared by every project.
+
+## Diagrams and handoffs
+
+`Where this sits` includes the smallest Mermaid flow that exposes the skill's
+steps, decisions, conditional gates and handoffs. Filled process boxes are work
+inside the skill, decision diamonds are agent judgements, hexagons are human
+gates and unfilled boxes are other skills.
+
+```mermaid
+flowchart LR
+  evidence["1. Read evidence"]
+  enough{"Context consistent?"}
+  decide{{"❖ Resolve gap"}}
+  model["2. Model current context"]
+  clear["architecture-document-style"]
+
+  evidence --> enough
+  enough -->|yes| model
+  enough -->|no| decide --> model
+  model --> clear
+```
+
+The `Hands off to` section states why another skill is invoked, exactly what it
+receives and what result comes back. Naming a dependency without its data
+contract leaves the workflow incomplete.
+
+## Process binding
+
+The process model says **why work exists and who receives its output**. Its
+SIPOC row names the trigger, suppliers, inputs, output, customers and owner. A
+skill says **how an agent performs a coherent unit of that work**.
+
+The binding is many-to-many. A procedure may realize several processes when
+one activation carries work across their boundary, and a process may use a
+procedure, a document template and a rulebook together. A rulebook or template
+can realize or support a process without becoming a standalone process. Record
+direct bindings in `realizes_process`; show supporting skills in `Where this
+sits` and `Hands off to`.
+
+Process boundaries follow accountability: one trigger, output, customer and
+owner. Skill boundaries follow activation and context. Neither catalogue
+should be split merely to mirror the other.
 
 ## Cross-references
 
-A skill names another skill's section as `` `skill-name` `` followed by `§`
-and the heading. `check_skills.py` resolves both halves, which is what makes a
-rename safe and a heading rename loud.
+- Refer to another skill as `` `skill-name` § Heading `` so both the skill and
+  the exact contract are clear.
+- A skill links only within the plugin's `skills/` directory. Name a consuming
+  repository path in a code span, such as `architecture/README.md`.
+- Never cite an element ID from one customer model as if it were universal.
+- When a heading or skill name changes, update every reference in the same
+  change.
 
-A skill links only to files inside `skills/`. Installing the plugin copies the
-directory to a cache, so a relative link out of it resolves to nothing for
-anyone who installed rather than cloned. A consuming project's documents are
-named in a code span instead — `` `architecture/README.md` `` — which reads
-correctly on both paths.
+## Why Markdown rather than AIP YAML
 
-**A skill never cites an element ID from a specific model.** `P3` is that
-model's third principle, and in a downstream project it resolves to something
-else entirely. Name the principle.
+[AIP](https://github.com/zach-blumenfeld/aip) contributes the execution-graph
+discipline used here: explicit kinds, invariants, negative space, typed step
+inputs and outputs, handoffs and anti-patterns. ArChreator keeps those concepts
+but writes them in Markdown.
 
-## Where this format came from
+The method's steps are mostly contextual judgements rather than script-backed
+nodes joined by machine-typed edges. Markdown keeps one artifact readable by
+the builder, enterprise architect and agent, while also carrying tables,
+cross-references and Mermaid diagrams. Scripts still belong behind fixed,
+testable mechanisms; they do not require the whole skill to become YAML.
 
-The section vocabulary is adapted from the
-[Agent Instruction Protocol](https://github.com/zach-blumenfeld/aip) (AIP),
-which models a skill as a schema-validated execution graph. Its lasting
-contribution here is **naming the negative space**: a skill states when *not*
-to use it, what it hands off to and gets back, the mistakes it steers away
-from, and the rules holding across every step rather than at one of them.
-Those four sections are AIP's, and three of them were where real defects had
-been hiding.
+## Anti-patterns
 
-Two more of its ideas carry through. A skill belongs to a **kind**, and the
-kind decides what structure it owes — which is why `REQUIRED_SECTIONS` is
-keyed by kind rather than applied uniformly. And its test for what to
-mechanize is the right one: script a fixed rule over structured input, leave a
-judgement over a loosely-specified one as prose for the agent to reason
-through.
-
-**The format is markdown rather than AIP's fenced YAML, and that is a
-deliberate divergence.** AIP's value comes from steps backed by scripts and
-wired by typed edges; these skills have neither — they are judgement
-procedures under human approval, and the one conversion measured carried zero
-script-backed steps and zero graph edges while growing 59% in lines. Markdown
-also keeps one artifact for both readers, and keeps the diagrams, which a YAML
-body cannot hold.
-
-The parts of AIP worth having did not need its file format. What replaced the
-JSON Schemas is the section table above, and `check_skills.py` enforcing it.
+- Free-form advice with no activation boundary, output or completion test.
+- A procedure that hides inputs and outputs inside prose.
+- A gate for every review, layer or ordinary verification step.
+- One skill mixing procedure, template and rulebook responsibilities instead
+  of handing off explicitly.
+- A diagram that omits a branch, gate or handoff described by the steps.
+- A process ID added only to make a skill appear grounded, without a matching
+  SIPOC output.

@@ -1,27 +1,14 @@
-# Python bytecode from running the checks in scripts/.
+# Python test and runtime residue.
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
 
-# Agent-local tooling, not repository content: installed and vendored
-# third-party skills, worktrees, local settings — one directory per host the
-# method runs on. The validators skip these directories too. `.agents/` is
-# where install_skills.py --repo lands, and this repository's own skills are
-# the source it copies from, so a copy of them here is not content.
-.claude/
+# Agent-local configuration and installed plugin copies.
 .agents/
-.gemini/
+.claude/
 .codex/
 .copilot/
+.gemini/
 
-# Where CI clones the pinned AIP skill to run its validators.
-.aip/
-
-# The projection built by scripts/build_model.py. Regenerated from the
-# Markdown under architecture/ on every run, so it is never committed: a
-# derived file that is checked in is a derived file that can go stale.
-.model/
-
-# The documentation portal: the staged copy of the Markdown, the built site,
-# and the exported PDF. Rebuilt from `architecture/` by scripts/build_docs.py
-# on every run, so a copy in the history is a copy that can go stale.
-.docs/
+# Disposable ArChreator briefs, PDFs and portal output.
+/.archreator/work/

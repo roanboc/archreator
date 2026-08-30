@@ -1,220 +1,166 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Get started — archreator</title>
-  <meta name="description" content="Install archreator on Claude Code, GitHub Copilot, Codex CLI or Gemini CLI, and run your first modeling session." />
-  <meta property="og:title" content="Get started with archreator" />
-  <meta property="og:description" content="Install on Claude Code, GitHub Copilot, Codex CLI or Gemini CLI, then run your first modeling session." />
-  <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='4' rx='1.5' fill='%237e57c2'/%3E%3Crect x='6' y='12' width='20' height='4' rx='1.5' fill='%23c8a24a'/%3E%3Crect x='6' y='18' width='20' height='4' rx='1.5' fill='%230288d1'/%3E%3Crect x='6' y='24' width='20' height='4' rx='1.5' fill='%23558b2f'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="./style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install ArChreator and create the smallest useful architecture model for an initiative, solution, domain or enterprise.">
+  <title>Get started — ArChreator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="./index.html">
-      <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
-        <rect x="6" y="6"  width="20" height="4" rx="1.5" fill="#7e57c2" />
-        <rect x="6" y="12" width="20" height="4" rx="1.5" fill="#c8a24a" />
-        <rect x="6" y="18" width="20" height="4" rx="1.5" fill="#0288d1" />
-        <rect x="6" y="24" width="20" height="4" rx="1.5" fill="#558b2f" />
-      </svg>
-      archreator
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="ArChreator home">
+      <span class="brand-mark" aria-hidden="true">A</span>
+      <span>ArChreator</span>
     </a>
-  </div>
-</header>
+    <nav aria-label="Main navigation">
+      <a href="index.html#method">Method</a>
+      <a href="index.html#model">Model</a>
+      <a aria-current="page" href="start.html">Get started</a>
+      <a href="https://github.com/roanboc/archreator">GitHub</a>
+    </nav>
+  </header>
 
-<main>
-  <div class="wrap">
+  <main id="main">
+    <section class="page-hero wrap">
+      <p class="eyebrow">Get started</p>
+      <h1>Begin with one question and one front door.</h1>
+      <p class="lede">Install the plugin, describe the initiative in your own
+        words, and let ArChreator create only the context that is useful now.</p>
+    </section>
 
-    <div class="stripes" aria-hidden="true">
-      <span style="background:#7e57c2"></span>
-      <span style="background:#c8a24a"></span>
-      <span style="background:#0288d1"></span>
-      <span style="background:#558b2f"></span>
-    </div>
-
-    <h1>Get started</h1>
-
-    <p class="lede">
-      archreator is a plugin for your coding agent. Install it, say what you
-      want to model, and the method takes over from there. Pick your agent
-      below — every route lands in the same place.
-    </p>
-
-    <div class="host-nav">
-      <a href="#claude-code">Claude Code</a>
-      <a href="#copilot">GitHub Copilot</a>
-      <a href="#codex">Codex CLI</a>
-      <a href="#gemini">Gemini CLI</a>
-      <a href="#scaffold">No agent yet</a>
-    </div>
-
-    <h2 id="install">1 · Install it</h2>
-
-    <div class="host" id="claude-code">
-      <h3>Claude Code <span class="where">terminal, desktop app, VS Code and JetBrains</span></h3>
-      <p>Inside any session, two slash commands:</p>
-      <pre><code>/plugin marketplace add roanboc/archreator
+    <section class="wrap section start-layout" aria-labelledby="install-title">
+      <div class="step-number" aria-hidden="true">01</div>
+      <div>
+        <h2 id="install-title">Install the plugin</h2>
+        <p>Choose the host you use. The repository is the same source for every
+          supported agent.</p>
+        <div class="install-grid">
+          <article class="code-card">
+            <h3>Claude Code</h3>
+            <pre><code>/plugin marketplace add roanboc/archreator
 /plugin install archreator@archreator</code></pre>
-      <p>
-        Start a new session afterwards so the skills are picked up. Update
-        later with <code>/plugin update archreator@archreator</code>.
-      </p>
-    </div>
-
-    <div class="host" id="copilot">
-      <h3>GitHub Copilot <span class="where">Copilot CLI, VS Code and the Copilot app</span></h3>
-      <p>From your shell:</p>
-      <pre><code>copilot plugin marketplace add roanboc/archreator
+          </article>
+          <article class="code-card">
+            <h3>GitHub Copilot</h3>
+            <pre><code>copilot plugin marketplace add roanboc/archreator
 copilot plugin install archreator@archreator</code></pre>
-      <p>
-        The same two steps work as <code>/plugin marketplace add</code> and
-        <code>/plugin install</code> inside a Copilot session. Confirm with
-        <code>copilot plugin list</code>; update with
-        <code>copilot plugin update archreator</code>.
-      </p>
+          </article>
+          <article class="code-card">
+            <h3>OpenAI Codex</h3>
+            <pre><code>codex plugin marketplace add roanboc/archreator
+codex plugin add archreator@archreator</code></pre>
+          </article>
+        </div>
+        <p class="aside-note"><strong>Another skill-capable agent?</strong>
+          Make the ten folders under <code>plugins/archreator/skills/</code>
+          available through its skill mechanism. Copy the minimal scaffold only
+          when the repository has no equivalent entry files.</p>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="first-title">
+      <div class="wrap start-layout">
+        <div class="step-number" aria-hidden="true">02</div>
+        <div>
+          <h2 id="first-title">Describe the need naturally</h2>
+          <div class="prompt-box">Help me model this initiative clearly.</div>
+          <p>The <code>model-context</code> procedure inspects evidence before it
+            interviews you. It names the model level and authority, chooses only
+            the relevant business-model, strategy or landscape discovery route,
+            and creates the smallest useful current model.</p>
+
+          <ol class="timeline">
+            <li><strong>Set the boundary.</strong><span>Enterprise, Domain or Solution; purpose, owner, parent and exclusions.</span></li>
+            <li><strong>Load only relevant discovery.</strong><span>Customers and value, strategy, or the current estate—not all three by default.</span></li>
+            <li><strong>Resolve real uncertainty.</strong><span>A person is asked only when a material gap or inconsistency changes the model.</span></li>
+            <li><strong>Write and verify current context.</strong><span>Self-locating pages, explicit parents, clear prose, useful visuals and traversable relationships.</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section start-layout" aria-labelledby="lands-title">
+      <div class="step-number" aria-hidden="true">03</div>
+      <div>
+        <h2 id="lands-title">Know what lands in the repository</h2>
+        <div class="artifact-grid">
+          <article>
+            <h3>Always</h3>
+            <ul class="check-list"><li><code>AGENTS.md</code> and host pointers</li><li><code>architecture/README.md</code> as model boundary, status and navigation</li></ul>
+          </article>
+          <article>
+            <h3>Only when useful</h3>
+            <ul class="check-list"><li>Standard area folders with real locally owned content</li><li><code>architecture/decisions/</code> for durable material rationale</li></ul>
+          </article>
+          <article>
+            <h3>Only when requested</h3>
+            <ul class="check-list"><li>Briefs, scopes and individual PDFs under <code>.archreator/work/&lt;run&gt;/</code></li><li>The static portal under <code>.archreator/work/portal/</code></li></ul>
+          </article>
+        </div>
+        <p class="aside-note">No empty layer tree, SQLite projection, whole-model
+          PDF, portal configuration or publishing workflow is copied into a
+          customer repository.</p>
+      </div>
+    </section>
+
+    <section class="band dark" aria-labelledby="use-title">
+      <div class="wrap start-layout">
+        <div class="step-number" aria-hidden="true">04</div>
+        <div>
+          <h2 id="use-title">Use the model by asking for an outcome</h2>
+          <div class="request-grid">
+            <article><p class="card-kicker">Understand</p><h3>“Explain how orders are handled to a business reader.”</h3><p>Direct answer, understanding brief or portal—only as requested.</p></article>
+            <article><p class="card-kicker">Assess</p><h3>“What would changing the order service affect?”</h3><p>Current relationships traced in both directions, with unavailable context stated.</p></article>
+            <article><p class="card-kicker">Plan</p><h3>“What should this become, and in what order?”</h3><p>Baseline, target outcomes, material gaps and dependency-led sequence.</p></article>
+            <article><p class="card-kicker">Deliver</p><h3>“Implement this change and keep the architecture true.”</h3><p>Impact, implementation, proportionate verification and current-context refresh.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section start-layout" aria-labelledby="runtime-title">
+      <div class="step-number" aria-hidden="true">05</div>
+      <div>
+        <h2 id="runtime-title">Use the small runtime when repetition helps</h2>
+        <p>The runtime reads current Markdown on every command. It does not
+          maintain a database or generated graph.</p>
+        <pre class="command-block"><code>python plugins/archreator/scripts/archreator.py --repo . check
+python plugins/archreator/scripts/archreator.py --repo . trace ACMP1 --direction both --depth 2
+python plugins/archreator/scripts/archreator.py --repo . work --name impact-order-service
+python plugins/archreator/scripts/archreator.py --repo . portal
+python plugins/archreator/scripts/archreator.py --repo . pdf --kind brief .archreator/work/impact-order-service/impact-order-service.md</code></pre>
+        <p>PDF export accepts only a scope or brief inside
+          <code>.archreator/work/</code>. The complete architecture is consumed
+          in the repository or portal.</p>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="deeper-title">
+      <div class="wrap">
+        <p class="eyebrow">Go deeper</p>
+        <h2 id="deeper-title">Read the contract behind the experience.</h2>
+        <div class="link-grid">
+          <a href="https://github.com/roanboc/archreator/blob/main/docs/method.md"><strong>The method</strong><span>Customers, flow, source and views</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/docs/skill-format.md"><strong>The skill format</strong><span>AIP-derived types and workflow contract</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/docs/process/README.md"><strong>The process model</strong><span>SIPOC outcomes and skill bindings</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/architecture-document-style/references/model-structure.md"><strong>The model structure</strong><span>Levels, areas, IDs and relationships</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/architecture-document-style/references/hierarchical-elements.md"><strong>Hierarchical elements</strong><span>Level files, page location and explicit parents</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md"><strong>ArchiMate on Mermaid</strong><span>Human labels, glyphs, shapes, colours and edges</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/process-and-capability-levels/references/process-presentation-patterns.md"><strong>Process presentation</strong><span>Flexible Level 1–3 content profiles and Level 4 boundary</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/README.md"><strong>The skill catalogue</strong><span>Five procedures, two documents, three rulebooks</span></a>
+          <a href="https://github.com/roanboc/archreator/blob/main/docs/portal.md"><strong>The portal</strong><span>On-demand reading and publishing boundary</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <p>ArChreator · Human-first architecture under the MIT License.</p>
+      <div><a href="index.html">Home</a><a href="https://github.com/roanboc/archreator">Source</a></div>
     </div>
-
-    <div class="host" id="codex">
-      <h3>Codex CLI <span class="where">terminal, IDE extension and the Codex app</span></h3>
-      <p>From your shell, or as slash commands inside a session:</p>
-      <pre><code>codex plugin marketplace add roanboc/archreator
-codex plugin install archreator@archreator</code></pre>
-      <p>
-        Start a new session before using the skills — Codex reads its plugin
-        list at launch. <code>/plugins</code> opens the browser if you would
-        rather install from there.
-      </p>
-    </div>
-
-    <div class="host" id="gemini">
-      <h3>Gemini CLI <span class="where">terminal</span></h3>
-      <p>
-        Gemini installs an extension from a repository root rather than a
-        subdirectory, so it takes the skills directly instead of the plugin.
-        Clone the repository once and run the installer:
-      </p>
-      <pre><code>git clone https://github.com/roanboc/archreator.git
-cd archreator
-python3 plugins/archreator/scripts/install_skills.py</code></pre>
-      <p>
-        That copies the seventeen skills into <code>~/.agents/skills/</code>, the
-        directory every host reads. Restart Gemini so it rescans. Re-run the
-        same command after a <code>git pull</code> to update.
-      </p>
-    </div>
-
-    <p class="note">
-      The installer works for Claude Code, Copilot and Codex too, if you would
-      rather not install a plugin. Add <code>--repo</code> to put the skills in
-      the current project's <code>.agents/skills/</code> instead of your home
-      directory, or <code>--dry-run</code> to see what would land. It ships the
-      skills and not the scaffold — the scaffold still arrives on the first
-      run, below.
-    </p>
-
-    <h2 id="first-run">2 · Run your first session</h2>
-
-    <p>
-      There is nothing to configure and no command to memorise. Say what you
-      want to model, in your own words — <em>set up architecture for this
-      repo</em>, or <em>I want to model my consultancy</em> — and the
-      <code>establish-project</code> skill recognises the situation and starts.
-    </p>
-
-    <ol class="steps">
-      <li>
-        <strong>It asks what the project is.</strong> One application, one
-        organization, or an enterprise large enough to split into business
-        lines. Answer in a sentence.
-      </li>
-      <li>
-        <strong>It picks a modeling depth and tells you which.</strong> Depth 1
-        is a single application with a light strategy layer; depth 2 is one
-        organization; depth 3 splits the model into domains. It is a starting
-        posture, never a ceiling — changing it later is a normal initiative.
-      </li>
-      <li>
-        <strong>It writes the scaffold into your repository.</strong> Six
-        numbered layer folders, a scope folder, a decisions log, two
-        validators, and the entry point that records the depth.
-      </li>
-      <li>
-        <strong>It hands off to discovery.</strong> Strategy and business
-        architecture first, always — that is the rule the whole method turns
-        on. Nothing gets built before you approve it.
-      </li>
-    </ol>
-
-    <h2 id="lands">What lands in your project</h2>
-
-    <table>
-      <thead>
-        <tr><th>Path</th><th>What it is</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>AGENTS.md</code></td>
-          <td>The entry point every agent reads: the rule that governs everything else, and the declared modeling depth</td>
-        </tr>
-        <tr>
-          <td><code>CLAUDE.md</code> · <code>GEMINI.md</code></td>
-          <td>One line each, importing <code>AGENTS.md</code>, so a host that reads only its own filename still finds it</td>
-        </tr>
-        <tr>
-          <td><code>architecture/</code></td>
-          <td>The six numbered layers — strategy through technology — plus <code>scope/</code>, one document per initiative, and <code>decisions/</code></td>
-        </tr>
-        <tr>
-          <td><code>scripts/</code></td>
-          <td>Two validators: relative links resolve, and element-ID references resolve. Run them before every push</td>
-        </tr>
-        <tr>
-          <td><code>README.md</code> · <code>CONTRIBUTING.md</code></td>
-          <td>Your project's own front door, and who the Requester, Agent and Reviewer are</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p>
-      Nothing else. The skills do not touch your files until you ask them to,
-      and no code is generated before a gate is approved.
-    </p>
-
-    <h2 id="scaffold">Starting without an agent</h2>
-
-    <p>
-      The scaffold is plain markdown and stands on its own. Copy
-      <a href="https://github.com/roanboc/archreator/tree/main/plugins/archreator/scaffold"><code>plugins/archreator/scaffold/</code></a>
-      into a new repository and fill it in by hand, then install the skills
-      whenever you want an agent to take over. The method is the same either
-      way; the skills only make an agent follow it faithfully.
-    </p>
-
-    <hr />
-
-    <h2 id="next">Where to go next</h2>
-    <ul>
-      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/method.md">The method</a></strong> — the six layers, the four gates, and the loop between Requester, Agent and Reviewer.</li>
-      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/adopting.md">The adoption guide</a></strong> — the same routes in more detail, and how a project stays in sync with the method.</li>
-      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/publishing.md">Publishing the model</a></strong> — the portal and the PDF your model ships with, for the people who will never open the repository.</li>
-      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/README.md">The skill catalogue</a></strong> — what each of the seventeen skills is for, in the order they are used.</li>
-      <li><strong><a href="https://github.com/roanboc/architecture-archreator">See it in use</a></strong> — a real organization modelled with the method, and the method modelled with itself.</li>
-    </ul>
-
-  </div>
-</main>
-
-<footer>
-  <div class="wrap">
-    Free and open source · MIT licensed ·
-    <a href="https://github.com/roanboc/archreator">source on GitHub</a>
-  </div>
-</footer>
-
+  </footer>
 </body>
 </html>

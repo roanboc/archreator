@@ -1,216 +1,101 @@
 # ArChreator
 
-**Your AI can build anything. It still can't know what you meant.**
+**Architecture people can understand and AI can build from.**
 
-ArChreator turns what you know about your business into an architecture an
-agent can build from — plain Markdown in your own repo, with you approving at
-explicit gates before a line of code exists.
+ArChreator helps a builder describe an initiative, solution, domain or
+enterprise in plain language. It keeps the result as navigable Markdown in the
+same repository, with ArchiMate concepts and relationships available as
+secondary metadata for enterprise architects and agents.
 
-[![Docs check](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml)
-[![Skills check](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-18-7e57c2)](./plugins/archreator/skills/README.md)
+The method is designed for two equally valid routes:
 
----
+- a builder explains the subject and receives only the guidance needed to make
+  it clear and buildable;
+- an enterprise architect navigates the standard structure, relationships and
+  portal directly to find gaps or explain the architecture.
 
-## The problem
+An agent is a consumer of this context, not the customer and not the only way
+to read it.
 
-Building software was hard, and slow. That was the visible problem, and it
-covered for everything behind it — a requirement nobody had pinned down,
-business context that lived in one person's head, an assumption three people
-each understood differently. None of it had to be settled, because the build
-was always the thing running late.
+## What is different
 
-AI took that delay away faster than anyone planned for, and what it was
-covering is now the whole problem. **Vague requirements and missing context
-no longer slow a project down — they get built.** An agent handed an
-assumption nobody stated does not stop and ask. It fills the gap with
-something plausible and carries on, at speed, and you get a working version of
-the wrong thing in an afternoon. Understanding the problem, and which solution
-actually fits it, is the part that stays human.
+- A new model starts with one `architecture/README.md`, not empty layer trees.
+- A layer folder is created only when the repository owns useful content in it.
+- Clear evidence becomes current context without blanket approval ceremonies.
+- A person decides only when a gap, inconsistency, material authorization or
+  required acceptance needs judgement.
+- Decision, impact and understanding briefs are temporary outputs under
+  `.archreator/work/<run>/`.
+- Requested briefs and scopes can be exported individually to PDF. The complete
+  architecture is read in the repository or the on-demand portal, never as one
+  large PDF.
+- Relationships are parsed from current Markdown on every question. There is
+  no SQLite database, cached graph or projection publication.
 
-So the thing worth building now is not a faster way to produce software. It is
-a way to get your own assumptions written down where people can disagree with
-them — who you serve, what you offer, who does what, and which system does
-each piece — early, while disagreeing is still cheap. The fix isn't a better
-prompt.
+## The model
 
-## How it works
+`architecture/README.md` is the human front door. It states the model boundary,
+owner, level and the status of the standard areas.
 
-A requirement never becomes code directly. It walks down six architecture
-layers — grouped into three questions — in two halves: the one you rule, and
-the one you can hand over.
+| Area | What it explains |
+| --- | --- |
+| Business design | Customers, value and operating model, only when the business itself is in scope |
+| Strategy | Direction, outcomes, drivers and constraints |
+| Business | People, capabilities, services and processes |
+| Information | Meaning, ownership, use and movement of information |
+| Application | Applications, components, interfaces and behavior |
+| Technology | Runtimes, platforms, infrastructure and deployment |
+| Roadmap and transition | Accepted targets, material gaps and change sequence |
 
-### First — what you are actually asking for
+The full document structure and ArchiMate metadata contract live in the
+[`architecture-document-style` reference](./plugins/archreator/skills/architecture-document-style/references/model-structure.md).
+Its [ArchiMate-on-Mermaid notation](./plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md)
+keeps human names dominant while glyphs, stereotypes, shapes, layer colours,
+labeled edges and secondary stable IDs make each view precise.
 
-```mermaid
-flowchart LR
-  req(["A requirement"]):::human
-  intention["<b>Intention</b><br/>why, and for whom"]:::ai
-  gA{{"You approve<br/>the direction"}}:::gate
-  operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
-  gB{{"You approve —<br/>before any code exists"}}:::gate
-  out(["A sharper requirement —<br/>agreed, and written down"]):::done
+The [hierarchical-element rules](./plugins/archreator/skills/architecture-document-style/references/hierarchical-elements.md)
+give every populated level a file, require each child to name its parent and
+make every page state where it sits without relying on the folder tree.
 
-  req --> intention --> gA --> operation --> gB --> out
-  gA -.->|"changes"| intention
-  gB -.->|"changes"| operation
-  classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
-  classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
-  classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
-  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
-  classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
-```
-
-**This half pays for itself even if nothing gets built.** The agent drafts;
-you settle. What you end up holding is your own requirement, sharper than the
-one you arrived with — who it serves, what it has to do, and which of your
-assumptions turned out to disagree with each other. The dotted edges are the
-loops that can't be skipped, and neither gate here is about code.
-
-### Then — what gets built from it
-
-```mermaid
-flowchart LR
-  inp(["What you agreed"]):::done
-  realization["<b>Realization</b><br/>what builds it"]:::ai
-  gC{{"Want to see<br/>the design first?"}}:::gateopt
-  build["Builds it"]:::ai
-  check{{"You check<br/>the delivery"}}:::gate
-  out(["The outcome you asked for,<br/>and the next requirement"]):::done
-
-  inp --> realization --> gC --> build --> check --> out
-  check -.->|"changes"| build
-  classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
-  classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
-  classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
-  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
-  classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
-```
-
-**Nobody asks you to read the code.** What comes back to you is the working
-thing, and the question is whether it does what you asked for. If you *are*
-technical, or someone on your side is, the pull request is right there and the
-dashed gate will show you the design before it is built — but that is an
-option you take, not a toll you pay.
-
-Each half is bounded, and each ends in something worth having: the first in
-understanding, the second in the outcome. That is also why the second picture
-ends where the first one began.
-
-Drawn in the method's own palette: cyan is always an AI actor, here and in
-every model you'll build, so you never mistake one for a person.
-
-### The six layers
-
-Numbered in the order they're assessed. Deriving one before the layer above it
-is agreed is the mistake the whole method exists to prevent.
-
-| Group | # | Layer | The question it answers |
-| ----- | - | ----- | ----------------------- |
-| **Intention** | 0 | Business design | Who are the customers, and how does each offering pay? |
-| **Intention** | 1 | Strategy | Why does this exist, and what must it be able to do? |
-| **Operation** | 2 | Business | Who does what, and which services are offered? |
-| **Operation** | 3 | Information | What information exists, and where does it live? |
-| **Realization** | 4 | Application | Which software realizes each business service? |
-| **Realization** | 5 | Technology | What runs it all — runtimes, build, hosting? |
-
-The groups are a way to read the six, not a seventh thing to learn. The line
-between **Operation** and **Realization** is the one that matters: it is where
-the method stops and asks, and everything above it is agreed before any code
-exists.
-
-You don't fill in all six for a weekend project. **One method, three depths** —
-an app, an organization, or an enterprise — and the agent tells you which one
-it picked and why.
-
-## The distinguishing bet
-
-**An AI is modeled as a member of the organization, not a tool used by it.**
-
-Every actor in your model carries a kind — human, AI, or hybrid. Every AI
-actor carries an autonomy level, concrete decision rights, and a named
-escalation path. So "the agent handles triage" stops being a hand-wave and
-becomes a row you can point at, argue with, and change on purpose.
+Process models use [level-specific presentation profiles](./plugins/archreator/skills/process-and-capability-levels/references/process-presentation-patterns.md):
+level 1 shows the landscape, level 2 carries the process contract and SIPOC,
+and level 3 adds the operational flow, actors, artifacts, decisions, controls
+and handoffs. The required meaning is stable; the page layout remains flexible.
 
 ## Quick start
 
-In Claude Code:
+Install the plugin using the instructions for your agent in
+[Adopting ArChreator](./docs/adopting.md), then describe what you need:
 
-```shell
-/plugin marketplace add roanboc/archreator
-/plugin install archreator@archreator
-```
+> Help me model this initiative clearly.
 
-In GitHub Copilot — the CLI, VS Code, or the Copilot app:
+> What would changing the order service affect?
 
-```shell
-copilot plugin marketplace add roanboc/archreator
-copilot plugin install archreator@archreator
-```
+> Explain this architecture to a business reader and create the portal.
 
-Then just say what you want to model. The `establish-project` skill takes it
-from there — it asks two questions, picks a depth, and writes you a working
-project on the first commit.
+ArChreator will establish or refresh only the context needed for that request.
 
-On Codex, on Gemini CLI, or if you'd rather clone the scaffold than install
-anything, [`docs/adopting.md`](./docs/adopting.md) has the recipe for each and
-says exactly what lands in your project either way.
+## Method, not a preprompt
 
-## What you get
+ArChreator has ten narrowly activated skills in three types:
 
-| | |
-| --- | --- |
-| **18 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
-| **A scaffold** | Six layer folders, the notation, two validators, and placeholder entry points. A working project before you've written anything. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
-| **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
-| **A portal and a PDF, when you need them** | The same documents as a searchable website and as one printable document, for the people who will never open a repository. Both are rebuilt from the Markdown and thrown away. [How it works](./docs/publishing.md) |
-| **Nothing to operate** | No database, no server, no account, and nothing to export before an agent can read it. Markdown in git is the model |
+- five **Procedures** for modeling context, answering questions, planning,
+  delivering change and optional federation;
+- two **Document templates** for temporary focused briefs and durable
+  decisions; and
+- three **Rulebooks** for clear documents, architecture structure and
+  proportionate process or capability depth.
 
-> **See it in use.** Worked models — an organization, the method modeling
-> itself, the guidance site — live in
-> [`architecture-archreator`](https://github.com/roanboc/architecture-archreator).
-> This repo holds the method; that one holds real examples of it applied.
+The skill contract is adapted from the Agent Instruction Protocol (AIP): every
+procedure states when to use it and when not to, its invariants, inputs,
+outputs, judgements, conditional human checkpoints, handoffs, anti-patterns and
+completion tests. A supplier-input-process-output-customer (SIPOC) model binds
+that work to accountable outcomes, so missing method coverage is visible.
 
-## Why Markdown, and not a modeling tool
+See the [skill catalogue](./plugins/archreator/skills/README.md),
+[skill format](./docs/skill-format.md), [process model](./docs/process/README.md)
+and [method](./docs/method.md).
 
-Because the reader that matters can't open a modeling tool.
+## License
 
-An architecture kept in a tool's own format is invisible to your agent and
-invisible to code review. Markdown in git is diffable, greppable, reviewable
-in a pull request, and readable natively by the thing you're asking to build
-from it. That single choice is why nothing has to be exported before the model
-can be used, and why there is nothing to keep running.
-
-Rendering it for people is a separate, optional step —
-[a portal and a PDF](./docs/publishing.md) are one command each, regenerated
-from the Markdown and gitignored, so the published copy can never become the
-second model everyone edits instead.
-
-## Where to go from here
-
-| To understand | Read |
-| ------------- | ---- |
-| **What the method does, and how** | [`docs/method.md`](./docs/method.md) — the process, the layers, the loop |
-| **How to adopt it in your project** | [`docs/adopting.md`](./docs/adopting.md) |
-| **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, in the order they're used |
-| **How the model reaches people who won't clone it** | [`docs/publishing.md`](./docs/publishing.md) — the portal, the PDF, and how a question comes back |
-| **The method as a levelled process model** | [`docs/process/`](./docs/process/README.md) — the macro map, a SIPOC per process, and which skill realizes each |
-| **The format every skill follows** | [`docs/skill-format.md`](./docs/skill-format.md) — frontmatter, the fixed sections, and the glyphs that mark them |
-| **Which standards it rests on** | [`docs/standards-alignment.md`](./docs/standards-alignment.md) — every coined term, the established name behind it, and where the method is genuinely its own |
-| **What a filled-in model looks like** | [`architecture-archreator`](https://github.com/roanboc/architecture-archreator) |
-| **How to contribute** | [`CONTRIBUTING.md`](./CONTRIBUTING.md) |
-
-## What's in this repository
-
-- **The skills** — [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md)
-- **The scaffold** — [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md), copied into your project by `establish-project`
-- **The plugin manifests** — [`plugin.json`](./plugins/archreator/plugin.json), [`.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) and [`marketplace.json`](./.claude-plugin/marketplace.json), publishing to Claude Code, GitHub Copilot and Codex
-- **Docs and site** — [`docs/`](./docs/method.md) and the one-page [`site/`](./site/index.html)
-
-No application code, and no worked models — those live in the sibling repo.
-
----
-
-**ArChreator** — *architecture* + *creator*. Free, open source, MIT.
-Built by [roanboc](https://github.com/roanboc).
+ArChreator is available under the [MIT License](./LICENSE).

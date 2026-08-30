@@ -1,41 +1,33 @@
-name: Skills check
+name: Method check
 
 on:
   pull_request:
     paths:
-      - "plugins/archreator/skills/**"
-      - "plugins/archreator/scripts/**"
-      - "plugins/archreator/scaffold/AGENTS.md"
-      - "plugins/archreator/scaffold/CLAUDE.md"
-      - "plugins/archreator/scaffold/GEMINI.md"
-      - "plugins/archreator/plugin.json"
-      - "plugins/archreator/.claude-plugin/**"
-      - ".claude-plugin/**"
+      - "plugins/archreator/**"
       - "docs/process/**"
       - "docs/skill-format.md"
+      - ".claude-plugin/**"
       - ".github/workflows/skills-check.yml"
   push:
     branches: [main]
     paths:
-      - "plugins/archreator/skills/**"
-      - "plugins/archreator/scripts/**"
-      - "plugins/archreator/scaffold/AGENTS.md"
-      - "plugins/archreator/scaffold/CLAUDE.md"
-      - "plugins/archreator/scaffold/GEMINI.md"
-      - "plugins/archreator/plugin.json"
-      - "plugins/archreator/.claude-plugin/**"
-      - ".claude-plugin/**"
+      - "plugins/archreator/**"
       - "docs/process/**"
       - "docs/skill-format.md"
+      - ".claude-plugin/**"
       - ".github/workflows/skills-check.yml"
 
 jobs:
-  check-skills:
+  validate-method:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # uv supplies PyYAML from the script's own inline metadata, so the
-      # checker needs no requirements file and no install step.
-      - uses: astral-sh/setup-uv@v5
-      - name: Check the skill corpus
-        run: uv run plugins/archreator/scripts/check_skills.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check typed skills, process bindings, manifests and scaffold
+        run: python3 plugins/archreator/scripts/check_method.py
+      - name: Test the method validator and source-fresh runtime
+        run: python3 -m unittest discover plugins/archreator/scripts/tests
+      - name: Test the on-demand portal
+        run: python3 -m unittest discover plugins/archreator/portal -p "test_*.py"

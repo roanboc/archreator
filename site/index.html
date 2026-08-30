@@ -1,119 +1,192 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>archreator — model your business, then let AI build it</title>
-  <meta name="description" content="A free, open-source method that turns what you know about your business into an architecture an AI agent can build from, with you approving at every gate. Ships as a plugin for Claude Code, GitHub Copilot and Codex." />
-  <meta property="og:title" content="archreator" />
-  <meta property="og:description" content="Model your business, then let AI build it. Free, open source, no accounts." />
-  <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='4' rx='1.5' fill='%237e57c2'/%3E%3Crect x='6' y='12' width='20' height='4' rx='1.5' fill='%23c8a24a'/%3E%3Crect x='6' y='18' width='20' height='4' rx='1.5' fill='%230288d1'/%3E%3Crect x='6' y='24' width='20' height='4' rx='1.5' fill='%23558b2f'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="./style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ArChreator is a human-first architecture method for builders and enterprise architects: clear Markdown, rigorous workflows, useful visuals, and context AI can traverse.">
+  <title>ArChreator — Architecture people can understand</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="./index.html">
-      <svg width="22" height="22" viewBox="0 0 32 32" aria-hidden="true">
-        <rect x="6" y="6"  width="20" height="4" rx="1.5" fill="#7e57c2" />
-        <rect x="6" y="12" width="20" height="4" rx="1.5" fill="#c8a24a" />
-        <rect x="6" y="18" width="20" height="4" rx="1.5" fill="#0288d1" />
-        <rect x="6" y="24" width="20" height="4" rx="1.5" fill="#558b2f" />
-      </svg>
-      archreator
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="ArChreator home">
+      <span class="brand-mark" aria-hidden="true">A</span>
+      <span>ArChreator</span>
     </a>
-  </div>
-</header>
+    <nav aria-label="Main navigation">
+      <a href="#method">Method</a>
+      <a href="#model">Model</a>
+      <a href="start.html">Get started</a>
+      <a href="https://github.com/roanboc/archreator">GitHub</a>
+    </nav>
+  </header>
 
-<main>
-  <div class="wrap">
+  <main id="main">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">Human-first architecture method</p>
+        <h1>Architecture people can understand and AI can build from.</h1>
+        <p class="lede">ArChreator turns what people know about an initiative,
+          solution, domain or enterprise into a small, navigable model. Plain
+          language leads; ArchiMate precision and executable workflow remain
+          underneath.</p>
+        <div class="actions">
+          <a class="button primary" href="start.html">Start with one repository</a>
+          <a class="button secondary" href="https://github.com/roanboc/archreator/blob/main/docs/method.md">Read the method</a>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-label="ArChreator operating principle">
+        <p class="panel-label">The operating principle</p>
+        <blockquote>Keep the project small.<br>Keep the method rigorous.</blockquote>
+        <ul class="check-list">
+          <li>No empty layer tree</li>
+          <li>No persisted graph to keep in sync</li>
+          <li>No blanket approval sequence</li>
+          <li>No agent-only black box</li>
+        </ul>
+      </aside>
+    </section>
 
-    <div class="stripes" aria-hidden="true">
-      <span style="background:#7e57c2"></span>
-      <span style="background:#c8a24a"></span>
-      <span style="background:#0288d1"></span>
-      <span style="background:#558b2f"></span>
+    <section class="band" aria-labelledby="routes-title">
+      <div class="wrap">
+        <p class="eyebrow">Two first-class routes</p>
+        <h2 id="routes-title">The same model serves different readers.</h2>
+        <div class="card-grid two">
+          <article class="card accent-violet">
+            <p class="card-kicker">Independent builder</p>
+            <h3>Explain the business. Get only the architecture you need.</h3>
+            <p>You bring the users, outcomes, constraints and implementation.
+              ArChreator selects the right discovery route, exposes material
+              gaps, and keeps the model understandable without teaching you an
+              architecture framework first.</p>
+          </article>
+          <article class="card accent-teal">
+            <p class="card-kicker">Enterprise architect</p>
+            <h3>Navigate the structure directly. Follow every relationship.</h3>
+            <p>Standard areas, stable identifiers, ArchiMate types, declared
+              relationships, ownership and source links remain visible. Use the
+              repository or on-demand portal; an agent is helpful, never the
+              only doorway.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="method" aria-labelledby="method-title">
+      <p class="eyebrow">A method, not a preprompt</p>
+      <h2 id="method-title">Every workflow has a contract.</h2>
+      <p class="section-intro">ArChreator adapts the Agent Instruction Protocol
+        to readable Markdown and binds it to a supplier-input-process-output-
+        customer process model. That makes missing work and hidden judgement
+        visible.</p>
+
+      <div class="method-flow" aria-label="ArChreator workflow">
+        <div><span>01</span><strong>Model context</strong><small>Evidence and ownership</small></div>
+        <div class="flow-choice"><span>02</span><strong>Answer · Plan · Deliver</strong><small>Route by the real need</small></div>
+        <div><span>03</span><strong>Refresh truth</strong><small>Code and model agree</small></div>
+      </div>
+
+      <div class="card-grid three compact-cards">
+        <article class="card">
+          <h3>Procedures</h3>
+          <p>State when to run and when not to, invariants, inputs, outputs,
+            judgement, conditional human checkpoints, handoffs, anti-patterns
+            and completion tests.</p>
+        </article>
+        <article class="card">
+          <h3>Document templates</h3>
+          <p>Separate temporary decision, impact, understanding and scope
+            briefs from durable decision rationale. Empty sections are removed.</p>
+        </article>
+        <article class="card">
+          <h3>Rulebooks</h3>
+          <p>Preserve clear writing, standard architecture navigation and
+            breadth-first, depth-on-pain process and capability modeling.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="band dark" id="model" aria-labelledby="model-title">
+      <div class="wrap">
+        <p class="eyebrow">One source, created lazily</p>
+        <h2 id="model-title">A recognizable structure without placeholder volume.</h2>
+        <p class="section-intro">Every repository starts with one front door.
+          An area folder appears only when the model owns real content there;
+          otherwise the front door says External, Out of scope, or names the
+          specific Gap.</p>
+
+        <div class="level-strip" aria-label="Model levels">
+          <div><strong>Enterprise</strong><span>Shared direction, capabilities and constraints</span></div>
+          <div><strong>Domain</strong><span>Owned outcomes, information and exposed contracts</span></div>
+          <div><strong>Solution</strong><span>Behavior, components, interfaces and runtime</span></div>
+        </div>
+        <p class="ownership-rule">One fact has one owner. A lower model refines
+          an exposed contract; it does not copy its parent.</p>
+        <p class="ownership-rule">Every page states its location. Each populated
+          hierarchy level has a file, and every child names its parent in human
+          language as well as in its stable ID.</p>
+
+        <div class="area-grid" aria-label="Standard architecture areas">
+          <div><span>0</span><strong>Business design</strong><small>Only when the business itself is in scope</small></div>
+          <div><span>1</span><strong>Strategy</strong><small>Direction, outcomes and constraints</small></div>
+          <div><span>2</span><strong>Business</strong><small>People, capabilities, services and processes</small></div>
+          <div><span>3</span><strong>Information</strong><small>Meaning, ownership and movement</small></div>
+          <div><span>4</span><strong>Application</strong><small>Behavior, components and interfaces</small></div>
+          <div><span>5</span><strong>Technology</strong><small>Platforms, runtime and deployment</small></div>
+          <div><span>6</span><strong>Transition</strong><small>Accepted targets, gaps and sequence</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section" aria-labelledby="views-title">
+      <p class="eyebrow">One source, several views</p>
+      <h2 id="views-title">Create the reading surface the moment needs.</h2>
+      <div class="view-grid">
+        <article><span class="view-icon">01</span><h3>Repository</h3><p>The canonical, directly navigable Markdown model.</p></article>
+        <article><span class="view-icon">02</span><h3>Focused brief</h3><p>Decision, impact, understanding or scope—under an ignored work folder.</p></article>
+        <article><span class="view-icon">03</span><h3>Scoped PDF</h3><p>One requested brief for business review and comments, never the whole model.</p></article>
+        <article><span class="view-icon">04</span><h3>Portal</h3><p>An on-demand searchable static view for wider consumption and explanation.</p></article>
+      </div>
+      <p class="work-note"><code>.archreator/work/</code> holds every disposable
+        output. Canonical facts remain in <code>architecture/</code>.</p>
+    </section>
+
+    <section class="band" aria-labelledby="skills-title">
+      <div class="wrap">
+        <p class="eyebrow">Ten skills, loaded by need</p>
+        <h2 id="skills-title">Small activation surface. Substantive method.</h2>
+        <div class="skill-groups">
+          <div>
+            <h3>Procedures</h3>
+            <ul><li>model-context</li><li>answer-context-question</li><li>plan-roadmap</li><li>deliver-change</li><li>federate-context <em>optional</em></li></ul>
+          </div>
+          <div>
+            <h3>Documents</h3>
+            <ul><li>write-brief</li><li>record-decision</li></ul>
+          </div>
+          <div>
+            <h3>Rulebooks</h3>
+            <ul><li>document-style</li><li>architecture-document-style</li><li>process-and-capability-levels</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap final-cta">
+      <p class="eyebrow">Start with what you know</p>
+      <h2>“Help me model this initiative clearly.”</h2>
+      <p>That is enough to begin. ArChreator selects the method route and creates
+        only the context the repository actually needs.</p>
+      <a class="button primary" href="start.html">See installation and first steps</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <p>ArChreator · Human-first architecture under the MIT License.</p>
+      <div><a href="https://github.com/roanboc/archreator">Source</a><a href="https://github.com/roanboc/archreator/blob/main/docs/skill-format.md">Skill format</a><a href="https://github.com/roanboc/archreator/blob/main/docs/process/README.md">Process model</a></div>
     </div>
-
-    <h1>Model your business, then let AI build it.</h1>
-
-    <p class="lede">
-      archreator is a free, open-source method that turns what you know about
-      your business into an architecture an AI agent can build from — with you
-      approving at every gate, in plain markdown, in your own repository.
-    </p>
-
-    <div class="actions">
-      <a class="btn btn-primary" href="./start.html">Get started</a>
-      <a class="btn btn-ghost" href="https://github.com/roanboc/archreator">Get it on GitHub</a>
-      <a class="btn btn-ghost" href="https://github.com/roanboc/architecture-archreator">See it in use</a>
-    </div>
-
-    <h2>Why it exists</h2>
-    <p>
-      Building software was hard, and slow. That was the visible problem, and
-      it covered for everything behind it — requirements nobody had pinned
-      down, business context that lived in one person's head. AI took that
-      delay away faster than anyone planned for, and what it was covering is
-      now the whole problem: vague requirements and missing context no longer
-      slow a project down, they get built. Understanding the problem, and
-      which solution actually fits it, is the part that stays human.
-    </p>
-    <p>
-      So the thing worth building now is not a faster way to produce software.
-      It is a way to get your own assumptions written down where people can
-      disagree with them, early, while disagreeing is still cheap.
-    </p>
-    <p>
-      archreator makes the understanding the deliverable. Before any code is
-      written, the strategy, the business, the information, and the design
-      are aligned in a shape both a human and an agent can read. The human
-      approves at explicit gates. The agent picks up from there.
-    </p>
-
-    <h2>What you get</h2>
-    <ul>
-      <li><strong>A methodology</strong> that walks your requirement through six architecture layers — grouped as intention, operation and realization — with your approval before any code exists.</li>
-      <li><strong>Seventeen skills</strong> that make an AI agent follow the method faithfully, from bootstrapping a new project to writing the pull request.</li>
-      <li><strong>An empty scaffold</strong> your project starts from, with layer READMEs, validators, and PR templates ready to go.</li>
-      <li><strong>AI actors as first-class citizens</strong> — every actor in your model carries a kind (human, AI, or hybrid) and every AI carries an autonomy level, decision rights, and an escalation path.</li>
-    </ul>
-
-    <h2>Get started</h2>
-    <p>
-      archreator ships as a plugin for Claude Code, GitHub Copilot and Codex,
-      and as skills for Gemini CLI. In Claude Code that is two slash commands:
-    </p>
-    <pre><code>/plugin marketplace add roanboc/archreator
-/plugin install archreator@archreator</code></pre>
-    <p>
-      Then just say what you want to model. The <code>establish-project</code>
-      skill takes it from there — it asks what the project is, picks a modeling
-      depth, and writes the scaffold into your repository.
-    </p>
-    <div class="actions">
-      <a class="btn btn-primary" href="./start.html">Installing on every agent →</a>
-    </div>
-
-    <hr />
-
-    <h2>Two repositories</h2>
-    <ul>
-      <li><strong><a href="https://github.com/roanboc/archreator">archreator</a></strong> — the method: the skills, the scaffold, the plugin package. What ships to your project.</li>
-      <li><strong><a href="https://github.com/roanboc/architecture-archreator">architecture-archreator</a></strong> — worked models: archreator applied to a real organization and to itself, so you can see what a filled-in model looks like.</li>
-    </ul>
-
-  </div>
-</main>
-
-<footer>
-  <div class="wrap">
-    Free and open source · MIT licensed ·
-    <a href="https://github.com/roanboc/archreator">source on GitHub</a>
-  </div>
-</footer>
-
+  </footer>
 </body>
 </html>

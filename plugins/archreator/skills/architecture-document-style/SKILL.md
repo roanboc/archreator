@@ -1,6 +1,6 @@
 ---
 name: architecture-document-style
-description: Rulebook — consult when creating or editing any document under architecture/ — the numbering of layer folders, element IDs and the hierarchical numbering of leveled elements (`CAP1`, `CAP1.2`), what belongs at which tier, canvas notation, the grounding rule, ArchiMate-on-Mermaid, actor kinds and autonomy, and the element-document skeleton. Adds to document-style, which governs every document in the repository and which architecture documents obey too.
+description: Rulebook — consult when creating or editing canonical architecture Markdown so enterprise, domain and solution models remain human-readable, standard, traversable and explicit about ownership.
 metadata:
   archreator:
     kind: rulebook
@@ -9,705 +9,268 @@ metadata:
 
 # ※ Architecture document style
 
-How a model is written: its identifiers, its notation, its tiers, and the
-skeleton of an element document.
-
-This is the architecture half. The rules that govern **every** document — the
-language, what a document may contain, and how it links — are in
-`document-style`, and a model document obeys those too.
+Canonical architecture is plain-language Markdown with precise secondary
+metadata. Builders should understand the subject without learning ArchiMate;
+enterprise architects and agents should still be able to navigate the same
+facts in a standard way.
 
 ## ⊕ When to use this
 
-| The situation | What it looks like |
-| ------------- | ------------------ |
-| Editing the model | Any document under `architecture/` is being created or changed |
-| Allocating an identifier | A new element needs an ID, or a leveled one needs numbering |
-| Drawing anything | A diagram is going into a document |
-| Writing any other document | A README, a `docs/` page, a contributing guide — for § What the document contains and § Links |
+- Creating, editing, splitting or reviewing anything under `architecture/`.
+- Choosing model ownership, standard areas, element identifiers, ArchiMate
+  types, relationships, provenance or a diagram.
+- Referencing another domain, repository or enterprise/domain/solution model.
+
+Read [the model-structure reference](./references/model-structure.md)
+when creating or reorganizing a model or area. Read
+[the hierarchical-elements reference](./references/hierarchical-elements.md)
+when an element is decomposed into levels or a child-level file is created.
+Read
+[the domain-boundaries reference](../federate-context/references/domain-boundaries.md)
+when deciding a domain boundary or declaring a cross-model contract. Read
+[ArchiMate on Mermaid](./references/archimate-on-mermaid.md) before drawing or
+changing an architecture view; it is the single source for labels, glyphs,
+shapes and the layer palette.
 
 ## ⊖ When not to
 
-| The situation | Use instead |
-| ------------- | ----------- |
-| The question is how far to decompose | `process-and-capability-levels` — that governs shape, this governs form |
-| The question is what the document is for | The skill that produces it — `write-scope-document`, `record-decision` |
+- General repository documentation with no modeled elements; use
+  `document-style` alone.
+- A disposable scope or brief under `.archreator/work/`; it cites canonical
+  sources but does not become part of them.
+- Portal or PDF output. Those are regenerated reading surfaces, never the
+  authority for a model fact.
 
 ## ⌖ Where this sits
 
-**Realizes no process.** It is the rulebook every process complies with, and
-the most-cited skill in the corpus — every skill that writes or edits a model
-document reaches for it. Nothing here is a step.
+This rulebook realizes no process. It adds the modeling contract to
+`document-style` and is consulted by modeling, change, roadmap, question and
+federation procedures.
 
 ## ※ Rules
-# EA documentation style
 
-### Numbering
+### Declare the model and its authority
 
-- Layer folders are numbered in assessment order and never reordered:
-  `1_strategy`, `2_business`, `3_information`, `4_application`,
-  `5_technology` (translate the words if the project's doc language isn't
-  English, but keep the numbers and the order). Projects that model an
-  organization also have `0_business-design`, holding the canvases the rest
-  is derived from — it is not an ArchiMate layer, and application-only
-  projects leave it empty.
-- Files inside a layer carry a numeric prefix giving the **logical analysis
-  order**, which each layer README explains in an "Analysis order" table.
-  A new file gets the next number, plus a row in that table; only renumber
-  when the analysis order genuinely changes.
-- Scope documents (`architecture/scope/`) are numbered **chronologically** per
-  initiative.
-- `architecture/6_transition/` is not a layer and carries no layer number. Its
-  documents are numbered in analysis order like a layer's are, because a gap
-  cannot be derived before the plateau it is measured against exists. It is
-  **the only folder in the model that describes a future**; every numbered
-  layer describes the current state, and that division is what lets a reader
-  trust a layer document without checking its date.
+Every model has one level: **Enterprise**, **Domain** or **Solution**.
+`architecture/README.md` is its front door and names the model, purpose,
+level, accountable owner, documentation language, parent when one exists and
+the boundary of facts it owns.
 
-### Document status
+- Enterprise models own shared business design, direction, capabilities,
+  constraints and cross-domain concerns.
+- Domain models own domain outcomes, services, information responsibility and
+  contracts exposed to enterprise, peers or solutions.
+- Solution models own local behavior, representations, components,
+  interfaces, runtime and the contracts they consume.
 
-**Every document that defines an element says in its preamble how far it has
-been validated.** One line, under the viewpoint line, opening with one of
-three glyphs:
+A lower model refines what its parent exposes; it does not restate the parent.
+One model owns each fact. Other models link to the definition and add only
+their own detail.
 
-| Glyph | Status | What it means |
-| ----- | ------ | ------------- |
-| `○` | **Not started** | The document exists so the gap is visible. It defines nothing yet, and a claim about this part of the subject is not in the model |
-| `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has approved them. Identifiers are still draft, figures are unconfirmed, and nothing here may be built on |
-| `●` | **Validated** | Confirmed by whoever is accountable for it, on a named date. Identifiers are permanent and a change to any of them is an initiative |
+### Create areas lazily and navigate them directly
 
-The line names the gate too, so a reader knows what would move it — or what
-already did:
+The standard areas are:
+
+| Path | Holds when locally relevant |
+| --- | --- |
+| `0_business-design/` | Customers, jobs, pains, gains, value propositions, products and business economics |
+| `1_strategy/` | Stakeholders, drivers, outcomes, goals, principles, capabilities, resources and constraints |
+| `2_business/` | Actors, roles, products, services, processes, business objects, contracts and rules |
+| `3_information/` | Meaning, ownership, quality, lifecycle, exchange and data representations |
+| `4_application/` | Applications, components, services, interfaces, behavior and integrations |
+| `5_technology/` | Platforms, runtimes, nodes, artifacts, deployment and operations |
+| `6_transition/` | Accepted targets, plateaus, material gaps, initiatives, dependencies and sequence |
+| `decisions/` | Durable rationale for consequential choices a future reader will question |
+
+The front door marks each area **Local**, **External**, **Out of scope** or a
+specific **Gap**. That row replaces an empty folder. Create an area's
+`README.md` only when supported local content exists; keep content there until
+splitting makes navigation or ownership materially clearer.
+
+Areas 0–5 describe current truth. Area 6 describes intended future states and
+their sequence. Do not mix planned elements into current catalogues or use a
+roadmap as authorization to deliver its initiatives.
+
+### Give every element a stable identity
+
+An identifier is a stable machine anchor for a modeled element. It begins with
+a type prefix and number. Use the prefixes and detailed area contract in the
+model-structure reference.
+
+- An ID is unique inside its owning model and stays with a surviving element
+  when its name or description changes.
+- Once an ID has entered the canonical model or is referenced elsewhere, do
+  not reuse it for a different element.
+- Decomposition extends the parent ID. For example, Order management
+  [CAP3.2] is a child of Commerce [CAP3]. The number states hierarchy only
+  when the child is a finer element of the same type.
+- A domain qualifier precedes the prefix, such as Order handling
+  [SALES.BSVC2]. From another model, qualify the anchor as Order handling
+  [customer-platform::SALES.BSVC2].
+- Number locally rather than inventing globally unique sequences. The model
+  and domain qualifiers carry the boundary.
+- Assign IDs only to modeled elements. A heading, layer band, explanatory
+  node or conditional human decision is not given an element ID merely so a
+  diagram can point at it.
+
+Do not use descriptive slug IDs such as `ORDER-FULFILMENT`. Names change as a
+business learns, and renaming a slug breaks durable and cross-model
+references. A numeric type ID stays anchored to the element while its human
+name improves.
+
+Definitions and references deliberately use different forms. A catalogue
+definition starts with its ID so it sorts and scans by stable identity. Every
+reference outside that definition row is human-first as Order handling
+[BSVC2]. A bare ID is valid only in the `ID` cell of the row that defines it;
+it is never a prose, relationship, diagram or brief reference.
+
+When an element is decomposed, apply the hierarchical-elements reference. Each
+populated level has its own file, every child definition names its parent as
+`Name [ID]`, and each file states its full location in the hierarchy. The
+dotted ID remains the machine hierarchy; it never substitutes for human
+orientation.
+
+### Put plain meaning before precise metadata
+
+Define modeled elements in an ID-first catalogue:
 
 ```markdown
-**Status:** ◐ Draft catalogue — identified from the sources named below, not
-yet validated. **Gate 2** covers this layer.
-
-**Status:** ● Validated at **Gate 2**, 2026-08-24.
-```
-
-**A `●` earned outside a gate names the decision that put it there.** Not
-every layer is covered by one: a Requester may decline Gate 3 and route the
-solution design to ordinary pull-request review, and that is a real decision by
-the person with the standing to make it. Such a document is validated, and its
-line says by what:
-
-```markdown
-**Status:** ● Validated — **Gate 3** declined at Gate 2 (scope document 1,
-2026-08-22), which routed this layer to pull-request review.
-```
-
-This is the one place `●` can be claimed without a gate, and the escape is
-narrow on purpose: it needs a recorded decision to point at. "I checked it" is
-not one, because an approval that is not recorded did not happen.
-
-`○` is the only one that is optional, and necessarily so: a document that
-defines nothing has nothing a reader could mistake, so the validator does not
-ask for a status there. Use it anyway where an empty document exists to keep a
-gap visible — it reads at a glance, and it puts the empty layer in the same
-vocabulary as the full ones.
-
-**The glyph carries the meaning; the sentence beside it is prose in whatever
-language the model is written in.** That is the same arrangement the element
-notation uses, and it is why `scripts/check_model.py` can enforce this in a
-model written in any language: it checks that a document defining elements
-carries exactly one status glyph before its first `##`, and never reads the
-words.
-
-**A draft catalogue is not an architecture draft, and the distinction is the
-point of the marker.** An architecture draft is a proposal about how something
-should be structured. A draft catalogue is a list of things somebody said
-exist, written down so they can be checked. Presenting the second as the first
-is the failure this exists to prevent: a Requester who is shown a catalogue
-and hears "architecture" approves a description nobody has verified, and an
-agent that reads one will build on a system that was mentioned once in a
-meeting.
-
-**So a draft catalogue's tables carry two extra columns**, and they earn their
-width:
-
-| Column | Holds |
-| ------ | ----- |
-| `Source` | Which reference document or conversation the element came from — § Reference documents. An element with no source in a draft catalogue is an invention |
-| `Notes` | What is uncertain, contested or awaiting confirmation. Two names for what may be one thing; a figure nobody could stand behind; a system whose owner is unknown |
-
-At the gate, `Source` stays — provenance does not expire. **`Notes` is
-emptied**, because a note that survives its own gate is one of three things: a
-fact, which belongs in the model; a question, which belongs in the
-open-questions log; or something nobody cared about, which belongs nowhere.
-
-**Mixed documents are normal, and the status is the weakest part.** A
-validated layer that a new initiative adds elements to is `◐` until that
-initiative's gate — not `●` with an asterisk. A reader who trusts a `●`
-document must be able to trust all of it.
-
-### Element IDs
-
-Every element carries a short **ID**: a type prefix followed by a number,
-no separator — `G1`, `CAP3`, `PROD2`. IDs are how one document refers to an
-element in another without restating it. An element inside a leveled
-catalogue extends its parent's ID instead of starting a new number —
-`CAP3.2` — see § Levels number hierarchically.
-
-An element is **defined** in one of exactly two shapes, and `check_model.py`
-recognizes both:
-
-| Shape | Used for | Example |
-| ----- | -------- | ------- |
-| The **first column of an inventory table** | Most elements | `` \| `BSVC3` \| Supervised build \| … `` |
-| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows | `- **G1 — Legible guidance.** A prospective adopter…` |
-
-A **qualified** ID in a first column (`` \| `SALES.BSVC3` \| ``) is a
-*reference*, not a definition — that is what a domain charter's "Consumed
-services" table holds. Anywhere else, a backticked ID is a reference.
-
-| Where | Prefixes |
-| ----- | -------- |
-| Motivation | `STK` Stakeholder · `DRV` Driver · `ASM` Assessment · `G` Goal · `OUT` Outcome · `P` Principle |
-| Strategy | `CAP` Capability · `RES` Resource · `COA` Course of Action · `VS` Value Stream |
-| Business | `ACT` Actor · `ROLE` Role · `BCOL` Business Collaboration · `PROD` Product · `BSVC` Business Service · `BPROC` Business Process · `BOBJ` Business Object · `BIF` Business Interface · `CTR` Contract · `RULE` Business Rule · `VAL` Value |
-| Information | `DOBJ` Data Object |
-| Application | `ASVC` Application Service · `ACMP` Application Component |
-| Technology | `TSVC` Technology Service · `NODE` Node · `ART` Artifact |
-| Implementation & Migration | `PLAT` Plateau · `GAP` Gap |
-| Canvas (VPC) | `JOB` Job · `PAIN` Pain · `GAIN` Gain · `PREL` Pain Reliever · `GCRE` Gain Creator |
-| Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
-
-Every document's "How to read this document" table repeats the prefixes it
-uses, expanded — `STK#` = Stakeholder — which is § Write it out applied to
-identifiers. Examples use `#` (and `#.#` for levels), never a plausible real
-identifier that pollutes searches for actual elements.
-
-Rules: an ID is assigned once and **never reused** after the element is
-removed (a dangling reference should fail loudly, not silently point at
-something else); numbering is per prefix, not global — and per parent inside
-a leveled catalogue; and an element's ID never changes when it is renamed.
-Referencing an element in prose or a table cell means writing its stable ID
-and short name — `relieves GAIN2 — Faster approval` — without repeating its
-full description. Cross-document references link that visible pair to the
-element definition; multiple references are one per line.
-
-#### Levels number hierarchically
-
-**An element that decomposes carries its parent's ID plus its own number,
-joined by a dot.** Capabilities, processes and products are the usual cases;
-any catalogue with levels behaves the same way.
-
-| Level | Capability | Process | Product |
-| ----- | ---------- | ------- | ------- |
-| **1** | `CAP#` | `BPROC#` | `PROD#` |
-| **2** | `CAP#.#` | `BPROC#.#` | `PROD#.#` |
-| **3** | `CAP#.#.#` | `BPROC#.#.#` | — |
-
-The last segment is numbered **per parent, not across the level**: the second
-child of `CAP1` is `CAP1.2` and the second child of `CAP2` is `CAP2.2`. So
-the identifier states where the element sits in the tree, and a reader meeting
-`BPROC1.3.4` in a technology document knows which macro process it belongs to
-without opening the catalogue.
-
-Two consequences, and they are most of the point:
-
-- **The ID carries the parent, so the table drops its parent column.** A
-  `Parent` column beside `CAP1.2` restates what the identifier already says,
-  which is DRY — each fact in one place — broken inside a single row. A column naming what a parent is
-  *composed of* survives, because it carries the children's **names**, which
-  no identifier holds.
-- **A level is not a type.** `CAP1.2` is a Capability exactly as `CAP1` is.
-  The dot says where it sits, not what it is, and every rule about prefixes,
-  glyphs and colours applies to it unchanged.
-
-**Only decomposition is written this way** — a whole-part hierarchy whose
-child is a finer-grained element of the same type. Every other relationship
-stays a column or an edge: a process realizing a service, a capability using
-a resource, a product tier refining its enterprise parent. An identifier can
-encode one tree, so it encodes the one the catalogue is organised by.
-
-**Moving an element under a different parent changes its ID.** That is what a
-meaningful identifier costs, and it is paid like any other removal: before the
-gate that approves the element, renumber it; afterwards, retire the old ID and
-define the element under its new parent, with the Retired row naming the ID
-that replaced it (§ Never-reused starts at the gate). Re-parenting an approved
-process is a modeling change a Requester should be shown — a leveled ID puts
-it in front of them instead of letting it pass as an edited column.
-
-#### Never-reused starts at the gate
-
-**An identifier is draft until the gate that approves its element, and
-permanent afterwards.** Which of the two a reader is looking at is declared at
-the top of the document — § Document status — so this rule is visible rather
-than remembered.
-
-| The element was | Removing it means |
-| --------------- | ----------------- |
-| **Never approved** — added while drafting, before the gate covering its layer | Renumber so the sequence stays continuous. No Retired row, no note explaining the gap. It never existed as far as the model is concerned |
-| **Approved at a gate** | The identifier is retired permanently and never reused, and the retirement is recorded (see `restate-current-state` § The Retired section) |
-
-Which gate covers which element is `align-change-through-layers` § The gates:
-canvases freeze at Gate 0, the strategy layer at Gate 1, business and
-information at Gate 2. An element added to an already-approved layer by a
-later initiative is draft until *that* initiative's gate.
-
-The reason is what a gap in a sequence should mean. If identifiers freeze the
-moment they are typed, a reader finding `CS1`, `CS3`, `CS4` has to wonder what
-happened to a customer segment that in fact existed for one afternoon of
-drafting and was never shown to anyone. If they freeze at the gate, a gap means
-something real was retired — which is exactly what never reusing an identifier
-is protecting, and nothing is protected by preserving the history of a draft
-nobody approved.
-
-**A gate presentation on a renumbered draft says so in one line.** The
-validators only check that references resolve, so renumbering passes silently;
-a Requester who reviewed the previous draft will otherwise see identifiers
-shift under them without explanation.
-
-**`scripts/check_model.py` enforces this**, and CI runs it: every reference
-resolves, no ID is defined twice, no retired ID reappears as live, and every
-leveled ID has its parent defined. It checks `architecture/` only. Scope
-documents, decision records, and reviews are narrative *about* the model —
-they cite retired elements, illustrate the convention, and are frozen once
-merged (`write-scope-document`), so a reference check there could never be made to
-pass. Keep IDs accurate in them anyway; nothing but review will catch a
-mistake.
-
-#### Namespacing across domains
-
-A project modeling multiple domains (see the `model-domains` skill and
-`architecture/domains/README.md`) qualifies
-IDs by domain, the way a module path qualifies a symbol:
-
-| Where the reference is written | How the ID is written | Example |
-| ------------------------------- | ---------------------- | -------- |
-| Inside the domain that owns the element | bare | `BSVC3` |
-| From another domain, or from the enterprise level | `<DOMAIN>.` prefix, domain in upper case | `SALES.BSVC3` |
-| An element owned at the enterprise level | always bare | `G1` |
-
-The domain segment is the folder name under `architecture/domains/`, upper-cased
-(`domains/sales/` → `SALES.`). A subdomain chains it — `SALES.EMEA.BSVC2` —
-which is also why the tree is capped at three levels; beyond that the IDs
-stop being readable, and the thing being modeled is a team, not a domain.
-
-**Both qualifiers use a dot, and the prefix tells them apart**: upper-case
-segments *before* the prefix are the domain path, numeric segments *after* it
-are the catalogue's levels. `SALES.BPROC1.3` is the third process under macro
-process `BPROC1`, owned by the sales domain. Read outwards from the prefix and
-neither half is ambiguous.
-
-Numbering stays per prefix **per domain**: two domains may both own a
-`BSVC3`, and the qualifier is what tells them apart. This is deliberate —
-domains are meant to be modeled independently, and forcing globally unique
-numbers would make every new domain a merge conflict against every other.
-
-Only a domain's **exposed** services (the ones in its charter) may be
-referenced from outside it. Referencing another domain's internal process or
-resource by ID reaches through the contract and is a modeling error — take
-it up with that domain's charter instead.
-
-### Crossing a model boundary
-
-An identifier is scoped to its model. Two models may each own a `G1`, which is
-deliberate — globally unique numbering would make every new model a merge
-conflict against every other — and it is why a bare identifier can only ever
-mean something inside the model that wrote it.
-
-**A reference to another model names that model first, separated by two
-colons**: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
-
-Two colons rather than a third meaning for the dot. The dot already separates
-the domain path (before the prefix) from the catalogue's levels (after it), and
-one character meaning three things stops being readable. Read outwards: model,
-then domain path, then prefix, then levels — each separator appears at most
-once, and always in that order.
-
-**The model's name is the one the federation index gives it.** That is the
-point rather than a convenience: a model you may reference is a model you have
-declared you federate with, in `architecture/federation.md`. There is no way to
-reach into something you never said you depend on.
-
-**How it resolves depends on where the other model is**, and the two cases are
-genuinely different:
-
-| The model is | Resolution | What can go wrong |
-| ------------ | ---------- | ----------------- |
-| **In this repository** | Against that model's own definitions, exactly and immediately | A stale identifier fails the build, like any other |
-| **In another repository** | Against a row in `architecture/imports.md` declaring it | The row can be internally consistent and out of date |
-
-Nothing fetches anything. A validator that read a sibling repository on every
-pull request would be slow, would fail when somebody else's site was down, and
-would let another team's push break this build. What is checked is that the
-dependency was **stated** — and the name the import row restates is held
-against the upstream only when the upstream is here to be read.
-
-### What belongs at which tier
-
-A model that federates — an organization with applications built under it —
-has the same six layers at every level, and **the layers do not mean the same
-thing at each**. Without a rule for that, the same fact gets written twice at
-different granularity, which is DRY broken across a boundary rather than
-inside a document.
-
-**Tier is not depth.** Depth says how much of the six layers a model fills in
-at all. Tier says how much *detail* each layer carries and who it defers to.
-Two models at the same depth can sit at different tiers:
-
-| Model | Depth | Tier |
-| ----- | ----- | ---- |
-| The organization | 2 — Organization | **Enterprise** |
-| A product it offers | 1 — Application | **Product** |
-| A thing that implements part of that product | 1 — Application | **Implementation** |
-
-#### The rule
-
-**A tier may refine what the tier above exposed; it may never restate it. Every
-refining element names its parent.**
-
-| Layer | Enterprise | Product | Implementation |
+| ID | Name | ArchiMate type | Description |
 | --- | --- | --- | --- |
-| 0 business-design | Owned | — | — |
-| 1 strategy | Owned | Only goals and principles specific to this product and absent above | Cites its parent; adds nothing |
-| 2 business | Owned | Product-specific services and rules | Cites its parent, and details only what the implementation requires |
-| 3 information | Owned | Product-specific objects | Cites its parent; representations and implementation-specific objects only |
-| 4 application | Key components and dependencies | Decomposes its enterprise component | Full component, port and interface design |
-| 5 technology | Key nodes and dependencies | Product-specific services | Full runtime, deployment and CI design |
+| ACMP1 | Order service | Application Component | Accepts and tracks orders. |
+```
 
-The enterprise layer 4 names **that** an application exists, what it offers,
-and who runs it. The tier below says **how** it is built. Neither restates the
-other, and the link between them is a column in the enterprise table naming
-which model carries the detail.
+The name and description are the human interface. `ArchiMate type` uses the
+canonical element name as secondary metadata for expert navigation and agent
+reasoning. Add `Owner`, `Source`, `Realized by` or another useful attribute
+after `Description` when it carries real content. A domain-specific catalogue
+may add other columns, but `ID` and `Name` remain first so stable ordering and
+human identity stay adjacent. A nested catalogue adds `Parent` immediately
+after the base columns and uses `Name [ID]` in that cell.
 
-**An implementation does own business and information elements** — it is not
-a bare application and technology model. An AI actor with an autonomy level
-and decision rights belongs where the delivery happens, not one tier up in the
-abstract. What an implementation may not do is *restate* a service, an actor
-or an object the tier above already owns: it cites that one and adds only what
-its own delivery requires.
+Outside its definition row, always reference the same element as Order service
+[ACMP1]. Relationship tables, prose, diagrams, briefs and other content never
+use a bare ID or put it before the name.
 
-#### Telling which tier you are in
+An element belongs at the level that owns its meaning, not necessarily in the
+repository containing its implementation. Link to parent and external facts
+rather than recreating them locally.
 
-Ask what the model is *for*. If it describes a business, it is enterprise. If
-it describes something the business offers, it is product. If it describes one
-built thing that realizes part of an offer, it is implementation. A model that
-would have to restate its parent's elements to make sense is not a tier of its
-own — it is a section of its parent.
+### Declare every traversable relationship once
 
-#### Where an implementation's model lives
+Same-type decomposition is the one specialized form: a nested definition's
+`Parent` column declares its Composition relationship and lets a reader move
+up without decoding the ID. Do not repeat that relationship below.
 
-Either in the product's own tree, or in a tree of its own. **That is the
-Requester's call, made per implementation**, and both are legitimate: keep it
-local when the implementation needs little design of its own, split it when it
-needs a lot. The tier rule is unaffected either way — it governs what the
-model contains, not which directory holds it.
+Use a relationship table for facts an agent or architect must follow:
 
-### Canvas notation
+```markdown
+| From | Relationship | To | Meaning |
+| --- | --- | --- | --- |
+| Order service [ACMP1] | Realization | Order handling [BSVC1] | The application component realizes the business service. |
+```
 
-The canvases in `0_business-design/` are Strategyzer artifacts, not
-ArchiMate. Keep a **table as the detailed, diffable source for each canvas**.
-Each Business Model Canvas also carries a Mermaid overview in the traditional
-nine-block arrangement: Key Partners; Key Activities above Key Resources;
-Value Propositions; Customer Relationships above Channels; Customer Segments;
-and Cost Structure and Revenue Streams across the bottom. Populate it from
-the same rows and show `ID — Name`; do not invent arrows between blocks or add
-facts that exist only in the diagram. Each canvas gets its own `###` heading
-naming the segment or product it belongs to.
+- `From` and `To` use `Human name [ID]`; the stable IDs define direction and
+  the names let a person understand the row without another lookup.
+- Use the canonical ArchiMate relationship where it fits: Composition,
+  Aggregation, Assignment, Realization, Serving, Access, Influence,
+  Association, Triggering, Flow or Specialization.
+- `Meaning` says in ordinary language what is true in this context. If no
+  ArchiMate relationship fits honestly, use a precise plain relationship
+  rather than a false mapping.
+- A diagram may render declared relationships; it never owns one. Do not make
+  prose or an arrow the only place a traversable fact exists.
+- Cross-model relationships retain source model, target model, direction and
+  authority boundary. Missing external context is reported, not treated as an
+  absent relationship.
 
-Where a canvas *is* drawn — a layer view showing fit — the canvas block name
-is the element type: it goes in the legend (`«Pain»`, `«Gain Creator»`,
-`«Customer Segment»`) and not on the nodes, with the Motivation fill for the
-customer profile and the Strategy fill for the value map, as in
-`architecture/0_business-design/README.md` § Layer view.
-The canvas-block-to-ArchiMate-element mapping lives in that same README and
-is not restated anywhere else.
+### Ground claims and preserve useful provenance
 
-### The relationship table
+Every important element should be checkable against something real: a team,
+role, written procedure, repository path, running service, contract, source
+document or accountable person's confirmation. When the realization, owner or
+meaning cannot be established, write a specific **Gap** beside that fact.
 
-An element's relationships are **declared**, in one of two places, and a
-diagram renders what was declared. A relationship whose only home is a Mermaid
-block is a fact living inside a rendering, which `P1` does not allow — and it
-is invisible to everything except a person reading that one document.
+During discovery, retain a concise source and any material inconsistency.
+Never convert plausibility into a model fact. Raw reference material is
+evidence rather than architecture and is not published through a portal by
+default. Record observable facts, decisions and constraints from a meeting,
+not personal judgements about participants.
 
-**A catalogue column declares the relationships a row can carry.** One row per
-element, and a column naming what it points at:
+### Draw focused views
 
-| ID | Application service | Realizes | Provided by |
-| -- | ------------------- | -------- | ----------- |
-| `ASVC1` | **Layer-by-layer alignment** | `BSVC1` | `ACMP1` |
+Use Mermaid when relationships, flow, hierarchy or sequence become materially
+easier to understand. Follow
+[ArchiMate on Mermaid](./references/archimate-on-mermaid.md); do not restate its
+notation locally.
 
-The column header is the relationship, carried verbatim into the projection —
-`Realizes`, `Realiza`, `Serves`. Nothing maps it onto ArchiMate's vocabulary,
-because a guess there is worse than an honest string.
+- Keep a view focused enough to read without searching a wall of nodes. Split
+  by question or section when necessary.
+- Label every modeled node
+  `<glyph> «ArchiMate type» Human name [ID]`, with the ID last, and label every
+  relationship edge.
+- Keep an element's layer and type visually consistent within the model.
+- Add a local legend only when the notation would otherwise be ambiguous; do
+  not repeat a generic legend or “How to read” section on every page.
+- The tables remain the source. A visual must not introduce a fact absent from
+  them.
 
-**A cell declares only when it is a list of identifiers and nothing else.**
-`` `ACMP7`, `ACMP8` `` declares two relationships; "A row in `BOBJ3`'s Approvals
-table" is prose that mentions one. This is what separates a relationship column
-from an attribute column — `Maturity` holds the word "Established" and
-`Realizes` holds identifiers, and both are columns of the same catalogue.
+### Make delegated authority explicit
 
-**This is the one place a reference is a bare identifier.** § Identifiers asks a
-reference in prose or an ordinary cell to carry `ID — Name`, so a reader is
-never sent looking. A relationship column is read by a parser before it is read
-by a person, and a name inside it turns the cell into prose the parse stops
-seeing — silently, because a column that declares nothing looks exactly like a
-column that has nothing to declare. The name belongs in the row's own name
-column, and in cells 2 and 4 of the relationship table below, where it is
-checked against the catalogue rather than trusted.
+An actor is **Human**, **AI** or **Hybrid** when that distinction affects
+responsibility. For an AI or hybrid actor with delegated work, record:
 
-**A relationship table declares everything a row cannot.** A catalogue has one
-row per element, so it has no shape at all for a relationship between two peers
-in the same layer — which is most of them. Give the document a `## Relationships`
-section beside the diagram that renders it:
+| Attribute | Holds |
+| --- | --- |
+| Autonomy | Advisory, co-pilot, autonomous with checkpoint, or fully autonomous |
+| Decision rights | What the actor may decide or change in concrete terms |
+| Escalation | The named role receiving work outside its authority or confidence |
 
-| From | From element | To | To element | Relationship |
-| ---- | ------------ | -- | ---------- | ------------ |
-| `CAP5` | ✦ «Capability» Learn from an engagement | `CAP1` | ✦ «Capability» Discover a subject from nothing | precedes |
+Do not add these columns to catalogues with no AI or hybrid actor. A material
+change to authority may need a durable decision record explaining why. A view
+may give an AI or hybrid actor the notation reference's cyan delegated-authority
+accent; its explicit `«Business Actor»` stereotype continues to state the
+element's type and layer.
 
-**Read by position, never by header word.** Columns 1 and 3 hold the
-identifiers; 2 and 4 describe them; 5 is the relationship; anything after is
-notes. A table whose first header is `ID` is a catalogue and is never read as
-this, which is what keeps a catalogue with a `Realizes` column from being
-mistaken for one. Headers are prose in whatever language the model is written
-in, and nothing here reads them — the same arrangement that puts an element's
-name in a catalogue's second cell.
+### Keep each document proportionate
 
-**Each end names its archetype and its name, and both are copies.** A node in a
-diagram drops its stereotype because glyph, shape and colour carry the type
-three times with a legend one screen above; a table cell has none of those, and
-`CAP5` alone tells a reader nothing. So the archetype and the name are written
-out — and because both are facts owned elsewhere, `check_model.py` holds the
-**name** against the catalogue that defines the element and fails on a
-mismatch. It is `P1`'s escape clause used exactly as `element-prefixes.json`
-uses it: one unavoidable copy, with a check on it.
+A useful canonical document has a title, direct navigation and one compact
+`Location` line that identifies its area, hierarchy and parent context without
+relying on its path. It then carries a short statement of what is true and why
+it matters, followed only by the visuals, element tables, relationship tables,
+gaps and sources the subject needs. Remove unused sections. Do not require a
+repeated status preamble, notation legend, document changelog, empty retired
+table or method explanation.
 
-The **archetype is deliberately not checked**, and the glyph is optional. An
-archetype cannot drift away from the prefix sitting in the cell beside it, and
-the word for it is language-dependent where the prefix is not — `«Capability»`
-in one model is `«Capacidad»` in another, and a registry of English names
-cannot judge either.
+Trust is expressed where it matters: area status at the front door, sources
+and uncertainty beside affected facts, and durable decisions linked to the
+elements they explain.
 
-**A relationship that is not true yet says so in words** — the same
-`Pending — future initiative` marker the grounding rule uses — in the notes
-column. Never with a dashed arrow: that is a diagram device, and diagrams are
-not read.
+## ⚠ Anti-patterns
 
-**A catalogue row says it once, for the whole row, and the marker leads a
-cell.** An element that does not exist yet points at nothing that is true yet,
-so the marker written for the grounding rule marks every relationship the row
-declares — `**Pending — future initiative**` in a `State` or `Note` column, and
-the parse reads it. Two rules make that safe and both are load-bearing:
+- Creating every standard folder before any of it carries content.
+- Restating enterprise or domain facts in a lower model.
+- A nested file whose level or parent can be discovered only from its filename,
+  path or dotted ID.
+- Using a bare ID or an ID-first label outside the catalogue row that defines
+  it, or using a descriptive slug ID as a supposedly stable anchor.
+- Inventing an ArchiMate type or relationship to make a table look complete.
+- A relationship that exists only in prose or Mermaid.
+- A current-state catalogue containing target elements.
+- An ungrounded element presented as fact instead of a specific gap.
+- Repeated legends and status boilerplate that displace the subject.
+- An AI actor with no stated authority or escalation.
+- Federation machinery introduced before a real cross-model need defines it.
 
-- **It cannot go in the relationship cell.** A cell declares only when it holds
-  identifiers and nothing else, so a word written beside one does not qualify
-  the relationship — it deletes it.
-- **It must start the cell it is in.** A catalogue row is prose as well as
-  data, and a sentence *about* pending work is not a pending row. Anchored to
-  the start, "**Pending** — no contributor base exists yet" marks the row and
-  "stops depending on their availability" does not.
+## ☑ Done when
 
-### Grounding rule (the most important one)
-
-Every EA element must name the code artifact that realizes it — a page, a
-module path, a pipeline file. If you cannot point at the realizing
-artifact, either the element doesn't belong in the docs, or the code is
-missing and the element should be marked explicitly **"Pending — future
-initiative"** (ideally linked to the initiative that will deliver it). This
-keeps the whole set verifiable against the code at any time — an outsider
-should be able to open any EA document and check it against the repo.
-
-### Reference documents
-
-`architecture/reference/` holds the material the model was built from, exactly
-as it was provided: meeting transcripts, presentations, specifications,
-spreadsheets, whatever somebody sent. **It is not part of the model.** Nothing
-in it defines an element or carries an identifier, and the validators do not
-read it — a transcript in which somebody says `CAP3` is a person talking, not
-a definition.
-
-It exists so that a claim in the model can be taken back to what it came from.
-A figure a Requester queries eighteen months later is answerable from the deck
-it was read off; a sentence in a layer document that no longer makes sense can
-be checked against the conversation it was written from.
-
-**Naming.** `YYYY-MM-DD-<short-description>.<ext>`, in plain ASCII with
-hyphens — `2026-08-24-operations-review-transcript.md`,
-`2026-03-02-target-operating-model.pptx`.
-
-The date is, in order of preference: **when the meeting happened**; failing
-that, **when the document was shared**; failing that, **when it was added to
-the repository**. Take the first one that can be established, and say which in
-the index when it is not the first.
-
-**The original filename is preserved in the index, not on disk.** A file
-called `BigView Strategy FINAL v3.pptx` keeps that name in a column where it
-is searchable and matches the sender's copy; on disk it becomes a dated slug,
-because spaces and capitals in a path break links, tooling and half the
-shells anyone will use on it. Renaming loses nothing as long as the index
-carries what was renamed.
-
-**Every file gets a row in `architecture/reference/README.md`**: the date and
-what fixed it, the original name, who provided it, and what in the model was
-derived from it. A reference document nothing derives from is still worth
-keeping and its row says so — the index is a record of what was received, not
-only of what was used.
-
-**Reference documents are not published.** The portal and the PDF exist to
-hand a reader the model; a raw transcript carries everything else that was in
-the room that day, to an audience that was not.
-
-#### A summary of a meeting records facts, not judgements
-
-A transcript is the commonest thing in `reference/`, and what gets written down
-*from* one is where a model quietly acquires claims nobody would have approved.
-
-**Write down what can be checked**: decisions taken, constraints stated,
-numbers quoted, systems and teams named, dates, owners, what somebody
-committed to, what was explicitly left open.
-
-**Do not write down readings of people**: who seemed frustrated, who is
-difficult to work with, whose team is disorganised, what a tone implied, who
-appeared not to understand their own process. Nor the emotional weather of the
-room — tension, resistance, enthusiasm — as though it were a finding.
-
-Three reasons, and the third is the one that matters:
-
-- **A judgement is unfalsifiable.** "Operations pushed back" can be checked;
-  "operations were defensive" cannot, so nobody can correct it.
-- **It is usually wrong.** A reading of a person from one meeting, written by
-  somebody with a stake in the outcome, is a guess wearing the clothes of an
-  observation.
-- **A repository keeps it.** Long after everyone has forgotten the meeting and
-  the context that made the reading seem fair, the sentence is still there,
-  searchable, attached to a named person, in a document a new colleague reads
-  to learn what the organization is like.
-
-Where a difficulty is real and architecturally relevant, it is written as what
-it is: a constraint, a risk, an assessment, a driver — an `ASM` or a `DRV`
-element with a source, not an aside about somebody. "Two teams disagree on who
-owns customer data" is a finding. "Team A is territorial" is not.
-
-**Nothing checks this.** No validator can tell a fact from a judgement, and one
-that claimed to would be the worst kind of wrong. It is a rule a writer follows
-and a reviewer reads for.
-
-### ArchiMate on Mermaid
-
-ArchiMate has no native Mermaid profile — no icons, no standard shapes — so
-these documents encode its semantics with **four devices: label format,
-glyph, shape, and colour.** All four are specified in exactly one place,
-`architecture/README.md` § Notation conventions, including the glyph set, the
-default shape per element, the layer palette and the per-element tone ramps.
-Read that section before drawing anything, and copy its values rather than
-re-tabulating them here — a second copy is a second thing to drift.
-
-The parts worth restating, because they are decisions rather than values:
-
-- **Node labels are one line, identifier last**:
-  `<glyph> <description> [<ID>]`. One line because a label
-  spanning two depends on the viewer rendering `<br>`, and whether it does
-  depends on that viewer's HTML-label setting — the same diagram reads
-  correctly in one place and runs together in another. A single line cannot
-  break. The identifier goes last, in brackets, where it is still in the same
-  place on every node; the tables carry the full context.
-- **The stereotype appears only where the notation is the subject** — the
-  legend under "How to read this document", and the notation section of
-  `architecture/README.md`. A legend node reads
-  `<glyph> «Stereotype» <what the type is>`; a content node drops the word,
-  because glyph, shape and colour already carry the type and the legend is one
-  screen above. The word is the widest thing on a node and the only one of the
-  four devices that costs label width.
-- **An actor's kind is not a stereotype and stays on the node.**
-  `⚇ Requester (Human) [ACT1]`, `⚇ The drafting agent (AI) [ACT2]` — see
-  § Actors. Nothing else in the notation distinguishes a `(Hybrid)` actor, and
-  a reader who defaults to "person" has been misled rather than merely
-  under-informed.
-- **Colour separates layers across a diagram and element types within one.**
-  A single-layer view ramps the layer's hue by element type; a cross-layer
-  view keeps the flat palette. An element borrowed from another layer keeps
-  its home colour, shape and glyph.
-- **Dashed edges mean Pending.** Solid is true today. This one rule turns a
-  diagram into a statement about the present rather than an aspiration.
-
-Relationships are labeled with their ArchiMate name (**serves**,
-**realizes**, **assigned to**, **accesses**, **triggers**, **flow**,
-**aggregates**, **influences**); where Mermaid arrowheads can't distinguish
-relation types, the label is authoritative.
-
-#### Diagrams come first, one per section
-
-**A section that has a diagram opens with it**, and the tables and prose
-below describe it. Not the reverse: a reader who meets three tables before a
-picture has to build the picture themselves, and most will not.
-
-**One diagram per section, not one per document.** Past roughly fifteen
-elements a single view of a layer can only be a selection, and a selection
-that looks complete is worse than several honest parts — it teaches the
-reader something false about the size of the model. Draw one link of the
-chain per section, letting consecutive diagrams overlap by one rank so they
-can be read as a sequence.
-
-**A diagram earns its place by saying something the table cannot.** Which
-element has the most edges, which has none, where every path converges,
-which side of a boundary is thin. If a diagram only restates the rows
-beneath it, cut it — that is DRY applied to pictures.
-
-#### Every element document opens with "How to read this document"
-
-A legend diagram showing this document's element types and how they connect,
-then a table of **glyph / shape / element / ID prefix** — including any
-element borrowed from another layer for context. **This is the one diagram
-that names the stereotypes**, which is what lets every diagram below it drop
-them.
-
-**A layer README that only indexes other documents is exempt**: it has no
-elements to legend, and giving it one would be ceremony rather than help.
-
-The cost is a few lines per document. What it buys is that **each layer is
-self-documenting**: a reader arriving from a deep link, or an agent loading
-one file, has the notation in front of them and needs no second file open.
-That matters more here than in most documentation, because these documents
-are read one at a time and out of order.
-
-### Actors: human, AI, and hybrid
-
-`«Business Actor»` and `«Business Role»` nodes name **who** — and in a
-system where an AI can hold a role, "who" is no longer implicitly human.
-State the actor's kind as `(Human)`, `(AI)`, or `(Hybrid)` (a human and an AI
-sharing one role, e.g. a co-pilot pattern). It rides on the node itself —
-`⚇ Requester (Human) [ACT1]` — which is the one exception to § ArchiMate on
-Mermaid's rule that a content node carries no type word; the legend writes it
-against the stereotype, `⚇ «Business Actor (Human)»`. Default to `(Human)`
-only when the actor is provably never an AI system acting with delegated
-authority — don't omit the qualifier to save space.
-
-When populating `2_business/1_business-actors-and-roles.md`, explicitly
-ask, for every role: **does an AI system perform or assist this role, and
-at what autonomy?** — don't let "actor" default to human by omission. For
-every `(AI)` or `(Hybrid)` actor, the actors table carries three extra
-columns beyond the usual name/description:
-
-| Column | Answers |
-| ------ | ------- |
-| Autonomy level | One of: **advisory** (suggests, a human decides and acts), **co-pilot** (acts, a human reviews before it takes effect), **autonomous with checkpoint** (acts independently, a human is notified and can intervene after the fact), **fully autonomous** (acts independently, no routine human checkpoint) |
-| Decision rights | What this actor is actually authorized to decide or change, in concrete terms — not "helps with X" |
-| Escalation path | Who/what it hands off to when it's outside its authority or confidence — a Business Role, not a vague "a human" |
-
-If an initiative changes an AI actor's autonomy level or decision rights,
-that's exactly the kind of call the `record-decision` skill is for.
-
-### Document skeleton
-
-- Title (`# …`), then a nav line:
-  `_[← <Layer> layer](./README.md) · [EA home](../README.md)_`
-  (scope docs link to the scope index instead).
-- State the **ArchiMate elements/viewpoint** covered near the top.
-- Then the **status line**, where the document defines elements — § Document
-  status. It sits in the preamble, before the first `##`, because that is
-  where a validator looks for it and where a reader meets it before anything
-  it might be believed for.
-- A **"How to read this document"** section next: the legend diagram and the
-  glyph / shape / element / ID-prefix table.
-- Then one section per element group, each **opening with its diagram**,
-  followed by the inventory table, followed by prose.
-- A **Retired** section, only if something approved has been retired
-  (`restate-current-state`).
-- **Additional notes**, last, and only if there is one — see § What the
-  document contains.
-- Prefer tables for element inventories, Mermaid for relationships, and
-  prose only for rationale (the "why", not the "what" — the diagrams and
-  tables already say what), and only where the "why" is about the subject.
+- The front door makes boundary, ownership, status and navigation clear.
+- Every other canonical file states its location, and every nested definition
+  names its parent.
+- Every local fact has one owning definition and every external fact is linked.
+- Catalogue definitions are ID-first, every reference outside them is
+  human-first, relationships are declared and links resolve.
+- Plain descriptions are understandable without ArchiMate knowledge while the
+  canonical metadata remains available.
+- Material claims are grounded or marked with a specific gap.
+- Current and future states remain separate.

@@ -1,86 +1,27 @@
 # Contributing
 
-Contributions to **archreator itself** — changes to the skills, the
-scaffold, the documentation, or the plugin manifests in this repository.
-For an explanation of the method that these files publish, see
-[`docs/method.md`](./docs/method.md); for using it in your own project, see
-[`docs/adopting.md`](./docs/adopting.md).
+Contributions should make ArChreator easier to understand, navigate or use in a
+real change. Complexity must earn its place through observed customer value.
 
-## What kind of change is this?
+## Before changing the method
 
-| Kind | Where the record lives |
-| ---- | ---------------------- |
-| **A change to the method** — new skill, new rule, changed convention, a scaffold refactor | A numbered scope document in [`architecture-archreator`](https://github.com/roanboc/architecture-archreator) under `product-archreator/architecture/scope/`, plus the corresponding change here |
-| **A bug fix** with no documented behavior change — a broken link, a typo, a validator false positive | Straight to a PR here; say what broke, the root cause, and the fix |
-| **A docs improvement** to the guidance under `docs/` or `site/` | A PR here; short scope note in the PR body if the doc changes what the method claims |
-| **A packaging or CI change** — plugin manifest, workflows, `.github/` | A PR here |
+Describe the customer problem and the simpler behavior that resolves it. Check
+the change against both routes: a builder using guidance and an enterprise
+architect navigating directly. Do not add an artifact, instruction or runtime
+dependency merely to represent a possible future use case.
 
-The split reflects federation. This repository holds *the method as it
-ships*; the sibling repository holds *the models that describe why the
-method is what it is*. A method change without a scope document is a
-change without a rationale — the rationale lives where the model does.
+## Repository expectations
 
-## The method governs itself
+- Keep the typed skill surface small and discriminating. A new skill needs a
+  distinct activation boundary, process binding and output contract.
+- Add project files lazily; never restore empty layer scaffolding.
+- Preserve the Markdown element and relationship contract.
+- Keep generated scopes, briefs, PDFs and portals out of source control.
+- Do not add SQLite, cached graph state or whole-model PDF export.
+- Treat federation implementation as evidence-led work.
 
-Method changes run through the same gates the method makes downstream
-projects run through. In practice:
+## Checks
 
-- **Gate 2 — Business** applies to every change that alters documented
-  behavior — every one that touches a skill body, a rule, or the scaffold.
-  It is granted in the sibling repository's scope document, then
-  implemented here.
-- **Gate 1 — Strategy** applies when the change adds or shifts a
-  Stakeholder, Driver, Goal, or Principle of the method itself — and when an
-  initiative sets a direction rather than building one, which is the same
-  approval pointed at a target instead of a strategy layer.
-- **Gate 3 — Solution design** is the Requester's option at Gate 2.
-
-Pure bug fixes skip the gates, per the method's own rule.
-
-## Working locally
-
-All three validators must be green before pushing; CI runs the same:
-
-```bash
-python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
-python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve
-python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
-```
-
-The first two live under `plugins/archreator/scaffold/` because they ship with
-the scaffold — the same scripts land in every project the method emits. Running
-them from the root of this repository is a smoke test: since there is no
-`architecture/` folder here, `check_model.py` reports the scaffold as having no
-elements and passes trivially, while `check_links.py` checks the docs, the
-scaffold, and the site.
-
-`check_skills.py` sits outside `scaffold/` because a downstream project has no
-skills to check. It reads the process model in [`docs/process/`](./docs/process/README.md)
-and every skill's frontmatter and headings, checking them against
-[the skill format](./docs/skill-format.md). It needs PyYAML — use `uv run` in
-place of `python3` where that is not installed, and it will supply it from the
-script's own inline metadata.
-
-## Pull requests
-
-One template for every change:
-**[`.github/pull_request_template.md`](./.github/pull_request_template.md)**.
-The body links the scope document in the sibling repository (if the change
-needed one), gives every affected surface a verdict, and describes the whole
-branch (`git diff main...HEAD`), not just the latest commit. For a pure bug
-fix, say what broke, the root cause, the fix, and any regression coverage.
-
-The [`write-pr-description`](./plugins/archreator/skills/write-pr-description/SKILL.md)
-skill keeps the body current.
-
-## Conventions
-
-- **Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, …).
-- **Documentation language:** English.
-- **Skill folder names** are a verb and an object for a skill you run, a noun
-  phrase for one you consult — see [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md).
-- **Skills follow a fixed format** — frontmatter, sections and glyphs are
-  specified in [`docs/skill-format.md`](./docs/skill-format.md), and
-  `check_skills.py` enforces it.
-- **A merged scope document is a historical record** — link targets get
-  repaired when files move; the words never change (`RULE6`).
+Run the commands in [AGENTS.md](./AGENTS.md#validation). Add focused tests for
+observable behavior rather than exact generated wording. A pull request should
+explain the customer effect, complexity added or removed, and verification.
