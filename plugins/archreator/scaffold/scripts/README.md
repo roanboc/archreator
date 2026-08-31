@@ -63,12 +63,13 @@ longer described it. A cache that is silently wrong is worse than no cache.
 genuinely cannot read Markdown — a dashboard, a report — but nothing in the
 method reads it back. Delete it and nothing is lost.
 
-## Two folders the validators skip
+## The folders the validators skip
 
 `architecture/reference/` holds source documents as they were provided. A
 transcript in which somebody says an element identifier is a person talking,
 not a definition.
 
-`architecture/scope/` and `architecture/decisions/` are skipped for the older
-reason: a merged scope document is immutable and will outlive the elements it
-names, so reference-checking it is incoherent rather than merely awkward.
+`architecture/scope/`, `architecture/decisions/`, and any `reviews/` or
+`engagements/` folder are skipped for the older reason: a merged scope
+document is immutable and will outlive the elements it names, so
+reference-checking it is incoherent rather than merely awkward.

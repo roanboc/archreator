@@ -3,8 +3,9 @@
 **This project has not been bootstrapped yet.** It is a fresh copy of the
 [archreator](./README.md) template: the method works, the model is empty.
 Run the `establish-project` skill before anything else — it names the
-project, declares the modeling depth, prunes what wasn't inherited, and
-hands off to discovery. Everything in this file below the rule is a
+project, declares the modeling depth, fills in this file, and hands off to
+discovery. Nothing arrives that the project does not use, so there is
+nothing to prune. Everything in this file below the rule is a
 placeholder it will replace.
 
 <!--

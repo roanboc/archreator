@@ -49,13 +49,12 @@ The model can also be read as a website, generated on request rather than
 published on merge — see the archreator method's `docs/adopting.md`. It is a
 rendering: the Markdown in this repository stays the model.
 
-If comment threads are switched on (`extra.giscus` in `mkdocs.yml`), a page
-also carries a discussion. A thread is a conversation about a document and
-never the record of a change: whatever it settles is written into the model,
-or it did not happen.
+If the published site carries comment threads, a thread is a conversation
+about a document and never the record of a change: whatever it settles is
+written into the model, or it did not happen.
 
-Those issues are triaged like anything else a Requester says. A question the
-model owes an answer to is logged in
+Those questions are triaged like anything else a Requester says. A question
+the model owes an answer to is logged in
 [`architecture/scope/open-questions.md`](./architecture/scope/open-questions.md);
 one that turns out to be a change becomes an initiative and passes the gates
 like any other. **Answering in the thread and nowhere else leaves the model

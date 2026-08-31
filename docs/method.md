@@ -194,12 +194,13 @@ defines elements without declaring one.
 
 The Markdown is the model, and the readers who never open a repository are
 served by rendering it rather than by keeping a second copy: one command
-publishes the same documents as a searchable website, another prints them as a
-single PDF, and both are regenerated and gitignored — see
+writes a searchable-website configuration, a focused brief answers one
+question, and everything generated is gitignored — see
 [`docs/adopting.md`](./adopting.md#reaching-a-reader-who-will-not-open-the-repository).
 
-The scaffold at [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) has every layer
-README ready to fill in. The full conventions — numbering, ArchiMate on
-Mermaid, colour ramps, actor kinds — are in
-[`plugins/archreator/scaffold/architecture/README.md`](../plugins/archreator/scaffold/architecture/README.md)
-and in the [`architecture-document-style` skill](../plugins/archreator/skills/architecture-document-style/SKILL.md).
+The scaffold at [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) opens with a
+status row per layer rather than empty folders; a layer's README arrives when
+a skill first fills it. The full conventions — numbering, ArchiMate on
+Mermaid, colour ramps, actor kinds — are in the
+[`architecture-document-style` skill](../plugins/archreator/skills/architecture-document-style/SKILL.md)
+and its references.

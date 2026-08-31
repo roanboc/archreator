@@ -8,8 +8,10 @@ parse moved here rather than being written twice, because two parsers of the
 same convention drift and the drift is silent.
 
 Nothing here validates and nothing here persists. `check_model.py` imports it
-and applies its four checks; `build_model.py` imports it and writes the
-projection. This module only reads Markdown and returns what it found.
+and applies its checks; the plugin's reading tools — `model.py` and
+`build_brief.py` — import it through `--project` so there is one parse of the
+convention, not one per consumer. This module only reads Markdown and returns
+what it found.
 
 **Two levels of detail.** `parse_project()` returns what validation needs —
 definitions, references, retirements, domains, and the names a restatement is
@@ -39,7 +41,7 @@ Deliberately not done here:
   header, or a relationship table's third cell — is carried verbatim:
   `habilita`, `precede a`, `serves`. Mapping those onto ArchiMate's
   relationship vocabulary would be a guess, and a wrong guess in a projection
-  is worse than an honest string. `build_model.py` reports how many distinct
+  is worse than an honest string. `model.py export` reports how many distinct
   ones a corpus uses, which is the honest alternative to a controlled list
   nobody could translate.
 - **No parse of the narrative folders.** Same reasoning as `check_model.py`:
@@ -163,9 +165,9 @@ LAYER_DIR_RE = re.compile(r"^(\d)_(.+)$")
 # the two the corpus uses today. An unrecognised marker degrades to "not
 # pending", which is the safe direction to be wrong in.
 #
-# It lives here rather than in a consumer because there are now two of them:
-# `query_model.py` reads it for grounding, and the projection reads it to decide
-# whether an edge is live. Two copies of one convention drift silently.
+# It lives here rather than in a consumer because there are several of them:
+# the plugin's reading tools use it for grounding, and the parse uses it to
+# decide whether an edge is live. Two copies of one convention drift silently.
 PENDING_MARKERS = ("pending", "pendiente")
 # The same marker, anchored to the start of a cell — which is how the grounding
 # rule writes it: `**Pending — future initiative**` is the cell, not a remark
@@ -307,9 +309,9 @@ def project_key(project: Path) -> str:
 
     Its path from the repository root — `product-archreator`,
     `product-archreator/site` — or `.` for a repository that holds one model at
-    its root. The same string `build_model.project_name()` writes into the
-    projection, so an identifier a reader sees and an identifier a document
-    writes are the same identifier.
+    its root. The same string `model.py export` writes into `model.json`, so an
+    identifier a reader sees and an identifier a document writes are the same
+    identifier.
     """
     if project == REPO_ROOT:
         return "."

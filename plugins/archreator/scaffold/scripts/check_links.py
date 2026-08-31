@@ -30,7 +30,7 @@ file, and any fragment (`#id`, or `page.html#id`) must resolve to an element
 `id` in the target HTML file. This catches broken page-to-page links and
 stale in-page anchors in the guidance site. A target a template engine fills
 in at build time (`{{ page.edit_url }}`) names no file on disk, so it is not
-checked — the portal's theme override is a template, not a page.
+checked — a template is not a page.
 
 Absolute or non-file targets (http, https, mailto, tel, data, javascript)
 are never checked in either kind.
@@ -75,8 +75,8 @@ ID_RE = re.compile(r"""(?<![\w-])id\s*=\s*["']([^"']+)["']""")
 
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "data:", "javascript:")
 # A target the template engine fills in when the page is built, rather than a
-# path — `href="{{ page.edit_url }}"` in the portal's theme override. There is
-# nothing on disk for it to point at until something renders it.
+# path — `href="{{ page.edit_url }}"` in a theme template. There is nothing on
+# disk for it to point at until something renders it.
 TEMPLATE_RE = re.compile(r"\{[{%]")
 
 _ids_cache: dict[Path, set[str]] = {}

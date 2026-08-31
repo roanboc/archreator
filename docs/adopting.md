@@ -62,20 +62,22 @@ Option C and copy it yourself.
 
 ## Option C — clone the scaffold directly
 
-Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It holds:
+Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It is eleven files:
 
 - `AGENTS.md` and `README.md` — placeholders you'll fill in when the
   bootstrap skill runs
 - `CLAUDE.md` and `GEMINI.md` — one line each, importing `AGENTS.md`, so
   the host that reads only its own filename still finds the entry point
-- `architecture/` — layer READMEs for the six description layers and for
-  `6_transition/`, plus `scope/` and `decisions/`
-- `scripts/` — the two validators, run before every push, and the three tools:
-  the projection, the documentation portal and the PDF export
-- `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a
-  website, the pull-request template a change is described in, and the issue
-  form a reader of that website raises a question through. Nothing deploys it; where the built folder goes is your call. See
+- `architecture/README.md` — the front door: a status row per layer saying
+  `Local`, `External`, `Out of scope` or a named `Gap`. Layer folders appear
+  when a skill first has something to put in them, from the plugin's
+  `assets/`
+- `scripts/` — the two validators, run before every push, the parse they
+  share, and its prefix data. The reading tools stay in the plugin and reach
+  a project with `--project` — see
   [§ Reaching a reader who will not open the repository](#reaching-a-reader-who-will-not-open-the-repository)
+- `.gitignore` — keeps bytecode, machine-local settings and everything
+  regenerated out of the history
 
 Then follow the bootstrap checklist by hand, or install the skills and let
 `establish-project` do it.

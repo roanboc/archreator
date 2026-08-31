@@ -58,7 +58,7 @@ host.
 python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve, per project
 uv run    plugins/archreator/scripts/check_skills.py           # the skill corpus against the process model
-uv run    pytest plugins/archreator/scripts/tests/
+uv run    --with pytest pytest plugins/archreator/scripts/tests/
 ```
 
 All must be green before pushing. The first two run on the scaffold here
