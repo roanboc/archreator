@@ -1,6 +1,6 @@
 # ArchiMate on Mermaid
 
-_Reference for [`architecture-document-style`](../SKILL.md) § Drawing._
+_Reference for [`architecture-document-style`](../SKILL.md) § What is here, and what is one file away._
 
 Read this before drawing anything. It carries the four devices that encode
 ArchiMate semantics onto Mermaid, and the rules for where a diagram goes.
@@ -158,13 +158,12 @@ Two places declare one:
 Its columns are fixed by position: 1 and 3 hold the two identifiers, 2 and 4
 describe them as `<glyph> «Archetype» <name>`, 5 is the relationship, and
 anything after is notes. No header word is read, so the table works in a model
-written in any language. The worked example is in
-`architecture-document-style` § The relationship table, and not here — a
-specimen identifier in the scaffold ships into every generated project as a
-reference to an element nobody defined. **Each end names its archetype and its name because a table cell
-has no glyph, shape or colour to carry the type** — and because the name is a
-copy of what the catalogue owns, `scripts/check_model.py` holds the two in step.
-The `architecture-document-style` skill is the single source for the full rule.
+written in any language. The worked example and the full rule — where the
+`Pending` marker may go, and what is held against the catalogue — are in
+[`relationship-tables.md`](./relationship-tables.md), and not here. **Each end
+names its archetype and its name because a table cell has no glyph, shape or
+colour to carry the type** — and because the name is a copy of what the
+catalogue owns, `scripts/check_model.py` holds the two in step.
 
 **Dashed edges mean Pending in a diagram; a table says it in words**, with the
 same `Pending — future initiative` marker the grounding rule uses.

@@ -1,7 +1,7 @@
 # Model structure — Enterprise, Domain and Solution
 
-_Reference for [`architecture-document-style`](../SKILL.md) § Where a model
-sits._
+_Reference for [`architecture-document-style`](../SKILL.md) § What is here, and
+what is one file away._
 
 Read this when deciding what a model owns, what it defers to its parent, and
 which folders it should actually have.

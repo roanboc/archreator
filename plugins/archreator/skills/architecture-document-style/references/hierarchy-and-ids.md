@@ -7,7 +7,10 @@ element, or writing a reference that crosses a domain or a model.
 
 ## The prefix registry
 
-services" table holds. Anywhere else, a backticked ID is a reference.
+A prefix says what kind of thing an element is, and this table is the whole
+list. A model that needs a prefix not named here is proposing a method change,
+not picking a convenience — `scripts/element-prefixes.json` in the project is
+the machine-readable copy, and `check_skills.py` holds the two in step.
 
 | Where | Prefixes |
 | ----- | -------- |
@@ -22,8 +25,8 @@ services" table holds. Anywhere else, a backticked ID is a reference.
 | Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
 
 Every document's "How to read this document" table repeats the prefixes it
-uses, expanded — `STK#` = Stakeholder — which is § Write it out applied to
-identifiers. Examples use `#` (and `#.#` for levels), never a plausible real
+uses, expanded — `STK#` = Stakeholder — `architecture-document-style`
+§ Element IDs carries that rule; this page only holds the registry.
 
 ## Levels number hierarchically
 

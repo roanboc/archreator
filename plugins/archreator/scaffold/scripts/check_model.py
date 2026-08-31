@@ -11,11 +11,11 @@ that `PAIN2` was deleted three initiatives ago.
 **The parse lives in `model_graph.py`**, which this script imports. It moved
 there when the published view of the model became a second consumer of the
 same reading of the same convention; a second parser would have drifted from
-this one silently. What stayed here is the judgement — the four checks below
+this one silently. What stayed here is the judgement — the checks below
 and the exit code. Nothing is persisted: validation needs a parse, not a
 store, so this script still builds the graph, checks it and exits.
 
-Four things are checked, per project:
+Six things are checked, per project:
 
 - **Dangling references** — every referenced ID resolves to a definition.
   A qualified reference (`SALES.BSVC3`) resolves inside that domain's

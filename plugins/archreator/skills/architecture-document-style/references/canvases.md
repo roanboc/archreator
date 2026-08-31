@@ -1,7 +1,7 @@
 # Canvas notation
 
-_Reference for [`architecture-document-style`](../SKILL.md) § Where a model
-sits._
+_Reference for [`architecture-document-style`](../SKILL.md) § What is here, and
+what is one file away._
 
 Read this only when the model has a `0_business-design/` layer — Depth 2 and
 Depth 3 subjects. An application project never needs it.

@@ -1,6 +1,6 @@
 # Actors: human, AI, and hybrid
 
-_Reference for [`architecture-document-style`](../SKILL.md) § Drawing._
+_Reference for [`architecture-document-style`](../SKILL.md) § What is here, and what is one file away._
 
 Read this when populating `2_business/1_business-actors-and-roles.md`, or
 whenever a role might be performed by an AI system.

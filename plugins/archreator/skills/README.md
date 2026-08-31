@@ -41,11 +41,11 @@ consuming project's documents by naming the path in a code span —
 `` `architecture/README.md` `` — which reads correctly on both paths.
 
 **This page is the catalogue.** It is the only one — the rest of the
-repository links here rather than restating it. The one deliberate copy is
-the table in [`scaffold/AGENTS.md`](../scaffold/AGENTS.md), which
-lands in a project that cannot link back to this repository at all; change
-a row here and change it there in the same commit.
-[`check_skills.py`](../scripts/check_skills.py) compares them.
+repository links here rather than restating it, and the scaffold's
+`AGENTS.md` deliberately carries no copy: a generated project's skills come
+from the plugin, and a table restated there was a table that drifted.
+[`check_skills.py`](../scripts/check_skills.py) holds this one against the
+skill directories that exist.
 
 ## Establishing the model — `BPROC1`
 

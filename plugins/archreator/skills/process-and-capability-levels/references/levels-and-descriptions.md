@@ -1,7 +1,7 @@
 # Levels, and what each one must say
 
-_Reference for [`process-and-capability-levels`](../SKILL.md) § How far down to
-go._
+_Reference for [`process-and-capability-levels`](../SKILL.md) § What is here, and
+what is one file away._
 
 Read this when you have decided *that* a catalogue needs another level and now
 need to know what that level owes — the four macro categories, what each level

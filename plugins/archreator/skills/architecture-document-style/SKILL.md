@@ -39,7 +39,6 @@ the most-cited skill in the corpus — every skill that writes or edits a model
 document reaches for it. Nothing here is a step.
 
 ## ※ Rules
-# EA documentation style
 
 ### What is here, and what is one file away
 

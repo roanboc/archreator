@@ -1,7 +1,7 @@
 # Finding the processes, and where they live
 
-_Reference for [`process-and-capability-levels`](../SKILL.md) § How far down to
-go._
+_Reference for [`process-and-capability-levels`](../SKILL.md) § What is here, and
+what is one file away._
 
 Read this when starting a catalogue from nothing, or when deciding which file
 a level belongs in.

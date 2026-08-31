@@ -55,6 +55,7 @@ the whole map knows nothing is hidden. Vertical completeness is what makes it
 unreadable. Only the second is optional, so only the second gets cut. This is
 `document-style` § Consolidate before you enumerate applied to
 depth instead of to count.
+
 ### What is here, and what is one file away
 
 **This page holds the judgement — how far to decompose, and what a process is

@@ -1,7 +1,7 @@
 # Reference documents
 
-_Reference for [`architecture-document-style`](../SKILL.md) § Where a model
-sits._
+_Reference for [`architecture-document-style`](../SKILL.md) § What is here, and
+what is one file away._
 
 Read this when adding source material to `architecture/reference/`, or writing
 anything down from a meeting.

@@ -17,18 +17,29 @@ and stale paths inside document templates.
 This script covers the skills, and lives outside `scaffold/` because a
 downstream project has no skills to check.
 
-Six things are checked:
+What is checked (the success line derives the live list from the checks
+that actually ran):
 
 - **Section markers** - every reference of the form skill-name, section sign,
-  heading names a skill that exists and a heading it actually has.
+  heading - backticked or written as a link - names a skill that exists and a
+  heading it actually has, in its SKILL.md or its references.
 - **Process binding** - every skill named in the process model exists, every
   level-2 process is realized by at least one skill, and a skill's own
   `realizes_process` agrees with the model.
 - **Required sections** - a skill declaring `metadata.archreator.kind` carries
   the headings its kind requires. A skill declaring no kind is skipped, which
   is what lets the corpus be converted in waves.
-- **Catalogue agreement** - the skill table in `skills/README.md` and its
-  deliberate copy in `scaffold/AGENTS.md` carry the same rows.
+- **Prefix registry** - the prefix table in the style rulebook matches
+  `element-prefixes.json`, the machine-readable copy the scaffold ships.
+- **Reference files** - every file under a skill's `references/` is linked
+  from its SKILL.md, so nothing citable is unreachable.
+- **Scaffold specimens** - no plausible element identifier ships in the
+  scaffold as an example a generated project would inherit.
+- **Catalogue** - the table in `skills/README.md` names exactly the skills
+  that exist, with the kind each declares. The scaffold's `AGENTS.md`
+  deliberately does not restate it.
+- **Assets** - every file under `assets/` is named by a skill that emits it,
+  and every asset a skill names exists.
 - **Manifest agreement** - the plugin manifest exists in both places hosts
   look for it, with the same fields, and the marketplace entry agrees.
 - **Context files** - the `CLAUDE.md` and `GEMINI.md` the scaffold plants
@@ -130,8 +141,13 @@ FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n(.*)$", re.DOTALL)
 HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*$", re.M)
 # A skill name in backticks, a section sign, then the heading - which may wrap
 # onto the next line and runs into the prose after it. What follows the sign is
-# a window, not the name.
-MARKER_RE = re.compile(r"`([a-z0-9][a-z0-9-]*)`\s*§\s*([^\n]*(?:\n[^\n]*)?)")
+# a window, not the name. The name may also be the text of a Markdown link -
+# `[`skill`](../SKILL.md) § Heading` is how a reference file cites the page it
+# belongs to - so an optional `](...)` is allowed between the name and the
+# sign; without it, every citation written as a link went unchecked.
+MARKER_RE = re.compile(
+    r"`([a-z0-9][a-z0-9-]*)`(?:\]\([^)\n]*\))?\s*§\s*([^\n]*(?:\n[^\n]*)?)"
+)
 # Terminators that cannot appear inside a heading being cited mid-sentence.
 # An em-dash is not one: step headings use it, and the longest-prefix search
 # below already copes with a window that runs past the heading it names.
