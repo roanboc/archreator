@@ -73,8 +73,8 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
   when a skill first has something to put in them, from the plugin's
   `assets/`
 - `scripts/` — the two validators, run before every push, the parse they
-  share, and its prefix data. The reading tools stay in the plugin and reach
-  a project with `--project` — see
+  share, its prefix data and their own README. The reading tools stay in the
+  plugin and reach a project with `--project` — see
   [§ Reaching a reader who will not open the repository](#reaching-a-reader-who-will-not-open-the-repository)
 - `.gitignore` — keeps bytecode, machine-local settings and everything
   regenerated out of the history

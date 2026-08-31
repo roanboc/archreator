@@ -184,6 +184,15 @@ class ProjectToolTests(unittest.TestCase):
             )
             result = run(MODEL, "--project", tree, "coverage")
             self.assertEqual(result.returncode, 0, result.stderr)
+            for wrong in (root / "product-y", root / "not-a-tree"):
+                # A mistyped tree must be refused, not silently answered for
+                # the whole repository by the root's scripts.
+                (root / "not-a-tree").mkdir(exist_ok=True)
+                refused = run(MODEL, "--project", wrong, "coverage")
+                self.assertNotEqual(
+                    refused.returncode, 0,
+                    f"{wrong.name}: a non-project bound to the repository root",
+                )
             portal = run(MODEL, "--project", tree, "portal")
             self.assertEqual(portal.returncode, 0, portal.stderr)
             config = tree / ".archreator" / "work" / "portal" / "mkdocs.yml"

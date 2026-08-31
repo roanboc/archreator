@@ -250,12 +250,17 @@ def listed(meta: dict, key: str) -> list[str]:
 # This file defines the marker pattern, so it necessarily contains examples of
 # it. Scanning itself would report its own documentation as broken references.
 SELF = Path(__file__).resolve()
+# The same tooling-and-derived set the two scaffold validators skip: a brief
+# generated into .archreator/, or a stale pre-reset .docs/ staging copy, is
+# not the corpus's to validate.
+EXCLUDED_PARTS = {".git", ".claude", ".agents", ".gemini", ".codex",
+                  ".copilot", ".aip", ".docs", ".archreator", ".model"}
 
 
 def scanned_files() -> list[Path]:
     files = []
     for path in REPO_ROOT.rglob("*"):
-        if {".git", ".claude", ".aip"} & set(path.parts) or not path.is_file():
+        if EXCLUDED_PARTS & set(path.parts) or not path.is_file():
             continue
         if path.resolve() == SELF:
             continue
@@ -571,7 +576,11 @@ def catalogue_rows(path: Path) -> dict[str, list[str]]:
 
 
 def check_assets(known: set[str]) -> list[str]:
-    """Every asset is emitted by a skill, and every asset a skill names exists.
+    """Every asset is named by a skill, and every asset the index names exists.
+
+    Named, not emitted: this is a reachability check on plain text, and it
+    cannot tell an emission instruction from a mention. What it guarantees is
+    that no asset is orphaned from the corpus that is supposed to emit it.
 
     `check_links.py` cannot check this tree - a template's relative links are
     written for the project it lands in - so what it would have caught is

@@ -69,7 +69,7 @@ inline task list — see the `shard-stories` skill.
 
 For a single consequential call smaller than a full initiative — most
 often why an AI actor's autonomy level or decision rights were set the way
-they were — see [docs/decisions/](../decisions/README.md) (optional) and
+they were — see [the decisions index](../decisions/README.md) (optional) and
 the `record-decision` skill.
 
 Scope documents accumulate. After a run of initiatives the EA can be

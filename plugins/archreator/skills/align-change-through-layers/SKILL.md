@@ -126,11 +126,12 @@ before any code exists, and you may ask to see the design first.
 | **❖ Understanding** | Every initiative that changes documented behavior, which is every initiative that will produce code. A docs-only initiative passes Direction instead | The changes, or explicit "no change" verdicts, to `1_strategy`, `2_business` and `3_information` |
 | **❖ Design** | Only if the Requester opts in when asked at Understanding | The solution architecture and logical application components, with the good practices and design patterns applied called out |
 
-**A Depth 1 project meets one gate, and one offer.** Understanding is
-mandatory; Design is offered at it. Direction applies only where an
-organization is being modeled or a direction is being settled, so an
-application project never sees it — and it gets no row saying so, because a
-gate that could not have applied is not a gate that was skipped.
+**On an ordinary change, a Depth 1 project meets one gate and one offer.**
+Understanding is mandatory; Design is offered at it. Direction belongs to
+discovery and planning, so an application project meets it only when one of
+those runs — its first strategy discovery, or a roadmap — and an ordinary
+change never sees it. It gets no row saying so, because a gate that could not
+have applied is not a gate that was skipped.
 
 **Direction may be granted in two sittings, and it is still one gate.** Where
 the subject is an organization the canvases are approved first and the strategy

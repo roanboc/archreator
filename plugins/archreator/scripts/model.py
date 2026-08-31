@@ -6,11 +6,13 @@ fresh on every run. There is no second store: no database to rebuild, no cache
 to invalidate, nothing that can answer from a revision the model has moved on
 from.
 
-    python3 scripts/model.py trace CAP3      # what would a change here touch?
-    python3 scripts/model.py coverage        # what is not grounded, and what
-                                             # is not yet approved?
-    python3 scripts/model.py inventory       # one line per element
-    python3 scripts/model.py export          # write .model/model.json
+    model.py --project . trace CAP3     # what would a change here touch?
+    model.py --project . coverage       # what is not grounded, and what
+                                        # is not yet approved?
+    model.py --project . inventory      # one line per element
+    model.py --project . export         # write .model/model.json
+
+The tool lives in the plugin and reads a project named with `--project`.
 
 **Why there is no database any more.** There was one, and in the largest real
 model built on this method it was stale — it answered from a projection built
@@ -33,6 +35,7 @@ matched against a short list of headings and left empty when none matches.
 fails — consult it rather than teaching this list a new language.
 """
 import argparse
+import os
 import json
 import sys
 from collections import defaultdict
@@ -65,11 +68,19 @@ def _find_parse(root: Path) -> Path | None:
     A repository that holds several trees keeps one `scripts/` at its root —
     the worked-models layout — so `--project <tree>` walks up to find it. The
     walk stops at the repository boundary: what sits above a `.git` belongs to
-    somebody else.
+    somebody else. And a tree served by a root it walked up to must carry a
+    model of its own (`architecture/`, hard-coded here because the parse that
+    names the constant is what this function is looking for) — otherwise a
+    mistyped `--project` would silently bind to the repository root and
+    answer for the whole repository.
     """
+    if not root.is_dir():
+        return None
     for candidate in (root, *root.parents):
         parse = candidate / "scripts" / "model_graph.py"
         if parse.is_file():
+            if candidate != root and not (root / "architecture").is_dir():
+                return None
             return parse
         if (candidate / ".git").exists():
             return None
@@ -83,8 +94,9 @@ if _PARSE is None:
         print(__doc__)
         sys.exit(0)
     sys.exit(
-        f"No archreator project at {_ROOT}: expected scripts/model_graph.py "
-        f"there or at the enclosing repository root.\n"
+        f"No archreator project at {_ROOT}: expected a directory holding "
+        f"architecture/, with scripts/model_graph.py beside it or at the "
+        f"enclosing repository root.\n"
         f"Run this from a project's root, or pass --project <path>."
     )
 sys.path.insert(0, str(_PARSE.parent))
@@ -617,9 +629,13 @@ def portal(project: Path) -> int:
         ),
         encoding="utf-8",
     )
-    print(f"Wrote {config.relative_to(project)}. Build it with:")
-    print(f"  uvx --with mkdocs-material mkdocs build -f {config.relative_to(project)}")
-    print(f"  uvx --with mkdocs-material mkdocs serve -f {config.relative_to(project)}")
+    # Relative to where the caller is standing, not to the project: the
+    # printed command has to work when pasted from a multi-tree repository
+    # root that named a tree with --project.
+    shown = os.path.relpath(config)
+    print(f"Wrote {shown}. Build it with:")
+    print(f"  uvx --with mkdocs-material mkdocs build -f {shown}")
+    print(f"  uvx --with mkdocs-material mkdocs serve -f {shown}")
     print()
     print("The site is a rendering. The Markdown stays the model, and")
     print(f"{WORK_DIR}/ is gitignored so no copy of it can be committed.")

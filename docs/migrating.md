@@ -1,14 +1,16 @@
 # Crossing to 0.2 — for a project on the 0.1 method
 
+_[← Repository README](../README.md) · [Adopting archreator](./adopting.md)_
+
 A new project needs none of this: `establish-project` emits the current
 scaffold and nothing here applies. This page is for a repository that adopted
 the method before 0.2 — it holds the old scripts, the empty layer folders and
 the four numbered gates — and says what changes, what stays, and why the
 stays are deliberate.
 
-The plugin itself updates the ordinary way (`docs/adopting.md` § Keeping a
-project in sync with the method). Everything below is about the project's own
-files.
+The plugin itself updates the ordinary way — see
+[keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
+Everything below is about the project's own files.
 
 ## The gates: four numbers become three names
 
@@ -26,8 +28,9 @@ Two vocabularies will coexist in an old project, and that is correct:
   retired vocabulary is history, not drift.
 - **Living documents sweep once** — `AGENTS.md`, the architecture front door,
   the layer READMEs' gate mentions — in one ordinary change.
-- **The front door carries the correspondence**, one line beside the
-  stereotype table, so a reader meeting both vocabularies can map them:
+- **The front door carries the correspondence**, one line near the top of
+  `architecture/README.md` — beside the stereotype table, where a translated
+  model keeps one — so a reader meeting both vocabularies can map them:
   Direction = Gates 0 and 1, Understanding = Gate 2, Design = Gate 3.
 
 **Gate names translate like stereotypes do.** A Spanish model that wrote
@@ -55,8 +58,8 @@ existing file was trusted with no freshness check. Verified on the largest
 real model on this method: rename an element and `trace` serves the old name
 with no warning, add one and it answers "no such element", and the brief
 stamps a revision hash implying a currency the content does not have. The fix
-is not a smarter cache but none: a full parse of that model measures well
-under a tenth of a second.
+is not a smarter cache but none: a full parse of that model takes well under
+a second.
 
 Housekeeping that follows: keep `.model/` in `.gitignore` only if `model.py
 export` is used, add `.archreator/`, and delete any lingering

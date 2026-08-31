@@ -63,9 +63,10 @@ nothing but the text. So spell things out:
   short form freely. Per document, not per project: a reader arriving from a
   deep link shouldn't have to hunt for what a prefix means.
 - **Element IDs are acronyms too.** First mention in a document names the
-  element and expands its prefix — business and solution designers (`CS1`,
-  Customer Segment 1) — or sits in a table whose adjacent column gives the
-  name. Never a bare `CS1` in prose the first time.
+  element the ordinary way — **business and solution designers [CS1]** — and
+  expands the prefix beside it (`CS` = Customer Segment), or sits in a table
+  whose adjacent column gives the name. Never a bare `CS1` in prose the first
+  time.
 - **A cross-reference shows identity and meaning.** Write the element's name
   with the ID riding along — `[Business and solution designers [CS1]](...)` —
   rather than linking a bare ID. When one field references several elements,

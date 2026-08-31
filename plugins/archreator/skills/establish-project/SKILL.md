@@ -43,7 +43,7 @@ flowchart TD
   req(["A repository from the scaffold"])
   s1["⚙ 1 — Establish the subject, the depth and the host"]
   s2["⚙ 2 — Emit the scaffold, then make it this project"]
-  s3["⚙ 3 — Emit nothing else, and say so up front"]
+  s3["⚙ 3 — Emit nothing else, and say so on the front page"]
   s4["⚙ 4 — Open the first initiative"]
   s5["⚙ 5 — Hand off to discovery"]
   d{"Which depth?"}
@@ -159,18 +159,10 @@ Then, in one pass, so the first commit is coherent:
 | `architecture/README.md` | The status table — one row per layer, each saying `Local`, `External`, `Out of scope` or a named `Gap`. On a fresh project most rows are `Gap — not yet started`, and layer 0 is `Out of scope` unless the subject is an organization |
 | Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
 
-**⚖ Judgement.** Where the project lives decides what else is emitted, and it
-is not a question about tooling preference:
-
-| The answer | Emit from `assets/github/` |
-| ---------- | -------------------------- |
-| A **public** GitHub repository | `pull_request_template.md`, and `workflows/checks.yml` into `.github/workflows/` |
-| Any **other** GitHub repository | The same. Publishing is a separate decision, taken when somebody asks for a portal |
-| **Anything else**, or not decided yet | Nothing. `.github/` is GitHub-shaped; the model and the validators are not |
-
-*When the answer is unclear, take the last row.* A workflow is one file away
-when somebody wants it; a pipeline that publishes a model nobody agreed to
-publish is not undoable.
+**⚖ Judgement.** Step 1 already made this call — its host table is the single
+home of the rule. Emit what it activated: for a GitHub repository,
+`pull_request_template.md` and `workflows/checks.yml` into
+`.github/workflows/`, both from `assets/github/`; for anything else, nothing.
 
 **→ Produces** a project whose first commit is about the project.
 

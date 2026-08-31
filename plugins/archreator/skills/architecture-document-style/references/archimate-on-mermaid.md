@@ -170,19 +170,15 @@ same `Pending — future initiative` marker the grounding rule uses.
 
 ## Drawing rules
 
-- **Diagram first, then the tables and prose that describe it.** Every
-  section that has a diagram opens with it.
-- **One diagram per section, not one per document.** A single view of a whole
-  layer can only be a selection once the layer passes about fifteen elements,
-  and a selection that looks complete is worse than several honest parts.
-  Sectional diagrams overlap by one rank so a reader can chain them.
-- **Each document opens with a "How to read this document" section**: a
-  legend diagram showing the element types and how they connect, then the
-  glyph / shape / element / ID-prefix table. Layers are self-documenting;
-  nobody should need another file open to read one. **This legend is what
-  makes § 1 affordable** — it is the one diagram that names the stereotypes,
-  so the diagrams below it don't have to.
-- **Dashed edges mean Pending.** Solid is true today.
+Two of them are big enough to hold their own sections below — a section's
+diagram comes first (§ Diagrams come first, one per section), and every
+element document opens with the legend that lets the diagrams below it drop
+their stereotypes (§ Every element document opens with "How to read this
+document"). What remains here is the rest:
+
+**Dashed edges mean Pending; solid is true today.** The fact lives in a table
+either way — a dashed arrow renders a Pending row, and is never the
+declaration itself.
 
 Relationships are labeled with their ArchiMate name: **serves**,
 **realizes**, **assigned to**, **accesses**, **triggers**, **flow**,

@@ -6,10 +6,12 @@ options: open all of the model and hold the relevant rows in their head, or
 open a graph and reconstruct the question by clicking. This is the third — name
 a scope, get a document.
 
-    python3 scripts/build_brief.py --element BSVC1 --depth 2
-    python3 scripts/build_brief.py --domain SALES
-    python3 scripts/build_brief.py --layer Application --type "Application Component"
-    python3 scripts/build_brief.py --element DOBJ4 --focus information
+    build_brief.py --project . --element BSVC1 --depth 2
+    build_brief.py --project . --domain SALES
+    build_brief.py --project . --layer Application --type "Application Component"
+    build_brief.py --project . --element DOBJ4 --focus information
+
+The tool lives in the plugin and reads a project named with `--project`.
 
 **The walk is `model_graph.neighbourhood`**, the same traversal `model.py trace`
 runs. One question — what is connected to this — asked by two readers and
@@ -67,11 +69,19 @@ def _find_parse(root: Path) -> Path | None:
     A repository that holds several trees keeps one `scripts/` at its root —
     the worked-models layout — so `--project <tree>` walks up to find it. The
     walk stops at the repository boundary: what sits above a `.git` belongs to
-    somebody else.
+    somebody else. And a tree served by a root it walked up to must carry a
+    model of its own (`architecture/`, hard-coded here because the parse that
+    names the constant is what this function is looking for) — otherwise a
+    mistyped `--project` would silently bind to the repository root and
+    answer for the whole repository.
     """
+    if not root.is_dir():
+        return None
     for candidate in (root, *root.parents):
         parse = candidate / "scripts" / "model_graph.py"
         if parse.is_file():
+            if candidate != root and not (root / "architecture").is_dir():
+                return None
             return parse
         if (candidate / ".git").exists():
             return None
@@ -85,8 +95,9 @@ if _PARSE is None:
         print(__doc__)
         sys.exit(0)
     sys.exit(
-        f"No archreator project at {_ROOT}: expected scripts/model_graph.py "
-        f"there or at the enclosing repository root.\n"
+        f"No archreator project at {_ROOT}: expected a directory holding "
+        f"architecture/, with scripts/model_graph.py beside it or at the "
+        f"enclosing repository root.\n"
         f"Run this from a project's root, or pass --project <path>."
     )
 sys.path.insert(0, str(_PARSE.parent))
@@ -103,7 +114,9 @@ from model_graph import (
     project_key,
 )
 
-DERIVED = REPO_ROOT / ".archreator" / "work" / "briefs"
+# Keyed on the project the caller named, exactly as the portal is, so the
+# two reading tools drop their outputs in the same place in every layout.
+DERIVED = _ROOT / ".archreator" / "work" / "briefs"
 # The order the method assesses its layers in — `architecture/README.md`
 # § Layers, in assessment order. The layered view is that order made vertical,
 # which is what makes it answer "what realizes what" rather than "what is near

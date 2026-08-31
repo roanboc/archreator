@@ -13,7 +13,7 @@ a developer on any host may simply prefer not to install one.
 
 `.agents/skills/` is the path all four hosts read, and this script fills it.
 It copies skills only. The scaffold arrives separately - `establish-project`
-still emits it, or Option B in `docs/adopting.md` copies it by hand.
+still emits it, or Option C in `docs/adopting.md` copies it by hand.
 
 Existing skill directories are replaced, so re-running after a `git pull` is
 how an installation is updated.

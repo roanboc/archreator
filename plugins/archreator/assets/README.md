@@ -25,7 +25,7 @@ fact, which an empty README never was.
 | [`layers/scope/`](./layers/scope/README.md) | `write-scope-document` | The first initiative is opened |
 | [`layers/decisions/`](./layers/decisions/README.md) | `record-decision` | The first decision is recorded |
 | [`layers/domains/`](./layers/domains/README.md) | `model-domains` | The model splits into business lines — Depth 3 |
-| [`layers/reference/`](./layers/reference/README.md) | `discover-current-landscape`, `discover-business-model` | Source material is first filed |
+| [`layers/reference/`](./layers/reference/README.md) | `discover-strategy`, `discover-current-landscape`, `discover-business-model` | Source material is first filed |
 | [`layers/federation.md`](./layers/federation.md) · [`layers/imports.md`](./layers/imports.md) | `model-domains` | This model first names another one |
 | [`github/workflows/`](./github/workflows/README.md) | `establish-project` | The project is on GitHub and asks for CI |
 | [`github/pull_request_template.md`](./github/pull_request_template.md) | `establish-project` | The project takes pull requests |
@@ -39,4 +39,5 @@ they work in the one place they were never meant to, so `check_links.py` skips
 this tree and the project's own copy of it checks the copy that matters.
 
 What that would let rot instead is caught by `check_skills.py`: an asset no
-skill emits, and a skill naming an asset that is not here, are both errors.
+skill names, and an index row naming an asset that is not here, are both
+errors.

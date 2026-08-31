@@ -1,7 +1,7 @@
 # Declaring relationships
 
-_Reference for [`architecture-document-style`](../SKILL.md) § The relationship
-table._
+_Reference for [`architecture-document-style`](../SKILL.md) § Relationships
+are declared, never only drawn._
 
 Read this when writing a catalogue column that points at other elements, or a
 `## Relationships` section beside a diagram.

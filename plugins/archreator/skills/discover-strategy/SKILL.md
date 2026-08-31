@@ -147,9 +147,11 @@ Discovery is a full initiative, not a detour. Create it with
 against a concrete document.
 
 The alignment table records the impact on layers 1–2 with an explicit "not
-started" verdict for the rest. The Approvals table carries a Direction row, plus
-`N/A` rows for Understanding and Design always — and for Direction unless
-`discover-business-model` handed over, in which case it is already recorded.
+started" verdict for the rest. The Approvals table carries this skill's
+Direction row — the second one, where `discover-business-model` handed over,
+beside the row that sitting already wrote — and no rows for Understanding or
+Design: a docs-only discovery produces no code, so neither could have
+applied, and a gate that could not have applied gets no row.
 
 **→ Produces** `architecture/scope/<n>_*.md`, and its row in the index.
 

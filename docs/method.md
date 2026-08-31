@@ -78,7 +78,7 @@ agent tells you which depth it picked and why**.
 
 | Depth | The subject is | You get | Gates |
 | ----- | -------------- | ------- | ----- |
-| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | one, before code |
+| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | one per change, before code; Direction once, when the strategy is first discovered |
 | **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | three |
 | **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | three, plus every affected domain's owner |
 
@@ -97,11 +97,12 @@ pictures:
 | **Understanding** | Who does what, and with which information — before any code exists | Every change that will produce code |
 | **Design** | What builds it, before it is built | Only if you ask, when you are offered it at Understanding |
 
-**A single application meets one gate and one offer.** Understanding is
-mandatory; Design is offered at it. Direction belongs to modeling an
-organization or settling a direction, so a Depth 1 project never sees it — and
-gets no row saying so, because a gate that could not have applied is not a gate
-that was skipped.
+**An ordinary change to a single application meets one gate and one offer.**
+Understanding is mandatory; Design is offered at it. Direction belongs to
+discovery and planning — so a Depth 1 project meets it too, but only when one
+of those runs: its first strategy discovery, or a roadmap. An ordinary change
+never sees it, and gets no row saying so, because a gate that could not have
+applied is not a gate that was skipped.
 
 Direction may be granted in two sittings where the subject is an organization —
 the canvases first, the strategy derived from them second — and it is still one

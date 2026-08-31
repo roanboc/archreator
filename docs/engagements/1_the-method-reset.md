@@ -1,4 +1,4 @@
-# 1 — The method was reset against its own principles, twice, and compared
+# 1 — The method reset, run twice and compared
 
 **Date:** 2026-08-31
 **Kind:** initiative
@@ -18,7 +18,9 @@ would otherwise die with its branch. This note is where they survive.
 
 ## What the method did not cover
 
-**Which parts of it were the product.** Nothing said which mechanisms were the
+### Which parts of it were the product
+
+Nothing said which mechanisms were the
 kernel — the thing that makes the method more than a prompt — and which were
 ceremony around it. The first reset removed the skill format, the process
 grounding and the notation along with the empty folders, and what remained was
@@ -26,29 +28,36 @@ close to a plain preprompt. The correction, the most important one of the
 whole engagement: simplicity means removing ceremony and unused artifacts,
 never the kernel that improves reasoning, navigation and communication.
 
-**The difference between the standard existing and the standard being
-materialized.** The method equated "the model has a shape" with "every file of
+### The difference between the standard existing and the standard being materialized
+
+The method equated "the model has a shape" with "every file of
 that shape is created now", so a new project opened on forty-four files about
 nothing. The correction: the customer repository carries only current
 content, the plugin carries the discoverable standard, and a front-door status
 row per layer replaces every empty folder.
 
-**Who the reader of an identifier is.** The rules optimized identifiers for
+### Who the reader of an identifier is
+
+The rules optimized identifiers for
 the parser and let the reader decode them. The correction, refined twice: a
 defining row keeps the identifier first because the sequence and hierarchy
 must be scannable; a machine-read relationship column keeps bare identifiers
 because a name written there deletes the relationship; everywhere else the
 name leads and the identifier rides along.
 
-**What a cache costs when it lies.** The reading tools trusted a persisted
+### What a cache costs when it lies
+
+The reading tools trusted a persisted
 projection that was rebuilt only when its file was missing. On the largest
 real model on this method, verified during this comparison: rename an element
 and the trace serves the old name with no warning; add one and the answer is
 a confident "no such element"; the brief stamps a revision hash implying a
-currency the content does not have. A full fresh parse of that model measures
-well under a tenth of a second.
+currency the content does not have. A full fresh parse of that model takes
+well under a second.
 
-**Whether an approval may become invisible.** The first reset made every gate
+### Whether an approval may become invisible
+
+The first reset made every gate
 conditional and every scope record disposable, which reads as simplification
 and deletes the audit trail — against the one rule every repository on the
 method states first. The correction: three gates, named for what the
