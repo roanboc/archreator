@@ -66,6 +66,7 @@ have already decided a level is needed.
 | ---- | ---- |
 | [`references/levels-and-descriptions.md`](./references/levels-and-descriptions.md) | The four macro categories, what each level means, and the minimum a description carries |
 | [`references/starting-and-filing.md`](./references/starting-and-filing.md) | Starting a catalogue from nothing, the focus table, and which file a level belongs in |
+| [`references/presentation-patterns.md`](./references/presentation-patterns.md) | Laying a leveled catalogue out on the page — the map, the contract and the flow, per level and per element kind |
 
 ### Processes are verbs; capabilities are nouns
 

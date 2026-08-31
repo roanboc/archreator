@@ -38,6 +38,13 @@
 - **Docs / site** — under docs/ or site/
 - **Plugin package / CI** — the plugin and marketplace manifests, workflows
 
+## Complexity
+
+<!-- The method's first principle, asked of every change: what was removed?
+     What new recurring cost does this add — a file in the scaffold, a check
+     to keep green, a copy to hold together — and why is it justified?
+     "Nothing removed, nothing recurring added" is a complete answer. -->
+
 ## Verification
 
 <!-- What was run and what happened: -->

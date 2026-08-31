@@ -47,6 +47,13 @@
      a changed file is not explainable here, it either needs a mention or does
      not belong on the branch. -->
 
+## Complexity
+
+<!-- What was removed? What new recurring cost does this add — a document to
+     keep true, a check to keep green, a copy to hold together — and why is
+     it justified? "Nothing removed, nothing recurring added" is a complete
+     answer. -->
+
 ## Verification
 
 <!-- The commands that were run and what they said, plus anything checked by
