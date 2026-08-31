@@ -43,7 +43,7 @@ flowchart TD
   req(["A repository from the scaffold"])
   s1["⚙ 1 — Establish the subject, the depth and the host"]
   s2["⚙ 2 — Emit the scaffold, then make it this project"]
-  s3["⚙ 3 — Set the layers to the declared depth"]
+  s3["⚙ 3 — Emit nothing else, and say so up front"]
   s4["⚙ 4 — Open the first initiative"]
   s5["⚙ 5 — Hand off to discovery"]
   d{"Which depth?"}
@@ -124,7 +124,7 @@ preference:
 | The answer | What it activates |
 | ---------- | ----------------- |
 | A **public** GitHub repository | The checks workflow, and the pull-request template |
-| Any **other** GitHub repository | The checks workflow. Publishing needs Pages, which the free plan does not offer a private repository, and on the plans that do, publishing a private model is a disclosure decision rather than a default |
+| Any **other** GitHub repository | The same. Publishing stays a separate decision: Pages is not on the free plan for a private repository, and where it is available, publishing a private model is a disclosure decision rather than a default |
 | **Anything else**, or not decided yet | Nothing. `.github/` is GitHub-shaped; the model and the validators are not |
 
 *When the answer is unclear, take the last row.* An unactivated workflow is
@@ -139,7 +139,8 @@ host, all carried into every step below.
 Copy `scaffold/` from the plugin into the project root. **It is eleven files,
 and every one of them is used on the first commit** — `AGENTS.md`, `README.md`,
 `CLAUDE.md`, `GEMINI.md`, `.gitignore`, `architecture/README.md`, and
-`scripts/` with the two validators, the parse they share and its prefix data.
+`scripts/` with the two validators, the parse they share, its prefix data and
+their own README.
 
 **Copy the dotfiles too.** `.gitignore` is the one the project cannot do
 without: it keeps bytecode, machine-local settings and everything regenerated

@@ -1,6 +1,6 @@
 ---
 name: discover-strategy
-description: Procedure — run this when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer still contains template placeholders, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Direction) before anything else is built.
+description: Procedure — run this when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer does not exist yet or still holds template text, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Direction) before anything else is built.
 metadata:
   archreator:
     kind: gated-procedure
@@ -21,7 +21,7 @@ strategy filled in and current.
 
 | The situation | What it looks like |
 | ------------- | ------------------ |
-| Placeholders | `architecture/1_strategy/` still holds template text — the project's first real initiative |
+| Missing or placeholder | `architecture/1_strategy/` does not exist yet, or still holds template text — the project's first real initiative |
 | The change shifts strategy | It adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream |
 | Handed over from the canvases | `discover-business-model` granted Direction, and the strategy is derived from what it approved |
 
@@ -207,7 +207,7 @@ revise from Step 2 and present again, leaving the status lines where they are.
 
 ## ☑ Done when
 
-- `architecture/1_strategy/` holds no template placeholders.
+- `architecture/1_strategy/` exists and holds no template placeholders.
 - Every element names what realizes it, or is marked "Pending — future initiative".
 - Derived elements note the canvas block they came from.
 - The scope document's alignment table covers every layer, and its Approvals
