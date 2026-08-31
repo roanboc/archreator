@@ -180,10 +180,12 @@ Rules: an ID is assigned once and **never reused** after the element is
 removed (a dangling reference should fail loudly, not silently point at
 something else); numbering is per prefix, not global — and per parent inside
 a leveled catalogue; and an element's ID never changes when it is renamed.
-Referencing an element in prose or a table cell means writing its stable ID
-and short name — `relieves GAIN2 — Faster approval` — without repeating its
-full description. Cross-document references link that visible pair to the
-element definition; multiple references are one per line.
+Referencing an element in prose or an ordinary table cell means writing its
+name with the stable ID riding along — `relieves Faster approval [GAIN2]` —
+without repeating its full description; the name leads, per `document-style`
+§ The name leads, and the identifier rides along. Cross-document references
+link that visible pair to the element definition; multiple references are one
+per line.
 
 Each document's "How to read this document" table repeats the prefixes it
 uses, expanded — `STK#` = Stakeholder — which is § Write it out applied to

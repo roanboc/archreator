@@ -56,15 +56,16 @@ nothing but the text. So spell things out:
 - **Expand every acronym on its first use in each document**, then use the
   short form freely. Per document, not per project: a reader arriving from a
   deep link shouldn't have to hunt for what a prefix means.
-- **Element IDs are acronyms too.** First mention in a document reads
-  `CS1` (Customer Segment 1 — business and solution designers), or sits in a
-  table whose adjacent column gives the name. Never a bare `CS1` in prose
-  the first time.
-- **A cross-reference shows identity and meaning.** Write the ID and short
-  element name together — `[CS1 — Business and solution designers](...)` —
+- **Element IDs are acronyms too.** First mention in a document names the
+  element and expands its prefix — business and solution designers (`CS1`,
+  Customer Segment 1) — or sits in a table whose adjacent column gives the
+  name. Never a bare `CS1` in prose the first time.
+- **A cross-reference shows identity and meaning.** Write the element's name
+  with the ID riding along — `[Business and solution designers [CS1]](...)` —
   rather than linking a bare ID. When one field references several elements,
-  put one linked `ID — Name` on each line. A portal tooltip may repeat the name
-  as a convenience, but never carries information absent from Markdown or PDF.
+  put one linked `Name [ID]` on each line. A portal tooltip may repeat the
+  name as a convenience, but never carries information absent from the
+  Markdown.
 - **An abbreviation worth using is worth defining.** If the organization has
   its own jargon, it belongs in the glossary in
   `2_business/5_domain-context-and-rules.md`, not only in the head of
@@ -76,6 +77,30 @@ nothing but the text. So spell things out:
 This costs a few characters and buys the thing the whole method is for: a
 document that means the same to the person who wrote it, the person reading
 it a year later, and the agent acting on it.
+
+#### The name leads, and the identifier rides along
+
+`CAP3` is a key, not a name. In a sentence, a heading, a diagram label or a
+brief, write the name and let the identifier ride along — `Name [ID]`:
+
+> …which is why **the Supervised build service [BSVC3]** was split from…
+
+Not "which is why `BSVC3` was split from", which sends every reader who is not
+holding the catalogue in their head to go and look it up — and most of them
+are the people the model was written for.
+
+**Two places keep the identifier first, and both earn it.** A catalogue's own
+definition row opens with the ID — and the bolded lead-in `**G1 — Legible
+guidance.**` is the same defining shape in prose — because the leading
+identifier is what exposes the sequence and the hierarchy at a glance. And a
+**relationship column** holds bare identifiers and nothing else, because a
+parser reads it before a person does and a name written there silently deletes
+the relationship — `architecture-document-style` § Relationships are declared,
+never only drawn.
+
+Everywhere else the name leads. Nothing checks this: no validator can tell an
+identifier a reader would have wanted named from one they would not. It is a
+rule a writer follows and a reviewer reads for.
 
 #### Consolidate before you enumerate
 
@@ -188,25 +213,6 @@ for.
 - Restating a table or diagram that another document owns, rather than
   linking it.
 - A skill linking outside the plugin's own `skills/` directory.
-### A bare identifier never appears in prose
-
-`CAP3` is a key, not a name. In a sentence, a heading, a diagram label or a
-brief, write the name and let the identifier ride along:
-
-> …which is why **the Supervised build service [BSVC3]** was split from…
-
-Not "which is why `BSVC3` was split from", which sends every reader who is not
-holding the catalogue in their head to go and look it up — and most of them are
-the people the model was written for.
-
-**Two places keep the identifier first, and both earn it.** A catalogue's own
-definition row opens with the ID, because the column order is what exposes the
-sequence and the hierarchy at a glance. And a **relationship column** holds
-bare identifiers and nothing else, because a parser reads it before a person
-does and a name written there silently deletes the relationship —
-`architecture-document-style` § Relationships are declared, never only drawn.
-
-Everywhere else the name leads. Nothing checks this: no validator can tell an
-identifier a reader would have wanted named from one they would not. It is a
-rule a writer follows and a reviewer reads for.
+- A bare identifier in prose — `CAP3` where **the name [CAP3]** should lead
+  (§ The name leads, and the identifier rides along).
 

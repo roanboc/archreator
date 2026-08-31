@@ -144,7 +144,7 @@ and the `Source` column points there.
 
 For every product or service, place a traditional nine-block Mermaid Business
 Model Canvas immediately before its detailed table. The diagram is a compact
-view of the table, not a second model: use the same `ID — Name` entries, keep
+view of the table, not a second model: use the same `Name [ID]` entries, keep
 cost and revenue at the bottom, and resolve any mismatch in favor of the table.
 
 ### 3 — Verify fit before presenting

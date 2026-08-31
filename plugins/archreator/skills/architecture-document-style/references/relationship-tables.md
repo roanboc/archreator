@@ -30,9 +30,10 @@ table" is prose that mentions one. This is what separates a relationship column
 from an attribute column — `Maturity` holds the word "Established" and
 `Realizes` holds identifiers, and both are columns of the same catalogue.
 
-**This is the one place a reference is a bare identifier.** § Identifiers asks a
-reference in prose or an ordinary cell to carry `ID — Name`, so a reader is
-never sent looking. A relationship column is read by a parser before it is read
+**This is the one place a reference is a bare identifier.**
+`architecture-document-style` § Element IDs asks a reference in prose or an
+ordinary cell to carry the name with the identifier riding along —
+`Name [ID]` — so a reader is never sent looking. A relationship column is read by a parser before it is read
 by a person, and a name inside it turns the cell into prose the parse stops
 seeing — silently, because a column that declares nothing looks exactly like a
 column that has nothing to declare. The name belongs in the row's own name

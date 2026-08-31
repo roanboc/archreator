@@ -12,7 +12,7 @@ Each Business Model Canvas also carries a Mermaid overview in the traditional
 nine-block arrangement: Key Partners; Key Activities above Key Resources;
 Value Propositions; Customer Relationships above Channels; Customer Segments;
 and Cost Structure and Revenue Streams across the bottom. Populate it from
-the same rows and show `ID — Name`; do not invent arrows between blocks or add
+the same rows and show `Name [ID]`; do not invent arrows between blocks or add
 facts that exist only in the diagram. Each canvas gets its own `###` heading
 naming the segment or product it belongs to.
 
