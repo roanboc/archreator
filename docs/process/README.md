@@ -60,7 +60,8 @@ flowchart LR
 | — | Stadium | Event — what starts or ends a flow | — |
 
 Glyph, shape and colour follow
-[`architecture/README.md` § Notation conventions](../../plugins/archreator/scaffold/architecture/README.md#notation-conventions),
+the `architecture-document-style` rulebook's
+[ArchiMate on Mermaid reference](../../plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md),
 which stays the single source. The **approval gate** has no ArchiMate element type, so
 it takes a shape of its own here. As an ordinary decision rhombus it is
 indistinguishable from a verdict the agent reaches alone, and that is the distinction
@@ -126,7 +127,7 @@ Every level-2 process, and how far down it is detailed.
 | `BPROC1.4` | Split the model into domains | Level 2 | — | Depth 3 only. Revisit when an enterprise engagement raises one |
 | `BPROC1.5` | Discover the current landscape | Level 2 | — | The steps are a sweep order, not a branching flow. Revisit when a real estate engagement finds one |
 | `BPROC5.1` | Define the target and sequence the roadmap | Level 2 | — | Six steps and one gate. Revisit if sequencing an estate-sized backlog turns out to need its own procedure |
-| `BPROC2.1` | Align the change through the layers | **Level 3** | The method's own flow was unreadable | Every gate but Gate 0 and Gate 1 sits here, and the branching is why the single diagram it replaced could not be followed |
+| `BPROC2.1` | Align the change through the layers | **Level 3** | The method's own flow was unreadable | Every gate but Direction sits here, and the branching is why the single diagram it replaced could not be followed |
 | `BPROC2.2` | Implement and verify | Level 2 | — | Sequence varies by stack; detailing it would model the code, not the method |
 | `BPROC2.3` | Hand over for review | Level 2 | — | One step and one template |
 | `BPROC3.1` | Restate the current state | Level 2 | — | No pain raised. Revisit when one is |

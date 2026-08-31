@@ -8,8 +8,10 @@ parse moved here rather than being written twice, because two parsers of the
 same convention drift and the drift is silent.
 
 Nothing here validates and nothing here persists. `check_model.py` imports it
-and applies its four checks; `build_model.py` imports it and writes the
-projection. This module only reads Markdown and returns what it found.
+and applies its checks; the plugin's reading tools — `model.py` and
+`build_brief.py` — import it through `--project` so there is one parse of the
+convention, not one per consumer. This module only reads Markdown and returns
+what it found.
 
 **Two levels of detail.** `parse_project()` returns what validation needs —
 definitions, references, retirements, domains, and the names a restatement is
@@ -39,7 +41,7 @@ Deliberately not done here:
   header, or a relationship table's third cell — is carried verbatim:
   `habilita`, `precede a`, `serves`. Mapping those onto ArchiMate's
   relationship vocabulary would be a guess, and a wrong guess in a projection
-  is worse than an honest string. `build_model.py` reports how many distinct
+  is worse than an honest string. `model.py export` reports how many distinct
   ones a corpus uses, which is the honest alternative to a controlled list
   nobody could translate.
 - **No parse of the narrative folders.** Same reasoning as `check_model.py`:
@@ -89,11 +91,14 @@ NARRATIVE = {"scope", "decisions", "reviews", "engagements", "reference"}
 # of the pinned AIP release the validators are run from. None is this
 # repository's to validate, and none is a downstream project's once these
 # scripts ship there.
-# `.docs` is the documentation portal's staged copy and built site — every
-# document a second time, which would otherwise read as every element being
-# defined twice.
+# `.archreator` is where every generated working surface lands — briefs, the
+# portal configuration and whatever it builds — and `.model` is the exported
+# model.json; both are the model a second time, which would otherwise read as
+# every element being defined twice, or as a built page with links written
+# for a rendered site. `.docs` is where the pre-reset tooling staged the same
+# things, kept so a stale local copy never fails a fresh checkout's checks.
 EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot",
-                 ".aip", ".docs"}
+                 ".aip", ".docs", ".archreator", ".model"}
 # See the note in check_links.py: anchored to line starts and matched on fence
 # length, so a fence containing a fence does not close early and leak its body
 # back into the scanned prose.
@@ -163,9 +168,9 @@ LAYER_DIR_RE = re.compile(r"^(\d)_(.+)$")
 # the two the corpus uses today. An unrecognised marker degrades to "not
 # pending", which is the safe direction to be wrong in.
 #
-# It lives here rather than in a consumer because there are now two of them:
-# `query_model.py` reads it for grounding, and the projection reads it to decide
-# whether an edge is live. Two copies of one convention drift silently.
+# It lives here rather than in a consumer because there are several of them:
+# the plugin's reading tools use it for grounding, and the parse uses it to
+# decide whether an edge is live. Two copies of one convention drift silently.
 PENDING_MARKERS = ("pending", "pendiente")
 # The same marker, anchored to the start of a cell — which is how the grounding
 # rule writes it: `**Pending — future initiative**` is the cell, not a remark
@@ -307,9 +312,9 @@ def project_key(project: Path) -> str:
 
     Its path from the repository root — `product-archreator`,
     `product-archreator/site` — or `.` for a repository that holds one model at
-    its root. The same string `build_model.project_name()` writes into the
-    projection, so an identifier a reader sees and an identifier a document
-    writes are the same identifier.
+    its root. The same string `model.py export` writes into `model.json`, so an
+    identifier a reader sees and an identifier a document writes are the same
+    identifier.
     """
     if project == REPO_ROOT:
         return "."
@@ -979,3 +984,87 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         restatements=restatements,
         excerpts=excerpts,
     )
+
+
+# --------------------------------------------------------------------------
+# The neighbourhood walk
+#
+# **The traversal has exactly one copy, and this is it.** `model.py trace` and
+# `build_brief.py` both call it, which is why it lives beside the parse rather
+# than in either of them: a walk written twice is the drift this module exists
+# to prevent.
+#
+# It replaced a recursive CTE over a SQLite projection. The projection was a
+# second representation of the model that had to be rebuilt to stay true, and
+# in the one real model where that was checked it had not been - it answered
+# from a revision that no longer named a course of action somebody had added.
+# A cache that is silently wrong is worse than no cache, and parsing the
+# Markdown fresh takes well under a second on the largest model there is.
+# --------------------------------------------------------------------------
+
+
+def qualified(project_key_: str, element: str, dst_project: str = "") -> str:
+    """`product-archreator::CAP1` — an identifier that means one thing globally.
+
+    Two models may each own a `CAP1`, so a walk that crosses a federation
+    boundary has to carry the model name or start conflating them.
+    """
+    return f"{dst_project or project_key_}::{element}"
+
+
+def neighbourhood(
+    parsed: "ParsedProject",
+    root: str,
+    depth: int,
+    *,
+    extra: "list[ParsedProject] | None" = None,
+) -> tuple[dict[str, int], list[tuple[str, str, "Edge"]]]:
+    """Everything within `depth` hops of `root`, and the edges among it.
+
+    `root` is qualified. Returns the reached identifiers with the fewest hops
+    each was reached in, and every edge whose two ends were both reached.
+
+    **The walk is undirected.** Direction here is a property of the sentence
+    rather than of the relationship: a catalogue states a connection from
+    whichever end owns the row, so `Provided by` and `Provides` are one
+    relationship written from two sides. "What would this change touch" does
+    not care which way somebody phrased it.
+
+    **It is also model-blind.** An edge whose far end names another model is
+    followed like any other, because a blast radius that stops at a repository
+    boundary is a wrong answer rather than a smaller one.
+    """
+    links: list[tuple[str, str, Edge]] = []
+    for source in [parsed, *(extra or [])]:
+        key = project_key(source.project)
+        for edge in source.edges:
+            links.append((
+                qualified(key, edge.src),
+                qualified(key, edge.dst, edge.dst_project),
+                edge,
+            ))
+
+    adjacency: dict[str, list[int]] = {}
+    for index, (a, b, _) in enumerate(links):
+        adjacency.setdefault(a, []).append(index)
+        adjacency.setdefault(b, []).append(index)
+
+    # Breadth-first, so the first arrival at an element is the nearest one.
+    reached: dict[str, int] = {root: 0}
+    frontier = [root]
+    for hop in range(1, depth + 1):
+        nxt: list[str] = []
+        for node in frontier:
+            for index in adjacency.get(node, ()):
+                a, b, _ = links[index]
+                far = b if a == node else a
+                if far not in reached:
+                    reached[far] = hop
+                    nxt.append(far)
+        if not nxt:
+            break
+        frontier = nxt
+
+    edges = [(a, b, e) for a, b, e in links if a in reached and b in reached]
+    edges.sort(key=lambda t: (min(reached[t[0]], reached[t[1]]), t[0], t[1]))
+    return reached, edges

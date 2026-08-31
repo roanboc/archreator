@@ -2,12 +2,22 @@
 
 _[← Repository README](../README.md)_
 
-The one-paragraph version: **a requirement never becomes code directly.** It
-is aligned through numbered architecture layers, stopped at explicit
-approval gates the Requester grants, captured in a scope document, and only
-then implemented. Humans keep strategy and business judgement; AI agents do
-the modeling and the building in between, and every actor's kind and
-autonomy is written down.
+**What you get out of this is your own requirement, sharper than the one you
+arrived with** — who it serves, what it has to do, and which of your
+assumptions turned out to disagree with each other. That is worth having even
+if nothing gets built from it.
+
+The one-paragraph version of how: **a requirement never becomes code
+directly.** It is worked through numbered architecture layers, stopped at
+three named gates you grant, captured in a scope document, and only then
+implemented. You keep the strategy and business judgement; AI agents do the
+modeling and the building in between, and every actor's kind and autonomy is
+written down.
+
+You are never asked to learn a notation to answer a question about your own
+business. If you already know one — if you are an architect — the model is a
+standard layered structure in plain files, and you can navigate it directly
+rather than asking an agent to summarise it.
 
 ## The loop: Requester → Agent → Reviewer
 
@@ -68,28 +78,48 @@ agent tells you which depth it picked and why**.
 
 | Depth | The subject is | You get | Gates |
 | ----- | -------------- | ------- | ----- |
-| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | one, before code |
-| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | four |
-| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | four, plus every affected domain's owner |
+| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | one per change, before code; Direction once, when the strategy is first discovered |
+| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | three |
+| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | three, plus every affected domain's owner |
 
 Depth is a starting posture, never a ceiling — deepening is a normal
 change, not a restart.
 
-## The gates
+## When it stops and asks you
+
+**Three gates, named for what you approve**, and the names are the ones the
+[repository README](../README.md#how-it-works) already uses on its two
+pictures:
+
+| Gate | You approve | It applies when |
+| ---- | ----------- | --------------- |
+| **Direction** | Where this is going — the canvases where the subject is an organization, then the strategy derived from them, or a roadmap | The change moves *why* or *for whom* |
+| **Understanding** | Who does what, and with which information — before any code exists | Every change that will produce code |
+| **Design** | What builds it, before it is built | Only if you ask, when you are offered it at Understanding |
+
+**An ordinary change to a single application meets one gate and one offer.**
+Understanding is mandatory; Design is offered at it. Direction belongs to
+discovery and planning — so a Depth 1 project meets it too, but only when one
+of those runs: its first strategy discovery, or a roadmap. An ordinary change
+never sees it, and gets no row saying so, because a gate that could not have
+applied is not a gate that was skipped.
+
+Direction may be granted in two sittings where the subject is an organization —
+the canvases first, the strategy derived from them second — and it is still one
+gate, because both are the same act: settling where this is going.
 
 Approval is granted by the Requester and recorded in the scope document's
-**Approvals** table — which gate, who approved, when, and what was shown. A
-gate that didn't apply gets an `N/A — <why>` row rather than being deleted.
-An approval that isn't recorded didn't happen.
+**Approvals** table — which gate, who approved, when, and what was shown. An
+approval that isn't recorded didn't happen. Only a gate that *could* have
+applied and did not gets an `N/A — <why>` row.
 
-There are four: **Gate 0 — Business model**, **Gate 1 — Strategy**,
-**Gate 2 — Business**, and **Gate 3 — Solution design**. Four rather than five
-on purpose: a roadmap is approved at Gate 1, because approving a target and
-approving a strategy layer are the same act — a Requester settling a direction
-— and a fifth gate would add a row to every Approvals table ever written to
-record a decision an existing one already names. Which gate applies to a given
-change, and what the Requester is shown at each, is defined in exactly one
-place — the
+Between the gates, two things stop the work, and the agent says which:
+**material uncertainty** (two readings of the request build different things,
+and nothing in the model settles it) and **authorization** (the work would
+commit you to spend, exposure, or publication you have not agreed).
+
+Which gate applies to a given change, and what you are shown at each, is
+defined in exactly one place — the
 [`align-change-through-layers` skill](../plugins/archreator/skills/align-change-through-layers/SKILL.md)
 § The gates. This page names the gates; it does not restate the rule, because a
 second copy is a second thing to drift.
@@ -105,7 +135,7 @@ each actor's responsibility starts and ends.
 flowchart LR
   req(["⚇ Requester presents a requirement"])
   align["⚙ Agent aligns it through the layers"]
-  gates{{"❖ Gates 0–3 — the Requester approves"}}
+  gates{{"❖ the three gates — the Requester approves"}}
   build["⚙ Agent implements, keeping the documents true"]
   rev(["⚇ Reviewer reads the whole branch"])
   merged(["Merged"])
@@ -165,12 +195,13 @@ defines elements without declaring one.
 
 The Markdown is the model, and the readers who never open a repository are
 served by rendering it rather than by keeping a second copy: one command
-publishes the same documents as a searchable website, another prints them as a
-single PDF, and both are regenerated and gitignored — see
-[`docs/publishing.md`](./publishing.md).
+writes a searchable-website configuration, a focused brief answers one
+question, and everything generated is gitignored — see
+[`docs/adopting.md`](./adopting.md#reaching-a-reader-who-will-not-open-the-repository).
 
-The scaffold at [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) has every layer
-README ready to fill in. The full conventions — numbering, ArchiMate on
-Mermaid, colour ramps, actor kinds — are in
-[`plugins/archreator/scaffold/architecture/README.md`](../plugins/archreator/scaffold/architecture/README.md)
-and in the [`architecture-document-style` skill](../plugins/archreator/skills/architecture-document-style/SKILL.md).
+The scaffold at [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) opens with a
+status row per layer rather than empty folders; a layer's README arrives when
+a skill first fills it. The full conventions — numbering, ArchiMate on
+Mermaid, colour ramps, actor kinds — are in the
+[`architecture-document-style` skill](../plugins/archreator/skills/architecture-document-style/SKILL.md)
+and its references.

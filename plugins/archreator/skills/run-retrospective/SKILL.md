@@ -48,7 +48,7 @@ flowchart LR
   note[/"docs/engagements/N_*.md"/]
   prop(["Proposals — one row each"])
   init(["Raised as its own initiative"])
-  g2{{"❖ Gate 2 — on that initiative, not here"}}
+  g2{{"❖ Understanding — on that initiative, not here"}}
 
   fin --> q --> note --> prop --> init --> g2
 

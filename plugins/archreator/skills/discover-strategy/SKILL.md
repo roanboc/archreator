@@ -1,11 +1,11 @@
 ---
 name: discover-strategy
-description: Procedure — run this when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer still contains template placeholders, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Gate 1) before anything else is built.
+description: Procedure — run this when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer does not exist yet or still holds template text, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Direction) before anything else is built.
 metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.3
-    gates: Gate 1
+    gates: Direction
 ---
 
 # ⚙ Discover the strategy
@@ -13,7 +13,7 @@ metadata:
 When this skill applies, **the entire initiative is discovery**: no code, no
 application design, no stack decisions. The deliverables are the strategy
 layer, the key business elements it implies, and a scope document recording
-**Gate 1**. Whatever request triggered the discovery follows as a separate
+**Direction**. Whatever request triggered the discovery follows as a separate
 initiative, which re-enters `align-change-through-layers` and finds the
 strategy filled in and current.
 
@@ -21,9 +21,9 @@ strategy filled in and current.
 
 | The situation | What it looks like |
 | ------------- | ------------------ |
-| Placeholders | `architecture/1_strategy/` still holds template text — the project's first real initiative |
+| Missing or placeholder | `architecture/1_strategy/` does not exist yet, or still holds template text — the project's first real initiative |
 | The change shifts strategy | It adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream |
-| Handed over from the canvases | `discover-business-model` granted Gate 0, and the strategy is derived from what it approved |
+| Handed over from the canvases | `discover-business-model` granted Direction, and the strategy is derived from what it approved |
 
 ## ⊖ When not to
 
@@ -34,7 +34,7 @@ strategy filled in and current.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.3`, and owns **Gate 1** — the approval every later
+Realizes `BPROC1.3`, and owns **Direction** — the approval every later
 initiative is judged against.
 
 ```mermaid
@@ -44,7 +44,7 @@ flowchart TD
   s2["⚙ 2 — Write the layer as you go"]
   s3["⚙ 3 — Write the scope document"]
   s4["⚙ 4 — Present for approval"]
-  g1{{"❖ Gate 1 — the strategy layer"}}
+  g1{{"❖ Direction — the strategy layer"}}
   pcl(["⇄ process-and-capability-levels"])
   out(["A strategy a change can be judged against"])
 
@@ -79,7 +79,7 @@ flowchart TD
   bends.
 - **Derive, don't re-ask.** Where the canvases are filled, the Requester has
   already answered most of themes 1, 2, 4 and 5 in business language and had
-  them approved at Gate 0. Start each theme from the blocks it derives from,
+  them approved at Direction. Start each theme from the blocks it derives from,
   draft the elements, and ask only what the canvases leave genuinely open.
   Re-asking a question already answered on an approved canvas is how a gated
   process loses trust. Note the source block on each derived element.
@@ -114,7 +114,7 @@ justifies it. Asking an organization to recall its capabilities from a blank
 page is the version of this theme that produces an org chart.
 
 Theme 6 discovers the **key** business elements — enough for the strategy to
-be judged coherent and for Gate 1 to mean something. Full business and
+be judged coherent and for Direction to mean something. Full business and
 information alignment still happens per initiative.
 
 **→ Produces** the answers, theme by theme.
@@ -127,8 +127,13 @@ of the conversation, not a transcript kept elsewhere.
 
 **← Needs** the answers from Step 1.
 
+A folder that does not exist yet is created now, from the plugin's assets:
+`assets/layers/1_strategy/` gives the layer its README, the first business
+elements do the same with `assets/layers/2_business/`, and the first filed
+source with `assets/layers/reference/`. Nothing was waiting empty.
+
 Each document opens `◐ Draft catalogue` and its tables carry `Source` and
-`Notes` until Gate 1 — `architecture-document-style` § Document status. Where
+`Notes` until Direction — `architecture-document-style` § Document status. Where
 the Requester provided anything to work from, it is filed in
 `architecture/reference/` and the `Source` column points there.
 
@@ -138,19 +143,21 @@ the Requester provided anything to work from, it is filed in
 ### 3 — Write the scope document
 
 Discovery is a full initiative, not a detour. Create it with
-`write-scope-document` **before** presenting Gate 1, so the Requester approves
+`write-scope-document` **before** presenting Direction, so the Requester approves
 against a concrete document.
 
 The alignment table records the impact on layers 1–2 with an explicit "not
-started" verdict for the rest. The Approvals table carries a Gate 1 row, plus
-`N/A` rows for Gate 2 and Gate 3 always — and for Gate 0 unless
-`discover-business-model` handed over, in which case it is already recorded.
+started" verdict for the rest. The Approvals table carries this skill's
+Direction row — the second one, where `discover-business-model` handed over,
+beside the row that sitting already wrote — and no rows for Understanding or
+Design: a docs-only discovery produces no code, so neither could have
+applied, and a gate that could not have applied gets no row.
 
 **→ Produces** `architecture/scope/<n>_*.md`, and its row in the index.
 
 ### 4 — Present for approval
 
-**❖ Gate 1 — the strategy layer.** The Requester approves.
+**❖ Direction — the strategy layer.** The Requester approves.
 
 Present one compact summary — stakeholders, drivers, goals, principles, value
 stream, key business elements — with **full branch links to each document
@@ -158,30 +165,30 @@ behind it** (`align-change-through-layers` § Show the Requester what they are
 approving), and ask explicitly for approval of the strategy.
 
 Record the approval in the Approvals table: who, when, what was shown, and
-move every document it covered from `◐` to `● Validated at Gate 1`, emptying
+move every document it covered from `◐` to `● Validated at Direction`, emptying
 `Notes` as you go — each note becomes a fact in the model, a row in the
-open-questions log, or nothing. Only after Gate 1 is granted may an
+open-questions log, or nothing. Only after Direction is granted may an
 implementation initiative build on this strategy. If changes are requested,
 revise from Step 2 and present again, leaving the status lines where they are.
 
 **← Needs** the strategy layer, the scope document.
 
-**→ Produces** the Approvals table's Gate 1 row.
+**→ Produces** the Approvals table's Direction row.
 
 ## ⇄ Hands off to
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
 | `process-and-capability-levels` | Theme 4, on an organization | Levelled capabilities seeded from a named reference model, detailed below level 2 only where a pain justifies it |
-| `discover-current-landscape` | Gate 1 is granted and the subject already runs — an organization with processes, applications and infrastructure nobody has written down | A described baseline in layers 2–5, which is what a later change is actually aligned against |
-| `align-change-through-layers` | Gate 1 is granted, and the original request is still unbuilt | The implementation initiative, which now finds the strategy current |
+| `discover-current-landscape` | Direction is granted and the subject already runs — an organization with processes, applications and infrastructure nobody has written down | A described baseline in layers 2–5, which is what a later change is actually aligned against |
+| `align-change-through-layers` | Direction is granted, and the original request is still unbuilt | The implementation initiative, which now finds the strategy current |
 
 ## ✎ Worked example
 
 > A project created from the scaffold gets its first feature request. Step 1c
 > of the spine finds placeholders, so the initiative becomes discovery. Theme
-> 2 yields eleven goals; consolidation leaves six, and the Gate 1 summary says
-> so. Gate 1 is granted against branch links to three documents — and the
+> 2 yields eleven goals; consolidation leaves six, and the Direction summary says
+> so. Direction is granted against branch links to three documents — and the
 > feature that triggered all this is then opened as its own initiative, which
 > is the thing the closing step has to say out loud.
 
@@ -198,14 +205,15 @@ revise from Step 2 and present again, leaving the status lines where they are.
 - Twenty goals, because nobody checks a change against twenty.
 - Writing principles that cannot be tested — "be secure" rather than "role
   determines access".
-- Building an implementation on a strategy whose Gate 1 has not been granted.
+- Building an implementation on a strategy whose Direction has not been granted.
 
 ## ☑ Done when
 
-- `architecture/1_strategy/` holds no template placeholders.
+- `architecture/1_strategy/` exists and holds no template placeholders.
 - Every element names what realizes it, or is marked "Pending — future initiative".
 - Derived elements note the canvas block they came from.
 - The scope document's alignment table covers every layer, and its Approvals
-  table has a row for every gate — granted or `N/A` with a reason.
+  table has a row for every gate reached, and for any that could have applied
+  and did not — `N/A` with a reason.
 - Open questions are logged for everything adopted but unconfirmed.
 - The request that triggered discovery has been named, and offered as the next initiative.

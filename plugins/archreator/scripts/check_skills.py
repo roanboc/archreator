@@ -17,18 +17,29 @@ and stale paths inside document templates.
 This script covers the skills, and lives outside `scaffold/` because a
 downstream project has no skills to check.
 
-Six things are checked:
+What is checked (the success line derives the live list from the checks
+that actually ran):
 
 - **Section markers** - every reference of the form skill-name, section sign,
-  heading names a skill that exists and a heading it actually has.
+  heading - backticked or written as a link - names a skill that exists and a
+  heading it actually has, in its SKILL.md or its references.
 - **Process binding** - every skill named in the process model exists, every
   level-2 process is realized by at least one skill, and a skill's own
   `realizes_process` agrees with the model.
 - **Required sections** - a skill declaring `metadata.archreator.kind` carries
   the headings its kind requires. A skill declaring no kind is skipped, which
   is what lets the corpus be converted in waves.
-- **Catalogue agreement** - the skill table in `skills/README.md` and its
-  deliberate copy in `scaffold/AGENTS.md` carry the same rows.
+- **Prefix registry** - the prefix table in the style rulebook matches
+  `element-prefixes.json`, the machine-readable copy the scaffold ships.
+- **Reference files** - every file under a skill's `references/` is linked
+  from its SKILL.md, so nothing citable is unreachable.
+- **Scaffold specimens** - no plausible element identifier ships in the
+  scaffold as an example a generated project would inherit.
+- **Catalogue** - the table in `skills/README.md` names exactly the skills
+  that exist, with the kind each declares. The scaffold's `AGENTS.md`
+  deliberately does not restate it.
+- **Assets** - every file under `assets/` is named by a skill that emits it,
+  and every asset a skill names exists.
 - **Manifest agreement** - the plugin manifest exists in both places hosts
   look for it, with the same fields, and the marketplace entry agrees.
 - **Context files** - the `CLAUDE.md` and `GEMINI.md` the scaffold plants
@@ -72,7 +83,8 @@ SKILLS_DIR = REPO_ROOT / "plugins" / "archreator" / "skills"
 PROCESS_DIR = REPO_ROOT / "docs" / "process"
 CATALOGUE = SKILLS_DIR / "README.md"
 SCAFFOLD_DIR = REPO_ROOT / "plugins" / "archreator" / "scaffold"
-CATALOGUE_COPY = SCAFFOLD_DIR / "AGENTS.md"
+SCAFFOLD_AGENTS = SCAFFOLD_DIR / "AGENTS.md"
+ASSETS_DIR = REPO_ROOT / "plugins" / "archreator" / "assets"
 # The plugin manifest, in the two places the hosts look for it. Claude Code
 # reads `.claude-plugin/plugin.json`; Copilot and Codex read the plugin root.
 # Neither is derived from the other at runtime, so CI holds them together the
@@ -129,8 +141,13 @@ FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n(.*)$", re.DOTALL)
 HEADING_RE = re.compile(r"^#{1,6}\s+(.+?)\s*$", re.M)
 # A skill name in backticks, a section sign, then the heading - which may wrap
 # onto the next line and runs into the prose after it. What follows the sign is
-# a window, not the name.
-MARKER_RE = re.compile(r"`([a-z0-9][a-z0-9-]*)`\s*§\s*([^\n]*(?:\n[^\n]*)?)")
+# a window, not the name. The name may also be the text of a Markdown link -
+# `[`skill`](../SKILL.md) § Heading` is how a reference file cites the page it
+# belongs to - so an optional `](...)` is allowed between the name and the
+# sign; without it, every citation written as a link went unchecked.
+MARKER_RE = re.compile(
+    r"`([a-z0-9][a-z0-9-]*)`(?:\]\([^)\n]*\))?\s*§\s*([^\n]*(?:\n[^\n]*)?)"
+)
 # Terminators that cannot appear inside a heading being cited mid-sentence.
 # An em-dash is not one: step headings use it, and the longest-prefix search
 # below already copes with a window that runs past the heading it names.
@@ -138,6 +155,7 @@ WINDOW_END_RE = re.compile(r"[.,;:)]|\s+§\s+")
 # A catalogue row: the skill in the first cell, linked or bare. Later cells are
 # split off rather than swept up, so the two tables may carry different
 # columns and still be compared on the ones they share.
+ASSET_PATH_RE = re.compile(r"\]\(\./([A-Za-z0-9_./-]+?)/?\)")
 CATALOGUE_ROW_RE = re.compile(r"^\|\s*(?:\[)?`([a-z0-9-]+)`(?:\]\([^)]*\))?\s*\|(.*)\|\s*$", re.M)
 # The level-2 rows of the process model: a dotted ID, the process name, and the
 # realizing skills in the last cell.
@@ -169,11 +187,35 @@ def skill_names() -> set[str]:
     return {p.name for p in SKILLS_DIR.iterdir() if (p / "SKILL.md").is_file()}
 
 
-def headings_of(skill: str) -> list[str]:
-    path = SKILLS_DIR / skill / "SKILL.md"
+def _headings(path: Path) -> list[str]:
     if not path.is_file():
         return []
     return [normalize(h) for h in HEADING_RE.findall(strip_code(path.read_text(encoding="utf-8")))]
+
+
+def headings_of(skill: str) -> list[str]:
+    """The skill's own headings - what a required section has to be found in."""
+    return _headings(SKILLS_DIR / skill / "SKILL.md")
+
+
+def reference_files(skill: str) -> list[Path]:
+    """The skill's progressive-disclosure references, if it has any."""
+    return sorted((SKILLS_DIR / skill / "references").glob("*.md"))
+
+
+def citable_headings(skill: str) -> list[str]:
+    """Every heading a `skill` section reference may name.
+
+    A rulebook keeps the rules that apply everywhere in SKILL.md and the lookup
+    tables needed only sometimes in references/. A citation names a heading, not
+    a file, so moving a section into a reference has to leave every citation of
+    it resolving - otherwise the split would cost an edit in each citing skill,
+    which is the churn progressive disclosure is supposed to avoid.
+    """
+    headings = headings_of(skill)
+    for path in reference_files(skill):
+        headings += _headings(path)
+    return headings
 
 
 def skill_meta(skill: str) -> dict:
@@ -208,12 +250,17 @@ def listed(meta: dict, key: str) -> list[str]:
 # This file defines the marker pattern, so it necessarily contains examples of
 # it. Scanning itself would report its own documentation as broken references.
 SELF = Path(__file__).resolve()
+# The same tooling-and-derived set the two scaffold validators skip: a brief
+# generated into .archreator/, or a stale pre-reset .docs/ staging copy, is
+# not the corpus's to validate.
+EXCLUDED_PARTS = {".git", ".claude", ".agents", ".gemini", ".codex",
+                  ".copilot", ".aip", ".docs", ".archreator", ".model"}
 
 
 def scanned_files() -> list[Path]:
     files = []
     for path in REPO_ROOT.rglob("*"):
-        if {".git", ".claude", ".aip"} & set(path.parts) or not path.is_file():
+        if EXCLUDED_PARTS & set(path.parts) or not path.is_file():
             continue
         if path.resolve() == SELF:
             continue
@@ -269,7 +316,7 @@ def check_section_markers(known: set[str]) -> list[str]:
                 continue
             seen.add(key)
             if skill not in cache:
-                cache[skill] = headings_of(skill)
+                cache[skill] = citable_headings(skill)
             words = candidate.split(" ")
             matched = False
             for count in range(len(words), 0, -1):
@@ -449,7 +496,9 @@ def check_prefix_registry() -> list[str]:
     skills. Neither is derived from the other at runtime, so CI holds them
     together.
     """
-    skill = SKILLS_DIR / "architecture-document-style" / "SKILL.md"
+    skill = (
+        SKILLS_DIR / "architecture-document-style" / "references" / "hierarchy-and-ids.md"
+    )
     registry = (
         REPO_ROOT / "plugins" / "archreator" / "scaffold" / "scripts" / "element-prefixes.json"
     )
@@ -462,7 +511,7 @@ def check_prefix_registry() -> list[str]:
         if line.strip().startswith("| Where ") and "Prefixes" in line
     ]
     if not header:
-        return ["architecture-document-style: the element-prefix table is missing"]
+        return ["architecture-document-style: references/hierarchy-and-ids.md has no element-prefix table"]
 
     documented: dict[str, str] = {}
     for line in lines[header[0] + 2:]:
@@ -493,6 +542,28 @@ def check_prefix_registry() -> list[str]:
     return errors
 
 
+def check_references_reachable(known: set[str]) -> list[str]:
+    """Every references/*.md is linked from the SKILL.md that owns it.
+
+    Progressive disclosure only works if the skill says what is one file away.
+    A reference nothing links to is a file the agent never learns exists, which
+    is worse than the section having stayed inline.
+    """
+    errors: list[str] = []
+    for skill in sorted(known):
+        files = reference_files(skill)
+        if not files:
+            continue
+        body = (SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
+        for path in files:
+            if f"references/{path.name}" not in body:
+                errors.append(
+                    f"{skill}: references/{path.name} is not linked from SKILL.md, "
+                    "so nothing will ever read it"
+                )
+    return errors
+
+
 def catalogue_rows(path: Path) -> dict[str, list[str]]:
     """Skill name -> its remaining cells, normalized."""
     if not path.is_file():
@@ -504,10 +575,70 @@ def catalogue_rows(path: Path) -> dict[str, list[str]]:
     return rows
 
 
+def check_assets(known: set[str]) -> list[str]:
+    """Every asset is named by a skill, and every asset the index names exists.
+
+    Named, not emitted: this is a reachability check on plain text, and it
+    cannot tell an emission instruction from a mention. What it guarantees is
+    that no asset is orphaned from the corpus that is supposed to emit it.
+
+    `check_links.py` cannot check this tree - a template's relative links are
+    written for the project it lands in - so what it would have caught is
+    caught here instead, and more usefully: a link resolving proved a file was
+    there, this proves a file is reachable by the process that emits it.
+
+    The assets README is the index; a skill claims an asset by naming its path.
+    """
+    if not ASSETS_DIR.is_dir():
+        return []
+    errors: list[str] = []
+    named: set[str] = set()
+    # The skills only: the assets README is the index, and an index row is a
+    # claim about who emits a file, not the emission itself. With the README
+    # in the haystack, an asset no skill ever mentions passed on the strength
+    # of its own catalogue entry — the exact rot this check exists to catch.
+    sources = [SKILLS_DIR / s / "SKILL.md" for s in sorted(known)]
+    sources += sorted((SKILLS_DIR).rglob("references/*.md"))
+    haystack = "\n".join(
+        p.read_text(encoding="utf-8") for p in sources if p.is_file()
+    )
+
+    for path in sorted(ASSETS_DIR.rglob("*")):
+        if not path.is_file() or path == ASSETS_DIR / "README.md":
+            continue
+        rel = path.relative_to(ASSETS_DIR).as_posix()
+        # A skill claims a file by its qualified path (`assets/github/
+        # pull_request_template.md`) or any of its folders with a trailing
+        # slash (`assets/github/`). The claim carries the `assets/` prefix so
+        # an ordinary word cannot claim by accident, and the bare `layers`
+        # folder is not claimable: `assets/layers/` names the whole shelf,
+        # which is exactly the generic mention that made this check vacuous.
+        parts = rel.split("/")
+        claims = {f"assets/{rel}"}
+        for depth in range(1, len(parts)):
+            ancestor = "/".join(parts[:depth])
+            if ancestor != "layers":
+                claims.add(f"assets/{ancestor}/")
+        if any(claim in haystack for claim in claims):
+            named.add(rel)
+        else:
+            errors.append(
+                f"assets/{rel}: no skill names it, so nothing will ever emit it"
+            )
+
+    index = (ASSETS_DIR / "README.md")
+    if not index.is_file():
+        errors.append("assets/README.md is missing - it is the index of what gets emitted when")
+    else:
+        for match in ASSET_PATH_RE.findall(index.read_text(encoding="utf-8")):
+            if not (ASSETS_DIR / match).exists():
+                errors.append(f"assets/README.md names assets/{match}, which does not exist")
+    return errors
+
+
 def check_catalogue(known: set[str]) -> list[str]:
     errors: list[str] = []
     primary = catalogue_rows(CATALOGUE)
-    copy = catalogue_rows(CATALOGUE_COPY)
     if not primary:
         return ["plugins/archreator/skills/README.md: no skill rows found"]
 
@@ -516,18 +647,6 @@ def check_catalogue(known: set[str]) -> list[str]:
         errors.append(f"skills/README.md: `{skill}` exists but is not in the catalogue")
     for skill in sorted(set(primary) - known):
         errors.append(f"skills/README.md: `{skill}` is catalogued but no such skill exists")
-    for skill in sorted(set(primary) - set(copy)):
-        errors.append(f"scaffold/AGENTS.md: `{skill}` is missing from the copied table")
-    for skill in sorted(set(copy) - set(primary)):
-        errors.append(f"scaffold/AGENTS.md: `{skill}` is in the copied table but not the catalogue")
-    for skill in sorted(set(primary) & set(copy)):
-        # The catalogue carries a Kind column the copy does not, so compare the
-        # last cell - the one both tables end on.
-        if primary[skill][-1] != copy[skill][-1]:
-            errors.append(
-                f"scaffold/AGENTS.md: the row for `{skill}` has drifted from skills/README.md"
-            )
-
     for skill, cells in sorted(primary.items()):
         declared = skill_meta(skill).get("kind")
         if not declared or len(cells) < 2:
@@ -611,7 +730,7 @@ def check_context_files() -> list[str]:
     the other hosts never see, which is the drift this catches.
     """
     errors: list[str] = []
-    if not CATALOGUE_COPY.is_file():
+    if not SCAFFOLD_AGENTS.is_file():
         errors.append("scaffold/AGENTS.md is missing - it is the entry point the others import")
     for name in CONTEXT_POINTERS:
         path = SCAFFOLD_DIR / name
@@ -642,17 +761,23 @@ def main() -> int:
         print(f"No skills found under {SKILLS_DIR.relative_to(REPO_ROOT)} - nothing to check.")
         return 0
 
-    all_errors: list[str] = []
-    for label, errors in [
+    # The labels are also what the success line reports, so a check added here
+    # is announced without a second list to keep in step.
+    checks = [
         ("section markers", check_section_markers(known)),
         ("process binding", check_process_binding(known)),
         ("required sections", check_required_sections(known)),
         ("prefix registry", check_prefix_registry()),
+        ("reference files", check_references_reachable(known)),
         ("scaffold specimens", check_scaffold_specimens()),
         ("catalogue", check_catalogue(known)),
+        ("assets", check_assets(known)),
         ("manifests", check_manifests()),
         ("context files", check_context_files()),
-    ]:
+    ]
+
+    all_errors: list[str] = []
+    for label, errors in checks:
         if errors:
             all_errors.append(f"{label}:")
             all_errors.extend(f"  {e}" for e in errors)
@@ -664,9 +789,9 @@ def main() -> int:
         return 1
 
     converted = sum(1 for s in known if skill_meta(s).get("kind"))
-    print(f"{len(known)} skills ({converted} converted): section markers, process "
-          f"binding, required sections, catalogue, manifests and context files "
-          f"all resolve.")
+    labels = [label for label, _ in checks]
+    named = ", ".join(labels[:-1]) + f" and {labels[-1]}"
+    print(f"{len(known)} skills ({converted} converted): {named} all resolve.")
     return 0
 
 

@@ -24,7 +24,7 @@
 <!-- Link the initiative's scope document in the sibling repository,
      https://github.com/roanboc/architecture-archreator — usually under
      product-archreator/architecture/scope/. Its Approvals table records
-     the gates the change passed (Gate 2 at minimum for any change in
+     the gates the change passed (Understanding at minimum for any change in
      documented behavior). A change with no documented behavior change —
      a bug fix, a packaging or CI change — states "no scope document"
      here with the reason. -->
@@ -37,6 +37,13 @@
 - **Scaffold** — anything under scaffold/
 - **Docs / site** — under docs/ or site/
 - **Plugin package / CI** — the plugin and marketplace manifests, workflows
+
+## Complexity
+
+<!-- The method's first principle, asked of every change: what was removed?
+     What new recurring cost does this add — a file in the scaffold, a check
+     to keep green, a copy to hold together — and why is it justified?
+     "Nothing removed, nothing recurring added" is a complete answer. -->
 
 ## Verification
 

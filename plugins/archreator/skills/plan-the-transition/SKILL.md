@@ -1,11 +1,11 @@
 ---
 name: plan-the-transition
-description: Procedure — run this when the Requester wants to know where the architecture should go and in what order, rather than how to deliver one change. Turns an approved baseline into named target plateaus, a derived gap register and a sequence of initiatives, recorded in architecture/6_transition/ and approved at Gate 1. Use it for target state, to-be architecture, gap analysis, transition planning, a roadmap, or when changes keep arriving with nothing to judge their priority against.
+description: Procedure — run this when the Requester wants to know where the architecture should go and in what order, rather than how to deliver one change. Turns an approved baseline into named target plateaus, a derived gap register and a sequence of initiatives, recorded in architecture/6_transition/ and approved at Direction. Use it for target state, to-be architecture, gap analysis, transition planning, a roadmap, or when changes keep arriving with nothing to judge their priority against.
 metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC5.1
-    gates: Gate 1
+    gates: Direction
 ---
 
 # ⚙ Plan the transition
@@ -45,8 +45,8 @@ the changes on it has quietly deleted every gate the method has.
 Realizes `BPROC5.1`, and it is the only process in the method whose output
 describes a future rather than a present.
 
-It owns **Gate 1**, which `discover-strategy` also owns. That is deliberate
-rather than a collision: Gate 1 is the gate at which a Requester approves
+It owns **Direction**, which `discover-strategy` also owns. That is deliberate
+rather than a collision: Direction is the gate at which a Requester approves
 **direction**, and a sequenced target is direction in the same sense a
 strategy layer is. Giving the roadmap a gate of its own would add a row to
 every Approvals table in every model — including the merged scope documents no
@@ -59,8 +59,8 @@ flowchart TD
   s2["⚙ 2 — Name the target plateaus"]
   s3["⚙ 3 — Derive the gap register"]
   s4["⚙ 4 — Sequence the initiatives"]
-  s5["⚙ 5 — Write the scope document, present Gate 1"]
-  g1{{"❖ Gate 1 — the target and the sequence"}}
+  s5["⚙ 5 — Write the scope document, present Direction"]
+  g1{{"❖ Direction — the target and the sequence"}}
   s6["⚙ 6 — Bind the roadmap to the spine"]
   dcl(["⇄ discover-current-landscape"])
   acl(["⇄ align-change-through-layers"])
@@ -99,11 +99,11 @@ flowchart TD
   cheaper than discovering.
 - **The roadmap declares its own standing.** Its documents define elements, so
   they carry a status line like any others: `◐ Draft catalogue` while the
-  target is being drafted, `● Validated at Gate 1` once the Requester has
+  target is being drafted, `● Validated at Direction` once the Requester has
   settled it (`architecture-document-style` § Document status). A roadmap
   nobody has approved and one that was agreed last quarter are read very
   differently, and only the marker says which is on the screen.
-- **Nothing here is approved to build.** Gate 1 approves the destination and
+- **Nothing here is approved to build.** Direction approves the destination and
   the order. Every initiative on the roadmap runs the spine, and no gate is
   skipped because the roadmap already named it.
 - **A roadmap that is not revisited is worse than none**, because it is
@@ -149,7 +149,9 @@ done, it does not belong here.
 
 **← Needs** the strategy layer, and the baseline from Step 1.
 
-**→ Produces** the plateaus in `architecture/6_transition/`.
+**→ Produces** the plateaus in `architecture/6_transition/` — emitted from
+the plugin's `assets/layers/6_transition/` the first time, since the folder
+does not exist until a target state does.
 
 ### 3 — Derive the gap register
 
@@ -191,7 +193,7 @@ stale dates stops being read.
 
 **→ Produces** the sequence in `architecture/6_transition/`.
 
-### 5 — Write the scope document, present Gate 1
+### 5 — Write the scope document, present Direction
 
 Planning is a full initiative. Create the scope document with
 `write-scope-document` before presenting, so the Requester approves against a
@@ -203,7 +205,7 @@ the numbered layers describe today. The one exception is `1_strategy`, where
 naming a target routinely surfaces a course of action the layer did not carry
 — record that as a change, because it is one.
 
-**❖ Gate 1 — the target and the sequence.** The Requester approves.
+**❖ Direction — the target and the sequence.** The Requester approves.
 
 Present the plateaus, the gaps under each, and the order, with full branch
 links (`align-change-through-layers` § Show the Requester what they are
@@ -217,7 +219,7 @@ Record the approval in the Approvals table, naming the roadmap documents shown.
 **← Needs** the plateaus, the gaps, the sequence.
 
 **→ Produces** `architecture/scope/<n>_*.md`, its row in the index, and the
-Approvals table's Gate 1 row.
+Approvals table's Direction row.
 
 ### 6 — Bind the roadmap to the spine
 
@@ -236,7 +238,7 @@ is what makes the roadmap a record of direction over time instead of a
 perpetually optimistic present tense. A plateau abandoned is marked abandoned,
 with why, for the same reason.
 
-**← Needs** Gate 1.
+**← Needs** Direction.
 
 **→ Produces** the roadmap's status column, kept current by later initiatives.
 
@@ -246,7 +248,7 @@ with why, for the same reason.
 | ----- | ---- | --------------- |
 | `discover-current-landscape` | Step 1 finds the lower layers empty | A described, approved baseline — after which this skill restarts at Step 2 |
 | `restate-current-state` | Step 1 finds the current-state documents drifted | A model that describes today, which is what a gap has to be measured against |
-| `write-scope-document` | Step 5 | The initiative's record, and the Approvals table Gate 1 is written in |
+| `write-scope-document` | Step 5 | The initiative's record, and the Approvals table Direction is written in |
 | `align-change-through-layers` | Step 6, once per initiative on the sequence, as each is actually started | A delivered change, whose scope document cites the gaps it closed |
 | `record-decision` | A call inside the plan is consequential and smaller than the plan — which plateau a contested system lands in, and why | A numbered decision record the roadmap can point at instead of re-arguing |
 
@@ -258,7 +260,7 @@ with why, for the same reason.
 > eleven gaps, four of which are Pending rows left by the landscape sweep.
 > Step 4 groups them into five initiatives and finds that three of them cannot
 > start until the identity work lands, which settles most of the ordering
-> without asking anyone. The Requester, at Gate 1, moves one initiative later
+> without asking anyone. The Requester, at Direction, moves one initiative later
 > because a contract renewal makes next year cheaper than this one — an
 > ordering fact no architect had. The roadmap records the reason beside the
 > sequence, so the next reader does not re-derive it.
@@ -272,7 +274,7 @@ with why, for the same reason.
 - Sequencing every gap, until the roadmap is a backlog nobody reads.
 - Writing target elements into the numbered layers, which are the model's only
   description of today.
-- Treating Gate 1 on the roadmap as approval to build the things on it.
+- Treating Direction on the roadmap as approval to build the things on it.
 - Deleting a plateau when it is reached, leaving no record that it was ever
   the plan.
 
@@ -287,7 +289,7 @@ with why, for the same reason.
 - The sequence orders initiatives by dependency, and the Requester's ordering
   choices are recorded with their reasons.
 - Nothing in `architecture/6_transition/` has leaked into the numbered layers.
-- The scope document records Gate 1 as granted, naming the roadmap documents
+- The scope document records Direction as granted, naming the roadmap documents
   shown, and the presentation said plainly that the work itself is not
   approved.
 - The roadmap says how it is kept current, and who does it.

@@ -62,7 +62,7 @@ strips the glyph before matching.
 | `⚖` | Judgement | The criteria to weigh, where the step is a decision rather than a mechanism |
 | `←` | Needs | What the step consumes from an earlier one |
 | `→` | Produces | What it writes, by path |
-| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely names gates it does not own to say they are `N/A` |
+| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely draws a gate it does not own to show where its own work ends |
 
 **Needs and Produces each get their own paragraph.** Consecutive lines are one
 paragraph in markdown, and the two arrows render on one line if they share it.
@@ -76,7 +76,8 @@ reading a word of it.
 
 Filled boxes are this skill's steps. Unfilled ones are skills it reaches.
 Rose hexagons are gates. Glyph, shape and colour follow
-[`architecture/README.md` § Notation conventions](../plugins/archreator/scaffold/architecture/README.md#notation-conventions),
+the `architecture-document-style` rulebook's
+[ArchiMate on Mermaid reference](../plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md),
 which stays the single source for the palette.
 
 ## Cross-references
@@ -94,6 +95,33 @@ correctly on both paths.
 **A skill never cites an element ID from a specific model.** `P3` is that
 model's third principle, and in a downstream project it resolves to something
 else entirely. Name the principle.
+
+## References
+
+A skill may keep lookup content in `references/*.md` beside its `SKILL.md`.
+**SKILL.md holds what is needed to decide; a reference holds what is needed to
+look up.** The test is whether the content is read on every activation or only
+on some: the rule that a diagram opens its section is read every time, the
+table of which Mermaid shape a Plateau takes is read when somebody draws one.
+
+The split exists because a rulebook is loaded by every skill that obeys it, so
+its size is paid on almost every activation. `architecture-document-style` was
+39,850 characters — roughly ten thousand tokens, on top of whatever the agent
+was actually asked to do. Moving its glyph, shape, colour, prefix and canvas
+tables into references cut it to 14,221 without deleting a rule.
+
+Three rules keep it honest, and `check_skills.py` enforces the first two:
+
+- **A citation names a heading, not a file.** `` `skill` § Heading `` resolves
+  against the skill's SKILL.md *and* its references, so moving a section into a
+  reference costs no edit anywhere else. That is what makes the split
+  reversible and cheap.
+- **Every reference is linked from its own SKILL.md**, in a table saying when
+  to read it. A reference nothing links to is a file the agent never learns
+  exists, which is worse than the section having stayed inline.
+- **A reference is not a required section.** The sections a kind owes —
+  § Sections — are found in SKILL.md or not at all. A skill cannot satisfy
+  *Rules* by having a reference that happens to contain rules.
 
 ## Where this format came from
 

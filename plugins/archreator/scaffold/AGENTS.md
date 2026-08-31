@@ -3,8 +3,9 @@
 **This project has not been bootstrapped yet.** It is a fresh copy of the
 [archreator](./README.md) template: the method works, the model is empty.
 Run the `establish-project` skill before anything else — it names the
-project, declares the modeling depth, prunes what wasn't inherited, and
-hands off to discovery. Everything in this file below the rule is a
+project, declares the modeling depth, fills in this file, and hands off to
+discovery. Nothing arrives that the project does not use, so there is
+nothing to prune. Everything in this file below the rule is a
 placeholder it will replace.
 
 <!--
@@ -23,44 +24,42 @@ the Requester's approval, record it in a scope document (`architecture/scope/`),
 then implement. Pure bug fixes that change no documented behavior skip the
 alignment and the gates, but still keep the docs true.
 
+## Who decides
+
+Every change moves through three roles. Nothing here assumes a human fills the
+middle one — an AI agent and a person follow the same steps, in the same order,
+against the same documents.
+
+| Role | Who | Does |
+| ---- | --- | ---- |
+| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff. **Grants the gate approvals** before any code is written |
+| **Agent** | An AI agent (or a person) | Works the change through the layers, stops at each gate for the Requester's approval, writes the scope document, implements, and opens a pull request |
+| **Reviewer** | \<who reviews and merges> | Reviews and merges. Nothing ships without a human approving it |
+
+An approval that isn't recorded didn't happen: every gate is written into the
+scope document's Approvals table, with who approved, when, and what was shown.
+
 ## Modeling depth
 
 **Declared depth: _not yet declared_** — `establish-project` sets this.
 
 The six layers describe a weekend app and a twenty-business-line company
 alike; the depth says how much of them gets filled in and which gates apply
-(see [`architecture/README.md` § Modeling depth](./architecture/README.md#modeling-depth)).
+(see [`architecture/README.md`](./architecture/README.md)).
 Depth 1 is one application with a light strategy layer; Depth 2 is one
-organization; Depth 3 splits the model into [domains](./architecture/domains/README.md).
+organization; Depth 3 splits the model into domains, one per business line.
 It is a starting posture, never a ceiling — deepening or descoping is a
 normal initiative, decided by the Requester.
 
 ## The skills
 
-Your coding agent surfaces these from their `description:` frontmatter; you
-don't invoke them by name in normal use. They are listed in the order they are
-used in, with the four rulebooks — consulted rather than run — at the end.
+Your coding agent surfaces the archreator skills from their `description:`
+frontmatter; you don't invoke them by name in normal use. Three kinds: `⚙` a
+procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
 
-| Skill | Reach for it when |
-| ----- | ----------------- |
-| `establish-project` | A project from the template hasn't been set up yet — start here |
-| `discover-business-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |
-| `discover-strategy` | The strategy is unfilled or the change shifts it (Gate 1) |
-| `model-domains` | The organization is large enough to split into business lines, or a change crosses a domain boundary |
-| `discover-current-landscape` | The subject already exists and layers 2–5 are empty — sweep the estate into a described baseline |
-| `plan-the-transition` | The question is where the architecture should go and in what order — target plateaus, a gap register and a sequence |
-| `align-change-through-layers` | Any requirement change. **The spine** — defines the gates and the order |
-| `write-scope-document` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
-| `shard-stories` | A work package is too large to finish in one sitting |
-| `write-pr-description` | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
-| `restate-current-state` | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
-| `record-decision` | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
-| `answer-architecture-question` | A reader wants a focused, disposable brief about one element, domain, concern, impact or decision |
-| `run-retrospective` | An initiative or engagement just finished — capture what the method didn't cover before it evaporates |
-| `document-style` | Writing or editing any document at all — the language, what it may contain, and how it links |
-| `architecture-document-style` | Editing anything under `architecture/` — numbering, element IDs, tiers, ArchiMate-on-Mermaid, actors, the grounding rule |
-| `process-and-capability-levels` | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
-| `stack-selection` | No technology stack chosen yet on a small application |
+The catalogue lives with the skills, in the plugin — it is not restated here,
+because a copy in every generated project is a copy that goes stale in every
+generated project.
 
 ## Layout
 
@@ -69,25 +68,19 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 - `tests/` — ...
 -->
 
-- `architecture/` — everything architectural: the numbered ArchiMate layers
-  describing the current state, `architecture/6_transition/` — the one place the
-  model describes a future — `architecture/reference/` — the transcripts,
-  decks and documents it was built from, kept as they arrived —
-  `architecture/domains/` (Depth 3 only), `architecture/scope/` — one document
-  per initiative — and `architecture/decisions/` for calls smaller than an
-  initiative.
+- `architecture/` — what this project knows about itself. Its `README.md` is
+  the front door and says, per layer, whether this model owns it, another
+  model does, it is out of scope, or it is a named gap. **A folder exists only
+  once it holds something**; the skills emit the one they need when they need
+  it, so an empty directory is never a substitute for saying what is missing.
 - **Every document that defines an element says how far it has been
   validated**, with `○` not started, `◐` a draft catalogue of things somebody
   said exist, or `●` validated at a named gate on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing.
-- `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
-  development workflow.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
-  push, and the three tools: the projection, the documentation portal and the
-  PDF export.
-- `mkdocs.yml` and `overrides/` — how the model is published as a website.
-  Everything they produce lands in `.docs/`, which is derived and gitignored.
+  push. Everything else the method can do runs from the plugin rather than
+  from a copy in here.
 
 ## Commands
 
@@ -96,7 +89,6 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 npm run lint
 npm run typecheck
 npm test
-npm run build
 ```
 All of them must be green before pushing; CI runs the same.
 -->
@@ -106,22 +98,21 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing. Five tools sit beside them, none of them a
-gate:
+Both must be green before pushing. They need nothing but Python — no network,
+no plugin installed — which is the point: this project can check itself.
+
+Everything else the method can do runs from the plugin against this project,
+so there is one copy of each tool rather than one per project:
 
 ```bash
-python3 scripts/build_model.py    # the model as nodes and edges, in .model/
-python3 scripts/query_model.py coverage    # what is grounded, and what is not
-python3 scripts/build_brief.py --element CAP1 --focus impact  # one question, as a brief
-python3 scripts/build_docs.py     # the model as a website, in .docs/site/
-python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
+model.py --project . trace BSVC1     # what a change here would touch
+model.py --project . coverage        # what names no realizing artifact
+model.py --project . portal          # the model as a website, for a reader outside the repo
+build_brief.py --project . --element BSVC1 --focus impact
 ```
 
-`query_model.py` answers the questions a table cannot — `trace <ID>` for what a
-change to one element would touch, `coverage` for what names no realizing
-artifact — and reads the projection `build_model.py` writes. The last two are
-for a reader who is not in this repository. All five are regenerated from the
-Markdown under `architecture/`, which stays the source of truth.
+Everything they generate lands under `.archreator/`, which is gitignored.
+Delete it and nothing is lost.
 
 ## Conventions
 

@@ -81,9 +81,10 @@ change fills the same body — a pure bug fix included.
 | Section | Holds |
 | ------- | ----- |
 | **Summary** | What the branch delivers, in two to four sentences |
-| **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Its Approvals table must already record the gates the change required — Gate 2 at minimum, per `align-change-through-layers` § The gates. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
+| **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Its Approvals table must already record the gates the change required — Understanding at minimum, per `align-change-through-layers` § The gates. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
 | **EA layers touched** | The verdicts copied from the scope document's alignment table. Every layer gets one, including an explicit "no change" |
 | **Changes** | Grouped by work package or area, covering the full `main...HEAD` diff |
+| **Complexity** | What was removed, and what new recurring cost the change adds — a file in the scaffold, a check to keep green, a copy to hold together — with why it is justified. "Nothing removed, nothing recurring added" is a complete answer |
 | **Verification** | The commands run — lint, typecheck, tests, build — and their results, plus manual and end-to-end checks |
 | **Out of scope / follow-ups** | The scope document's gap notes, mirrored |
 

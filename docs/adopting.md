@@ -62,25 +62,32 @@ Option C and copy it yourself.
 
 ## Option C — clone the scaffold directly
 
-Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It holds:
+Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It is eleven files:
 
 - `AGENTS.md` and `README.md` — placeholders you'll fill in when the
   bootstrap skill runs
 - `CLAUDE.md` and `GEMINI.md` — one line each, importing `AGENTS.md`, so
   the host that reads only its own filename still finds the entry point
-- `architecture/` — layer READMEs for the six description layers and for
-  `6_transition/`, plus `scope/` and `decisions/`
-- `scripts/` — the two validators, run before every push, and the three tools:
-  the projection, the documentation portal and the PDF export
-- `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a
-  website, the pull-request template a change is described in, and the issue
-  form a reader of that website raises a question through. Nothing deploys it; where the built folder goes is your call. See
-  [`docs/publishing.md`](./publishing.md)
+- `architecture/README.md` — the front door: a status row per layer saying
+  `Local`, `External`, `Out of scope` or a named `Gap`. Layer folders appear
+  when a skill first has something to put in them, from the plugin's
+  `assets/`
+- `scripts/` — the two validators, run before every push, the parse they
+  share, its prefix data and their own README. The reading tools stay in the
+  plugin and reach a project with `--project` — see
+  [§ Reaching a reader who will not open the repository](#reaching-a-reader-who-will-not-open-the-repository)
+- `.gitignore` — keeps bytecode, machine-local settings and everything
+  regenerated out of the history
 
 Then follow the bootstrap checklist by hand, or install the skills and let
 `establish-project` do it.
 
 ## Keeping a project in sync with the method
+
+A project that adopted the method before 0.2 has a one-time crossing to make
+first — the renamed gates, the scripts that moved to the plugin, and what an
+existing model deliberately keeps. That is [`docs/migrating.md`](./migrating.md),
+and it is separate from the routine sync below.
 
 Three things ship in this repo with different lifecycles, and only one of
 them stays in sync automatically:
@@ -100,7 +107,7 @@ them stays in sync automatically:
 
 If a scaffold change matters enough to backport (a rule that would
 retroactively affect an existing model), it becomes an initiative in your
-project like any other: assessed, approved at Gate 2, and applied by hand.
+project like any other: assessed, approved at Understanding, and applied by hand.
 
 ## Reading order
 
@@ -116,3 +123,43 @@ Improvements to the method (a new skill, a change to an existing one, a
 rule refinement) are welcome. See [`CONTRIBUTING.md`](../CONTRIBUTING.md)
 in the root — the method itself governs how it evolves, so a proposal runs
 through the same gates it makes you run through.
+
+## Reaching a reader who will not open the repository
+
+Two ways, and neither of them is a second copy of the model.
+
+**A portal.** One command writes a stock MkDocs Material config into
+`.archreator/work/portal/` and tells you how to build or serve it:
+
+```bash
+model.py --project . portal
+uvx --with mkdocs-material mkdocs build -f .archreator/work/portal/mkdocs.yml
+```
+
+That is the whole of it — a theme, Mermaid, and search. There was a custom
+theme directory once: an overridden template, a comment box, a hand-written
+pan-and-zoom viewer, a PDF cover page. Five hundred lines of front-end that had
+to keep working across two upstream projects, to render documents that render
+fine without them.
+
+**A brief.** For one question rather than the whole model, `build_brief.py`
+writes a single Markdown document about a named scope — the elements in it,
+generated views of how they cross the layers, and what the documents already
+say. Hand that to somebody, or convert it to whatever format they asked for.
+
+```bash
+build_brief.py --project . --element BSVC1 --focus business
+```
+
+**A PDF is a conversion, not an export.** There was a PDF exporter once — a
+headless browser printing the whole model through a print-site plugin — and
+it produced the artifact most likely to be mailed around and quoted eight
+months after it stopped being true. What replaced it is a rule rather than a
+tool: a business reader who asks for a PDF gets one brief or scope converted
+by the agent, landing under gitignored `.archreator/work/` beside its
+Markdown source — never the whole model. Turning one page of Markdown into a
+PDF is something any agent can do; the boundary is the part the method owns.
+
+Everything generated lands under `.archreator/`, which is gitignored. Delete it
+and nothing is lost; a published copy that lives in the repository is the
+second model everyone edits instead.

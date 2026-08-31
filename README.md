@@ -47,9 +47,9 @@ the one you can hand over.
 flowchart LR
   req(["A requirement"]):::human
   intention["<b>Intention</b><br/>why, and for whom"]:::ai
-  gA{{"You approve<br/>the direction"}}:::gate
+  gA{{"❖ <b>Direction</b><br/>you approve where this is going"}}:::gate
   operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
-  gB{{"You approve —<br/>before any code exists"}}:::gate
+  gB{{"❖ <b>Understanding</b><br/>you approve, before any code exists"}}:::gate
   out(["A sharper requirement —<br/>agreed, and written down"]):::done
 
   req --> intention --> gA --> operation --> gB --> out
@@ -68,13 +68,17 @@ one you arrived with — who it serves, what it has to do, and which of your
 assumptions turned out to disagree with each other. The dotted edges are the
 loops that can't be skipped, and neither gate here is about code.
 
+**Those names are the method's, not the diagram's.** Direction, Understanding
+and Design are what the skills call them too, so nothing you read later
+renames what you just approved.
+
 ### Then — what gets built from it
 
 ```mermaid
 flowchart LR
   inp(["What you agreed"]):::done
   realization["<b>Realization</b><br/>what builds it"]:::ai
-  gC{{"Want to see<br/>the design first?"}}:::gateopt
+  gC{{"❖ <b>Design</b><br/>only if you ask to see it first"}}:::gateopt
   build["Builds it"]:::ai
   check{{"You check<br/>the delivery"}}:::gate
   out(["The outcome you asked for,<br/>and the next requirement"]):::done
@@ -153,6 +157,11 @@ Then just say what you want to model. The `establish-project` skill takes it
 from there — it asks two questions, picks a depth, and writes you a working
 project on the first commit.
 
+**If you already are an architect**, the other route is to read the model
+directly: it is a standard layered structure in plain files, navigable in the
+order you already know, and you never have to ask an agent to summarise it for
+you.
+
 On Codex, on Gemini CLI, or if you'd rather clone the scaffold than install
 anything, [`docs/adopting.md`](./docs/adopting.md) has the recipe for each and
 says exactly what lands in your project either way.
@@ -162,10 +171,10 @@ says exactly what lands in your project either way.
 | | |
 | --- | --- |
 | **18 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
-| **A scaffold** | Six layer folders, the notation, two validators, and placeholder entry points. A working project before you've written anything. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
+| **Eleven files on your first commit** | And every one of them is used. Your model's front page says, per layer, whether it is here, somewhere else, out of scope, or a gap — a folder appears when it has something to hold. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
 | **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
-| **A portal and a PDF, when you need them** | The same documents as a searchable website and as one printable document, for the people who will never open a repository. Both are rebuilt from the Markdown and thrown away. [How it works](./docs/publishing.md) |
-| **Nothing to operate** | No database, no server, no account, and nothing to export before an agent can read it. Markdown in git is the model |
+| **A portal, on request** | The same documents as a searchable website, for the people who will never open a repository. Stock MkDocs, one command, gitignored output. [How it works](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) |
+| **Nothing to operate, and nothing cached** | No database, no server, no account, nothing to export before an agent can read it, and no projection that can answer from a revision the model has moved past. Markdown in git is the model, and every tool reads it fresh |
 
 > **See it in use.** Worked models — an organization, the method modeling
 > itself, the guidance site — live in
@@ -183,7 +192,7 @@ from it. That single choice is why nothing has to be exported before the model
 can be used, and why there is nothing to keep running.
 
 Rendering it for people is a separate, optional step —
-[a portal and a PDF](./docs/publishing.md) are one command each, regenerated
+[a portal](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) is one command, regenerated
 from the Markdown and gitignored, so the published copy can never become the
 second model everyone edits instead.
 
@@ -194,7 +203,7 @@ second model everyone edits instead.
 | **What the method does, and how** | [`docs/method.md`](./docs/method.md) — the process, the layers, the loop |
 | **How to adopt it in your project** | [`docs/adopting.md`](./docs/adopting.md) |
 | **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, in the order they're used |
-| **How the model reaches people who won't clone it** | [`docs/publishing.md`](./docs/publishing.md) — the portal, the PDF, and how a question comes back |
+| **How the model reaches people who won't clone it** | [`docs/adopting.md`](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) — the portal, and the brief that answers one question |
 | **The method as a levelled process model** | [`docs/process/`](./docs/process/README.md) — the macro map, a SIPOC per process, and which skill realizes each |
 | **The format every skill follows** | [`docs/skill-format.md`](./docs/skill-format.md) — frontmatter, the fixed sections, and the glyphs that mark them |
 | **Which standards it rests on** | [`docs/standards-alignment.md`](./docs/standards-alignment.md) — every coined term, the established name behind it, and where the method is genuinely its own |

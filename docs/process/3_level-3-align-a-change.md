@@ -3,8 +3,8 @@
 _[← The process model](./README.md) · [Level 2](./2_level-2-processes.md)_
 
 The one process decomposed past level 2, and the
-[focus table](./README.md#the-focus-table) says why: every gate but Gate 0 and
-Gate 1 sits here, and its branching is more than one diagram can carry legibly.
+[focus table](./README.md#the-focus-table) says why: the Understanding and Design gates both
+sit here, and their branching is more than one diagram can carry legibly.
 
 ```mermaid
 flowchart TD
@@ -16,10 +16,10 @@ flowchart TD
   bugfix{"Pure bug fix, no documented behavior changes?"}
   walk23["⚙ Align business and information [BPROC2.1.3]"]
   scope["⚙ Draft the scope document [BPROC2.1.4]"]
-  g2{{"❖ Gate 2 — strategy, business, information"}}
-  opt{"Gate 3 requested?"}
+  g2{{"❖ Understanding — strategy, business, information"}}
+  opt{"Design requested?"}
   walk45["⚙ Align application and technology [BPROC2.1.5]"]
-  g3{{"❖ Gate 3 — the solution design"}}
+  g3{{"❖ Design — the solution design"}}
   out(["Ready to implement — BPROC2.2"])
   disc(["Hand off to discovery — BPROC1.2 or BPROC1.3"])
 
@@ -48,7 +48,7 @@ flowchart TD
 | `BPROC2.1.2` | Assess the strategy layer against the change | The depth is stated | One of four verdicts, stated and recorded |
 | `BPROC2.1.3` | Align business and information | The verdict is "aligned" and this is not a pure bug fix | Changed `2_business/` and `3_information/`, or explicit "no change" verdicts |
 | `BPROC2.1.4` | Draft the scope document | The layers are aligned | The next numbered document in `architecture/scope/`, indexed |
-| `BPROC2.1.5` | Align application and technology | Gate 2 is approved | Changed `4_application/` and `5_technology/` |
+| `BPROC2.1.5` | Align application and technology | Understanding is approved | Changed `4_application/` and `5_technology/` |
 
 Every edge leaving a rhombus is a verdict the agent **states and records** — a "no
 change" on a layer, a "pure bug fix, no scope document", an open question logged.

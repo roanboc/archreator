@@ -12,8 +12,9 @@ more: worked examples of the method applied to real organizations live in
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The eighteen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/plugin.json`](./plugins/archreator/plugin.json) · [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests. The two plugin manifests are the same fact in the two places hosts look for it, and `check_skills.py` holds them together |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model, and [`install_skills.py`](./plugins/archreator/scripts/install_skills.py), which copies the skills into `.agents/skills/` for a host that installs no plugin. Both stay out of `scaffold/` because a downstream project has no skills |
-| `plugins/archreator/scaffold/` | The empty project scaffold, copied whole into a new project by `establish-project` — [the layered model](./plugins/archreator/scaffold/architecture/README.md), the reference folder its sources are kept in, [the validators, the projection and the two readers of it, the portal and the PDF export](./plugins/archreator/scaffold/scripts/README.md), the `mkdocs.yml` and `overrides/` those last two read, a `.github/` holding the pull-request template, the question form and the two workflows it ships switched off, a `.gitignore`, and placeholder `AGENTS.md`, `README.md` and `CONTRIBUTING.md`. Everything here ships, so it cannot document itself; this row is its description |
-| [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, how to adopt it, [how a model is published](./docs/publishing.md), and [the format every skill follows](./docs/skill-format.md). The skill catalogue is not here; it lives beside the skills |
+| [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the status table that replaced an empty layer tree), and `scripts/` with the two validators and the parse they share |
+| [`plugins/archreator/assets/`](./plugins/archreator/assets/README.md) | The templates a skill emits **when the project has something to put in them** — the layer READMEs, the non-layer folders, the GitHub-shaped files, `CONTRIBUTING.md`. Their relative links resolve where they land, so `check_links.py` skips the tree and `check_skills.py` proves instead that every asset is reachable from a skill |
+| [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, [how to adopt it and how a model is published](./docs/adopting.md), [how an existing project crosses a breaking version](./docs/migrating.md), and [the format every skill follows](./docs/skill-format.md). The method's own initiative records and retrospectives live in the sibling repository [architecture-archreator](https://github.com/roanboc/architecture-archreator), never here. The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The public site, deployed to <https://roanboc.github.io/archreator/> — a landing page, [a get-started page](./site/start.html) with the install recipe per host, and the stylesheet both share |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
 
@@ -56,19 +57,41 @@ host.
 ```bash
 python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve, per project
-python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
+uv run    plugins/archreator/scripts/check_skills.py           # the skill corpus against the process model
+uv run    --with pytest pytest plugins/archreator/scripts/tests/
 ```
 
-All three must be green before pushing. The first two run on the scaffold here
+All must be green before pushing. The first two run on the scaffold here
 exactly as a downstream project runs them on its own model; the third has no
 downstream counterpart.
 
-`scaffold/scripts/build_model.py` projects a model into `.model/` as nodes and
-edges, for consumers that cannot read Markdown tables, and
-`scaffold/scripts/query_model.py` is that consumer — `trace` for what a change
-to one element would touch, `coverage` for what names no realizing artifact.
-Both are tools rather than gates, and both find nothing here: the scaffold has
-no elements.
+**The scaffold ships two validators and the parse they share, and nothing
+else.** A project has to be able to check itself with no plugin installed and
+no network, so `check_links.py`, `check_model.py`, `model_graph.py` and
+`element-prefixes.json` are copied into it. The reading tools are not:
+`plugins/archreator/scripts/model.py` and `build_brief.py` run from here and
+take `--project <path>`, importing that project's `model_graph.py` so there is
+one parse of the document convention rather than one per project.
+
+```bash
+model.py --project . trace CAP1     # what a change to one element would touch
+model.py --project . coverage       # what names no realizing artifact
+model.py --project . portal         # a stock MkDocs config in .archreator/work/portal/
+model.py --project . export         # .model/model.json, which nothing here reads back
+build_brief.py --project . --element CAP1 --focus impact
+```
+
+`build_brief.py` names a scope and writes one Markdown brief into
+`.archreator/work/briefs/` — the elements that matter, generated ArchiMate
+views of how they depend on each other across the layers, and the paragraphs
+the documents already write. Disposable, never committed, stamped with the
+revision it came from.
+
+**Nothing is cached.** Every tool parses the Markdown fresh, which takes well
+under a second on the largest model built on this method. There was a
+persisted SQLite graph; in that model it had gone stale and was answering from
+a revision that no longer described the architecture, with nothing to tell the
+reader. A cache that is silently wrong is worse than no cache.
 
 A reference can name an element in another model — `other-model::CAP1` — and
 `check_model.py` resolves it against that model when it is in the same
@@ -77,22 +100,8 @@ fetches: a validator reading a sibling repository on every pull request would
 be slow, would fail when somebody else's site was down, and would let another
 team's push break this build.
 
-`scaffold/scripts/build_brief.py` is the reader the graph navigator turned out
-not to be: name a scope — an element and a depth, a domain, a layer — and it
-writes one Markdown brief into `.docs/briefs/` with the elements that matter,
-generated ArchiMate views of how they depend on each other across the layers,
-and the paragraphs the documents already write. Disposable, never committed,
-stamped with the revision it came from. The graph navigator that preceded it is
-deleted; a reader arrives with a question rather than a canvas.
-
-`scaffold/scripts/build_docs.py` and `export_pdf.py` are the last two tools:
-the model as a website and as one PDF, for readers who are not in the
-repository — see [`docs/publishing.md`](./docs/publishing.md). Run against the
-scaffold they publish the empty template, which is exactly what CI does to
-prove the shipped configuration still builds.
-
-`check_skills.py` needs PyYAML only once skills carry YAML bodies. Run it with
-`uv run` instead of `python3` where that is not installed.
+`check_skills.py` needs PyYAML, which `uv run` supplies from the script's own
+inline metadata.
 
 ## Conventions
 

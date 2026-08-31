@@ -6,7 +6,7 @@ on:
       - "**/*.md"
       - "**/*.html"
       - "plugins/archreator/scaffold/scripts/*.py"
-      - "plugins/archreator/scaffold/mkdocs.yml"
+      - "plugins/archreator/scripts/*.py"
       - ".github/workflows/docs-check.yml"
   push:
     branches: [main]
@@ -14,7 +14,7 @@ on:
       - "**/*.md"
       - "**/*.html"
       - "plugins/archreator/scaffold/scripts/*.py"
-      - "plugins/archreator/scaffold/mkdocs.yml"
+      - "plugins/archreator/scripts/*.py"
       - ".github/workflows/docs-check.yml"
 
 jobs:
@@ -27,24 +27,36 @@ jobs:
       - name: Check element-ID references
         run: python3 plugins/archreator/scaffold/scripts/check_model.py
 
-  # The portal ships in the scaffold, so what proves it works is building it —
-  # here against the scaffold itself, which is the only project in this
-  # repository. It catches a broken `mkdocs.yml`, a theme override that no
-  # longer renders, and staging that has stopped finding the documents.
-  build-portal:
+  # What proves the reading tools still work is running them on a project.
+  # test_project_tools.py builds one from the shipped scaffold, so a change
+  # that breaks a new project fails here rather than in somebody's first
+  # commit. It also asserts nothing writes a database.
+  read-a-project:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # uv reads the dependencies from the script's own inline metadata.
       - uses: astral-sh/setup-uv@v5
-      # Not `--strict`: the scaffold's layer READMEs deliberately point at the
-      # numbered documents a downstream project writes, which is the same
-      # forward reference check_links.py exempts, and MkDocs warns about each
-      # one.
-      - name: Build the shipped documentation portal
-        run: uv run plugins/archreator/scaffold/scripts/build_docs.py
-      # The page the PDF is printed from. Printing it needs a browser and a
-      # route to the diagram library, so CI checks that the page is built and
-      # leaves the render to whoever exports the document.
-      - name: Check the page the PDF is printed from
-        run: uv run plugins/archreator/scaffold/scripts/export_pdf.py --no-build --print-page
+      - name: The tools read a project built from the scaffold
+        run: uv run --with pytest pytest plugins/archreator/scripts/tests/ -q
+
+  # The portal is stock MkDocs Material with no theme of ours, so what is worth
+  # proving is that the config the method writes still builds and still renders
+  # Mermaid - which is the whole reason the config exists.
+  build-portal:
+    runs-on: ubuntu-latest
+    needs: read-a-project
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: A generated portal config builds, and draws its diagrams
+        run: |
+          set -euo pipefail
+          probe="$(mktemp -d)/probe"
+          cp -r plugins/archreator/scaffold "$probe"
+          printf '\n## A diagram\n\n```mermaid\nflowchart LR\n  a["one"] --> b["two"]\n```\n' \
+            >> "$probe/architecture/README.md"
+          uv run plugins/archreator/scripts/model.py --project "$probe" portal
+          uvx --with mkdocs-material mkdocs build \
+            -f "$probe/.archreator/work/portal/mkdocs.yml"
+          grep -rq 'class="mermaid"' "$probe/.archreator/work/portal/site/" \
+            || { echo "the portal did not render Mermaid" >&2; exit 1; }

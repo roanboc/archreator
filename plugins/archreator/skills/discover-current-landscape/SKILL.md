@@ -1,11 +1,11 @@
 ---
 name: discover-current-landscape
-description: Procedure — run this when the subject already exists and its lower layers are empty. Sweeps an organization's estate into the business, information, application and technology layers — actors, services, processes, data, applications, runtimes — from evidence rather than from a requirement, declares how far the sweep went, and stops at Gate 2 and Gate 3. Use it when the strategy layer is filled but layers 2 to 5 hold nothing, when an architect inherits a landscape nobody documented, or when a baseline is needed before a target state can be planned.
+description: Procedure — run this when the subject already exists and its lower layers are empty. Sweeps an organization's estate into the business, information, application and technology layers — actors, services, processes, data, applications, runtimes — from evidence rather than from a requirement, declares how far the sweep went, and stops at Understanding and Design. Use it when the strategy layer is filled but layers 2 to 5 hold nothing, when an architect inherits a landscape nobody documented, or when a baseline is needed before a target state can be planned.
 metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.5
-    gates: Gate 2, Gate 3
+    gates: Understanding, Design
 ---
 
 # ⚙ Discover the current landscape
@@ -43,7 +43,7 @@ was there before the model was.
 ## ⌖ Where this sits
 
 Realizes `BPROC1.5`, the last process of establishing a model. It reuses
-**Gate 2** and **Gate 3** rather than inventing gates of its own — what is
+**Understanding** and **Design** rather than inventing gates of its own — what is
 approved here is the same kind of thing the spine gets approved, and a
 Requester should not have to learn a second vocabulary to confirm a
 description of their own organization.
@@ -54,11 +54,11 @@ flowchart TD
   s1["⚙ 1 — Bound the sweep"]
   s2["⚙ 2 — Gather evidence, not opinions"]
   s3["⚙ 3 — Describe business and information"]
-  s4["⚙ 4 — Write the scope document, present Gate 2"]
-  g2{{"❖ Gate 2 — business and information"}}
+  s4["⚙ 4 — Write the scope document, present Understanding"]
+  g2{{"❖ Understanding — business and information"}}
   s5["⚙ 5 — Describe application and technology"]
-  s6["⚙ 6 — Present Gate 3"]
-  g3{{"❖ Gate 3 — the landscape as built"}}
+  s6["⚙ 6 — Present Design"]
+  g3{{"❖ Design — the landscape as built"}}
   s7["⚙ 7 — Record what was left uncharted"]
   pcl(["⇄ process-and-capability-levels"])
   dom(["⇄ model-domains"])
@@ -157,7 +157,8 @@ ownership, intent, and which of two contradictory sources is the live one.
 
 **Anything you are handed is filed before it is read.** A deck, a transcript,
 an inventory spreadsheet, an architecture document from a previous attempt —
-each goes into `architecture/reference/` under its dated name, with its row in
+each goes into `architecture/reference/` — created from the plugin's
+`assets/layers/reference/` the first time — under its dated name, with its row in
 that folder's index, *then* gets read. Filing afterwards means filing what you
 remembered to keep; the source that turns out to matter is usually the one
 nobody expected to need again.
@@ -203,7 +204,7 @@ the gate is actually for.
 **→ Produces** `architecture/2_business/` and `architecture/3_information/`,
 each document opening `◐ Draft catalogue`.
 
-### 4 — Write the scope document, present Gate 2
+### 4 — Write the scope document, present Understanding
 
 The sweep is a full initiative. Create the scope document with
 `write-scope-document` before presenting anything, so the Requester approves
@@ -214,7 +215,7 @@ in progress; layers 0 and 1 get an explicit "no change" verdict, because a
 sweep that quietly rewrites the approved strategy is doing something other
 than describing.
 
-**❖ Gate 2 — business and information.** The Requester approves.
+**❖ Understanding — business and information.** The Requester approves.
 
 Present a compact summary — the boundary, the actor and service catalogues,
 the process map at level 2, the data objects and where they live — with full
@@ -225,7 +226,7 @@ recognises their organization in forty elements will tell you so, and one who
 does not will say which forty are wrong.
 
 Record the approval in the Approvals table. **Then change the status line of
-every document it covered from `◐` to `● Validated at Gate 2`, on that date,
+every document it covered from `◐` to `● Validated at Understanding`, on that date,
 and empty the `Notes` column** — each note is now a fact that goes into the
 model, a question that goes into the open-questions log, or something nobody
 cared about. `Source` stays; provenance does not expire.
@@ -237,7 +238,7 @@ the one edit in this skill that would make the model lie.
 **← Needs** the layers from Step 3.
 
 **→ Produces** `architecture/scope/<n>_*.md`, its row in the index, and the
-Approvals table's Gate 2 row.
+Approvals table's Understanding row.
 
 ### 5 — Describe application and technology
 
@@ -251,18 +252,18 @@ Keep the two layers honest about what they are describing. A component that
 three teams each run their own copy of is three nodes and one component, and
 saying so is most of the value an estate model has.
 
-**← Needs** the evidence from Step 2, and Gate 2.
+**← Needs** the evidence from Step 2, and Understanding.
 
 **→ Produces** `architecture/4_application/` and `architecture/5_technology/`,
-each document opening `◐ Draft catalogue` until Step 6 grants Gate 3.
+each document opening `◐ Draft catalogue` until Step 6 grants Design.
 
-### 6 — Present Gate 3
+### 6 — Present Design
 
-**❖ Gate 3 — the landscape as built.** The Requester approves.
+**❖ Design — the landscape as built.** The Requester approves.
 
-Unlike the spine, Gate 3 is **not optional here.** In an ordinary change Gate
-3 asks whether a solution design should be reviewed before it is coded, and a
-Requester may reasonably decline. Here it is the approval of a description of
+Unlike the spine, Design is **not optional here.** In an ordinary change,
+Design is an offer — whether a solution design should be reviewed before it is
+coded — and a Requester may reasonably decline. Here it is the approval of a description of
 their own estate — the layer they are least likely to have seen written down
 and most likely to be able to correct. Declining it would leave the half of
 the model that carries the most guesses unconfirmed.
@@ -273,7 +274,7 @@ Requester is uniquely able to resolve.
 
 **← Needs** the layers from Step 5.
 
-**→ Produces** the Approvals table's Gate 3 row.
+**→ Produces** the Approvals table's Design row.
 
 ### 7 — Record what was left uncharted
 
@@ -314,7 +315,7 @@ the sweep found the estate, not the ambition.
 > written down rather than assumed. Step 2's licence list yields nineteen SaaS
 > applications; the identity provider yields twenty-three, and the four-way
 > difference turns out to be three abandoned tools and one nobody in IT had
-> heard of. Gate 3 is where the Requester recognises that last one as a
+> heard of. Design is where the Requester recognises that last one as a
 > department's own purchase, names its owner, and turns a Pending row into a
 > grounded element. The sweep closes with a Coverage section saying the
 > subsidiary is out, and hands to `plan-the-transition`.
@@ -343,7 +344,7 @@ the sweep found the estate, not the ambition.
 - Sweeping until the questions run out, rather than to the boundary that was
   agreed.
 - Level 3 everywhere, because the evidence happened to be detailed there.
-- Treating Gate 3 as optional because the spine does.
+- Treating Design as optional because the spine does.
 
 ## ☑ Done when
 
@@ -358,7 +359,7 @@ the sweep found the estate, not the ambition.
 - AI actors found in the estate are modeled as actors holding roles, with
   autonomy levels and decision rights.
 - The scope document's alignment table covers every layer, and its Approvals
-  table records Gate 2 and Gate 3 as granted, with what was shown.
+  table records Understanding and Design as granted, with what was shown.
 - Everything still Pending is listed in one place the Requester can work
   through.
 - `plan-the-transition` has been named and offered as the next initiative.

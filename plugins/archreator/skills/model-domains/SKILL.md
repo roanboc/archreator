@@ -5,7 +5,7 @@ metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.4
-    gates: Gate 2
+    gates: Understanding
 ---
 
 # ⚙ Model domains
@@ -40,7 +40,7 @@ isn't.
 
 Realizes `BPROC1.4`, and only at Depth 3. Splitting is a business-layer
 change, so it goes through the ordinary process: a scope document, and
-**Gate 2** before any folder moves.
+**Understanding** before any folder moves.
 
 ```mermaid
 flowchart TD
@@ -49,7 +49,7 @@ flowchart TD
   v{"Two or more tests hold?"}
   stop(["Leave it whole, and say why"])
   s2["⚙ 2 — Write the charter"]
-  g2{{"❖ Gate 2 — before the folders move"}}
+  g2{{"❖ Understanding — before the folders move"}}
   s3["⚙ 3 — Fill in the domain's layers"]
   s4["⚙ 4 — Namespace the identifiers"]
   ds(["⇄ discover-strategy"])
@@ -103,6 +103,11 @@ named interface. Two questions settle most cases:
 **→ Produces** a stated verdict, with the tests that carried it.
 
 ### 2 — Write the charter
+
+The first charter creates the tree from the plugin's
+`assets/layers/domains/`; a model that first names another model emits
+`assets/layers/federation.md`, and `assets/layers/imports.md` when that model
+lives in another repository.
 
 The domain's `README.md` **is** its charter — the contract between it and the
 rest of the organization, and the only part other domains may depend on. Write
@@ -186,8 +191,8 @@ business's own word for the domain over an invented one.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | The domain has goals distinct from the enterprise's | Its own `1_strategy/`, approved at Gate 1 |
-| `align-change-through-layers` | The split itself, and every later change | A scope document and Gate 2 before the folders move |
+| `discover-strategy` | The domain has goals distinct from the enterprise's | Its own `1_strategy/`, approved at Direction |
+| `align-change-through-layers` | The split itself, and every later change | A scope document and Understanding before the folders move |
 | `write-scope-document` | The split needs recording | One document naming every domain touched |
 
 ## ✎ Worked example
@@ -219,7 +224,7 @@ business's own word for the domain over an invented one.
 - Identifiers are namespaced, and every cross-domain reference points at a
   service the owning charter actually exposes.
 - Where the change altered or removed an exposed service, the scope document
-  names every consuming domain and its Approvals table carries a Gate 2 row
+  names every consuming domain and its Approvals table carries an Understanding row
   per Requester.
 
 ## Cross-domain changes
@@ -230,12 +235,12 @@ A contract has two sides, and that yields four rules.
 | --------- | ---------------- |
 | A change inside a domain touching nothing exposed | The owning domain's Requester only. Most changes |
 | Adding a new exposed service | The owning domain's Requester. Nobody depends on it yet |
-| Changing or removing an exposed service | **The consuming domains' Requesters at Gate 2 too.** Name every consumer in the scope document |
+| Changing or removing an exposed service | **The consuming domains' Requesters at Understanding too.** Name every consumer in the scope document |
 | Referencing another domain's internal element | A modeling error. Either it belongs in that domain's charter, or the dependency should not exist |
 
 A change spanning domains is still **one** initiative with one scope document
 — its alignment table names each domain touched, and its Approvals table
-carries a Gate 2 row per Requester.
+carries an Understanding row per Requester.
 
 ## Not yet: parallel work
 

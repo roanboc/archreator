@@ -5,7 +5,7 @@ metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC3.1
-    gates: Gate 2
+    gates: Understanding
 ---
 
 # ⚙ Restate the current state
@@ -38,7 +38,7 @@ whole — a reader cannot tell which parts describe today.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC3.1`, and stops at **Gate 2** — because the current-state
+Realizes `BPROC3.1`, and stops at **Understanding** — because the current-state
 documents changed, and retiring an element the Requester still considers live
 is exactly the mistake that gate catches.
 
@@ -50,7 +50,7 @@ flowchart TD
   s2["⚙ 2 — Restate"]
   s3["⚙ 3 — Record it as an initiative"]
   s4["⚙ 4 — Verify"]
-  g2{{"❖ Gate 2 — the restatement"}}
+  g2{{"❖ Understanding — the restatement"}}
   out(["A model that describes today"])
 
   drift --> s1 --> ask --> s2 --> s3 --> s4 --> g2
@@ -177,8 +177,8 @@ Restating is a change to the model, so it gets a scope document with
 `write-scope-document`:
 
 - an alignment table naming every layer touched, and "no change" for the rest;
-- **Gate 2**, because the current-state documents changed;
-- Gates 0, 1 and 3 marked `N/A — restatement changes no strategy and delivers
+- **Understanding**, because the current-state documents changed;
+- Direction and Design marked `N/A — restatement changes no strategy and delivers
   no code`;
 - an in-scope/out-of-scope table. Restating is famously easy to let sprawl
   into "and while I was there I improved…". A change to what the model *says
@@ -204,7 +204,7 @@ Restating is a change to the model, so it gets a scope document with
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `write-scope-document` | Step 3 | The document Gate 2 is recorded in |
+| `write-scope-document` | Step 3 | The document Understanding is recorded in |
 | `align-change-through-layers` | Restating revealed the architecture *should* be different | That as its own initiative, with its own gates |
 
 ## ✎ Worked example
@@ -228,7 +228,7 @@ Restating is a change to the model, so it gets a scope document with
 ## ☑ Done when
 
 - Every finding from Step 1 has a move applied or a stated reason it did not.
-- Gate 2 is recorded in the scope document's Approvals table.
+- Understanding is recorded in the scope document's Approvals table.
 - The four verification checks pass, including the byte-identical one.
 - The model reads as a description of today.
 

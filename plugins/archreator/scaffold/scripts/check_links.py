@@ -16,6 +16,9 @@ Two categories are deliberately not flagged:
 
 - Links inside fenced code blocks or inline code spans — skill files quote
   illustrative link syntax (e.g. `./<n>_*.md`) as examples, not real links.
+- Everything under `plugins/archreator/assets/`, which holds templates whose
+  relative links are written for the project they are emitted into rather than
+  for where they sit. `check_skills.py` checks those files instead.
 - Links inside a skill's `scaffold/architecture/` scaffold whose target is
   a numbered EA content file (`<n>_kebab-name.md`) that doesn't exist yet —
   layer READMEs deliberately forward-reference the numbered docs a
@@ -27,7 +30,7 @@ file, and any fragment (`#id`, or `page.html#id`) must resolve to an element
 `id` in the target HTML file. This catches broken page-to-page links and
 stale in-page anchors in the guidance site. A target a template engine fills
 in at build time (`{{ page.edit_url }}`) names no file on disk, so it is not
-checked — the portal's theme override is a template, not a page.
+checked — a template is not a page.
 
 Absolute or non-file targets (http, https, mailto, tel, data, javascript)
 are never checked in either kind.
@@ -72,8 +75,8 @@ ID_RE = re.compile(r"""(?<![\w-])id\s*=\s*["']([^"']+)["']""")
 
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "tel:", "data:", "javascript:")
 # A target the template engine fills in when the page is built, rather than a
-# path — `href="{{ page.edit_url }}"` in the portal's theme override. There is
-# nothing on disk for it to point at until something renders it.
+# path — `href="{{ page.edit_url }}"` in a theme template. There is nothing on
+# disk for it to point at until something renders it.
 TEMPLATE_RE = re.compile(r"\{[{%]")
 
 _ids_cache: dict[Path, set[str]] = {}
@@ -92,6 +95,26 @@ def strip_code(text: str) -> str:
     text = FENCE_RE.sub("", text)
     text = INLINE_CODE_RE.sub("", text)
     return text
+
+
+def is_template_asset(path: Path) -> bool:
+    """A file under `plugins/archreator/assets/`, checked where it lands instead.
+
+    An asset is a template a skill emits into a project's `architecture/`. Its
+    relative links are written for that destination - `../README.md` means the
+    project's architecture front door - so resolving them here would be asking
+    whether they work in the one place they were never meant to. They are
+    checked by the project's own `check_links.py`, on the copy that matters.
+
+    What could rot silently instead - an asset no skill emits, or a skill
+    naming an asset that does not exist - is caught by `check_skills.py`, which
+    is a stronger guarantee than link resolution was giving.
+    """
+    parts = path.parts
+    return any(
+        parts[i] == "archreator" and parts[i + 1] == "assets"
+        for i in range(len(parts) - 1)
+    )
 
 
 def is_expected_forward_reference(resolved: Path) -> bool:
@@ -221,11 +244,14 @@ def check_html(html_file: Path) -> list[str]:
 # of the pinned AIP release the validators are run from. None is this
 # repository's to validate, and none is a downstream project's once these
 # scripts ship there.
-# `.docs` is the documentation portal's staged copy and built site — every
-# document a second time, which would otherwise read as every element being
-# defined twice.
+# `.archreator` is where every generated working surface lands — briefs, the
+# portal configuration and whatever it builds — and `.model` is the exported
+# model.json; both are the model a second time, which would otherwise read as
+# every element being defined twice, or as a built page with links written
+# for a rendered site. `.docs` is where the pre-reset tooling staged the same
+# things, kept so a stale local copy never fails a fresh checkout's checks.
 EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot",
-                 ".aip", ".docs"}
+                 ".aip", ".docs", ".archreator", ".model"}
 
 
 def _excluded(path: Path) -> bool:
@@ -243,7 +269,7 @@ def main() -> int:
             pass
     all_errors = []
     for path in REPO_ROOT.rglob("*"):
-        if _excluded(path) or not path.is_file():
+        if _excluded(path) or is_template_asset(path) or not path.is_file():
             continue
         if path.suffix == ".md":
             all_errors.extend(check_markdown(path))

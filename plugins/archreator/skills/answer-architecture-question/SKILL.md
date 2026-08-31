@@ -29,15 +29,15 @@ brief is a reproducible reading of it.
 | The situation | Use instead |
 | ------------- | ----------- |
 | The model is being changed | `align-change-through-layers`; a brief never edits the model |
-| The whole model must be published | `scripts/build_docs.py` or `scripts/export_pdf.py` |
-| The user asks a precise graph query | `scripts/query_model.py trace` or `coverage` |
+| The whole model must be published | `model.py portal` — a brief answers one question, a portal carries the model |
+| The user asks a precise graph query | `model.py trace` or `model.py coverage` |
 | The model is empty or known to be stale | Establish, discover or restate it before presenting a derived answer |
 
 ## ⌖ Where this sits
 
 Realizes `BPROC3.3`. It carries **no gate** because it asserts nothing new:
 the brief contains declared relationships, catalogue facts and verbatim model
-prose. It is generated under `.docs/briefs/`, never committed, and says on its
+prose. It is generated under `.archreator/work/briefs/`, never committed, and says on its
 face that the repository is the model.
 
 ## ◈ Invariants
@@ -49,8 +49,9 @@ face that the repository is the model.
   `decision`. Combined viewpoints are separate briefs.
 - Resolve the anchor against the model. Suggest actual names and identifiers
   when the request is ambiguous; never invent an identifier.
-- Pass the confirmed focus to `scripts/build_brief.py`. Do not imitate its
-  graph selection or write a competing summary.
+- Pass the confirmed focus to the plugin's `build_brief.py` — it ships beside
+  the skills, not in the project, and reads a project through `--project`. Do
+  not imitate its graph selection or write a competing summary.
 - Return the generated Markdown as disposable output. Do not move it into the
   architecture tree or treat it as approved evidence.
 
@@ -86,12 +87,14 @@ replacement for the named scope.
 
 ### 3. Generate the brief
 
-Run the matching command from the project root, for example:
+Run the matching command from the project root. `build_brief.py` lives in the
+plugin's `scripts/` — not in the project — and `--project` points it at the
+model, for example:
 
 ```bash
-python3 scripts/build_brief.py --element BSVC1 --depth 2 --focus business
-python3 scripts/build_brief.py --element DOBJ4 --depth 2 --focus information
-python3 scripts/build_brief.py --domain SALES --focus impact
+python3 <plugin>/scripts/build_brief.py --project . --element BSVC1 --depth 2 --focus business
+python3 <plugin>/scripts/build_brief.py --project . --element DOBJ4 --depth 2 --focus information
+python3 <plugin>/scripts/build_brief.py --project . --domain SALES --focus impact
 ```
 
 If the view is omitted because the selected scope is too large, narrow the
@@ -103,6 +106,13 @@ Give the path to the generated brief and state its focus, anchor and boundary.
 Remind the reader that it is disposable and should be regenerated after the
 model changes. Answer follow-up questions from the model or generate a second
 brief with a different confirmed focus.
+
+**A reader who asks for a PDF gets one — converted, not exported.** Convert
+the generated brief yourself, with whatever converter the environment offers,
+and put the result beside its source under `.archreator/work/` — disposable,
+like everything there. The method owns the boundary, not a converter: one
+brief or scope per PDF, never the whole model, which is the artifact that
+gets mailed around and quoted eight months after it stopped being true.
 
 ## ⇥ Hands off to
 
