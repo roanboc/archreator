@@ -71,7 +71,7 @@ its own initiative through the skill, not a quiet edit.
 ## Notation
 
 Glyph, shape and colour follow
-[`../README.md` § Notation conventions](../README.md#notation-conventions),
+the `architecture-document-style` rulebook § ArchiMate on Mermaid,
 which stays the single source. Both element types take the Implementation &
 Migration rose, ramped from plateau to gap.
 

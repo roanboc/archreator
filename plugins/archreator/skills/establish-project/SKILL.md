@@ -85,9 +85,11 @@ Hold at every step below.
   is the one most often guessed wrong: a repository with no remote yet, or one
   generated from a template, tells you nothing reliable about where the
   project will actually live.
-- **The scaffold is the only thing that lands.** The method stays where the
-  plugin installed it, which is why there is nothing of archreator's to delete
-  afterwards.
+- **Nothing lands that the project does not use.** The scaffold is eleven
+  files, all of them live from the first commit. Everything else — layer
+  templates, the pull-request template, the workflows — waits in the plugin's
+  `assets/` until a skill has something to put in it. There is nothing of
+  archreator's to delete afterwards because nothing arrived early.
 
 ## ⚙ Steps
 
@@ -121,9 +123,9 @@ preference:
 
 | The answer | What it activates |
 | ---------- | ----------------- |
-| A **public** GitHub repository | Both workflows, and the comment wiring in `mkdocs.yml` |
+| A **public** GitHub repository | The checks workflow, and the pull-request template |
 | Any **other** GitHub repository | The checks workflow. Publishing needs Pages, which the free plan does not offer a private repository, and on the plans that do, publishing a private model is a disclosure decision rather than a default |
-| **Anything else**, or not decided yet | Nothing. `build_docs.py` writes a folder and where it goes is the organization's call, exactly as for a project that never answered |
+| **Anything else**, or not decided yet | Nothing. `.github/` is GitHub-shaped; the model and the validators are not |
 
 *When the answer is unclear, take the last row.* An unactivated workflow is
 one `git mv` away; a pipeline that publishes a model nobody agreed to publish
@@ -134,26 +136,14 @@ host, all carried into every step below.
 
 ### 2 — Emit the scaffold, then make it this project
 
-Copy the scaffold whole from `scaffold/` in the plugin into the project root.
-It holds `AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `.gitignore`,
-`architecture/` — with `scope/`, `decisions/`, `6_transition/` and `reference/`
-inside it — and `scripts/`, the two validators and the five tools with their
-own README. It also holds
-`mkdocs.yml` and `overrides/`, which render the model as a website, and
-`.github/`, which carries the pull-request template a change is described in,
-the issue form a reader of that website raises a question through, and
-`workflows-available/` — two workflow files that do not run where they sit,
-because the automation host reads `.github/workflows/` and nothing else. `CLAUDE.md`
-and `GEMINI.md` come with it too, each holding nothing but an `@AGENTS.md`
-import so the host that reads only its own filename still finds the entry
-point. Copy them as they are and leave them alone; content in one of them is
-content the other hosts never see.
+Copy `scaffold/` from the plugin into the project root. **It is eleven files,
+and every one of them is used on the first commit** — `AGENTS.md`, `README.md`,
+`CLAUDE.md`, `GEMINI.md`, `.gitignore`, `architecture/README.md`, and
+`scripts/` with the two validators, the parse they share and its prefix data.
 
 **Copy the dotfiles too.** `.gitignore` is the one the project cannot do
-without: it keeps bytecode, machine-local settings and everything regenerated —
-the projection and the published copy — out of the history. `.github/` is the
-other one a glob copy drops silently, which is only noticed later, in a commit
-that should not have contained what it did.
+without: it keeps bytecode, machine-local settings and everything regenerated
+out of the history.
 
 Then, in one pass, so the first commit is coherent:
 
@@ -161,68 +151,50 @@ Then, in one pass, so the first commit is coherent:
 | ---- | ------- |
 | `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running; placeholders left here are what make later sessions guess |
 | `README.md` | The project's own front door, not archreator's with names swapped |
-| `CONTRIBUTING.md` | Leave § Development workflow as its TEMPLATE comment until a stack exists, rather than inventing commands |
-| `mkdocs.yml` | The site name, the description, the repository URL — so every published page carries a link back to the file that produced it — and `theme.language` when the project documents in something other than English. Translate the `extra.diagram_zoom` labels in that case too; the viewer is part of the page, while the Markdown remains unchanged. Left as it ships, the portal still builds — without the repository links. On a **public** repository the `extra.giscus` values belong here too, which is what turns the comment box on; anywhere else leave them unset, and the "Discuss this page" link in `overrides/main.html` is what a reader gets instead |
-| `architecture/5_technology/2_deployment.md` | § Where this project lives, from Step 1's third answer. This is the one place a later change reads instead of asking again. Leave the rest of the document as its TEMPLATE comments until the layer is first assessed |
-| `overrides/main.html`, `.github/` | Only on a non-GitHub host: the question link builds a GitHub `issues/new` URL, so remove it with the form it points at |
+| `architecture/README.md` | The status table — one row per layer, each saying `Local`, `External`, `Out of scope` or a named `Gap`. On a fresh project most rows are `Gap — not yet started`, and layer 0 is `Out of scope` unless the subject is an organization |
 | Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
 
-**⚖ Judgement.** The optional files are a decision, not a default:
+**⚖ Judgement.** Where the project lives decides what else is emitted, and it
+is not a question about tooling preference:
 
-| File | Keep it when | Otherwise |
-| ---- | ------------ | --------- |
-| `architecture/scope/open-questions.md` | A stakeholder cannot be consulted synchronously | Delete — it can come back later |
-| `architecture/decisions/` | The project will make enough architecture-significant calls to justify a log | Delete — it can come back later |
-| `.github/` | The project is on GitHub | Delete the directory whole. The template, the form and both workflows are GitHub-shaped; the model, the validators and the portal are not |
+| The answer | Emit from `assets/github/` |
+| ---------- | -------------------------- |
+| A **public** GitHub repository | `pull_request_template.md`, and `workflows/checks.yml` into `.github/workflows/` |
+| Any **other** GitHub repository | The same. Publishing is a separate decision, taken when somebody asks for a portal |
+| **Anything else**, or not decided yet | Nothing. `.github/` is GitHub-shaped; the model and the validators are not |
 
-**Then activate what Step 1's third answer selected**, by moving it — never by
-writing a new file:
+*When the answer is unclear, take the last row.* A workflow is one file away
+when somebody wants it; a pipeline that publishes a model nobody agreed to
+publish is not undoable.
 
-```bash
-mkdir -p .github/workflows
-git mv .github/workflows-available/checks.yml .github/workflows/
-```
+**→ Produces** a project whose first commit is about the project.
 
-| The answer | Move to `.github/workflows/` | Delete |
-| ---------- | ---------------------------- | ------ |
-| Public GitHub repository | `checks.yml`, `publish-docs.yml` | — |
-| Other GitHub repository | `checks.yml` | `publish-docs.yml` |
-| Not GitHub, or undecided | — | `.github/` whole |
+### 3 — Emit nothing else, and say so on the front page
 
-`.github/workflows-available/` is empty by the end of bootstrap either way, so
-delete it and its README. A directory of files that look like they run, and do
-not, is worse than no directory.
+**No layer folder is created until it has something to hold.** The templates
+for all of them are in the plugin's `assets/layers/`, and the skill that first
+fills a layer emits its README at that moment. What the project gets on day one
+is one row per layer in `architecture/README.md`, and the row is the whole
+point: it says whether this model owns the layer, another model does, it is out
+of scope, or it is a gap — which an empty README never said.
 
-**Say what the publishing workflow needs before it works.** Pages has to be
-switched on — Settings → Pages → Source: GitHub Actions — and until it is, the
-deploy step fails. Do it in the same sitting, or leave `publish-docs.yml` out
-and let the Requester add it when they mean to. A red first push teaches a team
-that the checks are noise.
+| Depth | Layer 0 row | Domains |
+| ----- | ----------- | ------- |
+| **1 — Application** | `Out of scope` — an application has no business model of its own | Not mentioned |
+| **2 — Organization** | `Gap` until `discover-business-model` fills it | Not mentioned |
+| **3 — Enterprise** | `Gap` until `discover-business-model` fills it | A row per business line, added by `model-domains` |
 
-**← Needs** the declared depth, the project description.
-
-**→ Produces** `AGENTS.md`, its `CLAUDE.md` and `GEMINI.md` imports, `README.md`, `CONTRIBUTING.md`, `.gitignore`, `architecture/` — including `5_technology/2_deployment.md` — `scripts/`, `mkdocs.yml`, `overrides/`, and `.github/` with whatever workflows the answer activated.
-
-### 3 — Set the layers to the declared depth
-
-All seven layer folders stay, at every depth. What changes is their **declared
-state**: a layer the project is not filling in yet gets "not started" in its
-README table, not a deletion. An unfilled layer is a known gap; a missing
-folder is an unknown one.
-
-| Depth | `0_business-design/` | `domains/` |
-| ----- | -------------------- | ---------- |
-| **1 — Application** | Empty, and said so | Empty, and said so |
-| **2 — Organization** | Filled by discovery | Empty |
-| **3 — Enterprise** | Filled by discovery | One per business line, after the enterprise level is modeled |
+An empty folder is not a plan, and a README saying "not started" is a file a
+reader has to open to learn nothing. The row says it on the page they are
+already on.
 
 If no stack is chosen yet and this is a small application, use
-`stack-selection` rather than re-deriving one, and record the choice in
-`architecture/5_technology/1_technology-services.md`.
+`stack-selection` rather than re-deriving one, and record the choice when
+`5_technology/` is first emitted.
 
 **← Needs** the declared depth.
 
-**→ Produces** `architecture/`.
+**→ Produces** `architecture/README.md`, filled in.
 
 ### 4 — Open the first initiative
 
@@ -272,16 +244,15 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 - Inferring the subject, the depth or the host from the repository instead of
   asking. A remote that exists today is not a statement about where the
   project will live.
-- Activating `publish-docs.yml` without enabling Pages in the same sitting, so
-  the project's first push is red for a reason nobody wrote down.
-- Leaving `.github/workflows-available/` behind after bootstrap, so the
+- Emitting `assets/github/` onto a project that is not on GitHub, so the
   project carries two files that look like they run and do not.
-- Writing a workflow from scratch instead of moving the one that shipped.
+- Writing a workflow from scratch instead of emitting the one in `assets/`.
 - Picking a depth without saying which, why, and how to change it later.
 - Writing the strategy here. Bootstrap hands off to discovery, which does it
   with the Requester against gates.
-- Deleting a layer folder the project is not filling in yet, rather than
-  marking it "not started".
+- Creating a layer folder before it has anything to hold. The row in
+  `architecture/README.md` is what says the layer exists and is empty; a
+  folder saying it too is a file a reader opens to learn nothing.
 - Leaving the Requester's original request unmentioned once discovery
   finishes, so a docs-only PR reads as the process having failed to build
   anything.
@@ -293,12 +264,15 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 - `CLAUDE.md` and `GEMINI.md` sit beside it, each still nothing but
   `@AGENTS.md`.
 - The documentation language is decided and recorded.
-- The scaffold has been copied out of the plugin's `scaffold/`, and the
-  optional files are kept or deleted deliberately.
-- Where the project lives is recorded in
-  `architecture/5_technology/2_deployment.md`, and `.github/workflows-available/`
-  no longer exists — every file in it was moved or deleted on that answer.
-- Every layer README's table says either what exists or "not started".
+- The scaffold has been copied out of the plugin's `scaffold/` — all eleven
+  files, and nothing was deleted afterwards, because nothing arrived that the
+  project does not use.
+- Where the project lives is recorded in `AGENTS.md`, and anything emitted from
+  `assets/github/` was emitted deliberately on that answer.
+- `architecture/README.md`'s status table has a row per layer, and **no row says
+  nothing** — every one is `Local`, `External`, `Out of scope`, or a named
+  `Gap`.
+- No empty layer folder exists.
 - Scope document `1_*.md` exists and is indexed.
 - `python3 scripts/check_links.py` and `python3 scripts/check_model.py` both
   pass. They came with the scaffold, so every project has them from its first

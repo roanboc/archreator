@@ -76,7 +76,8 @@ reading a word of it.
 
 Filled boxes are this skill's steps. Unfilled ones are skills it reaches.
 Rose hexagons are gates. Glyph, shape and colour follow
-[`architecture/README.md` § Notation conventions](../plugins/archreator/scaffold/architecture/README.md#notation-conventions),
+the `architecture-document-style` rulebook's
+[ArchiMate on Mermaid reference](../plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md),
 which stays the single source for the palette.
 
 ## Cross-references

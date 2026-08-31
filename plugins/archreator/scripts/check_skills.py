@@ -72,7 +72,8 @@ SKILLS_DIR = REPO_ROOT / "plugins" / "archreator" / "skills"
 PROCESS_DIR = REPO_ROOT / "docs" / "process"
 CATALOGUE = SKILLS_DIR / "README.md"
 SCAFFOLD_DIR = REPO_ROOT / "plugins" / "archreator" / "scaffold"
-CATALOGUE_COPY = SCAFFOLD_DIR / "AGENTS.md"
+SCAFFOLD_AGENTS = SCAFFOLD_DIR / "AGENTS.md"
+ASSETS_DIR = REPO_ROOT / "plugins" / "archreator" / "assets"
 # The plugin manifest, in the two places the hosts look for it. Claude Code
 # reads `.claude-plugin/plugin.json`; Copilot and Codex read the plugin root.
 # Neither is derived from the other at runtime, so CI holds them together the
@@ -138,6 +139,7 @@ WINDOW_END_RE = re.compile(r"[.,;:)]|\s+§\s+")
 # A catalogue row: the skill in the first cell, linked or bare. Later cells are
 # split off rather than swept up, so the two tables may carry different
 # columns and still be compared on the ones they share.
+ASSET_PATH_RE = re.compile(r"\]\(\./([A-Za-z0-9_./-]+?)/?\)")
 CATALOGUE_ROW_RE = re.compile(r"^\|\s*(?:\[)?`([a-z0-9-]+)`(?:\]\([^)]*\))?\s*\|(.*)\|\s*$", re.M)
 # The level-2 rows of the process model: a dotted ID, the process name, and the
 # realizing skills in the last cell.
@@ -552,10 +554,54 @@ def catalogue_rows(path: Path) -> dict[str, list[str]]:
     return rows
 
 
+def check_assets(known: set[str]) -> list[str]:
+    """Every asset is emitted by a skill, and every asset a skill names exists.
+
+    `check_links.py` cannot check this tree - a template's relative links are
+    written for the project it lands in - so what it would have caught is
+    caught here instead, and more usefully: a link resolving proved a file was
+    there, this proves a file is reachable by the process that emits it.
+
+    The assets README is the index; a skill claims an asset by naming its path.
+    """
+    if not ASSETS_DIR.is_dir():
+        return []
+    errors: list[str] = []
+    named: set[str] = set()
+    sources = [SKILLS_DIR / s / "SKILL.md" for s in sorted(known)]
+    sources += sorted((SKILLS_DIR).rglob("references/*.md"))
+    sources.append(ASSETS_DIR / "README.md")
+    haystack = "\n".join(
+        p.read_text(encoding="utf-8") for p in sources if p.is_file()
+    )
+
+    for path in sorted(ASSETS_DIR.rglob("*")):
+        if not path.is_file() or path == ASSETS_DIR / "README.md":
+            continue
+        rel = path.relative_to(ASSETS_DIR).as_posix()
+        # A folder asset is claimed by naming the folder; a file, by its path.
+        folder = rel.rsplit("/", 1)[0] if "/" in rel else rel
+        if rel in haystack or folder in haystack:
+            named.add(rel)
+        else:
+            errors.append(
+                f"assets/{rel}: no skill and no assets README names it, so "
+                f"nothing will ever emit it"
+            )
+
+    index = (ASSETS_DIR / "README.md")
+    if not index.is_file():
+        errors.append("assets/README.md is missing - it is the index of what gets emitted when")
+    else:
+        for match in ASSET_PATH_RE.findall(index.read_text(encoding="utf-8")):
+            if not (ASSETS_DIR / match).exists():
+                errors.append(f"assets/README.md names assets/{match}, which does not exist")
+    return errors
+
+
 def check_catalogue(known: set[str]) -> list[str]:
     errors: list[str] = []
     primary = catalogue_rows(CATALOGUE)
-    copy = catalogue_rows(CATALOGUE_COPY)
     if not primary:
         return ["plugins/archreator/skills/README.md: no skill rows found"]
 
@@ -564,18 +610,6 @@ def check_catalogue(known: set[str]) -> list[str]:
         errors.append(f"skills/README.md: `{skill}` exists but is not in the catalogue")
     for skill in sorted(set(primary) - known):
         errors.append(f"skills/README.md: `{skill}` is catalogued but no such skill exists")
-    for skill in sorted(set(primary) - set(copy)):
-        errors.append(f"scaffold/AGENTS.md: `{skill}` is missing from the copied table")
-    for skill in sorted(set(copy) - set(primary)):
-        errors.append(f"scaffold/AGENTS.md: `{skill}` is in the copied table but not the catalogue")
-    for skill in sorted(set(primary) & set(copy)):
-        # The catalogue carries a Kind column the copy does not, so compare the
-        # last cell - the one both tables end on.
-        if primary[skill][-1] != copy[skill][-1]:
-            errors.append(
-                f"scaffold/AGENTS.md: the row for `{skill}` has drifted from skills/README.md"
-            )
-
     for skill, cells in sorted(primary.items()):
         declared = skill_meta(skill).get("kind")
         if not declared or len(cells) < 2:
@@ -659,7 +693,7 @@ def check_context_files() -> list[str]:
     the other hosts never see, which is the drift this catches.
     """
     errors: list[str] = []
-    if not CATALOGUE_COPY.is_file():
+    if not SCAFFOLD_AGENTS.is_file():
         errors.append("scaffold/AGENTS.md is missing - it is the entry point the others import")
     for name in CONTEXT_POINTERS:
         path = SCAFFOLD_DIR / name
@@ -700,6 +734,7 @@ def main() -> int:
         ("reference files", check_references_reachable(known)),
         ("scaffold specimens", check_scaffold_specimens()),
         ("catalogue", check_catalogue(known)),
+        ("assets", check_assets(known)),
         ("manifests", check_manifests()),
         ("context files", check_context_files()),
     ]

@@ -16,6 +16,9 @@ Two categories are deliberately not flagged:
 
 - Links inside fenced code blocks or inline code spans — skill files quote
   illustrative link syntax (e.g. `./<n>_*.md`) as examples, not real links.
+- Everything under `plugins/archreator/assets/`, which holds templates whose
+  relative links are written for the project they are emitted into rather than
+  for where they sit. `check_skills.py` checks those files instead.
 - Links inside a skill's `scaffold/architecture/` scaffold whose target is
   a numbered EA content file (`<n>_kebab-name.md`) that doesn't exist yet —
   layer READMEs deliberately forward-reference the numbered docs a
@@ -92,6 +95,26 @@ def strip_code(text: str) -> str:
     text = FENCE_RE.sub("", text)
     text = INLINE_CODE_RE.sub("", text)
     return text
+
+
+def is_template_asset(path: Path) -> bool:
+    """A file under `plugins/archreator/assets/`, checked where it lands instead.
+
+    An asset is a template a skill emits into a project's `architecture/`. Its
+    relative links are written for that destination - `../README.md` means the
+    project's architecture front door - so resolving them here would be asking
+    whether they work in the one place they were never meant to. They are
+    checked by the project's own `check_links.py`, on the copy that matters.
+
+    What could rot silently instead - an asset no skill emits, or a skill
+    naming an asset that does not exist - is caught by `check_skills.py`, which
+    is a stronger guarantee than link resolution was giving.
+    """
+    parts = path.parts
+    return any(
+        parts[i] == "archreator" and parts[i + 1] == "assets"
+        for i in range(len(parts) - 1)
+    )
 
 
 def is_expected_forward_reference(resolved: Path) -> bool:
@@ -243,7 +266,7 @@ def main() -> int:
             pass
     all_errors = []
     for path in REPO_ROOT.rglob("*"):
-        if _excluded(path) or not path.is_file():
+        if _excluded(path) or is_template_asset(path) or not path.is_file():
             continue
         if path.suffix == ".md":
             all_errors.extend(check_markdown(path))

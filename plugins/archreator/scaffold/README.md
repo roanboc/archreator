@@ -11,24 +11,22 @@
 
 ## The model
 
-This project's architecture lives in [`architecture/`](./architecture/README.md),
-as numbered ArchiMate layers. Start there to understand what the project
-does and how its pieces relate.
+What this project knows about itself lives in
+[`architecture/`](./architecture/README.md). Start there: its front page says
+which parts are modeled, which belong to somebody else, and which are still
+missing.
 
-- [`architecture/`](./architecture/README.md) — the layered model, current state
-- [`architecture/scope/`](./architecture/scope/README.md) — one document per initiative, with its approval gates
-- [`architecture/decisions/`](./architecture/decisions/README.md) — consequential calls smaller than an initiative
-
-Not a repository person? `python3 scripts/build_docs.py` renders the same
-documents as a searchable website and `python3 scripts/export_pdf.py` as a
-single PDF — both built from the Markdown, which stays the model.
+Folders appear as they earn their place. A layer with nothing to say yet is a
+row on that page, not an empty directory — so what was decided is never
+confused with what was never looked at.
 
 ## How changes are made
 
-Requirements are aligned through the model and approved at explicit gates
+A requirement is not built directly. It is worked through the model and
+approved at named gates — **Direction**, **Understanding**, **Design** —
 before anything is built. [`AGENTS.md`](./AGENTS.md) states the rule and the
-declared modeling depth, [`CONTRIBUTING.md`](./CONTRIBUTING.md) names who
-grants those gates, and the `align-change-through-layers` skill runs the process.
+declared modeling depth; the `align-change-through-layers` skill runs the
+process.
 
 ## Built with
 

@@ -23,44 +23,42 @@ the Requester's approval, record it in a scope document (`architecture/scope/`),
 then implement. Pure bug fixes that change no documented behavior skip the
 alignment and the gates, but still keep the docs true.
 
+## Who decides
+
+Every change moves through three roles. Nothing here assumes a human fills the
+middle one — an AI agent and a person follow the same steps, in the same order,
+against the same documents.
+
+| Role | Who | Does |
+| ---- | --- | ---- |
+| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff. **Grants the gate approvals** before any code is written |
+| **Agent** | An AI agent (or a person) | Works the change through the layers, stops at each gate for the Requester's approval, writes the scope document, implements, and opens a pull request |
+| **Reviewer** | \<who reviews and merges> | Reviews and merges. Nothing ships without a human approving it |
+
+An approval that isn't recorded didn't happen: every gate is written into the
+scope document's Approvals table, with who approved, when, and what was shown.
+
 ## Modeling depth
 
 **Declared depth: _not yet declared_** — `establish-project` sets this.
 
 The six layers describe a weekend app and a twenty-business-line company
 alike; the depth says how much of them gets filled in and which gates apply
-(see [`architecture/README.md` § Modeling depth](./architecture/README.md#modeling-depth)).
+(see [`architecture/README.md`](./architecture/README.md)).
 Depth 1 is one application with a light strategy layer; Depth 2 is one
-organization; Depth 3 splits the model into [domains](./architecture/domains/README.md).
+organization; Depth 3 splits the model into domains, one per business line.
 It is a starting posture, never a ceiling — deepening or descoping is a
 normal initiative, decided by the Requester.
 
 ## The skills
 
-Your coding agent surfaces these from their `description:` frontmatter; you
-don't invoke them by name in normal use. They are listed in the order they are
-used in, with the four rulebooks — consulted rather than run — at the end.
+Your coding agent surfaces the archreator skills from their `description:`
+frontmatter; you don't invoke them by name in normal use. Three kinds: `⚙` a
+procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
 
-| Skill | Reach for it when |
-| ----- | ----------------- |
-| `establish-project` | A project from the template hasn't been set up yet — start here |
-| `discover-business-model` | The subject is an organization: canvases first (Direction), strategy derived from them |
-| `discover-strategy` | The strategy is unfilled or the change shifts it (Direction) |
-| `model-domains` | The organization is large enough to split into business lines, or a change crosses a domain boundary |
-| `discover-current-landscape` | The subject already exists and layers 2–5 are empty — sweep the estate into a described baseline |
-| `plan-the-transition` | The question is where the architecture should go and in what order — target plateaus, a gap register and a sequence |
-| `align-change-through-layers` | Any requirement change. **The spine** — defines the gates and the order |
-| `write-scope-document` | Writing the initiative's scope document; its Approvals table is the durable record of the gates |
-| `shard-stories` | A work package is too large to finish in one sitting |
-| `write-pr-description` | Opening or updating a pull request — the body covers the whole branch, not the latest commit |
-| `restate-current-state` | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
-| `record-decision` | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
-| `answer-architecture-question` | A reader wants a focused, disposable brief about one element, domain, concern, impact or decision |
-| `run-retrospective` | An initiative or engagement just finished — capture what the method didn't cover before it evaporates |
-| `document-style` | Writing or editing any document at all — the language, what it may contain, and how it links |
-| `architecture-document-style` | Editing anything under `architecture/` — numbering, element IDs, tiers, ArchiMate-on-Mermaid, actors, the grounding rule |
-| `process-and-capability-levels` | An organization's processes or capabilities need shaping — the four macro categories, the levels, and how far down to go |
-| `stack-selection` | No technology stack chosen yet on a small application |
+The catalogue lives with the skills, in the plugin — it is not restated here,
+because a copy in every generated project is a copy that goes stale in every
+generated project.
 
 ## Layout
 
@@ -69,25 +67,19 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 - `tests/` — ...
 -->
 
-- `architecture/` — everything architectural: the numbered ArchiMate layers
-  describing the current state, `architecture/6_transition/` — the one place the
-  model describes a future — `architecture/reference/` — the transcripts,
-  decks and documents it was built from, kept as they arrived —
-  `architecture/domains/` (Depth 3 only), `architecture/scope/` — one document
-  per initiative — and `architecture/decisions/` for calls smaller than an
-  initiative.
+- `architecture/` — what this project knows about itself. Its `README.md` is
+  the front door and says, per layer, whether this model owns it, another
+  model does, it is out of scope, or it is a named gap. **A folder exists only
+  once it holds something**; the skills emit the one they need when they need
+  it, so an empty directory is never a substitute for saying what is missing.
 - **Every document that defines an element says how far it has been
   validated**, with `○` not started, `◐` a draft catalogue of things somebody
   said exist, or `●` validated at a named gate on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing.
-- `CONTRIBUTING.md` — who the Requester, Agent and Reviewer are, and the
-  development workflow.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
-  push, and the three tools: the projection, the documentation portal and the
-  PDF export.
-- `mkdocs.yml` and `overrides/` — how the model is published as a website.
-  Everything they produce lands in `.docs/`, which is derived and gitignored.
+  push. Everything else the method can do runs from the plugin rather than
+  from a copy in here.
 
 ## Commands
 

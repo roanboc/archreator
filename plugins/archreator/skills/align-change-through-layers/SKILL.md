@@ -156,11 +156,11 @@ standing, and changing it afterwards is not optional: a layer that stays `◐`
 after its gate tells every later reader not to rely on something a Requester
 approved.
 
-**This table is the single source for which gate applies when.** `CONTRIBUTING.md`,
+**This table is the single source for which gate applies when.** `AGENTS.md`,
 `architecture/scope/README.md` and `write-scope-document` point here rather than
 restating it.
 
-Approval is granted by the **Requester** (see `CONTRIBUTING.md` § Actors) and
+Approval is granted by the **Requester** (see `AGENTS.md` § Who decides) and
 recorded in the scope document's Approvals table — which gate, who approved,
 when, and what was shown. **An approval that isn't recorded didn't happen.**
 

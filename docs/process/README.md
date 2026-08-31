@@ -60,7 +60,8 @@ flowchart LR
 | — | Stadium | Event — what starts or ends a flow | — |
 
 Glyph, shape and colour follow
-[`architecture/README.md` § Notation conventions](../../plugins/archreator/scaffold/architecture/README.md#notation-conventions),
+the `architecture-document-style` rulebook's
+[ArchiMate on Mermaid reference](../../plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md),
 which stays the single source. The **approval gate** has no ArchiMate element type, so
 it takes a shape of its own here. As an ordinary decision rhombus it is
 indistinguishable from a verdict the agent reaches alone, and that is the distinction

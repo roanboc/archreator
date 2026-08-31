@@ -89,7 +89,7 @@ flowchart TB
 
 The AI actor is drawn in the Application cyan even though it sits in a
 business diagram — one of the two colour overrides in
-[README.md § Notation conventions](../README.md#notation-conventions), so a
+the `architecture-document-style` rulebook § ArchiMate on Mermaid, so a
 reader never mistakes it for a person.
 
 Every business service is realized by application services — the mapping is
