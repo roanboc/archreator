@@ -30,3 +30,13 @@ columns beyond the usual name/description:
 If an initiative changes an AI actor's autonomy level or decision rights,
 that's exactly the kind of call the `record-decision` skill is for.
 
+## An actor earns its row by acting
+
+**A supplier the organization only depends on is not an actor.** A platform,
+a hosting service, a model provider — it fills no role in this model and
+decides nothing in it, so it gets no `ACT` row: it is a key partner where a
+canvas exists, a contract on the business layer, and a node on the
+technology layer, and those three carry everything true about it. The test
+is the role column: an actor whose row cannot name a role it fills or
+assists in is a dependency wearing the wrong stereotype.
+

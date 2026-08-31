@@ -79,6 +79,34 @@ there resolves exactly as one naming a heading here.
   layer describes the current state, and that division is what lets a reader
   trust a layer document without checking its date.
 
+### One document per layer, until it is not
+
+A layer opens as **one document**, and a small subject stays that way — a
+whole business layer can be one honest file. A larger subject splits **by
+element family, in analysis order**, the shape the canonical file names
+already anticipate: `1_business-actors-and-roles.md`,
+`2_business-services.md`, `3_business-processes.md`.
+
+Split when any of these becomes true, and not before:
+
+- **A reader scrolls through one family to reach another** — past roughly
+  twenty-five elements in the document, counting every level, the page has
+  stopped being scannable.
+- **One family carries a leveled catalogue of its own** — a process map
+  with its level-2 contracts, a capability decomposition — big enough to be
+  the document a reader opens on purpose.
+- **Two families are validated at different sittings of a gate.** What is
+  approved together can live together; what is approved separately should
+  be separable.
+
+Each split document keeps the full skeleton — its own "How to read" legend,
+its own status line — and the layer README's analysis-order table is the
+index. Split along family lines only: levels 1 and 2 of one catalogue stay
+in one document, with only a level-3 flow earning a file of its own
+(`process-and-capability-levels` § What is here, and what is one file away).
+And merge back when a change leaves stubs: two half-empty documents are
+worse than one honest one.
+
 ### Document status
 
 **Every document that defines an element says in its preamble how far it has

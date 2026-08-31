@@ -29,6 +29,12 @@ Two models at the same depth can sit at different tiers:
 **A tier may refine what the tier above exposed; it may never restate it. Every
 refining element names its parent.**
 
+The same rule holds between federated models in one repository: a product's
+tree cites the organization's strategy by cross-model reference —
+`org::G1` in a `Serves` column on its goals, a `Sharpens` column on its
+drivers — and defines only what the product adds. A motivation layer that
+reads correctly with the parent's copied in has restated it.
+
 | Layer | Enterprise | Product | Implementation |
 | --- | --- | --- | --- |
 | 0 business-design | Owned | — | — |
