@@ -169,11 +169,35 @@ def skill_names() -> set[str]:
     return {p.name for p in SKILLS_DIR.iterdir() if (p / "SKILL.md").is_file()}
 
 
-def headings_of(skill: str) -> list[str]:
-    path = SKILLS_DIR / skill / "SKILL.md"
+def _headings(path: Path) -> list[str]:
     if not path.is_file():
         return []
     return [normalize(h) for h in HEADING_RE.findall(strip_code(path.read_text(encoding="utf-8")))]
+
+
+def headings_of(skill: str) -> list[str]:
+    """The skill's own headings - what a required section has to be found in."""
+    return _headings(SKILLS_DIR / skill / "SKILL.md")
+
+
+def reference_files(skill: str) -> list[Path]:
+    """The skill's progressive-disclosure references, if it has any."""
+    return sorted((SKILLS_DIR / skill / "references").glob("*.md"))
+
+
+def citable_headings(skill: str) -> list[str]:
+    """Every heading a `skill` section reference may name.
+
+    A rulebook keeps the rules that apply everywhere in SKILL.md and the lookup
+    tables needed only sometimes in references/. A citation names a heading, not
+    a file, so moving a section into a reference has to leave every citation of
+    it resolving - otherwise the split would cost an edit in each citing skill,
+    which is the churn progressive disclosure is supposed to avoid.
+    """
+    headings = headings_of(skill)
+    for path in reference_files(skill):
+        headings += _headings(path)
+    return headings
 
 
 def skill_meta(skill: str) -> dict:
@@ -269,7 +293,7 @@ def check_section_markers(known: set[str]) -> list[str]:
                 continue
             seen.add(key)
             if skill not in cache:
-                cache[skill] = headings_of(skill)
+                cache[skill] = citable_headings(skill)
             words = candidate.split(" ")
             matched = False
             for count in range(len(words), 0, -1):
@@ -449,7 +473,9 @@ def check_prefix_registry() -> list[str]:
     skills. Neither is derived from the other at runtime, so CI holds them
     together.
     """
-    skill = SKILLS_DIR / "architecture-document-style" / "SKILL.md"
+    skill = (
+        SKILLS_DIR / "architecture-document-style" / "references" / "hierarchy-and-ids.md"
+    )
     registry = (
         REPO_ROOT / "plugins" / "archreator" / "scaffold" / "scripts" / "element-prefixes.json"
     )
@@ -462,7 +488,7 @@ def check_prefix_registry() -> list[str]:
         if line.strip().startswith("| Where ") and "Prefixes" in line
     ]
     if not header:
-        return ["architecture-document-style: the element-prefix table is missing"]
+        return ["architecture-document-style: references/hierarchy-and-ids.md has no element-prefix table"]
 
     documented: dict[str, str] = {}
     for line in lines[header[0] + 2:]:
@@ -490,6 +516,28 @@ def check_prefix_registry() -> list[str]:
                 f"`{code}` is `{documented[code]}` in the rulebook and "
                 f"`{shipped[code]}` in element-prefixes.json"
             )
+    return errors
+
+
+def check_references_reachable(known: set[str]) -> list[str]:
+    """Every references/*.md is linked from the SKILL.md that owns it.
+
+    Progressive disclosure only works if the skill says what is one file away.
+    A reference nothing links to is a file the agent never learns exists, which
+    is worse than the section having stayed inline.
+    """
+    errors: list[str] = []
+    for skill in sorted(known):
+        files = reference_files(skill)
+        if not files:
+            continue
+        body = (SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
+        for path in files:
+            if f"references/{path.name}" not in body:
+                errors.append(
+                    f"{skill}: references/{path.name} is not linked from SKILL.md, "
+                    "so nothing will ever read it"
+                )
     return errors
 
 
@@ -642,17 +690,22 @@ def main() -> int:
         print(f"No skills found under {SKILLS_DIR.relative_to(REPO_ROOT)} - nothing to check.")
         return 0
 
-    all_errors: list[str] = []
-    for label, errors in [
+    # The labels are also what the success line reports, so a check added here
+    # is announced without a second list to keep in step.
+    checks = [
         ("section markers", check_section_markers(known)),
         ("process binding", check_process_binding(known)),
         ("required sections", check_required_sections(known)),
         ("prefix registry", check_prefix_registry()),
+        ("reference files", check_references_reachable(known)),
         ("scaffold specimens", check_scaffold_specimens()),
         ("catalogue", check_catalogue(known)),
         ("manifests", check_manifests()),
         ("context files", check_context_files()),
-    ]:
+    ]
+
+    all_errors: list[str] = []
+    for label, errors in checks:
         if errors:
             all_errors.append(f"{label}:")
             all_errors.extend(f"  {e}" for e in errors)
@@ -664,9 +717,9 @@ def main() -> int:
         return 1
 
     converted = sum(1 for s in known if skill_meta(s).get("kind"))
-    print(f"{len(known)} skills ({converted} converted): section markers, process "
-          f"binding, required sections, catalogue, manifests and context files "
-          f"all resolve.")
+    labels = [label for label, _ in checks]
+    named = ", ".join(labels[:-1]) + f" and {labels[-1]}"
+    print(f"{len(known)} skills ({converted} converted): {named} all resolve.")
     return 0
 
 
