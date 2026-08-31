@@ -150,19 +150,32 @@ deliberate — globally unique numbering would make every new model a merge
 conflict against every other — and it is why a bare identifier can only ever
 mean something inside the model that wrote it.
 
-**A reference to another model names that model first, separated by two
-colons**: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
+**A reference to another model leads with that model's federation ID**:
+`ORG.STK#`, `PRD_MTD.BSVC#`, `DMN_SALES.EMEA.BSVC#`. The federation ID is a
+short uppercase code built from the tier — `ORG` for the organization,
+`DMN_<NAME>` for a domain, `PRD_<NAME>` for a product — and the hierarchy
+runs Organization, then Domain, then Product; the component below a product
+keeps no model tree of its own and therefore no federation ID. The tier code
+stands alone only where the tier cannot have siblings, which is the
+organization alone: a domain or product carries its short name from birth,
+because a second one arriving must never rename the first. **A federation ID
+is stable once granted, exactly like an element's.**
 
-Two colons rather than a third meaning for the dot. The dot already separates
-the domain path (before the prefix) from the catalogue's levels (after it), and
-one character meaning three things stops being readable. Read outwards: model,
-then domain path, then prefix, then levels — each separator appears at most
-once, and always in that order.
+The underscore belongs inside the ID, so the dot keeps exactly two meanings:
+ownership before the type prefix — a federation ID, a domain path, or both —
+and catalogue levels after it. Read outwards: model, then domain path, then
+prefix, then levels; each kind of segment appears at most once, and always
+in that order. One grammar carries domains and federation alike; which one a
+qualifier is depends on what the model declared, never on how it is spelled.
 
-**The model's name is the one the federation index gives it.** That is the
-point rather than a convenience: a model you may reference is a model you have
-declared you federate with, in `architecture/federation.md`. There is no way to
-reach into something you never said you depend on.
+**A model declares its own federation ID once, on its front door** — a
+`**Federation ID:** \`ORG\`` line in its `architecture/README.md` — and the
+citing model maps the IDs it uses in `architecture/federation.md` (cell 1
+the ID, cell 2 the model's key). That mapping is the point rather than a
+convenience: a model you may reference is a model you have declared you
+federate with, and `check_model.py` holds the mapping against the ID the
+target's own front door declares. There is no way to reach into something
+you never said you depend on.
 
 **How it resolves depends on where the other model is**, and the two cases are
 genuinely different:

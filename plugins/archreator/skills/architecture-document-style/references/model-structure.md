@@ -30,10 +30,18 @@ Two models at the same depth can sit at different tiers:
 refining element names its parent.**
 
 The same rule holds between federated models in one repository: a product's
-tree cites the organization's strategy by cross-model reference —
-`org::G1` in a `Serves` column on its goals, a `Sharpens` column on its
+tree cites the organization's strategy by federation ID —
+`ORG.G#` in a `Serves` column on its goals, a `Sharpens` column on its
 drivers — and defines only what the product adds. A motivation layer that
 reads correctly with the parent's copied in has restated it.
+
+**And a child's own elements trace to the parent.** What a child defines it
+derives from or aligns to something the parent already knows — a stakeholder
+column naming the parent element each one refines, a driver sharpening a
+parent driver. A child cannot discover a stakeholder the parent has never
+heard of: an element that matters to the product but appears nowhere in the
+organization's model is a finding **about the organization's model** — raise
+it there first, and refine it below once the parent owns it.
 
 | Layer | Enterprise | Product | Implementation |
 | --- | --- | --- | --- |
