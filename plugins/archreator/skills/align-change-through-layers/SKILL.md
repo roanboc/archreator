@@ -440,6 +440,7 @@ branch (`main...HEAD`), not just the latest commit.
 | `stack-selection` | Step 5, and no stack chosen | A recorded choice in `5_technology/` |
 | `shard-stories` | Step 6, and a work package is too large | Self-contained stories in build order |
 | `write-pr-description` | Step 8 | The pull-request body |
+| `run-retrospective` | The pull request merged and judgement was exercised — the method was silent somewhere and someone improvised | A pattern note in the organization's own records; each proposal becomes its own initiative |
 
 ## ✎ Worked example
 

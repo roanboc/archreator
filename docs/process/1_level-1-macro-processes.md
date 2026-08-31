@@ -4,6 +4,11 @@ _[← The process model](./README.md)_
 
 The five macro processes, each with its level-2 children, ordered on this page by
 when they run rather than by identifier — `BPROC5` was added last and runs second.
+That is the method eating its own rule: an identifier is assigned once and never
+reallocated, so a number says when a process joined the model, and the sequence
+is carried by this page's order and the map — never by the number. Renumbering
+to restore the flow would silently repoint every reference ever written to
+`BPROC2`, `BPROC3` and `BPROC4`.
 The map that places them relative to one another is on
 [the index page](./README.md#the-macro-process-map); this page opens each one up.
 What every child process consumes and produces is in
