@@ -60,11 +60,33 @@ def _project_root(argv: list[str]) -> Path:
     return Path.cwd().resolve()
 
 
+def _find_parse(root: Path) -> Path | None:
+    """The project's parse — beside it, or at the enclosing repository root.
+
+    A repository that holds one model keeps `scripts/` beside `architecture/`.
+    A repository that holds several trees keeps one `scripts/` at its root —
+    the worked-models layout — so `--project <tree>` walks up to find it. The
+    walk stops at the repository boundary: what sits above a `.git` belongs to
+    somebody else.
+    """
+    for candidate in (root, *root.parents):
+        parse = candidate / "scripts" / "model_graph.py"
+        if parse.is_file():
+            return parse
+        if (candidate / ".git").exists():
+            return None
+    return None
+
+
 _ROOT = _project_root(sys.argv[1:])
-_PARSE = _ROOT / "scripts" / "model_graph.py"
-if not _PARSE.is_file():
+_PARSE = _find_parse(_ROOT)
+if _PARSE is None:
+    if {"-h", "--help"} & set(sys.argv[1:]):
+        print(__doc__)
+        sys.exit(0)
     sys.exit(
-        f"No archreator project at {_ROOT}: expected scripts/model_graph.py.\n"
+        f"No archreator project at {_ROOT}: expected scripts/model_graph.py "
+        f"there or at the enclosing repository root.\n"
         f"Run this from a project's root, or pass --project <path>."
     )
 sys.path.insert(0, str(_PARSE.parent))

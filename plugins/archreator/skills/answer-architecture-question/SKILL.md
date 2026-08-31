@@ -49,8 +49,9 @@ face that the repository is the model.
   `decision`. Combined viewpoints are separate briefs.
 - Resolve the anchor against the model. Suggest actual names and identifiers
   when the request is ambiguous; never invent an identifier.
-- Pass the confirmed focus to `scripts/build_brief.py`. Do not imitate its
-  graph selection or write a competing summary.
+- Pass the confirmed focus to the plugin's `build_brief.py` — it ships beside
+  the skills, not in the project, and reads a project through `--project`. Do
+  not imitate its graph selection or write a competing summary.
 - Return the generated Markdown as disposable output. Do not move it into the
   architecture tree or treat it as approved evidence.
 
@@ -86,12 +87,14 @@ replacement for the named scope.
 
 ### 3. Generate the brief
 
-Run the matching command from the project root, for example:
+Run the matching command from the project root. `build_brief.py` lives in the
+plugin's `scripts/` — not in the project — and `--project` points it at the
+model, for example:
 
 ```bash
-python3 scripts/build_brief.py --element BSVC1 --depth 2 --focus business
-python3 scripts/build_brief.py --element DOBJ4 --depth 2 --focus information
-python3 scripts/build_brief.py --domain SALES --focus impact
+python3 <plugin>/scripts/build_brief.py --project . --element BSVC1 --depth 2 --focus business
+python3 <plugin>/scripts/build_brief.py --project . --element DOBJ4 --depth 2 --focus information
+python3 <plugin>/scripts/build_brief.py --project . --domain SALES --focus impact
 ```
 
 If the view is omitted because the selected scope is too large, narrow the

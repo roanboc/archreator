@@ -91,11 +91,14 @@ NARRATIVE = {"scope", "decisions", "reviews", "engagements", "reference"}
 # of the pinned AIP release the validators are run from. None is this
 # repository's to validate, and none is a downstream project's once these
 # scripts ship there.
-# `.docs` is the documentation portal's staged copy and built site — every
-# document a second time, which would otherwise read as every element being
-# defined twice.
+# `.archreator` is where every generated working surface lands — briefs, the
+# portal configuration and whatever it builds — and `.model` is the exported
+# model.json; both are the model a second time, which would otherwise read as
+# every element being defined twice, or as a built page with links written
+# for a rendered site. `.docs` is where the pre-reset tooling staged the same
+# things, kept so a stale local copy never fails a fresh checkout's checks.
 EXCLUDED_DIRS = {".git", ".claude", ".agents", ".gemini", ".codex", ".copilot",
-                 ".aip", ".docs"}
+                 ".aip", ".docs", ".archreator", ".model"}
 # See the note in check_links.py: anchored to line starts and matched on fence
 # length, so a fence containing a fence does not close early and leak its body
 # back into the scanned prose.

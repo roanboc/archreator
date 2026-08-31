@@ -131,6 +131,68 @@ class ProjectToolTests(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0, f"{tool.name} accepted a non-project")
                 self.assertIn("model_graph.py", result.stderr)
 
+    def test_a_built_portal_does_not_fail_the_validators(self):
+        """What lands under .archreator/ is a rendering, not repository content.
+
+        Building the portal locally used to make check_links fail on the built
+        site's own pages until the directory was deleted.
+        """
+        site = self.probe / ".archreator" / "work" / "portal" / "site"
+        site.mkdir(parents=True, exist_ok=True)
+        (site / "index.html").write_text(
+            '<a href="missing.html">gone</a>', encoding="utf-8"
+        )
+        try:
+            for validator in ("check_links.py", "check_model.py"):
+                result = run(self.probe / "scripts" / validator, cwd=self.probe)
+                self.assertEqual(
+                    result.returncode, 0,
+                    f"{validator} read the generated portal: {result.stdout}{result.stderr}",
+                )
+        finally:
+            (site / "index.html").unlink()
+
+    def test_help_answers_outside_a_project(self):
+        """--help is a question about the tool, not about any project."""
+        with tempfile.TemporaryDirectory() as empty:
+            for tool in (MODEL, BRIEF):
+                result = run(tool, "--help", cwd=empty)
+                self.assertEqual(result.returncode, 0, f"{tool.name}: {result.stderr}")
+                self.assertTrue(result.stdout.strip(), f"{tool.name} printed nothing")
+
+    def test_a_tree_reaches_the_repository_root_scripts(self):
+        """A repository of several trees keeps one scripts/ at its root.
+
+        That is the worked-models layout: `--project <tree>` must find the
+        shared parse by walking up, and the portal must render the tree the
+        caller named, not the repository root.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "worked-models"
+            (root / ".git").mkdir(parents=True)
+            shutil.copytree(
+                SCAFFOLD / "scripts", root / "scripts",
+                ignore=shutil.ignore_patterns("__pycache__"),
+            )
+            tree = root / "product-x"
+            (tree / "architecture" / "2_business").mkdir(parents=True)
+            (tree / "architecture" / "README.md").write_text(
+                "# Probe tree\n", encoding="utf-8"
+            )
+            (tree / "architecture" / "2_business" / "README.md").write_text(
+                BUSINESS.replace("`ACMP1`", "—"), encoding="utf-8"
+            )
+            result = run(MODEL, "--project", tree, "coverage")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            portal = run(MODEL, "--project", tree, "portal")
+            self.assertEqual(portal.returncode, 0, portal.stderr)
+            config = tree / ".archreator" / "work" / "portal" / "mkdocs.yml"
+            self.assertTrue(config.is_file(), "the portal config went somewhere else")
+            self.assertIn(
+                "product-x/architecture", config.read_text(encoding="utf-8"),
+                "the portal is not rendering the tree the caller named",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
