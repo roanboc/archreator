@@ -84,6 +84,11 @@ Then follow the bootstrap checklist by hand, or install the skills and let
 
 ## Keeping a project in sync with the method
 
+A project that adopted the method before 0.2 has a one-time crossing to make
+first — the renamed gates, the scripts that moved to the plugin, and what an
+existing model deliberately keeps. That is [`docs/migrating.md`](./migrating.md),
+and it is separate from the routine sync below.
+
 Three things ship in this repo with different lifecycles, and only one of
 them stays in sync automatically:
 

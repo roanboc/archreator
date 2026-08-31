@@ -48,6 +48,12 @@ cross-platform path and URL-encoding issues. If ArchiMate stereotypes are
 translated, keep a correspondence table to the standard English element
 names near the top of `architecture/README.md`.
 
+The method's own vocabulary translates the same way. The three gate names may
+be written in the project's language — «Dirección», «Entendimiento»,
+«Diseño» — with the English originals in the same correspondence table. The
+validators read the status glyph, never the words beside it, so a translated
+gate name costs nothing.
+
 #### Write it out
 
 **Language is the interface** — to a human reader, and to an agent that has
