@@ -81,8 +81,8 @@ than remembered.
 | **Approved at a gate** | The identifier is retired permanently and never reused, and the retirement is recorded (see `restate-current-state` § The Retired section) |
 
 Which gate covers which element is `align-change-through-layers` § The gates:
-canvases freeze at Gate 0, the strategy layer at Gate 1, business and
-information at Gate 2. An element added to an already-approved layer by a
+canvases and the strategy layer freeze at Direction, business and
+information at Understanding. An element added to an already-approved layer by a
 later initiative is draft until *that* initiative's gate.
 
 The reason is what a gap in a sequence should mean. If identifiers freeze the

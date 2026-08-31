@@ -54,8 +54,8 @@ Turning a subject nobody has modeled into one a change can be judged against.
 | Skill | Kind | Reach for it when |
 | ----- | ---- | ----------------- |
 | [`establish-project`](./establish-project/SKILL.md) | ⚙ Procedure | A project from the template hasn't been set up yet — start here |
-| [`discover-business-model`](./discover-business-model/SKILL.md) | ⚙ Procedure | The subject is an organization: canvases first (Gate 0), strategy derived from them |
-| [`discover-strategy`](./discover-strategy/SKILL.md) | ⚙ Procedure | The strategy is unfilled or the change shifts it (Gate 1) |
+| [`discover-business-model`](./discover-business-model/SKILL.md) | ⚙ Procedure | The subject is an organization: canvases first (Direction), strategy derived from them |
+| [`discover-strategy`](./discover-strategy/SKILL.md) | ⚙ Procedure | The strategy is unfilled or the change shifts it (Direction) |
 | [`model-domains`](./model-domains/SKILL.md) | ⚙ Procedure | The organization is large enough to split into business lines, or a change crosses a domain boundary |
 | [`discover-current-landscape`](./discover-current-landscape/SKILL.md) | ⚙ Procedure | The subject already exists and layers 2–5 are empty — sweep the estate into a described baseline |
 

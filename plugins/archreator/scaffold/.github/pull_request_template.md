@@ -19,7 +19,7 @@
 ## Scope document
 
 <!-- Link the initiative's document in architecture/scope/. Its Approvals
-     table must already record the gates the change required — Gate 2 at
+     table must already record the gates the change required — Understanding at
      minimum for anything that changes documented behavior.
 
      A pure bug fix has no scope document. Write "No scope document" and say

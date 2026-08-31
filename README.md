@@ -47,9 +47,9 @@ the one you can hand over.
 flowchart LR
   req(["A requirement"]):::human
   intention["<b>Intention</b><br/>why, and for whom"]:::ai
-  gA{{"You approve<br/>the direction"}}:::gate
+  gA{{"❖ <b>Direction</b><br/>you approve where this is going"}}:::gate
   operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
-  gB{{"You approve —<br/>before any code exists"}}:::gate
+  gB{{"❖ <b>Understanding</b><br/>you approve, before any code exists"}}:::gate
   out(["A sharper requirement —<br/>agreed, and written down"]):::done
 
   req --> intention --> gA --> operation --> gB --> out
@@ -68,13 +68,17 @@ one you arrived with — who it serves, what it has to do, and which of your
 assumptions turned out to disagree with each other. The dotted edges are the
 loops that can't be skipped, and neither gate here is about code.
 
+**Those names are the method's, not the diagram's.** Direction, Understanding
+and Design are what the skills call them too, so nothing you read later
+renames what you just approved.
+
 ### Then — what gets built from it
 
 ```mermaid
 flowchart LR
   inp(["What you agreed"]):::done
   realization["<b>Realization</b><br/>what builds it"]:::ai
-  gC{{"Want to see<br/>the design first?"}}:::gateopt
+  gC{{"❖ <b>Design</b><br/>only if you ask to see it first"}}:::gateopt
   build["Builds it"]:::ai
   check{{"You check<br/>the delivery"}}:::gate
   out(["The outcome you asked for,<br/>and the next requirement"]):::done

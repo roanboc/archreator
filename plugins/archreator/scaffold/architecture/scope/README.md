@@ -28,23 +28,24 @@ folders are numbered in:
    documents in the same change. If the strategy layer is still template
    placeholders, or the change adds/modifies a stakeholder, driver, goal,
    or principle, the initiative becomes **strategy discovery** first — a
-   docs-only, question-driven initiative ending at **Gate 1 — Strategy**
+   docs-only, question-driven initiative ending at **Direction**
    approval (see the `discover-strategy` skill); implementation
    follows as a separate initiative. If the subject is an **organization**
    rather than an application, the walk starts one layer earlier, at
    [0_business-design](../0_business-design/README.md) — the value
-   proposition and business model canvases, approved at **Gate 0 —
+   proposition and business model canvases, approved at **Direction —
    Business model** (see the `discover-business-model` skill)
    before layers 1–2 are derived from them.
 2. **Document the scope.** Add the next-numbered file to this folder
    describing plateaus, work packages, in/out of scope, gaps, and gate
    approvals — before implementation starts, refined as it proceeds.
 3. **Pass the gates.** Before any code, the Requester approves the
-   strategy, business, and information changes (**Gate 2 — Business**) and
+   strategy, business, and information changes (**Understanding**) and
    chooses whether to also review the solution design before it is coded
-   (**Gate 3 — Solution design**, optional). Approvals are recorded in the
+   (**Design**, optional). Approvals are recorded in the
    scope document's Approvals table — who approved, when, and what was
-   shown, with `N/A — <why>` for the gates that didn't apply. Which gate
+   shown, with `N/A — <why>` for a gate that could have applied and didn't.
+   Which gate
    applies to which initiative is defined in exactly one place,
    the `align-change-through-layers` skill § The gates, which also says **where**
    an approval can be granted — the conversation, or a reply on the pull
@@ -76,7 +77,7 @@ accurate line by line and no longer read as a description of *today* —
 shipped work still marked "Pending", elements that were replaced but never
 retired, questions answered in a conversation nobody recorded. The
 `restate-current-state` skill compacts that, as its own initiative with its
-own Gate 2. It changes the current-state documents only: **a merged scope
+own Understanding. It changes the current-state documents only: **a merged scope
 document is never rewritten**, because it is the record of what was
 approved on a date and against what information.
 

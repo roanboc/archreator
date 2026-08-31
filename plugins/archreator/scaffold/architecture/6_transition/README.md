@@ -30,13 +30,13 @@ last.
 
 ## What is approved here, and what is not
 
-**Gate 1** approves this folder: that the destination is right and the order
+**Direction** approves this folder: that the destination is right and the order
 is right. It is the same gate the strategy layer passes, because both are the
 Requester approving a direction.
 
 **It approves no work.** Every initiative on the sequence still enters
 `align-change-through-layers`, still aligns through the numbered layers, and
-still stops at its own Gate 2 before anything is built. A roadmap treated as
+still stops at its own Understanding before anything is built. A roadmap treated as
 pre-approval for the changes on it has quietly removed every gate the method
 has.
 

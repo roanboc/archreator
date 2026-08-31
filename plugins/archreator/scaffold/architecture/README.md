@@ -46,9 +46,9 @@ depths in `AGENTS.md`:
 
 | Depth | The subject is | `0_business-design/` | `1_strategy/` | `domains/` | Gates |
 | ----- | -------------- | -------------------- | ------------- | ---------- | ----- |
-| **1 — Application** | one application; no organization is modeled | not used | light — goals and principles, enough to judge a change against | not used | 2, and 3 if requested |
-| **2 — Organization** | one organization, sharing one model | canvases per segment and product | full | not used | 0–3 |
-| **3 — Enterprise** | several business lines, each owning its own model | per domain that needs one | full, at the enterprise level and per domain | [the domain tree](./domains/README.md) | 0–3, plus the consuming domains' Requesters on any cross-domain contract change |
+| **1 — Application** | one application; no organization is modeled | not used | light — goals and principles, enough to judge a change against | not used | Understanding, and Design if requested |
+| **2 — Organization** | one organization, sharing one model | canvases per segment and product | full | not used | Direction, Understanding, Design |
+| **3 — Enterprise** | several business lines, each owning its own model | per domain that needs one | full, at the enterprise level and per domain | [the domain tree](./domains/README.md) | The three, plus the consuming domains' Requesters on any cross-domain contract change |
 
 Rules that make the ladder work:
 

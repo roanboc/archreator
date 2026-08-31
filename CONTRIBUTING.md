@@ -25,15 +25,15 @@ change without a rationale — the rationale lives where the model does.
 Method changes run through the same gates the method makes downstream
 projects run through. In practice:
 
-- **Gate 2 — Business** applies to every change that alters documented
+- **Understanding** applies to every change that alters documented
   behavior — every one that touches a skill body, a rule, or the scaffold.
   It is granted in the sibling repository's scope document, then
   implemented here.
-- **Gate 1 — Strategy** applies when the change adds or shifts a
+- **Direction** applies when the change adds or shifts a
   Stakeholder, Driver, Goal, or Principle of the method itself — and when an
   initiative sets a direction rather than building one, which is the same
   approval pointed at a target instead of a strategy layer.
-- **Gate 3 — Solution design** is the Requester's option at Gate 2.
+- **Design** is the Requester's option at Understanding.
 
 Pure bug fixes skip the gates, per the method's own rule.
 

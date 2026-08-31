@@ -100,7 +100,7 @@ them stays in sync automatically:
 
 If a scaffold change matters enough to backport (a rule that would
 retroactively affect an existing model), it becomes an initiative in your
-project like any other: assessed, approved at Gate 2, and applied by hand.
+project like any other: assessed, approved at Understanding, and applied by hand.
 
 ## Reading order
 

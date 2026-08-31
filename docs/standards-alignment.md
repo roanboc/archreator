@@ -71,7 +71,7 @@ its space, and the table says which those are.
 
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
-| **Gates 0–3** | Architecture board review; Stage-Gate (Cooper) | Cite | — | The named-gate-before-proceeding shape is Stage-Gate's; the subject matter is TOGAF's architecture governance |
+| **the three gates** | Architecture board review; Stage-Gate (Cooper) | Cite | — | The named-gate-before-proceeding shape is Stage-Gate's; the subject matter is TOGAF's architecture governance |
 | **The Approvals table** | TOGAF Architecture Contract | Cite | — | Approximate. A Contract is a fuller artifact; this is the record of who approved what, when, and against which document |
 | **Scope document** | TOGAF Architecture Definition Document, narrowed to one initiative | Cite | — | Approximate |
 | **Requester / Agent / Reviewer** | RACI, narrowed to three fixed roles | Cite | — | Approximate. What archreator adds is that the middle role is not assumed human |

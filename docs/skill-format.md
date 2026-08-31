@@ -62,7 +62,7 @@ strips the glyph before matching.
 | `⚖` | Judgement | The criteria to weigh, where the step is a decision rather than a mechanism |
 | `←` | Needs | What the step consumes from an earlier one |
 | `→` | Produces | What it writes, by path |
-| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely names gates it does not own to say they are `N/A` |
+| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely draws a gate it does not own to show where its own work ends |
 
 **Needs and Produces each get their own paragraph.** Consecutive lines are one
 paragraph in markdown, and the two arrows render on one line if they share it.

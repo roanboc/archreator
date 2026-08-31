@@ -1,11 +1,11 @@
 ---
 name: discover-business-model
-description: Procedure — run this when the initiative is modeling an organization rather than building a single application — a company, a department, or a service line whose operating model is itself the deliverable. Runs a question-driven discovery with the Requester over the Value Proposition Canvas and a Business Model Canvas per product, ending at an explicit business-model approval gate (Gate 0), then hands off to discover-strategy to derive the enterprise architecture from it.
+description: Procedure — run this when the initiative is modeling an organization rather than building a single application — a company, a department, or a service line whose operating model is itself the deliverable. Runs a question-driven discovery with the Requester over the Value Proposition Canvas and a Business Model Canvas per product, ending at an explicit business-model approval gate (Direction), then hands off to discover-strategy to derive the enterprise architecture from it.
 metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC1.2
-    gates: Gate 0
+    gates: Direction
 ---
 
 # ⚙ Discover the business model
@@ -39,7 +39,7 @@ business model rather than an independent statement.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.2`, and owns **Gate 0** — the first approval any organization
+Realizes `BPROC1.2`, and owns **Direction** — the first approval any organization
 model receives. Nothing is derived until it is granted.
 
 ```mermaid
@@ -50,11 +50,11 @@ flowchart TD
   s3["⚙ 3 — Verify fit before presenting"]
   s4["⚙ 4 — Write the scope document"]
   s5["⚙ 5 — Present for approval"]
-  g0{{"❖ Gate 0 — the business model"}}
+  g0{{"❖ Direction — the business model"}}
   s6["⚙ 6 — Hand off to strategy discovery"]
   ds(["⇄ discover-strategy"])
   pcl(["⇄ process-and-capability-levels"])
-  g1{{"❖ Gate 1 — the strategy layer"}}
+  g1{{"❖ Direction — the strategy layer"}}
   out(["An approved operating model"])
 
   req --> s1 --> s2 --> s3 --> s4 --> s5 --> g0
@@ -69,8 +69,8 @@ flowchart TD
   class g0,g1 implementation
 ```
 
-Gate 1 is `discover-strategy`'s, not this skill's. One scope document covers
-both: the same file gains its Gate 1 row at the handoff, so don't open a
+Direction is `discover-strategy`'s, not this skill's. One scope document covers
+both: the same file gains its Direction row at the handoff, so don't open a
 second.
 
 ## ⚓ Invariants
@@ -135,7 +135,7 @@ so a misread segment surfaces in minutes rather than at the gate.
 `architecture/0_business-design/2_business-model-canvas.md`.
 
 The canvases open `◐ Draft catalogue` and carry `Source` and `Notes` until
-Gate 0 grants them — `architecture-document-style` § Document status. A canvas
+Direction grants them — `architecture-document-style` § Document status. A canvas
 is the most tempting document in the model to read as settled, because it
 looks finished the moment it is drawn; the marker is what says it is not.
 Anything the Requester provided is filed in `architecture/reference/` first,
@@ -163,7 +163,7 @@ Check, and fix or flag — never quietly present an unfit canvas:
 ### 4 — Write the scope document
 
 Discovery is a full initiative, not a detour. Create the scope document with
-`write-scope-document` **before** presenting Gate 0, so the Requester approves
+`write-scope-document` **before** presenting Direction, so the Requester approves
 against a concrete document and the approval has somewhere to be recorded the
 moment it is granted.
 
@@ -171,7 +171,7 @@ moment it is granted.
 
 ### 5 — Present for approval
 
-**❖ Gate 0 — the business model.** The Requester approves.
+**❖ Direction — the business model.** The Requester approves.
 
 Present one compact summary — segments, their jobs, the sharpest pains and
 gains, the products, and per product the blocks that distinguish it (revenue,
@@ -193,11 +193,11 @@ changes are requested, revise from Step 2 and present again.
 
 **← Needs** the canvases, the fit verdict, the scope document.
 
-**→ Produces** the Approvals table's Gate 0 row.
+**→ Produces** the Approvals table's Direction row.
 
 ### 6 — Hand off to strategy discovery
 
-**Nothing is derived until Gate 0 is granted.** The strategy layer is a
+**Nothing is derived until Direction is granted.** The strategy layer is a
 consequence of an approved business model; deriving from an unapproved canvas
 means redoing layers 1 and 2 when the canvas moves.
 
@@ -205,13 +205,13 @@ Then run `discover-strategy`, which finds the canvases filled and **derives
 rather than re-asks**. Its themes map onto the canvas blocks; the only theme
 with no canvas source is **Principles**, still discovered directly.
 
-**← Needs** the granted Gate 0.
+**← Needs** the granted Direction.
 
 ## ⇄ Hands off to
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | Gate 0 is granted | The strategy and key business layers derived from the canvases, approved at **Gate 1** — recorded in the same scope document |
+| `discover-strategy` | Direction's first sitting is granted | The strategy and key business layers derived from the canvases, approved at **Direction's second sitting** — recorded in the same scope document |
 | `process-and-capability-levels` | While deriving, to decide how far down capabilities and processes go | Levels 1 and 2 complete, level 3 only where a Pain on the approved canvas justifies it |
 
 ## ✎ Worked example
@@ -220,11 +220,11 @@ with no canvas source is **Principles**, still discovered directly.
 >
 > Depth 2, so this track rather than `discover-strategy`. Theme 3 yields
 > twelve pains; consolidation merges them to five with a per-segment severity
-> column, and the Gate 0 summary says so — the Requester overturns one merge,
+> column, and the Direction summary says so — the Requester overturns one merge,
 > which is exactly what naming the consolidation is for.
 >
 > Two offerings turn out to have separate economics at theme 5, so theme 7
-> produces two Business Model Canvases rather than one. Gate 0 is granted
+> produces two Business Model Canvases rather than one. Direction is granted
 > against branch links to both canvas documents, and only then does
 > `discover-strategy` derive the capability map.
 
@@ -232,7 +232,7 @@ with no canvas source is **Principles**, still discovered directly.
 
 - Filling a canvas block from what a business of this kind usually looks like,
   rather than from an answer.
-- Deriving the strategy layer before Gate 0 is granted.
+- Deriving the strategy layer before Direction is granted.
 - Presenting a canvas whose pains have no relievers, without flagging it.
 - Consolidating at the end, which renumbers everything the Requester has
   already read.
@@ -249,6 +249,7 @@ with no canvas source is **Principles**, still discovered directly.
   realized by people and procedures, not source files.
 - The scope document's EA-alignment table records the impact on layers 0–2 and
   an explicit "not started" verdict for the rest.
-- Its Approvals table records **Gate 0**, and gains **Gate 1** at the handoff.
+- Its Approvals table records **Direction** for the canvases, and gains a
+  second **Direction** row for the strategy at the handoff.
 - Open questions are logged for everything adopted but unconfirmed.
 - `python3 scripts/check_links.py` and `python3 scripts/check_model.py` pass.

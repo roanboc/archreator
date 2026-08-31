@@ -51,8 +51,8 @@ flowchart TD
   dbm(["⇄ discover-business-model"])
   ds(["⇄ discover-strategy"])
   md(["⇄ model-domains"])
-  g0{{"❖ Gate 0 — the canvases"}}
-  g1{{"❖ Gate 1 — the strategy layer"}}
+  g0{{"❖ Direction — the canvases"}}
+  g1{{"❖ Direction — the strategy layer"}}
   out(["A model a change can be judged against"])
 
   req --> s1 --> s2 --> s3 --> s4 --> s5 --> d
@@ -247,10 +247,10 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles that gate every later change, approved at **Gate 1** |
-| `discover-business-model` | Depth 2 or 3 | The canvases, approved at **Gate 0** before anything is derived from them; `discover-strategy` then derives the strategy layer |
+| `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles that gate every later change, approved at **Direction** |
+| `discover-business-model` | Depth 2 or 3 | The canvases, approved at **Direction** before anything is derived from them; `discover-strategy` then derives the strategy layer |
 | `model-domains` | Depth 3, after the enterprise level | One charter per business line, with its exposed and consumed services |
-| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, approved at **Gate 2** and **Gate 3** |
+| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, approved at **Understanding** and **Design** |
 | `stack-selection` | No stack chosen, small application | A recorded choice in `5_technology/` |
 
 ## ✎ Worked example

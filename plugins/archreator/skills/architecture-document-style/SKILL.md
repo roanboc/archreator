@@ -97,19 +97,19 @@ already did:
 
 ```markdown
 **Status:** ◐ Draft catalogue — identified from the sources named below, not
-yet validated. **Gate 2** covers this layer.
+yet validated. **Understanding** covers this layer.
 
-**Status:** ● Validated at **Gate 2**, 2026-08-24.
+**Status:** ● Validated at **Understanding**, 2026-08-24.
 ```
 
 **A `●` earned outside a gate names the decision that put it there.** Not
-every layer is covered by one: a Requester may decline Gate 3 and route the
+every layer is covered by one: a Requester may decline Design and route the
 solution design to ordinary pull-request review, and that is a real decision by
 the person with the standing to make it. Such a document is validated, and its
 line says by what:
 
 ```markdown
-**Status:** ● Validated — **Gate 3** declined at Gate 2 (scope document 1,
+**Status:** ● Validated — **Design** declined at Understanding (scope document 1,
 2026-08-22), which routed this layer to pull-request review.
 ```
 

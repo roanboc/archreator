@@ -61,7 +61,7 @@ domain. If you can't name what the domain would expose to the rest of the
 organization, it isn't one yet.
 
 Splitting is a change to the business layer, so it goes through the normal
-process and needs Gate 2 like anything else. The `model-domains` skill
+process and needs Understanding like anything else. The `model-domains` skill
 walks it.
 
 ## The charter
@@ -96,7 +96,7 @@ internal.**
   either the element belongs in the charter, or the dependency shouldn't
   exist.
 - **Changing an exposed service requires the consuming domains' Requesters
-  at Gate 2**, not just the owning domain's. A contract has two sides.
+  at Understanding**, not just the owning domain's. A contract has two sides.
 - Changing anything a charter doesn't expose needs only the owning domain's
   Requester. This is the point of the boundary: most changes stay local.
 

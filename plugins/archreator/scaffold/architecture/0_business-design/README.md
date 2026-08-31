@@ -20,8 +20,8 @@ organization** — a company, a department, a service line. A project that is
 building a single application skips it entirely and starts at the
 [strategy layer](../1_strategy/README.md), driven by the
 `discover-strategy` skill. The company track is driven by the
-`discover-business-model` skill instead, and ends at **Gate 0 — Business
-model**, where the Requester approves these canvases before anything is
+`discover-business-model` skill instead, and ends at the **Direction**
+gate, where the Requester approves these canvases before anything is
 derived from them.
 
 ## Analysis order
@@ -46,7 +46,7 @@ revenue, cost).
 ### Fit is a rule, not a comment
 
 A value proposition canvas only means something if it *fits*. Checked at
-Gate 0, and re-checked whenever either canvas changes:
+Direction, and re-checked whenever either canvas changes:
 
 - every **Pain** is addressed by at least one **Pain Reliever**;
 - every **Gain** is produced by at least one **Gain Creator**;

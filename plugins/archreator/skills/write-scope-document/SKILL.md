@@ -19,7 +19,7 @@ which layers it touches, who approved it, and what it deliberately left out.
 | The situation | What it looks like |
 | ------------- | ------------------ |
 | An initiative starts | Step 3 of `align-change-through-layers`, before the gate that approves it |
-| Discovery starts | `discover-business-model` or `discover-strategy` needs somewhere to record Gate 0 or Gate 1 |
+| Discovery starts | `discover-business-model` or `discover-strategy` needs somewhere to record Direction |
 | An initiative moves | The work diverged from the plan, and the document has to stay true to what shipped |
 
 ## ⊖ When not to
@@ -85,12 +85,22 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 ## Approvals
 
-| Gate                     | Approved by | Date         | What was approved                          |
-| ------------------------ | ----------- | ------------ | ------------------------------------------- |
-| Gate 0 — Business model  | <Requester> | <YYYY-MM-DD> | <the canvases — or "N/A — <why>">          |
-| Gate 1 — Strategy        | <Requester> | <YYYY-MM-DD> | <the strategy layer, or the target and the sequence — or "N/A — <why>"> |
-| Gate 2 — Business        | <Requester> | <YYYY-MM-DD> | <the docs/sections presented at the gate>  |
-| Gate 3 — Solution design | <Requester> | <YYYY-MM-DD> | <the solution design — or "N/A — not requested"> |
+| Gate | Approved by | Date | What was approved |
+| ---- | ----------- | ---- | ----------------- |
+| Understanding | <Requester> | <YYYY-MM-DD> | <the documents and sections presented> |
+
+<!--
+  One row per gate this initiative actually reached, plus one for any gate that
+  could have applied and did not — `N/A — <why>`. A gate the project's depth
+  never had gets no row at all.
+
+  Direction, where the subject is an organization, is two rows: the canvases,
+  then the strategy derived from them. Design gets a row only when it was
+  offered — approved, or `N/A — not requested`.
+
+  An unscheduled stop gets a row too, with the reason in place of a gate name:
+  `Authorization` or `Material uncertainty`.
+-->
 
 ## Plateaus
 
@@ -130,10 +140,11 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   is not a decision.
 - **Every gate gets a row, including the ones that did not apply.** Which gate
   applies is defined in exactly one place — `align-change-through-layers` §
-  The gates — and the short form is that Gate 2 applies to every initiative
+  The gates — and the short form is that Understanding applies to every initiative
   that changes documented behavior, which is every initiative that will
-  produce code; a docs-only initiative passes Gate 0 or Gate 1 instead. A gate
-  that did not apply is written `N/A — <why>` rather than deleted, so a reader
+  produce code; a docs-only initiative passes Direction instead. A gate
+  that could have applied and did not is written `N/A — <why>` rather than
+  deleted, so a reader
   can tell a skipped gate from a forgotten one. **An approval that isn't
   recorded didn't happen.**
 - **A granted gate promotes the documents it covered.** Recording the approval
@@ -174,14 +185,16 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 ## ✎ Worked example
 
-> A docs-only discovery initiative records Gate 1 as granted with links to
-> three strategy documents, and Gates 2 and 3 as `N/A — docs-only initiative,
-> no code`. Gate 0 is `N/A — subject is a single application`. Four rows, one
+> A docs-only discovery initiative records Direction as granted with links to
+> three strategy documents, and the Understanding and Design gates as `N/A — docs-only initiative,
+> no code`. Direction gets no row on a Depth 1 project. Three rows, one
 > approval, and a reader can tell every skip from an omission.
 
 ## ⚠ Anti-patterns
 
-- Deleting a gate row instead of writing `N/A — <why>`.
+- Deleting a row for a gate that could have applied, instead of writing
+  `N/A — <why>`. (A gate this project's depth never had is a different thing,
+  and gets no row.)
 - "What was approved" naming a topic rather than the documents shown.
 - Leaving a layer out of the alignment table because nothing changed there.
 - Rewriting a merged document instead of writing the next one.

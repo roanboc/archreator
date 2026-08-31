@@ -44,8 +44,8 @@ used in, with the four rulebooks — consulted rather than run — at the end.
 | Skill | Reach for it when |
 | ----- | ----------------- |
 | `establish-project` | A project from the template hasn't been set up yet — start here |
-| `discover-business-model` | The subject is an organization: canvases first (Gate 0), strategy derived from them |
-| `discover-strategy` | The strategy is unfilled or the change shifts it (Gate 1) |
+| `discover-business-model` | The subject is an organization: canvases first (Direction), strategy derived from them |
+| `discover-strategy` | The strategy is unfilled or the change shifts it (Direction) |
 | `model-domains` | The organization is large enough to split into business lines, or a change crosses a domain boundary |
 | `discover-current-landscape` | The subject already exists and layers 2–5 are empty — sweep the estate into a described baseline |
 | `plan-the-transition` | The question is where the architecture should go and in what order — target plateaus, a gap register and a sequence |

@@ -20,14 +20,14 @@ flowchart TD
   p11["⚙ Establish the project [BPROC1.1]"]
   org{"Is the subject an organization?"}
   p12["⚙ Discover the business model [BPROC1.2]"]
-  g0{{"❖ Gate 0 — the canvases"}}
+  g0{{"❖ Direction — the canvases"}}
   p13["⚙ Discover the strategy [BPROC1.3]"]
-  g1{{"❖ Gate 1 — the strategy layer"}}
+  g1{{"❖ Direction — the strategy layer"}}
   deep{"Several business lines?"}
   p14["⚙ Split the model into domains [BPROC1.4]"]
   est{"Does an estate already run?"}
   p15["⚙ Discover the current landscape [BPROC1.5]"]
-  g23{{"❖ Gates 2 and 3 — the landscape"}}
+  g23{{"❖ Understanding, then Design — the landscape"}}
   done(["A model a change can be judged against"])
 
   req --> p11 --> org
@@ -72,7 +72,7 @@ flowchart TD
   base{"Is there a baseline worth planning from?"}
   back(["⇄ BPROC1.5, or BPROC3.1"])
   p51["⚙ Define the target and sequence the roadmap [BPROC5.1]"]
-  g1{{"❖ Gate 1 — the target and the sequence"}}
+  g1{{"❖ Direction — the target and the sequence"}}
   road(["A direction each later change is judged against"])
 
   ask --> base
@@ -93,7 +93,7 @@ what is true now, and that rule is worth keeping precisely because one place is
 exempt from it. The exemption is a folder, `architecture/6_transition/`, and it is the
 whole of `BPROC5`'s output.
 
-It reuses Gate 1 rather than adding a fifth gate. The reasoning is in
+It reuses Direction rather than adding a gate of its own. The reasoning is in
 [`2_level-2-processes.md`](./2_level-2-processes.md).
 
 ## `BPROC2` — Deliver an architected change
@@ -105,18 +105,18 @@ still true.
 flowchart TD
   req(["A requirement, or a problem"])
   p21["⚙ Align the change through the layers [BPROC2.1]"]
-  g2{{"❖ Gate 2 — strategy, business, information"}}
-  g3{{"❖ Gate 3 — the solution design"}}
+  g2{{"❖ Understanding — strategy, business, information"}}
+  g3{{"❖ Design — the solution design"}}
   p22["⚙ Implement and verify [BPROC2.2]"]
   p23["⚙ Hand over for review [BPROC2.3]"]
   merged(["Merged"])
 
   req --> p21 --> g2
   g2 -->|changes requested| p21
-  g2 -->|approved, Gate 3 requested| g3
+  g2 -->|approved, Design requested| g3
   g3 -->|changes requested| p21
   g3 -->|approved| p22
-  g2 -->|approved, Gate 3 not requested| p22
+  g2 -->|approved, Design not requested| p22
   p22 --> p23 --> merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
@@ -141,7 +141,7 @@ flowchart TD
   onecall(["One consequential call, smaller than an initiative"])
   question(["A reader has one architecture question"])
   p31["⚙ Restate the current state [BPROC3.1]"]
-  g2b{{"❖ Gate 2 — the restatement"}}
+  g2b{{"❖ Understanding — the restatement"}}
   p32["⚙ Record a decision [BPROC3.2]"]
   p33["⚙ Answer an architecture question [BPROC3.3]"]
   back(["A model that describes today"])
