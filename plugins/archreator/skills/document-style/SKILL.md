@@ -186,6 +186,14 @@ states what is true now; git holds how it got there and the scope documents
 hold why. A model carrying its own changelog gives a reader two accounts to
 reconcile and no way to tell which is current.
 
+**A rebuilt document carries none of the rebuild.** When a model is rebuilt
+or crosses a method version, the new documents never mention the corpus they
+replaced, the version they crossed, or the ref where the old text is
+preserved — the initiative's scope document says all of that once. A status
+line names the mark and the gate that covers the document, nothing else:
+state the state and the reason it holds, never the history of how the page
+got here.
+
 #### Notes that survive go to the end
 
 A note worth keeping that belongs to no single section goes in a final
@@ -216,6 +224,8 @@ for.
   what was consolidated into what, why identifiers moved.
 - "As of initiative N", or any other version commentary. Git holds how a
   document got here; the scope documents hold why.
+- A rebuilt document narrating the rebuild — what the old corpus held, where
+  it is preserved, which method version was crossed.
 - An empty section written to say a section is empty.
 - Restating a table or diagram that another document owns, rather than
   linking it.

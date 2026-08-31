@@ -34,6 +34,16 @@ branch, on pain (`process-and-capability-levels` § Breadth first, depth on
 pain): most models never need the third question anywhere but one or two
 branches, and the focus table is what keeps that a visible decision.
 
+**The first two questions are both answered, everywhere.** Levels 1 and 2
+are complete across the whole subject — the same § Breadth first, depth on
+pain — so a catalogue stopping at level 1 is a table of contents, not a
+model: the map says what is there and never what each element owes. Only the
+third question is optional.
+
+**Each level gets a heading that names it** — `### Level 1 — the areas`,
+`### Level 2 — the contract` — so a reader knows which question the
+identifiers in front of them answer without counting dots in an ID.
+
 ## Level 1 — the landscape
 
 One diagram of the whole boundary, opening the document. The four bands are
@@ -138,6 +148,7 @@ map, then the contract — and none of them earns the third question:
 Domains at Depth 3 look like a fourth case and are not: their map and
 charters belong to `model-domains`, which owns that shape entirely.
 
-When in doubt, stop a level earlier. A map somebody understands beats a
-contract nobody reads, and a contract kept current beats a flow that was
-drawn once and never again opened.
+When in doubt about the third question, don't ask it: a contract kept
+current beats a flow that was drawn once and never again opened. The doubt
+never reaches level 2 — the contract is complete across the subject, per
+§ One question per level.

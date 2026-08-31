@@ -146,10 +146,12 @@ looks finished the moment it is drawn; the marker is what says it is not.
 Anything the Requester provided is filed in `architecture/reference/` first,
 and the `Source` column points there.
 
-For every product or service, place a traditional nine-block Mermaid Business
-Model Canvas immediately before its detailed table. The diagram is a compact
-view of the table, not a second model: use the same `Name [ID]` entries, keep
-cost and revenue at the bottom, and resolve any mismatch in favor of the table.
+Lead the Business Model Canvas with the products at a glance — one column
+per product: segments, channels, relationship, revenue, dominant cost,
+whether it scales — before any block catalogue, and open each canvas with
+the generic how-to-read legend rather than a nine-block overview
+(`architecture-document-style` § What is here, and what is one file away —
+the canvases reference).
 
 ### 3 — Verify fit before presenting
 

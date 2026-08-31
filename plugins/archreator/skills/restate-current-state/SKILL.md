@@ -189,10 +189,12 @@ above:
   change was foundational and traverses every document, correcting in place
   rewrites the whole model twice — once to cross, once to simplify. The
   stronger form: preserve the current corpus at an immutable ref, treat it
-  as the reference material it now is (`Source` cells cite the ref), re-run
-  `establish-project`, and rebuild through the gates as one initiative.
-  History lives at the ref; the new documents describe the subject and
-  nothing else.
+  as the reference material it now is, re-run `establish-project`, and
+  rebuild through the gates as one initiative. **Only the initiative's scope
+  document cites the ref.** The rebuilt documents are written as if fresh —
+  no mention of the rebuild, the version crossed, or the corpus replaced
+  (`document-style` § No version commentary); history lives at the ref, and
+  the new documents describe the subject and nothing else.
 
 ### 3 — Record it as an initiative
 

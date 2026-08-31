@@ -186,10 +186,11 @@ without repeating its full description; the name leads, per `document-style`
 link that visible pair to the element definition; multiple references are one
 per line.
 
-Each document's "How to read this document" table repeats the prefixes it
-uses, expanded — `STK#` = Stakeholder — which is § Write it out applied to
-identifiers. Examples use `#` (and `#.#` for levels), never a plausible real
-identifier that pollutes searches for actual elements.
+Each document's "How to read this document" legend carries, on its nodes,
+every prefix the document uses, expanded — `«Stakeholder» … [STK#]` — which
+is § Write it out applied to identifiers. Examples use `#` (and `#.#` for
+levels), never a plausible real identifier that pollutes searches for actual
+elements.
 
 **The prefix registry, hierarchical numbering, what happens to an identifier
 when the element is retired, and how a reference crosses a domain or a model
@@ -241,10 +242,18 @@ The full rules, including where the marker may and may not go and what
   status. It sits in the preamble, before the first `##`, because that is
   where a validator looks for it and where a reader meets it before anything
   it might be believed for.
-- A **"How to read this document"** section next: the legend diagram and the
-  glyph / shape / element / ID-prefix table.
-- Then one section per element group, each **opening with its diagram**,
-  followed by the inventory table, followed by prose.
+- A **"How to read this document"** section next: the legend diagram, whose
+  nodes name the stereotypes and ID prefixes — and no table restating it
+  (`references/archimate-on-mermaid.md` § Every element document opens with
+  "How to read this document").
+- Then **one section per element family, headed by that family's name** — a
+  catalogue table never rides under another family's heading, because the
+  heading is what tells a reader what the identifiers in front of them
+  describe. A leveled catalogue names the level in the heading
+  (`### Level 1 — the areas`, `### Level 2 — the capabilities`).
+- Each section **opens with its diagram** where one earns its place
+  (`references/archimate-on-mermaid.md` § Diagrams come first, one per
+  section), followed by the inventory table, followed by prose.
 - A **Retired** section, only if something approved has been retired
   (`restate-current-state`).
 - **Additional notes**, last, and only if there is one — see § What the

@@ -31,8 +31,8 @@ legend under "How to read this document", and the examples in this section.
 Everywhere else the type is already carried three times, by glyph, shape and
 colour, with the legend one screen above; a fourth carrier is the widest thing
 on the node and the least informative. A legend node reads
-`<glyph> «Stereotype» <what the type is>`, and it is the only place the word
-earns its width.
+`<glyph> «Stereotype» <what the type is> [<PREFIX>#]`, and it is the only
+place the stereotype and the example identifier earn their width.
 
 **One carve-out: an actor's kind rides on the node.** `(Human)`, `(AI)` or
 `(Hybrid)` stays in the label — `⚇ Requester (Human) [ACT1]` — because it is
@@ -210,11 +210,17 @@ beneath it, cut it — that is DRY applied to pictures.
 
 ## Every element document opens with "How to read this document"
 
-A legend diagram showing this document's element types and how they connect,
-then a table of **glyph / shape / element / ID prefix** — including any
-element borrowed from another layer for context. **This is the one diagram
-that names the stereotypes**, which is what lets every diagram below it drop
-them.
+A legend diagram showing this document's element types and how they typically
+connect — including any element borrowed from another layer for context. Each
+legend node carries everything a reader needs to decode the diagrams below —
+`<glyph> «Stereotype» <what the type is> [<PREFIX>#]` — drawn in the
+element's own shape and colour. **This is the one diagram that names the
+stereotypes**, which is what lets every diagram below it drop them.
+
+**The legend diagram is the whole section — no table restates it.** The
+diagram already renders each type's shape and colour, and its nodes name the
+glyph, the stereotype and the ID prefix; a glyph/shape/prefix table beside it
+is a second copy the reader can only reconcile by matching glyphs.
 
 **A layer README that only indexes other documents is exempt**: it has no
 elements to legend, and giving it one would be ceremony rather than help.
