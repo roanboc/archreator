@@ -27,6 +27,7 @@ whole — a reader cannot tell which parts describe today.
 | After a run of initiatives | Each left a "Pending" behind |
 | The pending table has ghosts | `open-questions.md` holds rows nobody remembers |
 | On a cadence | Quarterly is plenty, where the project has one |
+| The method itself moved | The plugin crossed a breaking version, and the model still describes the previous method's machinery or gate vocabulary |
 
 ## ⊖ When not to
 
@@ -170,6 +171,28 @@ explanation — worse than the clutter it removed.
 Keep it short. Past roughly a dozen rows, the elements at the bottom are old
 enough that the scope documents are the better record; move them out and say
 so in one line.
+
+#### When the method itself moved
+
+A plugin update across a breaking method version is drift with a different
+author: the subject held still and the rules moved. Two rules join the table
+above:
+
+- **Restate under the current method's rules, never the ones the documents
+  were written to.** A restatement that reproduces retired conventions — the
+  old gate vocabulary, deleted tooling, empty layer folders standing in for
+  a status row — has restated the drift. The mechanical crossing (which
+  scripts change hands, how gate names carry over, what an existing project
+  deliberately keeps) is the method's `docs/migrating.md`; walk it before
+  correcting anything.
+- **Total drift earns the rebuild, not a restatement.** When the version
+  change was foundational and traverses every document, correcting in place
+  rewrites the whole model twice — once to cross, once to simplify. The
+  stronger form: preserve the current corpus at an immutable ref, treat it
+  as the reference material it now is (`Source` cells cite the ref), re-run
+  `establish-project`, and rebuild through the gates as one initiative.
+  History lives at the ref; the new documents describe the subject and
+  nothing else.
 
 ### 3 — Record it as an initiative
 
