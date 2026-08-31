@@ -117,7 +117,7 @@ segments or systems. Where an example was needed, the corpus's own phrase
 
 | # | Skill or document | The sentence it would add | Raised as |
 | - | ----------------- | ------------------------- | --------- |
-| 1 | `docs/adopting.md` | A business reader can ask for one brief or scope as a PDF, and the method owns the recipe — restoring the scoped export the principle kept when the whole-model one went | not yet — the Requester decides whether the method owns it or a project does |
-| 2 | `architecture-archreator` | The reset recorded as the initiative it is, through Understanding, once the method it delivers is validated | not yet — deliberately deferred by the Requester |
+| 1 | `answer-architecture-question` | A reader who asks for a PDF gets one brief or scope converted by the agent, under `.archreator/work/`, never the whole model — the method owns the boundary, not a converter | decided 2026-08-31 — applied in this change; no exporter ships |
+| 2 | `architecture-archreator` | The reset recorded as the initiative it is, through Understanding | accepted — the next initiative, opened once this comparison's pull request merges |
 | 3 | the scaffold | The acceptance test is a person who has never heard of ArchiMate modeling something real with it, measured on files produced, questions asked, and whether a draft catalogue reads as one | not yet — nothing further should be built until it passes |
 | 4 | `process-and-capability-levels` | A presentation pattern per level — the vertical contract table, the ordered-flow table — as a reference beside the content contract | not yet |

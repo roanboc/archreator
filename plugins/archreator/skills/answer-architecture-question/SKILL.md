@@ -107,6 +107,13 @@ Remind the reader that it is disposable and should be regenerated after the
 model changes. Answer follow-up questions from the model or generate a second
 brief with a different confirmed focus.
 
+**A reader who asks for a PDF gets one — converted, not exported.** Convert
+the generated brief yourself, with whatever converter the environment offers,
+and put the result beside its source under `.archreator/work/` — disposable,
+like everything there. The method owns the boundary, not a converter: one
+brief or scope per PDF, never the whole model, which is the artifact that
+gets mailed around and quoted eight months after it stopped being true.
+
 ## ⇥ Hands off to
 
 - `align-change-through-layers` when the answer becomes a requested change.

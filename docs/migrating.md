@@ -83,7 +83,9 @@ untouched.
   scoped PDF to its business readers — a real and reasonable deliverable —
   keeps its own copy of the old tooling, owned by the project, with the
   costs owned too: it depends on the deleted staging scripts, so the fork
-  keeps both, and the method will not maintain them.
+  keeps both, and the method will not maintain them. For a new, one-off
+  need, the lighter path is a brief converted to PDF by the agent on
+  request — `answer-architecture-question` carries the rule.
 - **Every element, identifier, status glyph and skill name survives.** All
   eighteen skills keep their names; the ○ / ◐ / ● discipline, the prefix
   registry and the relationship tables are unchanged. Nothing in a model's

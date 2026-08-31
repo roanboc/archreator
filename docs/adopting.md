@@ -151,11 +151,14 @@ say. Hand that to somebody, or convert it to whatever format they asked for.
 build_brief.py --project . --element BSVC1 --focus business
 ```
 
-**There is no PDF export any more.** There was one — a headless browser
-printing the whole model through a print-site plugin — and it produced the
-artifact most likely to be mailed around and quoted eight months after it
-stopped being true. A brief is a better thing to hand somebody, and turning
-one page of Markdown into a PDF is not something the method needs to own.
+**A PDF is a conversion, not an export.** There was a PDF exporter once — a
+headless browser printing the whole model through a print-site plugin — and
+it produced the artifact most likely to be mailed around and quoted eight
+months after it stopped being true. What replaced it is a rule rather than a
+tool: a business reader who asks for a PDF gets one brief or scope converted
+by the agent, landing under gitignored `.archreator/work/` beside its
+Markdown source — never the whole model. Turning one page of Markdown into a
+PDF is something any agent can do; the boundary is the part the method owns.
 
 Everything generated lands under `.archreator/`, which is gitignored. Delete it
 and nothing is lost; a published copy that lives in the repository is the
