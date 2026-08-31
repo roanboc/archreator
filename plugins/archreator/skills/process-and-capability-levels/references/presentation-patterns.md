@@ -142,7 +142,7 @@ map, then the contract — and none of them earns the third question:
 | Catalogue | Level 1 — the map | Level 2 — the contract | It never gets |
 | --------- | ----------------- | ---------------------- | ------------- |
 | **Capabilities** | The areas, grouped the way the organization talks about itself | Each capability's definition and what realizes it | A flow. A capability has no sequence and no trigger — an ordered capability diagram is a process map wearing the wrong label |
-| **Data objects** | The data domains and their owners — `Customer data`, `Product data` — one map, few boxes, settled before any object | Each object belongs to a domain and extends its ID; its row carries owner, classification and where it is mastered | A schema. Attributes belong to the systems that store them; the model carries what a decision needs |
+| **Data objects** | The data domains and their owners — `Customer data`, `Product data` — one map, few boxes, settled before any object. Once level 2 exists, draw it as a **composite**: the objects nested inside their domain boxes, so one picture carries both levels | Each object belongs to a domain and extends its ID; its row carries owner, classification and where it is mastered | A schema. Attributes belong to the systems that store them; the model carries what a decision needs |
 | **Products** | The portfolio — what is sold, to which segments | Each product's services and the segments they serve | A technical decomposition — that is the application layer's, reached by relationship |
 
 Domains at Depth 3 look like a fourth case and are not: their map and
