@@ -7,9 +7,9 @@
   "plugins": [
     {
       "name": "archreator",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./plugins/archreator",
-      "description": "Enterprise-architecture-first development with human approval gates: model an organization or an application through numbered ArchiMate layers, stop at explicit Requester gates before any code, and record every initiative in a scope document."
+      "description": "Enterprise-architecture-first development with three named human gates: model an organization or an application through numbered ArchiMate layers, stop at Direction, Understanding and Design before any code, and record every approval in a scope document."
     }
   ]
 }

@@ -2,12 +2,22 @@
 
 _[← Repository README](../README.md)_
 
-The one-paragraph version: **a requirement never becomes code directly.** It
-is aligned through numbered architecture layers, stopped at explicit
-approval gates the Requester grants, captured in a scope document, and only
-then implemented. Humans keep strategy and business judgement; AI agents do
-the modeling and the building in between, and every actor's kind and
-autonomy is written down.
+**What you get out of this is your own requirement, sharper than the one you
+arrived with** — who it serves, what it has to do, and which of your
+assumptions turned out to disagree with each other. That is worth having even
+if nothing gets built from it.
+
+The one-paragraph version of how: **a requirement never becomes code
+directly.** It is worked through numbered architecture layers, stopped at
+three named gates you grant, captured in a scope document, and only then
+implemented. You keep the strategy and business judgement; AI agents do the
+modeling and the building in between, and every actor's kind and autonomy is
+written down.
+
+You are never asked to learn a notation to answer a question about your own
+business. If you already know one — if you are an architect — the model is a
+standard layered structure in plain files, and you can navigate it directly
+rather than asking an agent to summarise it.
 
 ## The loop: Requester → Agent → Reviewer
 

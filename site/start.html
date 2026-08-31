@@ -102,7 +102,7 @@ codex plugin install archreator@archreator</code></pre>
 cd archreator
 python3 plugins/archreator/scripts/install_skills.py</code></pre>
       <p>
-        That copies the seventeen skills into <code>~/.agents/skills/</code>, the
+        That copies the eighteen skills into <code>~/.agents/skills/</code>, the
         directory every host reads. Restart Gemini so it rescans. Re-run the
         same command after a <code>git pull</code> to update.
       </p>
@@ -113,8 +113,8 @@ python3 plugins/archreator/scripts/install_skills.py</code></pre>
       rather not install a plugin. Add <code>--repo</code> to put the skills in
       the current project's <code>.agents/skills/</code> instead of your home
       directory, or <code>--dry-run</code> to see what would land. It ships the
-      skills and not the scaffold — the scaffold still arrives on the first
-      run, below.
+      skills and not the project files — those still arrive on the first run,
+      below.
     </p>
 
     <h2 id="first-run">2 · Run your first session</h2>
@@ -139,9 +139,12 @@ python3 plugins/archreator/scripts/install_skills.py</code></pre>
         posture, never a ceiling — changing it later is a normal initiative.
       </li>
       <li>
-        <strong>It writes the scaffold into your repository.</strong> Six
-        numbered layer folders, a scope folder, a decisions log, two
-        validators, and the entry point that records the depth.
+        <strong>It writes eleven files into your repository.</strong> The
+        entry point that records the depth, your model's front page, and two
+        validators that run on plain Python with no network. Layer folders
+        appear when they have something to hold — until then the front page
+        says, per layer, whether it is here, somewhere else, out of scope, or
+        a gap.
       </li>
       <li>
         <strong>It hands off to discovery.</strong> Strategy and business
@@ -188,7 +191,8 @@ python3 plugins/archreator/scripts/install_skills.py</code></pre>
     <h2 id="scaffold">Starting without an agent</h2>
 
     <p>
-      The scaffold is plain markdown and stands on its own. Copy
+      The scaffold is plain markdown and stands on its own — eleven files,
+      two of them validators that need nothing but Python. Copy
       <a href="https://github.com/roanboc/archreator/tree/main/plugins/archreator/scaffold"><code>plugins/archreator/scaffold/</code></a>
       into a new repository and fill it in by hand, then install the skills
       whenever you want an agent to take over. The method is the same either
@@ -201,8 +205,8 @@ python3 plugins/archreator/scripts/install_skills.py</code></pre>
     <ul>
       <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/method.md">The method</a></strong> — the six layers, the three gates, and the loop between Requester, Agent and Reviewer.</li>
       <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/adopting.md">The adoption guide</a></strong> — the same routes in more detail, and how a project stays in sync with the method.</li>
-      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/publishing.md">Publishing the model</a></strong> — the portal and the PDF your model ships with, for the people who will never open the repository.</li>
-      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/README.md">The skill catalogue</a></strong> — what each of the seventeen skills is for, in the order they are used.</li>
+      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/docs/adopting.md">Adopting it</a></strong> — the install recipe per agent, and how to generate a portal for the people who will never open the repository.</li>
+      <li><strong><a href="https://github.com/roanboc/archreator/blob/main/plugins/archreator/skills/README.md">The skill catalogue</a></strong> — what each of the eighteen skills is for, in the order they are used.</li>
       <li><strong><a href="https://github.com/roanboc/architecture-archreator">See it in use</a></strong> — a real organization modelled with the method, and the method modelled with itself.</li>
     </ul>
 

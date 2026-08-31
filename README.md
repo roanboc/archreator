@@ -157,6 +157,11 @@ Then just say what you want to model. The `establish-project` skill takes it
 from there — it asks two questions, picks a depth, and writes you a working
 project on the first commit.
 
+**If you already are an architect**, the other route is to read the model
+directly: it is a standard layered structure in plain files, navigable in the
+order you already know, and you never have to ask an agent to summarise it for
+you.
+
 On Codex, on Gemini CLI, or if you'd rather clone the scaffold than install
 anything, [`docs/adopting.md`](./docs/adopting.md) has the recipe for each and
 says exactly what lands in your project either way.
@@ -166,10 +171,10 @@ says exactly what lands in your project either way.
 | | |
 | --- | --- |
 | **18 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
-| **A scaffold** | Six layer folders, the notation, two validators, and placeholder entry points. A working project before you've written anything. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
+| **Eleven files on your first commit** | And every one of them is used. Your model's front page says, per layer, whether it is here, somewhere else, out of scope, or a gap — a folder appears when it has something to hold. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
 | **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
 | **A portal, on request** | The same documents as a searchable website, for the people who will never open a repository. Stock MkDocs, one command, gitignored output. [How it works](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) |
-| **Nothing to operate** | No database, no server, no account, and nothing to export before an agent can read it. Markdown in git is the model |
+| **Nothing to operate, and nothing cached** | No database, no server, no account, nothing to export before an agent can read it, and no projection that can answer from a revision the model has moved past. Markdown in git is the model, and every tool reads it fresh |
 
 > **See it in use.** Worked models — an organization, the method modeling
 > itself, the guidance site — live in

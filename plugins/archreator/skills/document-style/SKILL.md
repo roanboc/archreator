@@ -188,3 +188,25 @@ for.
 - Restating a table or diagram that another document owns, rather than
   linking it.
 - A skill linking outside the plugin's own `skills/` directory.
+### A bare identifier never appears in prose
+
+`CAP3` is a key, not a name. In a sentence, a heading, a diagram label or a
+brief, write the name and let the identifier ride along:
+
+> …which is why **the Supervised build service [BSVC3]** was split from…
+
+Not "which is why `BSVC3` was split from", which sends every reader who is not
+holding the catalogue in their head to go and look it up — and most of them are
+the people the model was written for.
+
+**Two places keep the identifier first, and both earn it.** A catalogue's own
+definition row opens with the ID, because the column order is what exposes the
+sequence and the hierarchy at a glance. And a **relationship column** holds
+bare identifiers and nothing else, because a parser reads it before a person
+does and a name written there silently deletes the relationship —
+`architecture-document-style` § Relationships are declared, never only drawn.
+
+Everywhere else the name leads. Nothing checks this: no validator can tell an
+identifier a reader would have wanted named from one they would not. It is a
+rule a writer follows and a reviewer reads for.
+
