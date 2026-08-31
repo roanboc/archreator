@@ -60,7 +60,9 @@ flowchart LR
 
 ## ▤ Template
 
-Lives at `architecture/decisions/<n>_<kebab-case-slug>.md`, numbered
+Lives at `architecture/decisions/<n>_<kebab-case-slug>.md` — the first
+decision creates the folder from the plugin's `assets/layers/decisions/` —
+numbered
 chronologically across all decisions — one flat sequence, not per layer — and
 indexed in `architecture/decisions/README.md`.
 

@@ -149,7 +149,9 @@ done, it does not belong here.
 
 **← Needs** the strategy layer, and the baseline from Step 1.
 
-**→ Produces** the plateaus in `architecture/6_transition/`.
+**→ Produces** the plateaus in `architecture/6_transition/` — emitted from
+the plugin's `assets/layers/6_transition/` the first time, since the folder
+does not exist until a target state does.
 
 ### 3 — Derive the gap register
 

@@ -104,6 +104,11 @@ named interface. Two questions settle most cases:
 
 ### 2 — Write the charter
 
+The first charter creates the tree from the plugin's
+`assets/layers/domains/`; a model that first names another model emits
+`assets/layers/federation.md`, and `assets/layers/imports.md` when that model
+lives in another repository.
+
 The domain's `README.md` **is** its charter — the contract between it and the
 rest of the organization, and the only part other domains may depend on. Write
 it before filling in any layer: the charter is what the split is *for*, and

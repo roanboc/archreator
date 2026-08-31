@@ -59,7 +59,10 @@ flowchart LR
 ## ▤ Template
 
 Named `<n>_<kebab-case-name>.md`, where `<n>` is the next number in the
-chronological sequence — check the index in `architecture/scope/README.md`,
+chronological sequence — check the index in `architecture/scope/README.md`
+(the first initiative creates the folder from the plugin's
+`assets/layers/scope/`, which carries the index and the optional
+open-questions log),
 and add the new document to it in the same change.
 
 ```markdown

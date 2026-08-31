@@ -309,6 +309,10 @@ the shape per initiative. If the change adds an actor, or changes an existing
 AI actor's autonomy level or decision rights, consider a `record-decision`
 alongside the scope document explaining why.
 
+A layer folder that does not exist yet is emitted from the plugin's assets
+at the moment the change first fills it — `assets/layers/2_business/`,
+`assets/layers/3_information/` — never created empty in advance.
+
 **← Needs** the verdicts from Step 1.
 
 **→ Produces** changed `2_business/` and `3_information/`, or explicit "no
@@ -357,6 +361,9 @@ Present the affected application services and logical components, their ports
 and interfaces, and name the good practices and design patterns applied — and,
 where a pattern is load-bearing, why it is needed. Wait for approval and record
 it before implementing; rework this step if changes are requested.
+
+As in Step 2, a layer filled for the first time gets its README from the
+plugin's assets — `assets/layers/4_application/`, `assets/layers/5_technology/`.
 
 **← Needs** the granted Understanding.
 

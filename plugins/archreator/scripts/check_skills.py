@@ -584,9 +584,12 @@ def check_assets(known: set[str]) -> list[str]:
         return []
     errors: list[str] = []
     named: set[str] = set()
+    # The skills only: the assets README is the index, and an index row is a
+    # claim about who emits a file, not the emission itself. With the README
+    # in the haystack, an asset no skill ever mentions passed on the strength
+    # of its own catalogue entry — the exact rot this check exists to catch.
     sources = [SKILLS_DIR / s / "SKILL.md" for s in sorted(known)]
     sources += sorted((SKILLS_DIR).rglob("references/*.md"))
-    sources.append(ASSETS_DIR / "README.md")
     haystack = "\n".join(
         p.read_text(encoding="utf-8") for p in sources if p.is_file()
     )
@@ -595,14 +598,23 @@ def check_assets(known: set[str]) -> list[str]:
         if not path.is_file() or path == ASSETS_DIR / "README.md":
             continue
         rel = path.relative_to(ASSETS_DIR).as_posix()
-        # A folder asset is claimed by naming the folder; a file, by its path.
-        folder = rel.rsplit("/", 1)[0] if "/" in rel else rel
-        if rel in haystack or folder in haystack:
+        # A skill claims a file by its qualified path (`assets/github/
+        # pull_request_template.md`) or any of its folders with a trailing
+        # slash (`assets/github/`). The claim carries the `assets/` prefix so
+        # an ordinary word cannot claim by accident, and the bare `layers`
+        # folder is not claimable: `assets/layers/` names the whole shelf,
+        # which is exactly the generic mention that made this check vacuous.
+        parts = rel.split("/")
+        claims = {f"assets/{rel}"}
+        for depth in range(1, len(parts)):
+            ancestor = "/".join(parts[:depth])
+            if ancestor != "layers":
+                claims.add(f"assets/{ancestor}/")
+        if any(claim in haystack for claim in claims):
             named.add(rel)
         else:
             errors.append(
-                f"assets/{rel}: no skill and no assets README names it, so "
-                f"nothing will ever emit it"
+                f"assets/{rel}: no skill names it, so nothing will ever emit it"
             )
 
     index = (ASSETS_DIR / "README.md")

@@ -135,6 +135,10 @@ so a misread segment surfaces in minutes rather than at the gate.
 **→ Produces** `architecture/0_business-design/1_value-proposition-canvas.md`,
 `architecture/0_business-design/2_business-model-canvas.md`.
 
+`architecture/0_business-design/` does not exist until now — emit its README
+from the plugin's `assets/layers/0_business-design/` before the first canvas,
+and the first filed source does the same with `assets/layers/reference/`.
+
 The canvases open `◐ Draft catalogue` and carry `Source` and `Notes` until
 Direction grants them — `architecture-document-style` § Document status. A canvas
 is the most tempting document in the model to read as settled, because it

@@ -18,7 +18,7 @@ fact, which an empty README never was.
 | Asset | Emitted by | When |
 | ----- | ---------- | ---- |
 | [`layers/1_strategy/`](./layers/1_strategy/README.md) | `discover-strategy` | The strategy layer is first filled |
-| [`layers/2_business/`](./layers/2_business/README.md) · [`layers/3_information/`](./layers/3_information/README.md) | `align-change-through-layers`, `discover-current-landscape` | The layer first has an element to hold |
+| [`layers/2_business/`](./layers/2_business/README.md) · [`layers/3_information/`](./layers/3_information/README.md) | `discover-strategy`, `align-change-through-layers`, `discover-current-landscape` | The layer first has an element to hold |
 | [`layers/4_application/`](./layers/4_application/README.md) · [`layers/5_technology/`](./layers/5_technology/README.md) | `align-change-through-layers`, `discover-current-landscape` | The layer first has an element to hold |
 | [`layers/0_business-design/`](./layers/0_business-design/README.md) | `discover-business-model` | The subject is an organization — Depth 2 and 3 |
 | [`layers/6_transition/`](./layers/6_transition/README.md) | `plan-the-transition` | A target state is first described |

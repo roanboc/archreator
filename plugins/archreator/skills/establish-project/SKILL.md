@@ -145,6 +145,10 @@ and every one of them is used on the first commit** — `AGENTS.md`, `README.md`
 without: it keeps bytecode, machine-local settings and everything regenerated
 out of the history.
 
+**If the project will take contributions from more than its owner**, also emit
+`assets/CONTRIBUTING.md` and fill in its placeholders. For a single owner it
+is ceremony, and it can arrive later with the first contributor.
+
 Then, in one pass, so the first commit is coherent:
 
 | File | Fill in |

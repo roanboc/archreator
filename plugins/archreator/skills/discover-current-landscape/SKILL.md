@@ -157,7 +157,8 @@ ownership, intent, and which of two contradictory sources is the live one.
 
 **Anything you are handed is filed before it is read.** A deck, a transcript,
 an inventory spreadsheet, an architecture document from a previous attempt —
-each goes into `architecture/reference/` under its dated name, with its row in
+each goes into `architecture/reference/` — created from the plugin's
+`assets/layers/reference/` the first time — under its dated name, with its row in
 that folder's index, *then* gets read. Filing afterwards means filing what you
 remembered to keep; the source that turns out to matter is usually the one
 nobody expected to need again.

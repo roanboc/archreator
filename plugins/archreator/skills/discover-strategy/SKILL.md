@@ -127,6 +127,11 @@ of the conversation, not a transcript kept elsewhere.
 
 **← Needs** the answers from Step 1.
 
+A folder that does not exist yet is created now, from the plugin's assets:
+`assets/layers/1_strategy/` gives the layer its README, the first business
+elements do the same with `assets/layers/2_business/`, and the first filed
+source with `assets/layers/reference/`. Nothing was waiting empty.
+
 Each document opens `◐ Draft catalogue` and its tables carry `Source` and
 `Notes` until Direction — `architecture-document-style` § Document status. Where
 the Requester provided anything to work from, it is filed in
