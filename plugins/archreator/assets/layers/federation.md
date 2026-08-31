@@ -39,10 +39,10 @@ what it models, cell 3 where its **projection** is published. The same rule the
 rest of the notation follows, for the same reason: a model may be written in
 any language.
 
-Cell 3 names the directory a projection is published in — `<site>/projection/`
-for a model published by this method. It holds two files, `model.json` for a
-consumer that parses and `model.db` for one that queries, and which of them a
-reader wants is the reader's business.
+Cell 3 names where a projection of that model is published, for a consumer
+that cannot read its Markdown — `model.json`, written by `model.py export`.
+Leave it empty when nothing publishes one; a model is federated by being
+declared here, not by exporting anything.
 
 **A location is a URL or a relative path.** A model published beside this one
 uses a relative path; a model in another repository uses its full HTTPS URL.

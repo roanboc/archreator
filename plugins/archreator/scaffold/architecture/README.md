@@ -1,6 +1,6 @@
 # Architecture — <Project Name>
 
-_[← Project home](../README.md)_
+_The front door of this project's model._
 
 **This folder is what your project knows about itself** — who it is for, what
 it does, and which piece of software does each part. It is written in plain

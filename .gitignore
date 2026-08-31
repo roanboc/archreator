@@ -25,3 +25,6 @@ __pycache__/
 # and the exported PDF. Rebuilt from `architecture/` by scripts/build_docs.py
 # on every run, so a copy in the history is a copy that can go stale.
 .docs/
+
+# Everything the method generates against this repository's own scaffold.
+.archreator/

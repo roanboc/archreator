@@ -23,7 +23,7 @@ ask again. It decides what runs automatically and what has to be done by hand.
 | **Repository** | `<host and path — e.g. GitHub, acme/widgets>` |
 | **Visibility** | `<public · private · internal>` |
 | **Checks on every change** | `<.github/workflows/checks.yml · run by hand · a pipeline on another host>` |
-| **Where the portal is published** | `<GitHub Pages · a static host · handed over as a folder · nowhere yet>` |
+| **Where the model is read outside this repo** | `<a portal generated on request · handed over as briefs · nowhere yet>` |
 
 **A model is published on purpose.** Where the portal is world-readable, that
 is a disclosure decision about who may read the architecture — not a
@@ -45,7 +45,7 @@ workflow it names. The plugin keeps a copy of both workflows in
 | Trigger | What runs | Where it is defined |
 | ------- | --------- | ------------------- |
 | `<every pull request>` | `<check_links.py, check_model.py>` | `<.github/workflows/checks.yml>` |
-| `<merge to the default branch>` | `<build_docs.py, and the deploy that follows>` | `<.github/workflows/publish-docs.yml>` |
+| `<merge to the default branch>` | `<the project's own build and deploy>` | `<.github/workflows/deploy.yml>` |
 
 ## From build to runtime
 

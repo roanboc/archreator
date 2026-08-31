@@ -979,3 +979,87 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         restatements=restatements,
         excerpts=excerpts,
     )
+
+
+# --------------------------------------------------------------------------
+# The neighbourhood walk
+#
+# **The traversal has exactly one copy, and this is it.** `model.py trace` and
+# `build_brief.py` both call it, which is why it lives beside the parse rather
+# than in either of them: a walk written twice is the drift this module exists
+# to prevent.
+#
+# It replaced a recursive CTE over a SQLite projection. The projection was a
+# second representation of the model that had to be rebuilt to stay true, and
+# in the one real model where that was checked it had not been - it answered
+# from a revision that no longer named a course of action somebody had added.
+# A cache that is silently wrong is worse than no cache, and parsing the
+# Markdown fresh takes well under a second on the largest model there is.
+# --------------------------------------------------------------------------
+
+
+def qualified(project_key_: str, element: str, dst_project: str = "") -> str:
+    """`product-archreator::CAP1` — an identifier that means one thing globally.
+
+    Two models may each own a `CAP1`, so a walk that crosses a federation
+    boundary has to carry the model name or start conflating them.
+    """
+    return f"{dst_project or project_key_}::{element}"
+
+
+def neighbourhood(
+    parsed: "ParsedProject",
+    root: str,
+    depth: int,
+    *,
+    extra: "list[ParsedProject] | None" = None,
+) -> tuple[dict[str, int], list[tuple[str, str, "Edge"]]]:
+    """Everything within `depth` hops of `root`, and the edges among it.
+
+    `root` is qualified. Returns the reached identifiers with the fewest hops
+    each was reached in, and every edge whose two ends were both reached.
+
+    **The walk is undirected.** Direction here is a property of the sentence
+    rather than of the relationship: a catalogue states a connection from
+    whichever end owns the row, so `Provided by` and `Provides` are one
+    relationship written from two sides. "What would this change touch" does
+    not care which way somebody phrased it.
+
+    **It is also model-blind.** An edge whose far end names another model is
+    followed like any other, because a blast radius that stops at a repository
+    boundary is a wrong answer rather than a smaller one.
+    """
+    links: list[tuple[str, str, Edge]] = []
+    for source in [parsed, *(extra or [])]:
+        key = project_key(source.project)
+        for edge in source.edges:
+            links.append((
+                qualified(key, edge.src),
+                qualified(key, edge.dst, edge.dst_project),
+                edge,
+            ))
+
+    adjacency: dict[str, list[int]] = {}
+    for index, (a, b, _) in enumerate(links):
+        adjacency.setdefault(a, []).append(index)
+        adjacency.setdefault(b, []).append(index)
+
+    # Breadth-first, so the first arrival at an element is the nearest one.
+    reached: dict[str, int] = {root: 0}
+    frontier = [root]
+    for hop in range(1, depth + 1):
+        nxt: list[str] = []
+        for node in frontier:
+            for index in adjacency.get(node, ()):
+                a, b, _ = links[index]
+                far = b if a == node else a
+                if far not in reached:
+                    reached[far] = hop
+                    nxt.append(far)
+        if not nxt:
+            break
+        frontier = nxt
+
+    edges = [(a, b, e) for a, b, e in links if a in reached and b in reached]
+    edges.sort(key=lambda t: (min(reached[t[0]], reached[t[1]]), t[0], t[1]))
+    return reached, edges

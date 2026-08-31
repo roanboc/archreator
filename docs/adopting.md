@@ -75,7 +75,7 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
 - `mkdocs.yml`, `overrides/` and `.github/` — how the model is rendered as a
   website, the pull-request template a change is described in, and the issue
   form a reader of that website raises a question through. Nothing deploys it; where the built folder goes is your call. See
-  [`docs/publishing.md`](./publishing.md)
+  [§ Reaching a reader who will not open the repository](#reaching-a-reader-who-will-not-open-the-repository)
 
 Then follow the bootstrap checklist by hand, or install the skills and let
 `establish-project` do it.
@@ -116,3 +116,40 @@ Improvements to the method (a new skill, a change to an existing one, a
 rule refinement) are welcome. See [`CONTRIBUTING.md`](../CONTRIBUTING.md)
 in the root — the method itself governs how it evolves, so a proposal runs
 through the same gates it makes you run through.
+
+## Reaching a reader who will not open the repository
+
+Two ways, and neither of them is a second copy of the model.
+
+**A portal.** One command writes a stock MkDocs Material config into
+`.archreator/work/portal/` and tells you how to build or serve it:
+
+```bash
+model.py --project . portal
+uvx --with mkdocs-material mkdocs build -f .archreator/work/portal/mkdocs.yml
+```
+
+That is the whole of it — a theme, Mermaid, and search. There was a custom
+theme directory once: an overridden template, a comment box, a hand-written
+pan-and-zoom viewer, a PDF cover page. Five hundred lines of front-end that had
+to keep working across two upstream projects, to render documents that render
+fine without them.
+
+**A brief.** For one question rather than the whole model, `build_brief.py`
+writes a single Markdown document about a named scope — the elements in it,
+generated views of how they cross the layers, and what the documents already
+say. Hand that to somebody, or convert it to whatever format they asked for.
+
+```bash
+build_brief.py --project . --element BSVC1 --focus business
+```
+
+**There is no PDF export any more.** There was one — a headless browser
+printing the whole model through a print-site plugin — and it produced the
+artifact most likely to be mailed around and quoted eight months after it
+stopped being true. A brief is a better thing to hand somebody, and turning
+one page of Markdown into a PDF is not something the method needs to own.
+
+Everything generated lands under `.archreator/`, which is gitignored. Delete it
+and nothing is lost; a published copy that lives in the repository is the
+second model everyone edits instead.

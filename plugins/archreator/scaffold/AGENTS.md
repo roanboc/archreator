@@ -88,7 +88,6 @@ generated project.
 npm run lint
 npm run typecheck
 npm test
-npm run build
 ```
 All of them must be green before pushing; CI runs the same.
 -->
@@ -98,22 +97,21 @@ python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
 ```
 
-Both must be green before pushing. Five tools sit beside them, none of them a
-gate:
+Both must be green before pushing. They need nothing but Python — no network,
+no plugin installed — which is the point: this project can check itself.
+
+Everything else the method can do runs from the plugin against this project,
+so there is one copy of each tool rather than one per project:
 
 ```bash
-python3 scripts/build_model.py    # the model as nodes and edges, in .model/
-python3 scripts/query_model.py coverage    # what is grounded, and what is not
-python3 scripts/build_brief.py --element CAP1 --focus impact  # one question, as a brief
-python3 scripts/build_docs.py     # the model as a website, in .docs/site/
-python3 scripts/export_pdf.py     # the model as one PDF, in .docs/
+model.py --project . trace BSVC1     # what a change here would touch
+model.py --project . coverage        # what names no realizing artifact
+model.py --project . portal          # the model as a website, for a reader outside the repo
+build_brief.py --project . --element BSVC1 --focus impact
 ```
 
-`query_model.py` answers the questions a table cannot — `trace <ID>` for what a
-change to one element would touch, `coverage` for what names no realizing
-artifact — and reads the projection `build_model.py` writes. The last two are
-for a reader who is not in this repository. All five are regenerated from the
-Markdown under `architecture/`, which stays the source of truth.
+Everything they generate lands under `.archreator/`, which is gitignored.
+Delete it and nothing is lost.
 
 ## Conventions
 

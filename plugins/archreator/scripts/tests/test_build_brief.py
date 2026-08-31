@@ -1,15 +1,17 @@
 import importlib.util
-import sqlite3
 import subprocess
 import sys
-import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
 
-SCRIPT = Path(__file__).resolve().parents[2] / "scaffold" / "scripts" / "build_brief.py"
+SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "build_brief.py"
+# The tool imports the parse from the project it is pointed at; for a unit test
+# of the focus rules there is no project, so the scaffold's copy stands in.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scaffold" / "scripts"))
 sys.path.insert(0, str(SCRIPT.parent))
+sys.argv = [sys.argv[0], "--project", str(Path(__file__).resolve().parents[2] / "scaffold")]
 spec = importlib.util.spec_from_file_location("build_brief", SCRIPT)
 build_brief = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(build_brief)
@@ -19,26 +21,22 @@ def row(element, layer, element_type="Element"):
     return {
         "project": "model", "id": element, "layer_group": layer,
         "name": element, "type": element_type, "status": "validated",
-        "retired": 0, "attrs": "{}", "doc": "architecture/model.md",
+        "retired": 0, "attrs": {}, "doc": "architecture/model.md",
     }
 
 
 class FocusSelectionTests(unittest.TestCase):
     def setUp(self):
-        self.connection = sqlite3.connect(":memory:")
-        self.connection.row_factory = sqlite3.Row
-        self.connection.execute(
-            "CREATE TABLE edges (project TEXT, src TEXT, dst_project TEXT, dst TEXT, "
-            "rel TEXT, origin TEXT, pending INTEGER)"
-        )
-        for src, dst in [
-            ("G1", "CAP1"), ("CAP1", "BSVC1"), ("BSVC1", "DOBJ1"),
-            ("DOBJ1", "ACMP1"), ("ACMP1", "NODE1"), ("GAP1", "ACMP1"),
-        ]:
-            self.connection.execute(
-                "INSERT INTO edges VALUES ('model', ?, '', ?, 'relates', 'table', 0)",
-                (src, dst),
-            )
+        # A Store built by hand rather than parsed: these test the focus rules,
+        # not the parse.
+        self.store = SimpleNamespace(edges=[
+            {"s": f"model::{src}", "d": f"model::{dst}",
+             "rel": "relates", "origin": "table", "pending": False}
+            for src, dst in [
+                ("G1", "CAP1"), ("CAP1", "BSVC1"), ("BSVC1", "DOBJ1"),
+                ("DOBJ1", "ACMP1"), ("ACMP1", "NODE1"), ("GAP1", "ACMP1"),
+            ]
+        ])
         self.rows = [
             row("G1", "Motivation", "Goal"), row("CAP1", "Strategy", "Capability"),
             row("BSVC1", "Business", "Business Service"),
@@ -49,11 +47,8 @@ class FocusSelectionTests(unittest.TestCase):
             row("ACMP2", "Application", "Application Component"),
         ]
 
-    def tearDown(self):
-        self.connection.close()
-
     def ids_for(self, focus, anchor=None):
-        kept, dropped = build_brief.apply_focus(self.connection, self.rows, focus, anchor)
+        kept, dropped = build_brief.apply_focus(self.store, self.rows, focus, anchor)
         return {r["id"] for r in kept}, {d.split("::")[-1] for d in dropped}
 
     def test_business_keeps_primary_and_direct_support(self):
@@ -87,23 +82,16 @@ class FocusSelectionTests(unittest.TestCase):
 
 class BriefOutputTests(unittest.TestCase):
     def setUp(self):
-        self.connection = sqlite3.connect(":memory:")
-        self.connection.row_factory = sqlite3.Row
-        self.connection.executescript(
-            "CREATE TABLE nodes (project TEXT, id TEXT);"
-            "CREATE TABLE edges (project TEXT, src TEXT, dst_project TEXT, dst TEXT, "
-            "rel TEXT, origin TEXT, pending INTEGER);"
-            "CREATE TABLE excerpts (project TEXT, element TEXT, heading TEXT, body TEXT, doc TEXT);"
+        self.store = SimpleNamespace(
+            nodes=[{"project": "model", "id": "BSVC1"}],
+            edges=[],
+            excerpts_for=lambda project, element: [],
         )
-        self.connection.execute("INSERT INTO nodes VALUES ('model', 'BSVC1')")
-
-    def tearDown(self):
-        self.connection.close()
 
     def test_focus_metadata_and_exclusions_are_visible(self):
-        args = SimpleNamespace(focus="business", depth=2, out=Path(tempfile.gettempdir()))
+        args = SimpleNamespace(focus="business", depth=2)
         body = build_brief.brief(
-            self.connection, [row("BSVC1", "Business", "Business Service")],
+            self.store, [row("BSVC1", "Business", "Business Service")],
             "`BSVC1` — Service, within 2 hop(s)", [], ["model::NODE1"], args,
         )
         self.assertIn("| **Focus** | Business and operations |", body)
@@ -112,7 +100,9 @@ class BriefOutputTests(unittest.TestCase):
 
     def test_invalid_focus_is_rejected_by_the_cli(self):
         completed = subprocess.run(
-            [sys.executable, str(SCRIPT), "--element", "BSVC1", "--focus", "everything"],
+            [sys.executable, str(SCRIPT), "--project",
+             str(Path(__file__).resolve().parents[2] / "scaffold"),
+             "--element", "BSVC1", "--focus", "everything"],
             capture_output=True, text=True,
         )
         self.assertEqual(completed.returncode, 2)

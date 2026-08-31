@@ -168,7 +168,7 @@ says exactly what lands in your project either way.
 | **18 agent skills** | The method itself. Each is named for the process it realizes, and your agent picks the right one from what you said — you never invoke them by name. [Catalogue](./plugins/archreator/skills/README.md) |
 | **A scaffold** | Six layer folders, the notation, two validators, and placeholder entry points. A working project before you've written anything. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
 | **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
-| **A portal and a PDF, when you need them** | The same documents as a searchable website and as one printable document, for the people who will never open a repository. Both are rebuilt from the Markdown and thrown away. [How it works](./docs/publishing.md) |
+| **A portal, on request** | The same documents as a searchable website, for the people who will never open a repository. Stock MkDocs, one command, gitignored output. [How it works](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) |
 | **Nothing to operate** | No database, no server, no account, and nothing to export before an agent can read it. Markdown in git is the model |
 
 > **See it in use.** Worked models — an organization, the method modeling
@@ -187,7 +187,7 @@ from it. That single choice is why nothing has to be exported before the model
 can be used, and why there is nothing to keep running.
 
 Rendering it for people is a separate, optional step —
-[a portal and a PDF](./docs/publishing.md) are one command each, regenerated
+[a portal](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) is one command, regenerated
 from the Markdown and gitignored, so the published copy can never become the
 second model everyone edits instead.
 
@@ -198,7 +198,7 @@ second model everyone edits instead.
 | **What the method does, and how** | [`docs/method.md`](./docs/method.md) — the process, the layers, the loop |
 | **How to adopt it in your project** | [`docs/adopting.md`](./docs/adopting.md) |
 | **What each skill is for** | [`plugins/archreator/skills/README.md`](./plugins/archreator/skills/README.md) — the catalogue, in the order they're used |
-| **How the model reaches people who won't clone it** | [`docs/publishing.md`](./docs/publishing.md) — the portal, the PDF, and how a question comes back |
+| **How the model reaches people who won't clone it** | [`docs/adopting.md`](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) — the portal, and the brief that answers one question |
 | **The method as a levelled process model** | [`docs/process/`](./docs/process/README.md) — the macro map, a SIPOC per process, and which skill realizes each |
 | **The format every skill follows** | [`docs/skill-format.md`](./docs/skill-format.md) — frontmatter, the fixed sections, and the glyphs that mark them |
 | **Which standards it rests on** | [`docs/standards-alignment.md`](./docs/standards-alignment.md) — every coined term, the established name behind it, and where the method is genuinely its own |

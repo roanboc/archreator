@@ -12,12 +12,13 @@ __pycache__/
 .codex/
 .copilot/
 
-# The projection built by scripts/build_model.py. Regenerated from the
-# Markdown under architecture/ on every run, so it is never committed: a
-# derived file that is checked in is a derived file that can go stale.
-.model/
+# Everything the method generates: briefs, the portal it writes a config for,
+# and any scope brief still being worked on. All of it is rebuilt from the
+# Markdown under architecture/ on demand, so a copy in the history is a copy
+# that can go stale — and a generated document that gets committed is the
+# second model everyone edits instead.
+.archreator/
 
-# The documentation portal: the staged copy of the Markdown, the built site,
-# and the exported PDF. Rebuilt from `architecture/` by scripts/build_docs.py
-# on every run, so a copy in the history is a copy that can go stale.
-.docs/
+# The JSON export, for a consumer that cannot read Markdown. Nothing in the
+# method reads it back; delete it and nothing is lost.
+.model/

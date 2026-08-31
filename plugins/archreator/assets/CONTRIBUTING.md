@@ -45,12 +45,9 @@ python3 scripts/check_model.py    # element-ID references resolve
 
 ## Questions from outside the repository
 
-The model is also rendered as a website — `python3 scripts/build_docs.py`,
-which writes a folder anyone can host — for readers who will never open this
-repository. Every page there links back: the pencil opens that
-document in git, and **"Raise a question about this page"** opens an issue
-naming it, through
-[`.github/ISSUE_TEMPLATE/architecture-question.yml`](./.github/ISSUE_TEMPLATE/architecture-question.yml).
+The model can also be read as a website, generated on request rather than
+published on merge — see the archreator method's `docs/adopting.md`. It is a
+rendering: the Markdown in this repository stays the model.
 
 If comment threads are switched on (`extra.giscus` in `mkdocs.yml`), a page
 also carries a discussion. A thread is a conversation about a document and

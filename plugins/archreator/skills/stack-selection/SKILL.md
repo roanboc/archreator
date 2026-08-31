@@ -113,28 +113,31 @@ with `record-decision`.
 | ------- | ------------------------- |
 | The model no longer fits in one context read | An agent that must query rather than read needs something to query |
 | Domains live in separate repositories | Federation needs an interchange format; an agent cannot `grep` a repository it has not cloned |
-| A genuinely **transitive** question recurs | "Blast radius of retiring `CAP3`" is a traversal, not a lookup. A one-off is a script, not infrastructure |
+| A genuinely **transitive** question recurs | "Blast radius of retiring `CAP3`" is a traversal, not a lookup — but see below: the method answers that one by parsing, not by storing |
 | A non-agent consumer appears | A dashboard, a report or a rendered model cannot read Markdown tables |
 
-**The projection is already written.** `scripts/build_model.py` ships in the
-scaffold, so a project that needs one runs a command rather than building
-anything:
+**The third trigger has a cheaper answer than it looks.** archreator answers
+its own transitive question — what a change to one element would touch — by
+parsing the Markdown fresh on every run, because on the largest model built on
+it that takes well under a second. There was a persisted graph, and it went
+stale: it answered from a revision that no longer described the architecture,
+confidently, with nothing to tell the reader. **A store you have to remember to
+rebuild is a store that will be wrong**, and the cost of being wrong is higher
+than the cost of parsing.
+
+So reach for a persisted projection when the parse is genuinely too slow, or
+when the fourth trigger fires and something outside the repository has to read
+it:
 
 ```bash
-python3 scripts/build_model.py       # .model/model.json and .model/model.db
-python3 scripts/build_model.py --inventory   # one line per element, nothing written
+model.py --project . export     # .model/model.json, which nothing here reads back
 ```
-
-It exists because the fourth trigger fired — a rendered view of the model, for
-stakeholders who will not read Markdown tables. **That does not make it the
-default.** A project with no such consumer should never run it, and deleting
-`.model/` loses nothing.
 
 **An unfamiliar reader is not that consumer.** The fourth trigger is about
 something that has to *query* the model — a dashboard computing coverage, a
 report counting what a change touches. Someone who only has to read it wants
-the documents rendered, which needs no projection at all: `scripts/build_docs.py`
-publishes them as a website and `scripts/export_pdf.py` prints them as one PDF,
+the documents rendered, which needs no projection at all: `model.py portal`
+writes a stock MkDocs config and the documents publish as a website,
 both straight from the Markdown. Reach for the projection when the question is
 a traversal, not when the audience is new.
 

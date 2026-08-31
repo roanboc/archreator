@@ -29,15 +29,15 @@ brief is a reproducible reading of it.
 | The situation | Use instead |
 | ------------- | ----------- |
 | The model is being changed | `align-change-through-layers`; a brief never edits the model |
-| The whole model must be published | `scripts/build_docs.py` or `scripts/export_pdf.py` |
-| The user asks a precise graph query | `scripts/query_model.py trace` or `coverage` |
+| The whole model must be published | `model.py portal` — a brief answers one question, a portal carries the model |
+| The user asks a precise graph query | `model.py trace` or `model.py coverage` |
 | The model is empty or known to be stale | Establish, discover or restate it before presenting a derived answer |
 
 ## ⌖ Where this sits
 
 Realizes `BPROC3.3`. It carries **no gate** because it asserts nothing new:
 the brief contains declared relationships, catalogue facts and verbatim model
-prose. It is generated under `.docs/briefs/`, never committed, and says on its
+prose. It is generated under `.archreator/work/briefs/`, never committed, and says on its
 face that the repository is the model.
 
 ## ◈ Invariants

@@ -11,7 +11,7 @@ a scope, get a document.
     python3 scripts/build_brief.py --layer Application --type "Application Component"
     python3 scripts/build_brief.py --element DOBJ4 --focus information
 
-**The walk is `neighbourhood.sql`**, the same traversal `query_model.py trace`
+**The walk is `model_graph.neighbourhood`**, the same traversal `model.py trace`
 runs. One question — what is connected to this — asked by two readers and
 answered once.
 
@@ -35,17 +35,53 @@ each document diagrams its own layer.
 import argparse
 import json
 import re
-import sqlite3
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-from model_graph import PREFIX_GROUPS, PREFIX_TYPES, REPO_ROOT, prefix_of
+# --------------------------------------------------------------------------
+# This tool runs from the plugin and reads a project. The parse it needs -
+# `model_graph.py` - lives in that project's `scripts/`, beside the two
+# validators, because a project has to be able to check itself with no plugin
+# installed and no network.
+#
+# **One copy of the parse, not two.** Shipping a second copy here would put the
+# document convention in two files that drift apart silently, which is the
+# thing `model_graph.py` exists to prevent one level down. So this imports the
+# project's copy, and says plainly what to do when there is none.
+# --------------------------------------------------------------------------
+def _project_root(argv: list[str]) -> Path:
+    for index, argument in enumerate(argv):
+        if argument == "--project" and index + 1 < len(argv):
+            return Path(argv[index + 1]).resolve()
+        if argument.startswith("--project="):
+            return Path(argument.split("=", 1)[1]).resolve()
+    return Path.cwd().resolve()
 
-DERIVED = REPO_ROOT / ".docs" / "briefs"
-NEIGHBOURHOOD_SQL = Path(__file__).resolve().parent / "neighbourhood.sql"
-DEFAULT_OUT = REPO_ROOT / ".model"
+
+_ROOT = _project_root(sys.argv[1:])
+_PARSE = _ROOT / "scripts" / "model_graph.py"
+if not _PARSE.is_file():
+    sys.exit(
+        f"No archreator project at {_ROOT}: expected scripts/model_graph.py.\n"
+        f"Run this from a project's root, or pass --project <path>."
+    )
+sys.path.insert(0, str(_PARSE.parent))
+
+import model
+from model_graph import (
+    PREFIX_GROUPS,
+    PREFIX_TYPES,
+    REPO_ROOT,
+    find_projects,
+    neighbourhood,
+    parse_project,
+    prefix_of,
+    project_key,
+)
+
+DERIVED = REPO_ROOT / ".archreator" / "work" / "briefs"
 # The order the method assesses its layers in — `architecture/README.md`
 # § Layers, in assessment order. The layered view is that order made vertical,
 # which is what makes it answer "what realizes what" rather than "what is near
@@ -117,84 +153,107 @@ FOCUS_PRESETS = {
 }
 
 
-def connect(out_dir: Path) -> sqlite3.Connection | None:
-    path = (out_dir / "model.db").resolve()
-    if not path.is_file():
-        import build_model
+class Store:
+    """The model, read fresh, in the shape the brief asks questions in.
 
-        projects = build_model.collect()
-        if not projects:
-            return None
-        out_dir.mkdir(parents=True, exist_ok=True)
-        build_model.write_json(projects, out_dir / "model.json")
-        build_model.write_sqlite(projects, path)
-        print(f"(projection was missing — built {path.relative_to(REPO_ROOT)})")
-    connection = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
-    connection.row_factory = sqlite3.Row
-    return connection
+    This replaced a read-only SQLite file. The queries below were SQL, and the
+    database they ran against had to be rebuilt to stay true — which, in the
+    largest real model built on this method, it had not been: it answered from
+    a projection that predated a course of action somebody had added, with
+    nothing to tell the reader. Parsing the documents takes well under a
+    second, so the store is now built per run and cannot be stale.
+
+    Rows are dicts, which answer `row["name"]` exactly as `sqlite3.Row` did.
+    """
+
+    def __init__(self, projects: list[dict]) -> None:
+        self.nodes: list[dict] = []
+        self.edges: list[dict] = []
+        self._excerpts: dict[tuple[str, str], list[dict]] = {}
+        for entry in projects:
+            name = entry["project"]
+            for element in entry["elements"]:
+                # `layer_group` is what the brief calls the element's own layer.
+                self.nodes.append({**element, "project": name,
+                                   "layer_group": element["group"]})
+            for edge in entry["edges"]:
+                self.edges.append({
+                    "s": f"{name}::{edge['src']}",
+                    "d": f"{edge['dst_project'] or name}::{edge['dst']}",
+                    "rel": edge["rel"],
+                    "origin": edge["origin"],
+                    "pending": edge["pending"],
+                })
+            for excerpt in entry["excerpts"]:
+                self._excerpts.setdefault((name, excerpt["element"]), []).append(excerpt)
+        self.nodes.sort(key=lambda n: (n["project"], n["id"]))
+
+    def has_project(self, name: str) -> bool:
+        return any(n["project"] == name for n in self.nodes)
+
+    def excerpts_for(self, project: str, element: str) -> list[dict]:
+        return self._excerpts.get((project, element), [])
+
+
+def read_model() -> Store | None:
+    projects = model.collect()
+    return Store(projects) if projects else None
 
 
 def gid(row) -> str:
     return f"{row['project']}::{row['id']}"
 
 
-def select(connection, args) -> tuple[list[sqlite3.Row], str, list[str]]:
+def select(store: "Store", parsed_all: list, args) -> tuple[list[dict], str, list[str]]:
     """The elements in scope, how the scope was stated, and what it excluded.
 
     Anchors first: an element named on the command line, walked outward. Then
     filters, which narrow whatever the anchors reached — or, with no anchor,
     select from the whole model.
     """
-    where, params, said = ["1=1"], {}, []
-    if args.project:
+    tests, said = [], []
+    if args.scope:
         # An exact model name wins over a substring, because
         # `product-archreator` naming `product-archreator/site` as well is
         # never what somebody meant by typing the parent's name.
-        exact = connection.execute("SELECT 1 FROM nodes WHERE project = :p LIMIT 1",
-                                   {"p": args.project}).fetchone()
-        where.append("project = :project" if exact else "project LIKE :project")
-        params["project"] = args.project if exact else f"%{args.project}%"
-        said.append(f"model `{args.project}`" if exact
-                    else f"model matching `{args.project}`")
+        exact = store.has_project(args.scope)
+        if exact:
+            tests.append(lambda n: n["project"] == args.scope)
+            said.append(f"model `{args.scope}`")
+        else:
+            tests.append(lambda n: args.scope in n["project"])
+            said.append(f"model matching `{args.scope}`")
     if args.domain:
-        where.append("upper(domain) = :domain")
-        params["domain"] = args.domain.upper()
+        tests.append(lambda n: (n["domain"] or "").upper() == args.domain.upper())
         said.append(f"domain `{args.domain.upper()}`")
     if args.layer:
-        where.append("lower(layer_group) = :layer")
-        params["layer"] = args.layer.lower()
+        tests.append(lambda n: (n["layer_group"] or "").lower() == args.layer.lower())
         said.append(f"the {args.layer} layer")
     if args.type:
-        where.append("lower(type) = :type")
-        params["type"] = args.type.lower()
+        tests.append(lambda n: (n["type"] or "").lower() == args.type.lower())
         said.append(f"elements of type {args.type}")
 
-    rows = connection.execute(
-        f"SELECT * FROM nodes WHERE {' AND '.join(where)} ORDER BY project, id", params
-    ).fetchall()
+    rows = [n for n in store.nodes if all(test(n) for test in tests)]
 
     if not args.element:
         return rows, ", ".join(said) or "the whole model", []
 
     anchors = [r for r in rows if r["id"].upper() == args.element.upper()]
-    if not anchors and not any((args.project, args.domain, args.layer, args.type)):
-        anchors = connection.execute("SELECT * FROM nodes WHERE upper(id) = :e",
-                                     {"e": args.element.upper()}).fetchall()
+    if not anchors and not any((args.scope, args.domain, args.layer, args.type)):
+        anchors = [n for n in store.nodes if n["id"].upper() == args.element.upper()]
     if not anchors:
         return [], f"`{args.element}`", []
     if len(anchors) > 1:
         names = ", ".join(a["project"] for a in anchors)
         print(f"`{args.element}` is defined in {len(anchors)} models ({names}).")
-        print("Narrow it with --project.")
+        print("Narrow it with --scope.")
         return [], "", []
 
     anchor = anchors[0]
-    walk = connection.execute(NEIGHBOURHOOD_SQL.read_text(encoding="utf-8"),
-                              {"root": gid(anchor), "depth": args.depth}).fetchall()
-    reached = {gid(anchor)}
-    for r in walk:
-        reached.add(r["src"])
-        reached.add(r["dst"])
+    home = next(p for p in parsed_all if project_key(p.project) == anchor["project"])
+    others = [p for p in parsed_all if p is not home]
+    walked, _ = neighbourhood(home, gid(anchor), args.depth, extra=others)
+    reached = set(walked) | {gid(anchor)}
     inside = [r for r in rows if gid(r) in reached]
     if not any(gid(r) == gid(anchor) for r in inside):
         inside.insert(0, anchor)
@@ -207,16 +266,13 @@ def select(connection, args) -> tuple[list[sqlite3.Row], str, list[str]]:
     return inside, scope, dropped
 
 
-def edges_within(connection, ids: set[str]) -> list[sqlite3.Row]:
-    rows = connection.execute(
-        "SELECT project || '::' || src AS s,"
-        " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS d,"
-        " rel, origin, pending FROM edges").fetchall()
-    return [r for r in rows if r["s"] in ids and r["d"] in ids and r["s"] != r["d"]]
+def edges_within(store: "Store", ids: set[str]) -> list[dict]:
+    return [e for e in store.edges
+            if e["s"] in ids and e["d"] in ids and e["s"] != e["d"]]
 
 
-def apply_focus(connection, rows: list[sqlite3.Row], focus: str | None,
-                anchor_id: str | None = None) -> tuple[list[sqlite3.Row], list[str]]:
+def apply_focus(store: "Store", rows: list[dict], focus: str | None,
+                anchor_id: str | None = None) -> tuple[list[dict], list[str]]:
     """Apply a reader viewpoint after scope selection, without changing facts.
 
     Primary-layer elements survive. Supporting-layer elements survive only
@@ -244,12 +300,7 @@ def apply_focus(connection, rows: list[sqlite3.Row], focus: str | None,
         element for element, row in by_id.items()
         if (row["layer_group"] or "—") in preset["support"]
     }
-    all_edges = connection.execute(
-        "SELECT project || '::' || src AS s,"
-        " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS d"
-        " FROM edges"
-    ).fetchall()
-    for edge in all_edges:
+    for edge in store.edges:
         if edge["s"] in primary and edge["d"] in candidates:
             kept.add(edge["d"])
         if edge["d"] in primary and edge["s"] in candidates:
@@ -289,7 +340,7 @@ def glyph_of(element_type: str) -> str:
     return from_map.get(element_type, "•")
 
 
-def layered_view(rows: list[sqlite3.Row], edges: list[sqlite3.Row]) -> str:
+def layered_view(rows: list[dict], edges: list[dict]) -> str:
     """The view the brief exists for: a scope, seen across the layers.
 
     One subgraph per layer in assessment order, and **only the relationships
@@ -352,7 +403,7 @@ def layered_view(rows: list[sqlite3.Row], edges: list[sqlite3.Row]) -> str:
     return "\n".join(lines)
 
 
-def motivation_view(rows: list[sqlite3.Row], edges: list[sqlite3.Row]) -> str:
+def motivation_view(rows: list[dict], edges: list[dict]) -> str:
     """Why the scope exists — its motivation and strategy elements, and nothing else."""
     keep = {gid(r) for r in rows if (r["layer_group"] or "") in ("Motivation", "Strategy")}
     if len(keep) < 2:
@@ -374,16 +425,13 @@ def motivation_view(rows: list[sqlite3.Row], edges: list[sqlite3.Row]) -> str:
     return "\n".join(lines)
 
 
-def brief(connection, rows, scope, dropped, focus_dropped, args) -> str:
+def brief(store: "Store", rows, scope, dropped, focus_dropped, args) -> str:
     ids = {gid(r) for r in rows}
-    edges = edges_within(connection, ids)
-    revision = ""
-    path = args.out / "model.json"
-    if path.is_file():
-        try:
-            revision = json.loads(path.read_text(encoding="utf-8")).get("revision", "")
-        except ValueError:
-            revision = ""
+    edges = edges_within(store, ids)
+    # From git, not from a written file: the point of the stamp is to say which
+    # revision this reading came from, and a stamp copied out of a projection
+    # says which revision the projection came from instead.
+    revision = model.revision()
 
     when = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     out = [
@@ -456,12 +504,12 @@ def brief(connection, rows, scope, dropped, focus_dropped, args) -> str:
     for group in sorted(by_layer, key=lambda g: LAYER_ORDER.index(g) if g in LAYER_ORDER else 99):
         out += [f"### {group}", ""]
         for row in sorted(by_layer[group], key=lambda r: r["id"]):
-            out += element_section(connection, row, edges, ids)
-    out += boundary(connection, rows, dropped, focus_dropped, ids, args.focus)
+            out += element_section(store, row, edges, ids)
+    out += boundary(store, rows, dropped, focus_dropped, ids, args.focus)
     return "\n".join(out) + "\n"
 
 
-def element_section(connection, row, edges, ids) -> list[str]:
+def element_section(store: "Store", row, edges, ids) -> list[str]:
     out = [f"#### {row['id']} — {row['name'] or 'unnamed'}", ""]
     facts = [f"**{row['type'] or 'element'}**"]
     if row["status"] and row["status"] != "validated":
@@ -470,19 +518,16 @@ def element_section(connection, row, edges, ids) -> list[str]:
         facts.append("_retired_")
     out += [" · ".join(facts), ""]
 
-    try:
-        attrs = json.loads(row["attrs"] or "{}")
-    except ValueError:
-        attrs = {}
+    # Already a dict: attrs come straight from the parse now, not through a
+    # JSON column that had to be decoded on the way back out.
+    attrs = row["attrs"] or {}
     filled = {k: v for k, v in attrs.items() if v and k.lower() != "name"}
     if filled:
         out += ["| | |", "| --- | --- |"]
         out += [f"| {k} | {v} |" for k, v in filled.items()]
         out.append("")
 
-    said = connection.execute(
-        "SELECT heading, body, doc FROM excerpts WHERE project = :p AND element = :e",
-        {"p": row["project"], "e": row["id"]}).fetchall()
+    said = store.excerpts_for(row["project"], row["id"])
     for excerpt in said:
         out += [f"> {excerpt['body']}", "",
                 f"> — _{excerpt['heading']}_, `{excerpt['doc']}`" if excerpt["heading"]
@@ -499,10 +544,10 @@ def element_section(connection, row, edges, ids) -> list[str]:
     return out
 
 
-def boundary(connection, rows, dropped, focus_dropped, ids, focus=None) -> list[str]:
+def boundary(store: "Store", rows, dropped, focus_dropped, ids, focus=None) -> list[str]:
     """What the scope left out. A brief that looks complete is the failure mode."""
     out = ["## What this leaves out", ""]
-    total = connection.execute("SELECT COUNT(*) FROM nodes").fetchone()[0]
+    total = len(store.nodes)
     out.append(f"The model holds {total} element(s); this brief carries {len(rows)}.")
     out.append("")
     if dropped:
@@ -514,10 +559,7 @@ def boundary(connection, rows, dropped, focus_dropped, ids, focus=None) -> list[
         out += [f"{len(focus_dropped)} reached element(s) were de-emphasized by **{label}**: " +
                 ", ".join(f"`{d.split('::')[-1]}`" for d in focus_dropped[:20]) +
                 ("…" if len(focus_dropped) > 20 else "") + ".", ""]
-    just_outside = connection.execute(
-        "SELECT DISTINCT project || '::' || src AS s,"
-        " CASE WHEN dst_project = '' THEN project ELSE dst_project END || '::' || dst AS d"
-        " FROM edges").fetchall()
+    just_outside = store.edges
     edge_of_scope = sorted({
         (r["d"] if r["s"] in ids else r["s"])
         for r in just_outside
@@ -546,40 +588,40 @@ def main() -> int:
     parser.add_argument("--domain", help="only elements in this domain")
     parser.add_argument("--layer", help="only this layer group — Business, Application, …")
     parser.add_argument("--type", help="only this element type — Capability, Node, …")
-    parser.add_argument("--project", help="only models whose path contains this")
+    parser.add_argument("--project", default=".",
+                        help="the project to read (default: the working directory)")
+    parser.add_argument("--scope", help="only models whose path contains this")
     parser.add_argument("--focus", choices=FOCUS_PRESETS,
                         help="reader viewpoint: business, information, solution, impact or decision")
-    parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="where model.db is")
     parser.add_argument("--to", type=Path, default=DERIVED, help="where to write the brief")
     parser.add_argument("--stdout", action="store_true", help="print it instead of writing it")
     args = parser.parse_args()
 
-    if not any((args.element, args.domain, args.layer, args.type, args.project)):
-        parser.error("name a scope: --element, --domain, --layer, --type or --project")
+    if not any((args.element, args.domain, args.layer, args.type, args.scope)):
+        parser.error("name a scope: --element, --domain, --layer, --type or --scope")
 
-    connection = connect(args.out)
-    if connection is None:
+    store = read_model()
+    if store is None:
         print("No model found — nothing to brief.")
         return 0
-    try:
-        rows, scope, dropped = select(connection, args)
-        if not rows:
-            if scope:
-                print(f"Nothing in scope for {scope}.")
-            return 1
-        rows, focus_dropped = apply_focus(connection, rows, args.focus, args.element)
-        if not rows:
-            print(f"Nothing remains in scope for the {args.focus} focus.")
-            return 1
-        body = brief(connection, rows, scope, dropped, focus_dropped, args)
-    finally:
-        connection.close()
+    parsed_all = [p for p in (parse_project(x, detail=True) for x in find_projects())
+                  if p.elements]
+    rows, scope, dropped = select(store, parsed_all, args)
+    if not rows:
+        if scope:
+            print(f"Nothing in scope for {scope}.")
+        return 1
+    rows, focus_dropped = apply_focus(store, rows, args.focus, args.element)
+    if not rows:
+        print(f"Nothing remains in scope for the {args.focus} focus.")
+        return 1
+    body = brief(store, rows, scope, dropped, focus_dropped, args)
 
     if args.stdout:
         print(body)
         return 0
     slug = re.sub(r"\W+", "-", (args.element or args.domain or args.layer or
-                                args.type or args.project)).strip("-").lower()
+                                args.type or args.scope)).strip("-").lower()
     if args.focus:
         slug += f"-{args.focus}"
     args.to.mkdir(parents=True, exist_ok=True)

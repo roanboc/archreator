@@ -29,7 +29,6 @@ fact, which an empty README never was.
 | [`layers/federation.md`](./layers/federation.md) · [`layers/imports.md`](./layers/imports.md) | `model-domains` | This model first names another one |
 | [`github/workflows/`](./github/workflows/README.md) | `establish-project` | The project is on GitHub and asks for CI |
 | [`github/pull_request_template.md`](./github/pull_request_template.md) | `establish-project` | The project takes pull requests |
-| [`github/ISSUE_TEMPLATE/`](./github/ISSUE_TEMPLATE/architecture-question.yml) | `establish-project` | The project publishes a portal readers ask questions through |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | `establish-project` | The project will take contributions from more than its owner |
 
 ## Their links resolve where they land, not here
