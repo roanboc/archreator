@@ -79,8 +79,8 @@ agent tells you which depth it picked and why**.
 | Depth | The subject is | You get | Gates |
 | ----- | -------------- | ------- | ----- |
 | **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | one, before code |
-| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | four |
-| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | four, plus every affected domain's owner |
+| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | three |
+| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | three, plus every affected domain's owner |
 
 Depth is a starting posture, never a ceiling — deepening is a normal
 change, not a restart.

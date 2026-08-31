@@ -260,9 +260,9 @@ each document opening `◐ Draft catalogue` until Step 6 grants Design.
 
 **❖ Design — the landscape as built.** The Requester approves.
 
-Unlike the spine, Design is **not optional here.** In an ordinary change Gate
-3 asks whether a solution design should be reviewed before it is coded, and a
-Requester may reasonably decline. Here it is the approval of a description of
+Unlike the spine, Design is **not optional here.** In an ordinary change,
+Design is an offer — whether a solution design should be reviewed before it is
+coded — and a Requester may reasonably decline. Here it is the approval of a description of
 their own estate — the layer they are least likely to have seen written down
 and most likely to be able to correct. Declining it would leave the half of
 the model that carries the most guesses unconfirmed.

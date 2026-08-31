@@ -69,9 +69,10 @@ flowchart TD
   class g0,g1 implementation
 ```
 
-Direction is `discover-strategy`'s, not this skill's. One scope document covers
-both: the same file gains its Direction row at the handoff, so don't open a
-second.
+Direction is one gate granted in two sittings, and this skill owns only the
+first — the business model. The second sitting, the strategy layer, is
+`discover-strategy`'s. One scope document covers both: the same file gains its
+second Direction row at the handoff, so don't open a second.
 
 ## ⚓ Invariants
 

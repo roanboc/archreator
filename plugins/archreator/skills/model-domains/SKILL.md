@@ -219,7 +219,7 @@ business's own word for the domain over an invented one.
 - Identifiers are namespaced, and every cross-domain reference points at a
   service the owning charter actually exposes.
 - Where the change altered or removed an exposed service, the scope document
-  names every consuming domain and its Approvals table carries a Understanding row
+  names every consuming domain and its Approvals table carries an Understanding row
   per Requester.
 
 ## Cross-domain changes
@@ -235,7 +235,7 @@ A contract has two sides, and that yields four rules.
 
 A change spanning domains is still **one** initiative with one scope document
 — its alignment table names each domain touched, and its Approvals table
-carries a Understanding row per Requester.
+carries an Understanding row per Requester.
 
 ## Not yet: parallel work
 

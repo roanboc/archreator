@@ -40,8 +40,8 @@ document, and only then coded. The folder numbers give the assessment order.
 ## ⌖ Where this sits
 
 Realizes `BPROC2.1`, `BPROC2.2` and `BPROC2.3` — the whole of the Operational
-band's delivery. It owns **Understanding** and, at the Requester's option, **Design**.
-the Direction gate belongs to the discovery it hands off to.
+band's delivery. It owns **Understanding** and, at the Requester's option,
+**Design**; the **Direction** gate belongs to the discovery it hands off to.
 
 ```mermaid
 flowchart TD
@@ -332,8 +332,8 @@ scope document. Then ask two explicit questions:
 
 1. **Do you approve these strategy, business and information changes**, so
    implementation can start?
-2. **Do you also want to review the solution design before it is coded** — Gate
-   3: the application architecture, logical components, good practices and
+2. **Do you also want to review the solution design before it is coded** —
+   Design: the application architecture, logical components, good practices and
    design patterns? A per-initiative choice aimed at technically inclined
    Requesters; declining means layers 4–5 are covered by ordinary review.
 
