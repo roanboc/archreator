@@ -108,12 +108,18 @@ worse than one honest one.
 
 ### A row must survive a page
 
-Model documents are read on screens and exported to portrait pages — a
-brief or a scope converted to PDF — and a table that overflows sideways is
-unreadable in the export and barely readable before it. So a catalogue
-keeps **at most six columns, and at most one whose cells are sentences**.
+**A table is the preferred display, and a table that fits stays a table.**
+Rows scanned against columns are what catalogues exist for, and flipping a
+fitting table into prose or a vertical record loses exactly that. The rule
+here fires on one symptom only: **horizontal scroll**. A table that
+overflows sideways — on the rendered page, or on the portrait PDF a brief
+or scope is converted to — is unreadable there and barely readable before
+it; a table that fits never flips, whatever its column count.
 
-Slim before widening, in this order:
+Past roughly **six columns, or more than one column of sentence-length
+cells**, a table usually starts to scroll — that is the symptom threshold
+to check at, never a cap to conform to pre-emptively. When a table does
+scroll, slim it first, in this order:
 
 - **A fact that is a relationship is not a column of its own** — it is a
   relationship column of bare identifiers, or a row of the `## Relationships`
@@ -125,12 +131,14 @@ Slim before widening, in this order:
 - **What is shared by every row is said once above the table**, never
   repeated per row.
 
-When a row still cannot fit — an element whose contract is genuinely prose —
-**flip the catalogue to the record form**: each element defined as a bolded
-lead-in (`**BPROC1.2 — Build and validate.**` — the same definition shape
-goals and principles use), its attributes as prose or a narrow two-column
-field table beneath, its relationships in the `## Relationships` table. The
-validators read both shapes already.
+Only when a slimmed row still scrolls — an element whose contract is
+genuinely prose — **flip that catalogue to the record form**: each element
+defined as a bolded lead-in (`**BPROC1.2 — Build and validate.**` — the
+same definition shape goals and principles use), its attributes as prose or
+a narrow two-column field table beneath, its relationships in the
+`## Relationships` table. The validators read both shapes already; the
+record form is an exception with a named cause, never a style, and never
+applied to a neighbouring table "for consistency".
 
 Never fix width in the export: a landscape page, a shrunken font or a
 truncated column is a rendering hiding a content bug, and the next export
