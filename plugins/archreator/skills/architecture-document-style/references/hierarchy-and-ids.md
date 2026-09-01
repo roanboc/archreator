@@ -24,9 +24,61 @@ the machine-readable copy, and `check_skills.py` holds the two in step.
 | Canvas (VPC) | `JOB` Job · `PAIN` Pain · `GAIN` Gain · `PREL` Pain Reliever · `GCRE` Gain Creator |
 | Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
 
-Every document's "How to read this document" table repeats the prefixes it
-uses, expanded — `STK#` = Stakeholder — `architecture-document-style`
-§ Element IDs carries that rule; this page only holds the registry.
+Every document's "How to read this document" legend carries the prefixes it
+uses on its nodes, expanded — `«Stakeholder» … [STK#]` —
+`architecture-document-style` § Element IDs carries that rule; this page
+holds the registry and, below it, what each element means.
+
+## What each element represents
+
+**The semantics are ArchiMate's, not this method's.** Where archreator says
+nothing about what an element means, the
+[ArchiMate® specification](https://pubs.opengroup.org/architecture/archimate32-doc/)
+decides — and where the two ever disagree, the specification prevails over
+any transcription here. The one-liners below are quoted from the ArchiMate
+3.2 Specification (© The Open Group; ArchiMate is a registered trademark of
+The Open Group) so a model can be built where the specification is not
+reachable, which an agent's environment often is not. Nothing beyond these
+is defined: a skill states modeling *practice* — what to put in a catalogue,
+what to leave out — and never redefines an element.
+
+| Prefix | Element | The standard says it represents |
+| ------ | ------- | ------------------------------- |
+| `STK` | Stakeholder | The role of an individual, team, or organization (or classes thereof) that represents their interests in the effects of the architecture |
+| `DRV` | Driver | An external or internal condition that motivates an organization to define its goals and implement the changes necessary to achieve them |
+| `ASM` | Assessment | The result of an analysis of the state of affairs of the enterprise with respect to some driver |
+| `G` | Goal | A high-level statement of intent, direction, or desired end state for an organization and its stakeholders |
+| `OUT` | Outcome | An end result, effect, or consequence of a certain state of affairs |
+| `P` | Principle | A statement of intent defining a general property that applies to any system in a certain context in the architecture |
+| `CAP` | Capability | An ability that an active structure element, such as an organization, person, or system, possesses |
+| `RES` | Resource | An asset owned or controlled by an individual or organization |
+| `COA` | Course of Action | An approach or plan for configuring some capabilities and resources of the enterprise, undertaken to achieve a goal |
+| `VS` | Value Stream | A sequence of activities that create an overall result for a customer, stakeholder, or end user |
+| `ACT` | Business Actor | A business entity that is capable of performing behavior |
+| `ROLE` | Business Role | The responsibility for performing specific behavior, to which an actor can be assigned, or the part an actor plays in a particular action or event |
+| `BCOL` | Business Collaboration | An aggregate of two or more business internal active structure elements that work together to perform collective behavior |
+| `PROD` | Product | A coherent collection of services and/or passive structure elements, accompanied by a contract or set of agreements, offered as a whole to internal or external customers |
+| `BSVC` | Business Service | Explicitly defined behavior that a business role, business actor, or business collaboration exposes to its environment |
+| `BPROC` | Business Process | A sequence of business behaviors that achieves a specific result such as a defined set of products or business services |
+| `BOBJ` | Business Object | A concept used within a particular business domain |
+| `BIF` | Business Interface | A point of access where a business service is made available to the environment |
+| `CTR` | Contract | A formal or informal specification of an agreement between a provider and a consumer that specifies the rights and obligations associated with a product and establishes functional and non-functional parameters for interaction |
+| `VAL` | Value | The relative worth, utility, or importance of a concept |
+| `RULE` | Business Rule | **archreator's own, no ArchiMate counterpart** — a declared constraint on how the business operates, which systems must honor |
+| `DOBJ` | Data Object | Data structured for automated processing |
+| `ASVC` | Application Service | An explicitly defined exposed application behavior |
+| `ACMP` | Application Component | An encapsulation of application functionality aligned to implementation structure, which is modular and replaceable |
+| `TSVC` | Technology Service | An explicitly defined exposed technology behavior |
+| `NODE` | Node | A computational or physical resource that hosts, manipulates, or interacts with other computational or physical resources |
+| `ART` | Artifact | A piece of data that is used or produced in a software development process, or by deployment and operation of an IT system |
+| `PLAT` | Plateau | A relatively stable state of the architecture that exists during a limited period of time |
+| `GAP` | Gap | A statement of difference between two plateaus |
+
+The canvas prefixes are not here because they are not ArchiMate: they are
+Strategyzer's blocks — the Value Proposition Canvas pairs and the Business
+Model Canvas nine — and the how-to-read legend of each canvas document
+carries how they read
+([`canvases.md`](./canvases.md)).
 
 ## Levels number hierarchically
 

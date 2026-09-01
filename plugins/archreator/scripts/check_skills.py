@@ -539,6 +539,29 @@ def check_prefix_registry() -> list[str]:
                 f"`{code}` is `{documented[code]}` in the rulebook and "
                 f"`{shipped[code]}` in element-prefixes.json"
             )
+
+    # Every non-canvas prefix also carries the standard's one-line definition
+    # in the same reference — § What each element represents. Canvas prefixes
+    # are Strategyzer blocks, not ArchiMate elements, and are exempt.
+    defined: set[str] = set()
+    for line in lines:
+        stripped = line.strip()
+        if not stripped.startswith("| `"):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if len(cells) == 3 and cells[2]:
+            defined.add(cells[0].strip("`"))
+    archimate = {
+        code
+        for label, group in json.loads(registry.read_text(encoding="utf-8"))["prefixes"].items()
+        if not label.startswith("Canvas")
+        for code in group
+    }
+    for code in sorted(archimate - defined):
+        errors.append(
+            f"`{code}` has no row in the rulebook's element-definitions table "
+            f"(§ What each element represents)"
+        )
     return errors
 
 
