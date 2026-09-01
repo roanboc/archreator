@@ -50,7 +50,7 @@ there resolves exactly as one naming a heading here.
 | Read | When |
 | ---- | ---- |
 | [`references/archimate-on-mermaid.md`](./references/archimate-on-mermaid.md) | Before drawing anything — the four notation devices, and where a diagram goes |
-| [`references/hierarchy-and-ids.md`](./references/hierarchy-and-ids.md) | Allocating an identifier — the prefix registry, what each element represents in the standard's words, hierarchical numbering, retirement, domain and federation qualifiers |
+| [`references/elements-and-ids.md`](./references/elements-and-ids.md) | Allocating an identifier — the prefix registry, what each element represents in the standard's words, hierarchical numbering, retirement, domain and federation qualifiers |
 | [`references/relationship-tables.md`](./references/relationship-tables.md) | Declaring a relationship in a catalogue column or a `## Relationships` table |
 | [`references/actors-and-autonomy.md`](./references/actors-and-autonomy.md) | Writing an actor or a role — kinds, autonomy levels, decision rights |
 | [`references/model-structure.md`](./references/model-structure.md) | Deciding what this model owns and what it defers to its parent |
@@ -223,7 +223,7 @@ elements.
 **The prefix registry, hierarchical numbering, what happens to an identifier
 when the element is retired, and how a reference crosses a domain or a model
 boundary are all in
-[`references/hierarchy-and-ids.md`](./references/hierarchy-and-ids.md).**
+[`references/elements-and-ids.md`](./references/elements-and-ids.md).**
 
 ### Grounding rule (the most important one)
 

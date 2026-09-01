@@ -190,6 +190,29 @@ stereotype-correspondence table** — translated label → standard ArchiMate
 element name — in its own `architecture/README.md`, so the vocabulary stays
 traceable back to the standard.
 
+## The aspect decides the shape of a view
+
+An element's **aspect** — active structure, behavior, or passive structure —
+predicts the view that will read well better than its layer does:
+
+- **Passive structure nests.** Objects, contracts and artifacts group by
+  ownership, so containers say more than arrows: boxes inside boxes, one per
+  level — the composite domain map is the worked shape.
+- **Behavior flows.** Processes, services and value streams have order, so
+  the shape is a left-to-right chain with labeled handoffs — the process map
+  and the value stream.
+- **Active structure connects.** Actors, roles and components exist to be
+  assigned and to expose, so they draw with what they are assigned to — an
+  actor with its roles, a component with the services it realizes — and
+  rarely alone.
+- **Motivation influences and composites aggregate** — the influence chain
+  from stakeholder through driver to goal and outcome, and the container
+  that collects: a product, a plateau.
+
+The aspect of every element the method uses is in
+[`elements-and-ids.md`](./elements-and-ids.md) § What each element
+represents.
+
 ## Diagrams come first, one per section
 
 **A section that has a diagram opens with it**, and the tables and prose

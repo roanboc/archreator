@@ -32,17 +32,7 @@ that's exactly the kind of call the `record-decision` skill is for.
 
 ## An actor earns its row by acting
 
-The standard's definition is deliberately wide — a business entity capable
-of performing behavior
-([`hierarchy-and-ids.md`](./hierarchy-and-ids.md) § What each element
-represents) — and by it a supplier qualifies. **This method catalogues
-narrower on purpose, as practice rather than as a redefinition**: an actor
-earns its `ACT` row by filling or assisting a role of *this* model. A
-supplier the organization only depends on — a platform, a hosting service, a
-model provider — fills no role here and decides nothing here, so it appears
-as what it is to this model instead: a key partner where a canvas exists, a
-contract on the business layer, and a node on the technology layer, and
-those three carry everything true about it. The test is the role column: an
-actor whose row cannot name a role it fills or assists in is a dependency
-wearing the wrong stereotype.
+**A supplier the organization only depends on is not an actor.** The test is
+the role column: an actor whose row cannot name a role it fills or assists
+in is a dependency wearing the wrong stereotype.
 

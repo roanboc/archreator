@@ -497,7 +497,7 @@ def check_prefix_registry() -> list[str]:
     together.
     """
     skill = (
-        SKILLS_DIR / "architecture-document-style" / "references" / "hierarchy-and-ids.md"
+        SKILLS_DIR / "architecture-document-style" / "references" / "elements-and-ids.md"
     )
     registry = (
         REPO_ROOT / "plugins" / "archreator" / "scaffold" / "scripts" / "element-prefixes.json"
@@ -511,7 +511,7 @@ def check_prefix_registry() -> list[str]:
         if line.strip().startswith("| Where ") and "Prefixes" in line
     ]
     if not header:
-        return ["architecture-document-style: references/hierarchy-and-ids.md has no element-prefix table"]
+        return ["architecture-document-style: references/elements-and-ids.md has no element-prefix table"]
 
     documented: dict[str, str] = {}
     for line in lines[header[0] + 2:]:
@@ -541,15 +541,16 @@ def check_prefix_registry() -> list[str]:
             )
 
     # Every non-canvas prefix also carries the standard's one-line definition
-    # in the same reference — § What each element represents. Canvas prefixes
-    # are Strategyzer blocks, not ArchiMate elements, and are exempt.
+    # in the same reference — § What each element represents: rows of prefix,
+    # element, aspect, definition, and the method's considerations. Canvas
+    # prefixes are Strategyzer blocks, not ArchiMate elements, and are exempt.
     defined: set[str] = set()
     for line in lines:
         stripped = line.strip()
         if not stripped.startswith("| `"):
             continue
         cells = [c.strip() for c in stripped.strip("|").split("|")]
-        if len(cells) == 3 and cells[2]:
+        if len(cells) == 5 and cells[2] and cells[3]:
             defined.add(cells[0].strip("`"))
     archimate = {
         code

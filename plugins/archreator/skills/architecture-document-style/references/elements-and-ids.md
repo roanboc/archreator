@@ -38,41 +38,80 @@ decides — and where the two ever disagree, the specification prevails over
 any transcription here. The one-liners below are quoted from the ArchiMate
 3.2 Specification (© The Open Group; ArchiMate is a registered trademark of
 The Open Group) so a model can be built where the specification is not
-reachable, which an agent's environment often is not. Nothing beyond these
-is defined: a skill states modeling *practice* — what to put in a catalogue,
-what to leave out — and never redefines an element.
+reachable, which an agent's environment often is not.
 
-| Prefix | Element | The standard says it represents |
-| ------ | ------- | ------------------------------- |
-| `STK` | Stakeholder | The role of an individual, team, or organization (or classes thereof) that represents their interests in the effects of the architecture |
-| `DRV` | Driver | An external or internal condition that motivates an organization to define its goals and implement the changes necessary to achieve them |
-| `ASM` | Assessment | The result of an analysis of the state of affairs of the enterprise with respect to some driver |
-| `G` | Goal | A high-level statement of intent, direction, or desired end state for an organization and its stakeholders |
-| `OUT` | Outcome | An end result, effect, or consequence of a certain state of affairs |
-| `P` | Principle | A statement of intent defining a general property that applies to any system in a certain context in the architecture |
-| `CAP` | Capability | An ability that an active structure element, such as an organization, person, or system, possesses |
-| `RES` | Resource | An asset owned or controlled by an individual or organization |
-| `COA` | Course of Action | An approach or plan for configuring some capabilities and resources of the enterprise, undertaken to achieve a goal |
-| `VS` | Value Stream | A sequence of activities that create an overall result for a customer, stakeholder, or end user |
-| `ACT` | Business Actor | A business entity that is capable of performing behavior |
-| `ROLE` | Business Role | The responsibility for performing specific behavior, to which an actor can be assigned, or the part an actor plays in a particular action or event |
-| `BCOL` | Business Collaboration | An aggregate of two or more business internal active structure elements that work together to perform collective behavior |
-| `PROD` | Product | A coherent collection of services and/or passive structure elements, accompanied by a contract or set of agreements, offered as a whole to internal or external customers |
-| `BSVC` | Business Service | Explicitly defined behavior that a business role, business actor, or business collaboration exposes to its environment |
-| `BPROC` | Business Process | A sequence of business behaviors that achieves a specific result such as a defined set of products or business services |
-| `BOBJ` | Business Object | A concept used within a particular business domain |
-| `BIF` | Business Interface | A point of access where a business service is made available to the environment |
-| `CTR` | Contract | A formal or informal specification of an agreement between a provider and a consumer that specifies the rights and obligations associated with a product and establishes functional and non-functional parameters for interaction |
-| `VAL` | Value | The relative worth, utility, or importance of a concept |
-| `RULE` | Business Rule | **archreator's own, no ArchiMate counterpart** — a declared constraint on how the business operates, which systems must honor |
-| `DOBJ` | Data Object | Data structured for automated processing |
-| `ASVC` | Application Service | An explicitly defined exposed application behavior |
-| `ACMP` | Application Component | An encapsulation of application functionality aligned to implementation structure, which is modular and replaceable |
-| `TSVC` | Technology Service | An explicitly defined exposed technology behavior |
-| `NODE` | Node | A computational or physical resource that hosts, manipulates, or interacts with other computational or physical resources |
-| `ART` | Artifact | A piece of data that is used or produced in a software development process, or by deployment and operation of an IT system |
-| `PLAT` | Plateau | A relatively stable state of the architecture that exists during a limited period of time |
-| `GAP` | Gap | A statement of difference between two plateaus |
+Two columns are the method's own. **Aspect** carries the standard's
+classification — active structure, behavior, passive structure, with
+motivation and composite beside them — because the aspect is what decides
+how a catalogue draws best
+([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § The aspect decides
+the shape of a view). **This method adds** holds archreator's considerations
+for working the element, where there are any — practice beside the
+definition, never a redefinition.
+
+### Motivation
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `STK` | Stakeholder | Motivation | The role of an individual, team, or organization (or classes thereof) that represents their interests in the effects of the architecture | A child model's stakeholders refine the parent's ([`model-structure.md`](./model-structure.md)) |
+| `DRV` | Driver | Motivation | An external or internal condition that motivates an organization to define its goals and implement the changes necessary to achieve them | — |
+| `ASM` | Assessment | Motivation | The result of an analysis of the state of affairs of the enterprise with respect to some driver | — |
+| `G` | Goal | Motivation | A high-level statement of intent, direction, or desired end state for an organization and its stakeholders | A child model's goals serve the parent's, cited by federation ID |
+| `OUT` | Outcome | Motivation | An end result, effect, or consequence of a certain state of affairs | Each row says how it is checked — and honestly when there is no method yet |
+| `P` | Principle | Motivation | A statement of intent defining a general property that applies to any system in a certain context in the architecture | — |
+
+### Strategy
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `CAP` | Capability | Behavior | An ability that an active structure element, such as an organization, person, or system, possesses | Areas at level 1, capabilities at level 2 — the subject's own, one per key activity where canvases exist (`discover-strategy`) |
+| `RES` | Resource | Structure | An asset owned or controlled by an individual or organization | — |
+| `COA` | Course of Action | Behavior | An approach or plan for configuring some capabilities and resources of the enterprise, undertaken to achieve a goal | — |
+| `VS` | Value Stream | Behavior | A sequence of activities that create an overall result for a customer, stakeholder, or end user | — |
+
+### Business
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `ACT` | Business Actor | Active structure | A business entity that is capable of performing behavior | An actor earns its row by filling or assisting a role of *this* model; a mere dependency is a partner, a contract and a node ([`actors-and-autonomy.md`](./actors-and-autonomy.md)) |
+| `ROLE` | Business Role | Active structure | The responsibility for performing specific behavior, to which an actor can be assigned, or the part an actor plays in a particular action or event | — |
+| `BCOL` | Business Collaboration | Active structure | An aggregate of two or more business internal active structure elements that work together to perform collective behavior | — |
+| `BIF` | Business Interface | Active structure | A point of access where a business service is made available to the environment | — |
+| `BPROC` | Business Process | Behavior | A sequence of business behaviors that achieves a specific result such as a defined set of products or business services | Levels follow the standard process hierarchy — the four categories band the map, macro processes at level 1, processes at level 2, activities below only on pain (`process-and-capability-levels`) |
+| `BSVC` | Business Service | Behavior | Explicitly defined behavior that a business role, business actor, or business collaboration exposes to its environment | — |
+| `PROD` | Product | Composite | A coherent collection of services and/or passive structure elements, accompanied by a contract or set of agreements, offered as a whole to internal or external customers | — |
+| `BOBJ` | Business Object | Passive structure | A concept used within a particular business domain | — |
+| `CTR` | Contract | Passive structure | A formal or informal specification of an agreement between a provider and a consumer that specifies the rights and obligations associated with a product and establishes functional and non-functional parameters for interaction | — |
+| `VAL` | Value | Motivation | The relative worth, utility, or importance of a concept | — |
+| `RULE` | Business Rule | Motivation | **archreator's own, no ArchiMate counterpart** — a declared constraint on how the business operates, which systems must honor | — |
+
+### Information
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `DOBJ` | Data Object | Passive structure | Data structured for automated processing | Breaks down as data domains at level 1, then data objects extending the ID — drawn as a composite, objects nested in their domains (`process-and-capability-levels`) |
+
+### Application
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `ASVC` | Application Service | Behavior | An explicitly defined exposed application behavior | — |
+| `ACMP` | Application Component | Active structure | An encapsulation of application functionality aligned to implementation structure, which is modular and replaceable | Every component names the path that realizes it — the grounding rule applied literally |
+
+### Technology
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `TSVC` | Technology Service | Behavior | An explicitly defined exposed technology behavior | — |
+| `NODE` | Node | Active structure | A computational or physical resource that hosts, manipulates, or interacts with other computational or physical resources | — |
+| `ART` | Artifact | Passive structure | A piece of data that is used or produced in a software development process, or by deployment and operation of an IT system | — |
+
+### Implementation & Migration
+
+| Prefix | Element | Aspect | The standard says it represents | This method adds |
+| ------ | ------- | ------ | ------------------------------- | ---------------- |
+| `PLAT` | Plateau | Composite | A relatively stable state of the architecture that exists during a limited period of time | — |
+| `GAP` | Gap | Passive structure | A statement of difference between two plateaus | — |
 
 The canvas prefixes are not here because they are not ArchiMate: they are
 Strategyzer's blocks — the Value Proposition Canvas pairs and the Business
