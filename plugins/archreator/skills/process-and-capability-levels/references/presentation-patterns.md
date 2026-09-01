@@ -85,23 +85,27 @@ carries: why the boundary sits where it does, and what an empty band means.
 
 ## Level 2 — the contract
 
-**The catalogue rows are the presentation.** A level-2 row is a SIPOC, and its
-columns are the contract — there is nothing to lay out beyond keeping the rows
-readable:
+**The catalogue rows are the presentation, and a row must survive a portrait
+page** (`architecture-document-style` § A row must survive a page). The
+SIPOC facts are all on the page — laid out to fit it rather than overflow
+it:
 
-- **Every cell is one line.** The purpose is the one-sentence formula; the
-  supplier and customer are names, not paragraphs. A row that stops fitting on
-  a screen is not asking for a wider table — it is asking whether this process
-  earned level 3, or whether prose is hiding in a cell that belongs under the
-  diagram.
-- **One diagram per macro process, in value order.** The level-2 document's
-  diagram shows the chain — which process triggers which — drawn from the
-  declared supplier and customer references, never invented for symmetry. A
-  reader should see where a request enters and where value leaves.
-- **The boundary is visible in the rows.** A supplier or customer outside the
-  model is named plainly (`Requester`, `Regulator`) and gets an ID only if the
-  model defines it. Where the chain leaves the organization is information;
-  do not model the world to avoid a plain word.
+- **The row carries what stays narrow**: the ID, the name, the purpose
+  formula, the owner, what realizes it. The purpose formula is the
+  contract's spine — shaped "turns X into Y", it names the trigger and the
+  output in one sentence, so neither needs a column of its own.
+- **The chain is declared beside the diagram, not in the row.** Who triggers
+  whom, and who supplies a process from outside, are rows of the
+  `## Relationships` table, rendered by the level-2 diagram — **one diagram
+  per macro process, in value order**, never invented for symmetry, so a
+  reader sees where a request enters and where value leaves.
+- **Every cell is one line.** A row that stops fitting is not asking for a
+  wider table — it is asking whether prose is hiding in a cell that belongs
+  under the diagram, or whether this process earned level 3.
+- **The boundary is visible.** A supplier or customer outside the model is
+  named plainly in the purpose or the prose (`Requester`, `Regulator`) and
+  gets an ID only if the model defines it. Where the chain leaves the
+  organization is information; do not model the world to avoid a plain word.
 
 ## Level 3 — the flow
 

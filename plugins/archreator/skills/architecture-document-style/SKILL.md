@@ -106,6 +106,36 @@ in one document, with only a level-3 flow earning a file of its own
 And merge back when a change leaves stubs: two half-empty documents are
 worse than one honest one.
 
+### A row must survive a page
+
+Model documents are read on screens and exported to portrait pages — a
+brief or a scope converted to PDF — and a table that overflows sideways is
+unreadable in the export and barely readable before it. So a catalogue
+keeps **at most six columns, and at most one whose cells are sentences**.
+
+Slim before widening, in this order:
+
+- **A fact that is a relationship is not a column of its own** — it is a
+  relationship column of bare identifiers, or a row of the `## Relationships`
+  table beside the diagram that renders it
+  ([`references/archimate-relationships.md`](./references/archimate-relationships.md)).
+- **A fact the description already carries is not a second column.** A
+  purpose formula shaped "turns X into Y" names the trigger and the output;
+  columns restating them are width without information.
+- **What is shared by every row is said once above the table**, never
+  repeated per row.
+
+When a row still cannot fit — an element whose contract is genuinely prose —
+**flip the catalogue to the record form**: each element defined as a bolded
+lead-in (`**BPROC1.2 — Build and validate.**` — the same definition shape
+goals and principles use), its attributes as prose or a narrow two-column
+field table beneath, its relationships in the `## Relationships` table. The
+validators read both shapes already.
+
+Never fix width in the export: a landscape page, a shrunken font or a
+truncated column is a rendering hiding a content bug, and the next export
+meets it again.
+
 ### Document status
 
 **Every document that defines an element says in its preamble how far it has
@@ -196,7 +226,7 @@ recognizes both:
 | Shape | Used for | Example |
 | ----- | -------- | ------- |
 | The **first column of an inventory table** | Most elements | `` \| `BSVC3` \| Supervised build \| … `` |
-| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows | `- **G1 — Legible guidance.** A prospective adopter…` |
+| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows — and any catalogue flipped to the record form because its rows outgrew a page (§ A row must survive a page) | `- **G1 — Legible guidance.** A prospective adopter…` |
 
 A **qualified** ID in a first column (`` \| `SALES.BSVC3` \| ``) is a
 *reference*, not a definition — that is what a domain charter's "Consumed
