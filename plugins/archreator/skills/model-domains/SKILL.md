@@ -150,7 +150,8 @@ The interface. Other domains may reference these IDs and nothing else.
 ## Operated by
 
 <Human / AI / Hybrid>, at <autonomy level>. <Decision rights and escalation
-path, per `architecture-document-style` § Actors — applied to the domain as a whole.>
+path, per the actor considerations in `architecture-document-style` § What
+each element represents — applied to the domain as a whole.>
 ```
 
 **← Needs** the split verdict.

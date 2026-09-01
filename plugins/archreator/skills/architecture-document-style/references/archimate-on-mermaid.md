@@ -31,14 +31,16 @@ legend under "How to read this document", and the examples in this section.
 Everywhere else the type is already carried three times, by glyph, shape and
 colour, with the legend one screen above; a fourth carrier is the widest thing
 on the node and the least informative. A legend node reads
-`<glyph> «Stereotype» <what the type is>`, and it is the only place the word
-earns its width.
+`<glyph> «Stereotype» <what the type is> [<PREFIX>#]`, and it is the only
+place the stereotype and the example identifier earn their width.
 
 **One carve-out: an actor's kind rides on the node.** `(Human)`, `(AI)` or
 `(Hybrid)` stays in the label — `⚇ Requester (Human) [ACT1]` — because it is
 information nothing else carries. Colour distinguishes an `(AI)` actor and
 nothing distinguishes a `(Hybrid)` one, and defaulting a reader to "person" is
-the mistake § Actors exists to prevent.
+the mistake the actor considerations exist to prevent
+([`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md) § What
+each element represents).
 
 ## 2. Element glyphs
 
@@ -160,7 +162,7 @@ describe them as `<glyph> «Archetype» <name>`, 5 is the relationship, and
 anything after is notes. No header word is read, so the table works in a model
 written in any language. The worked example and the full rule — where the
 `Pending` marker may go, and what is held against the catalogue — are in
-[`relationship-tables.md`](./relationship-tables.md), and not here. **Each end
+[`archimate-relationships.md`](./archimate-relationships.md), and not here. **Each end
 names its archetype and its name because a table cell has no glyph, shape or
 colour to carry the type** — and because the name is a copy of what the
 catalogue owns, `scripts/check_model.py` holds the two in step.
@@ -180,15 +182,48 @@ document"). What remains here is the rest:
 either way — a dashed arrow renders a Pending row, and is never the
 declaration itself.
 
-Relationships are labeled with their ArchiMate name: **serves**,
-**realizes**, **assigned to**, **accesses**, **triggers**, **flow**,
-**aggregates**, **influences**. Where Mermaid arrowheads can't distinguish
-relation types, the label is authoritative.
+Relationships are labeled with the standard's role name for the drawn
+direction — *serves*, *realized by*, *triggers* — the set and both
+directions' names being
+[`archimate-relationships.md`](./archimate-relationships.md) § What each
+relationship represents. Where Mermaid arrowheads can't distinguish relation
+types, the label is authoritative.
 
 **A model documented in a language other than English keeps a
 stereotype-correspondence table** — translated label → standard ArchiMate
 element name — in its own `architecture/README.md`, so the vocabulary stays
 traceable back to the standard.
+
+## The relationship decides the shape of a view
+
+A diagram's shape follows the relationships it renders, more than the
+elements' layer or aspect:
+
+- **Composition and aggregation nest.** What is composed draws inside its
+  owner — containers, boxes inside boxes, one per level, the composite
+  domain map being the worked shape. Never draw an arrow for a composition
+  that nesting can say.
+- **Triggering and flow chain.** Order is the fact, so the shape is a
+  left-to-right sequence with labeled handoffs — the process map and the
+  value stream.
+- **Assignment, realization and serving connect.** These are the labeled
+  arrows of most content diagrams — an actor assigned to its roles, a
+  component realizing its services, a service serving whom it serves —
+  and an element that only carries them never draws alone.
+- **Access points at the passive.** Behavior reading or writing an object
+  is an arrow into a container — or better, the `Uses` and `Produces`
+  columns of a flow table, where the fact is declared anyway.
+- **Influence chains motivation** — stakeholder through driver to goal and
+  outcome — and **specialization trees**, drawn rarely and small.
+
+The **aspect** is the corollary, not the rule: passive structure is mostly
+composed and aggregated, so it nests; behavior mostly triggers and flows, so
+it chains; active structure is mostly assigned and serving, so it connects.
+Each element's aspect is in
+[`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md) § What
+each element represents; the relationships and their role names are
+[`archimate-relationships.md`](./archimate-relationships.md) § What each
+relationship represents.
 
 ## Diagrams come first, one per section
 
@@ -210,11 +245,17 @@ beneath it, cut it — that is DRY applied to pictures.
 
 ## Every element document opens with "How to read this document"
 
-A legend diagram showing this document's element types and how they connect,
-then a table of **glyph / shape / element / ID prefix** — including any
-element borrowed from another layer for context. **This is the one diagram
-that names the stereotypes**, which is what lets every diagram below it drop
-them.
+A legend diagram showing this document's element types and how they typically
+connect — including any element borrowed from another layer for context. Each
+legend node carries everything a reader needs to decode the diagrams below —
+`<glyph> «Stereotype» <what the type is> [<PREFIX>#]` — drawn in the
+element's own shape and colour. **This is the one diagram that names the
+stereotypes**, which is what lets every diagram below it drop them.
+
+**The legend diagram is the whole section — no table restates it.** The
+diagram already renders each type's shape and colour, and its nodes name the
+glyph, the stereotype and the ID prefix; a glyph/shape/prefix table beside it
+is a second copy the reader can only reconcile by matching glyphs.
 
 **A layer README that only indexes other documents is exempt**: it has no
 elements to legend, and giving it one would be ceremony rather than help.

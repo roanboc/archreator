@@ -76,6 +76,7 @@ MODEL_DIR = "architecture"
 # What a model consumes from models it does not own. Read by `check_model.py`
 # to resolve a foreign reference without cloning anything.
 IMPORTS_DOC = "imports.md"
+FEDERATION_DOC = "federation.md"
 # Narrative folders inside the model directory. They are *about* the model
 # rather than part of it, and are deliberately not read.
 #
@@ -124,25 +125,30 @@ PREFIXES = sorted(PREFIX_TYPES, key=len, reverse=True)
 # The element itself: a type prefix, its number, then one dotted number per
 # level below the top (`CAP1`, `CAP1.2`, `CAP1.2.3`).
 _LOCAL = r"(?:" + "|".join(PREFIXES) + r")\d+(?:\.\d+)*"
-# A full ID prepends the domain path, when there is one (`SALES.CAP1.2`).
-_ID = r"(?:[A-Z][A-Z0-9]*\.)*" + _LOCAL
-# A foreign identifier names the model it belongs to first, separated by two
-# colons: `product-archreator::ACMP1`, `sales-platform::EMEA.BSVC3`.
+# A qualifier segment: a domain inside this model (`SALES.`) or the
+# federation ID of another model (`ORG.`, `PRD_MTD.`). The underscore joins
+# a tier code to its short name, so the dot keeps exactly two meanings —
+# ownership before the type prefix, catalogue levels after it.
+_QSEG = r"[A-Z][A-Z0-9_]*"
+# A full ID prepends the ownership path, when there is one (`SALES.CAP1.2`,
+# `ORG.STK1`, `PRD_MTD.SALES.BSVC3`).
+_ID = r"(?:" + _QSEG + r"\.)*" + _LOCAL
+# A federation ID is a short uppercase code a model declares once on its own
+# front door — `**Federation ID:** `ORG`` in `architecture/README.md` — and
+# a citing model maps in its `architecture/federation.md`. The mapping is
+# what turns the qualifier into a foreign reference, which is the point: a
+# model you may reference is a model you have declared you federate with.
+# One grammar carries domains and federation alike; which one a qualifier is
+# depends on what this model declared, never on how it is spelled.
 #
-# Two colons rather than a third meaning for the dot. The dot already separates
-# the domain path (before the prefix) from the catalogue's levels (after it),
-# and a grammar where one character means three things stops being readable.
-# The model name is the one the federation index gives it, which is the point:
-# a model you may reference is a model you have declared you federate with.
-FOREIGN_SEP = "::"
-_MODEL = r"[A-Za-z0-9][A-Za-z0-9._/-]*"
-_ANY_ID = r"(?:" + _MODEL + FOREIGN_SEP + r")?" + _ID
+# The retired `model::ID` notation is recognised only to be reported: a
+# reference written in it would otherwise stop matching anything and rot
+# silently, which is the failure mode this whole file exists to prevent.
+LEGACY_FOREIGN_RE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9._/-]*::[^`\s]+)`")
 
 # A backticked ID anywhere in the prose or a table cell is a reference — of
 # this model's own elements, or of a model it federates with.
-REFERENCE_RE = re.compile(r"`(" + _ANY_ID + r")`")
-# Splits a foreign reference into (model, identifier).
-FOREIGN_RE = re.compile(r"^(" + _MODEL + r")" + FOREIGN_SEP + r"(" + _ID + r")$")
+REFERENCE_RE = re.compile(r"`(" + _ID + r")`")
 # A table row whose first cell is a bare backticked ID defines that element.
 # A *domain-qualified* first cell is a reference instead — that is what a
 # domain charter's "Consumed services" table holds. A *leveled* first cell
@@ -151,7 +157,7 @@ FOREIGN_RE = re.compile(r"^(" + _MODEL + r")" + FOREIGN_SEP + r"(" + _ID + r")$"
 TABLE_DEF_RE = re.compile(r"^\|\s*`([A-Z][A-Z0-9]*\d+(?:\.\d+)*)`\s*\|", re.M)
 # Splits an ID into its domain path and the rest, so the two meanings of the
 # dot never get confused for each other.
-ID_PARTS_RE = re.compile(r"^((?:[A-Z][A-Z0-9]*\.)*)(" + _LOCAL + r")$")
+ID_PARTS_RE = re.compile(r"^((?:" + _QSEG + r"\.)*)(" + _LOCAL + r")$")
 # Goals and principles are written as bolded lead-ins rather than table rows.
 BULLET_DEF_RE = re.compile(r"\*\*(" + _ID + r")\s+—", re.M)
 RETIRED_HEADING_RE = re.compile(r"^##+\s+Retired\s*$", re.M)
@@ -249,10 +255,49 @@ def definitions_in(text: str) -> set[str]:
     return set(TABLE_DEF_RE.findall(text)) | set(BULLET_DEF_RE.findall(text))
 
 
-def foreign_of(element: str) -> tuple[str, str]:
-    """(model, identifier) for a foreign reference, ("", element) otherwise."""
-    match = FOREIGN_RE.match(element)
-    return (match.group(1), match.group(2)) if match else ("", element)
+# A federation index row's first cell: a bare backticked uppercase code.
+_ALIAS_CELL_RE = re.compile(r"^`([A-Z][A-Z0-9_]*)`$")
+# The first backticked model key in a federation index row's second cell.
+_MODEL_KEY_RE = re.compile(r"`([A-Za-z0-9][A-Za-z0-9._/-]*)`")
+# The federation ID a model declares on its own front door.
+FEDERATION_ID_RE = re.compile(r"\*\*Federation ID:\*\*\s*`([A-Z][A-Z0-9_]*)`")
+
+
+def federation_of(project: Path) -> dict[str, str]:
+    """Federation ID -> the model key it maps to, from `federation.md`.
+
+    Read by position: cell 1 the federation ID this model writes for the
+    other model, cell 2 that model's key — its tree name, backticked. A row
+    counts only when its first cell is a bare backticked uppercase code that
+    could not be an element ID. A federation ID whose row carries no readable
+    key maps to "", which means a model outside this repository: references
+    under it resolve against `architecture/imports.md` instead.
+    """
+    doc = project / MODEL_DIR / FEDERATION_DOC
+    if not doc.is_file():
+        return {}
+    found: dict[str, str] = {}
+    for line in strip_code(doc.read_text(encoding="utf-8")).splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = _cells(line)
+        if len(cells) < 2:
+            continue
+        alias = _ALIAS_CELL_RE.match(cells[0])
+        if not alias or re.fullmatch(_LOCAL, alias.group(1)):
+            continue
+        key = _MODEL_KEY_RE.search(cells[1])
+        found[alias.group(1)] = key.group(1) if key else ""
+    return found
+
+
+def federation_id_of(project: Path) -> str:
+    """The federation ID this model's own front door declares, or ""."""
+    doc = project / MODEL_DIR / "README.md"
+    if not doc.is_file():
+        return ""
+    match = FEDERATION_ID_RE.search(doc.read_text(encoding="utf-8"))
+    return match.group(1) if match else ""
 
 
 def qualifier_of(element: str) -> str:
@@ -390,7 +435,7 @@ def _name_of(cell: str) -> str:
 # A table cell that is nothing but one backticked identifier. Anchored at both
 # ends, because a cell that *mentions* an identifier in a sentence is prose and
 # a cell that *is* one is an end of a relationship.
-CELL_ID_RE = re.compile(r"^`(" + _ANY_ID + r")`$")
+CELL_ID_RE = re.compile(r"^`(" + _ID + r")`$")
 # The separators a list of identifiers is written with. Punctuation only: a
 # conjunction is a word, and which word it is depends on the language.
 _SEP = r"[\s,;/·+&—–-]*"
@@ -401,7 +446,7 @@ _SEP = r"[\s,;/·+&—–-]*"
 # holds the word "Established", and both are columns of the same catalogue. A
 # cell of prose that happens to name an identifier is somebody talking about an
 # element, which the projection already models as a mention.
-CELL_ID_LIST_RE = re.compile(r"^" + _SEP + r"(?:`" + _ANY_ID + r"`" + _SEP + r")+$")
+CELL_ID_LIST_RE = re.compile(r"^" + _SEP + r"(?:`" + _ID + r"`" + _SEP + r")+$")
 
 
 def _table_blocks(text: str) -> list[tuple[int, int, list[str], list[list[str]]]]:
@@ -668,7 +713,7 @@ def imports_of(project: Path) -> dict[str, tuple[str, str]]:
         if len(cells) < 3:
             continue
         match = CELL_ID_RE.match(cells[0])
-        if not match or FOREIGN_SEP not in match.group(1):
+        if not match or not qualifier_of(match.group(1)):
             continue
         found[match.group(1)] = (node_name(cells[1]), _plain(cells[2]))
     return found
@@ -727,11 +772,16 @@ class ParsedProject:
     duplicates: list[str]
     retired: dict[str, Path]
     references: list[tuple[str, Path]]
-    # (model, identifier, document) for every reference that names an element
-    # in a model this one does not own.
-    foreign: list[tuple[str, str, Path]]
+    # (federation ID, model key, identifier, document) for every reference
+    # that names an element in a model this one does not own. The model key
+    # is "" when the federation index maps the ID to nothing readable — a
+    # model outside this repository.
+    foreign: list[tuple[str, str, str, Path]]
     domains: set[str]
     skipped: int
+    # References still written in the retired `model::ID` notation, kept so
+    # the validator can name them instead of letting them rot unmatched.
+    legacy: list[tuple[str, Path]] = field(default_factory=list)
     # Repository-relative document path -> (status name, glyph count). Every
     # document the model parse reads, whether or not it defines anything.
     statuses: dict[str, tuple[str, int]] = field(default_factory=dict)
@@ -765,7 +815,8 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     duplicates: list[str] = []
     retired: dict[str, Path] = {}
     references: list[tuple[str, Path]] = []
-    foreign: list[tuple[str, str, Path]] = []
+    foreign: list[tuple[str, str, str, Path]] = []
+    legacy: list[tuple[str, Path]] = []
     domains: set[str] = set()
     statuses: dict[str, tuple[str, int]] = {}
     skipped = 0
@@ -776,15 +827,25 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     excerpts: list[Excerpt] = []
 
     model_root = project / MODEL_DIR
+    # The federation IDs this model maps, read once: they are what tells a
+    # qualified reference's head apart from a domain of this model.
+    aliases = federation_of(project)
+
+    def alias_split(identifier: str) -> tuple[str, str, str]:
+        """(federation ID, model key, rest) — or ("", "", identifier)."""
+        head, _, rest = identifier.partition(".")
+        if rest and head in aliases:
+            return head, aliases[head], rest
+        return "", "", identifier
 
     for md_file in model_files(project):
+        stripped = strip_code(md_file.read_text(encoding="utf-8"))
+        legacy.extend((found, md_file) for found in LEGACY_FOREIGN_RE.findall(stripped))
         # Relationship tables come out first, before any other reading of the
         # document. Their first cell is a bare backticked identifier, which is
         # what `TABLE_DEF_RE` treats as a definition — left in, every source
         # element would be reported as defined twice.
-        text, rel_tables = split_relationship_tables(
-            strip_code(md_file.read_text(encoding="utf-8"))
-        )
+        text, rel_tables = split_relationship_tables(stripped)
         scope = domain_of(md_file, project)
         if scope:
             domains.add(scope)
@@ -814,9 +875,9 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
 
         defined_here = definitions_in(text)
         for reference in cited:
-            model, local = foreign_of(reference)
-            if model:
-                foreign.append((model, local, md_file))
+            alias, model, local = alias_split(reference)
+            if alias:
+                foreign.append((alias, model, local, md_file))
                 continue
             if not qualifier_of(reference) and reference in defined_here:
                 continue
@@ -837,7 +898,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         for rows in rel_tables:
             for _, _, _, _, src_said, dst_said in relationship_rows(rows):
                 for said in (src_said, dst_said):
-                    if FOREIGN_SEP in said.element:
+                    if alias_split(said.element)[0]:
                         # A foreign element's name is checked against the
                         # import row that declares it, not against a catalogue
                         # this model does not have.
@@ -900,12 +961,12 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
                     for marker in PENDING_MARKERS
                 )
                 for target in cited:
-                    model, local = foreign_of(target)
-                    if model:
+                    alias, model, local = alias_split(target)
+                    if alias:
                         edges.append(
                             Edge(src=src, dst=local, rel=header, doc=doc,
                                  origin="catalogue", pending=pending,
-                                 dst_project=model)
+                                 dst_project=model or alias)
                         )
                         continue
                     dst = qualify(target) if not qualifier_of(target) else target
@@ -922,8 +983,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         seen_here: dict[str, int] = {}
         for heading, block in prose_blocks(live_text):
             for reference in dict.fromkeys(REFERENCE_RE.findall(block)):
-                model, _ = foreign_of(reference)
-                if model:
+                if alias_split(reference)[0]:
                     continue
                 key = f"{scope}.{reference}" if scope else reference
                 if seen_here.get(key, 0) >= EXCERPTS_PER_DOCUMENT:
@@ -935,15 +995,16 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
 
         for rows in rel_tables:
             for source, target, label, pending, _, _ in relationship_rows(rows):
-                src_model, src_local = foreign_of(source)
-                dst_model, dst_local = foreign_of(target)
-                src = src_local if src_model else (
+                src_alias, src_model, src_local = alias_split(source)
+                dst_alias, dst_model, dst_local = alias_split(target)
+                src = src_local if src_alias else (
                     qualify(source) if not qualifier_of(source) else source)
-                dst = dst_local if dst_model else (
+                dst = dst_local if dst_alias else (
                     qualify(target) if not qualifier_of(target) else target)
                 edges.append(
                     Edge(src=src, dst=dst, rel=label, doc=doc,
-                         origin="table", pending=pending, dst_project=dst_model)
+                         origin="table", pending=pending,
+                         dst_project=(dst_model or dst_alias) if dst_alias else "")
                 )
 
 
@@ -974,6 +1035,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
         retired=retired,
         references=references,
         foreign=foreign,
+        legacy=legacy,
         domains=domains,
         statuses=statuses,
         skipped=skipped,

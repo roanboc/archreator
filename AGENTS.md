@@ -93,9 +93,11 @@ persisted SQLite graph; in that model it had gone stale and was answering from
 a revision that no longer described the architecture, with nothing to tell the
 reader. A cache that is silently wrong is worse than no cache.
 
-A reference can name an element in another model — `other-model::CAP1` — and
-`check_model.py` resolves it against that model when it is in the same
-repository, or against `architecture/imports.md` when it is not. Nothing
+A reference can name an element in another model by its federation ID —
+`ORG.CAP1`, declared on that model's front door and mapped in
+`architecture/federation.md` — and `check_model.py` resolves it against that
+model when it is in the same repository, or against
+`architecture/imports.md` when it is not. Nothing
 fetches: a validator reading a sibling repository on every pull request would
 be slow, would fail when somebody else's site was down, and would let another
 team's push break this build.

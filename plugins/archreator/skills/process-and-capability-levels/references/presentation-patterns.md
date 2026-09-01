@@ -34,6 +34,16 @@ branch, on pain (`process-and-capability-levels` § Breadth first, depth on
 pain): most models never need the third question anywhere but one or two
 branches, and the focus table is what keeps that a visible decision.
 
+**The first two questions are both answered, everywhere.** Levels 1 and 2
+are complete across the whole subject — the same § Breadth first, depth on
+pain — so a catalogue stopping at level 1 is a table of contents, not a
+model: the map says what is there and never what each element owes. Only the
+third question is optional.
+
+**Each level gets a heading that names it** — `### Level 1 — the areas`,
+`### Level 2 — the contract` — so a reader knows which question the
+identifiers in front of them answer without counting dots in an ID.
+
 ## Level 1 — the landscape
 
 One diagram of the whole boundary, opening the document. The four bands are
@@ -75,23 +85,27 @@ carries: why the boundary sits where it does, and what an empty band means.
 
 ## Level 2 — the contract
 
-**The catalogue rows are the presentation.** A level-2 row is a SIPOC, and its
-columns are the contract — there is nothing to lay out beyond keeping the rows
-readable:
+**The catalogue rows are the presentation, and a row must survive a portrait
+page** (`architecture-document-style` § A row must survive a page). The
+SIPOC facts are all on the page — laid out to fit it rather than overflow
+it:
 
-- **Every cell is one line.** The purpose is the one-sentence formula; the
-  supplier and customer are names, not paragraphs. A row that stops fitting on
-  a screen is not asking for a wider table — it is asking whether this process
-  earned level 3, or whether prose is hiding in a cell that belongs under the
-  diagram.
-- **One diagram per macro process, in value order.** The level-2 document's
-  diagram shows the chain — which process triggers which — drawn from the
-  declared supplier and customer references, never invented for symmetry. A
-  reader should see where a request enters and where value leaves.
-- **The boundary is visible in the rows.** A supplier or customer outside the
-  model is named plainly (`Requester`, `Regulator`) and gets an ID only if the
-  model defines it. Where the chain leaves the organization is information;
-  do not model the world to avoid a plain word.
+- **The row carries what stays narrow**: the ID, the name, the purpose
+  formula, the owner, what realizes it. The purpose formula is the
+  contract's spine — shaped "turns X into Y", it names the trigger and the
+  output in one sentence, so neither needs a column of its own.
+- **The chain is declared beside the diagram, not in the row.** Who triggers
+  whom, and who supplies a process from outside, are rows of the
+  `## Relationships` table, rendered by the level-2 diagram — **one diagram
+  per macro process, in value order**, never invented for symmetry, so a
+  reader sees where a request enters and where value leaves.
+- **Every cell is one line.** A row that stops fitting is not asking for a
+  wider table — it is asking whether prose is hiding in a cell that belongs
+  under the diagram, or whether this process earned level 3.
+- **The boundary is visible.** A supplier or customer outside the model is
+  named plainly in the purpose or the prose (`Requester`, `Regulator`) and
+  gets an ID only if the model defines it. Where the chain leaves the
+  organization is information; do not model the world to avoid a plain word.
 
 ## Level 3 — the flow
 
@@ -132,12 +146,13 @@ map, then the contract — and none of them earns the third question:
 | Catalogue | Level 1 — the map | Level 2 — the contract | It never gets |
 | --------- | ----------------- | ---------------------- | ------------- |
 | **Capabilities** | The areas, grouped the way the organization talks about itself | Each capability's definition and what realizes it | A flow. A capability has no sequence and no trigger — an ordered capability diagram is a process map wearing the wrong label |
-| **Data objects** | The data domains and their owners — `Customer data`, `Product data` — one map, few boxes, settled before any object | Each object belongs to a domain and extends its ID; its row carries owner, classification and where it is mastered | A schema. Attributes belong to the systems that store them; the model carries what a decision needs |
+| **Data objects** | The data domains and their owners — `Customer data`, `Product data` — one map, few boxes, settled before any object. Once level 2 exists, draw it as a **composite**: the objects nested inside their domain boxes, so one picture carries both levels | Each object belongs to a domain and extends its ID; its row carries owner, classification and where it is mastered | A schema. Attributes belong to the systems that store them; the model carries what a decision needs |
 | **Products** | The portfolio — what is sold, to which segments | Each product's services and the segments they serve | A technical decomposition — that is the application layer's, reached by relationship |
 
 Domains at Depth 3 look like a fourth case and are not: their map and
 charters belong to `model-domains`, which owns that shape entirely.
 
-When in doubt, stop a level earlier. A map somebody understands beats a
-contract nobody reads, and a contract kept current beats a flow that was
-drawn once and never again opened.
+When in doubt about the third question, don't ask it: a contract kept
+current beats a flow that was drawn once and never again opened. The doubt
+never reaches level 2 — the contract is complete across the subject, per
+§ One question per level.

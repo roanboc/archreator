@@ -113,6 +113,9 @@ and put the result beside its source under `.archreator/work/` — disposable,
 like everything there. The method owns the boundary, not a converter: one
 brief or scope per PDF, never the whole model, which is the artifact that
 gets mailed around and quoted eight months after it stopped being true.
+A table that overflows the page is fixed in the source, never by rotating
+or shrinking the page — `architecture-document-style` § A row must survive
+a page.
 
 ## ⇥ Hands off to
 

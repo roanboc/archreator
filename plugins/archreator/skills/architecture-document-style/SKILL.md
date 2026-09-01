@@ -1,6 +1,6 @@
 ---
 name: architecture-document-style
-description: Rulebook — consult when creating or editing any document under architecture/ — the numbering of layer folders, element IDs, how far a document has been validated, the grounding rule, how a relationship is declared, and the skeleton every element document follows. Its references carry the lookup tables — the ArchiMate-on-Mermaid notation, the prefix registry and hierarchical numbering, actor kinds and autonomy, canvases, and where a model sits between enterprise and implementation. Adds to document-style, which governs every document in the repository and which architecture documents obey too.
+description: Rulebook — consult when creating or editing any document under architecture/ — the numbering of layer folders, element IDs, how far a document has been validated, the grounding rule, how a relationship is declared, and the skeleton every element document follows. Its references carry the lookup tables — the ArchiMate-on-Mermaid notation, the element and relationship references with the standard's definitions and the method's considerations, the prefix registry and hierarchical numbering, canvases, and where a model sits between enterprise and implementation. Adds to document-style, which governs every document in the repository and which architecture documents obey too.
 metadata:
   archreator:
     kind: rulebook
@@ -50,9 +50,8 @@ there resolves exactly as one naming a heading here.
 | Read | When |
 | ---- | ---- |
 | [`references/archimate-on-mermaid.md`](./references/archimate-on-mermaid.md) | Before drawing anything — the four notation devices, and where a diagram goes |
-| [`references/hierarchy-and-ids.md`](./references/hierarchy-and-ids.md) | Allocating an identifier — the prefix registry, hierarchical numbering, retirement, domain and model qualifiers |
-| [`references/relationship-tables.md`](./references/relationship-tables.md) | Declaring a relationship in a catalogue column or a `## Relationships` table |
-| [`references/actors-and-autonomy.md`](./references/actors-and-autonomy.md) | Writing an actor or a role — kinds, autonomy levels, decision rights |
+| [`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md) | Allocating an identifier — the prefix registry, what each element represents in the standard's words, hierarchical numbering, retirement, domain and federation qualifiers |
+| [`references/archimate-relationships.md`](./references/archimate-relationships.md) | Declaring a relationship, and what each one represents in the standard's words with both role names |
 | [`references/model-structure.md`](./references/model-structure.md) | Deciding what this model owns and what it defers to its parent |
 | [`references/canvases.md`](./references/canvases.md) | The model has a `0_business-design/` layer — Depth 2 and 3 only |
 | [`references/reference-documents.md`](./references/reference-documents.md) | Filing source material, or writing anything down from a meeting |
@@ -78,6 +77,64 @@ there resolves exactly as one naming a heading here.
   **the only folder in the model that describes a future**; every numbered
   layer describes the current state, and that division is what lets a reader
   trust a layer document without checking its date.
+
+### One document per layer, until it is not
+
+A layer opens as **one document**, and a small subject stays that way — a
+whole business layer can be one honest file. A larger subject splits **by
+element family, in analysis order**, the shape the canonical file names
+already anticipate: `1_business-actors-and-roles.md`,
+`2_business-services.md`, `3_business-processes.md`.
+
+Split when any of these becomes true, and not before:
+
+- **A reader scrolls through one family to reach another** — past roughly
+  twenty-five elements in the document, counting every level, the page has
+  stopped being scannable.
+- **One family carries a leveled catalogue of its own** — a process map
+  with its level-2 contracts, a capability decomposition — big enough to be
+  the document a reader opens on purpose.
+- **Two families are validated at different sittings of a gate.** What is
+  approved together can live together; what is approved separately should
+  be separable.
+
+Each split document keeps the full skeleton — its own "How to read" legend,
+its own status line — and the layer README's analysis-order table is the
+index. Split along family lines only: levels 1 and 2 of one catalogue stay
+in one document, with only a level-3 flow earning a file of its own
+(`process-and-capability-levels` § What is here, and what is one file away).
+And merge back when a change leaves stubs: two half-empty documents are
+worse than one honest one.
+
+### A row must survive a page
+
+Model documents are read on screens and exported to portrait pages — a
+brief or a scope converted to PDF — and a table that overflows sideways is
+unreadable in the export and barely readable before it. So a catalogue
+keeps **at most six columns, and at most one whose cells are sentences**.
+
+Slim before widening, in this order:
+
+- **A fact that is a relationship is not a column of its own** — it is a
+  relationship column of bare identifiers, or a row of the `## Relationships`
+  table beside the diagram that renders it
+  ([`references/archimate-relationships.md`](./references/archimate-relationships.md)).
+- **A fact the description already carries is not a second column.** A
+  purpose formula shaped "turns X into Y" names the trigger and the output;
+  columns restating them are width without information.
+- **What is shared by every row is said once above the table**, never
+  repeated per row.
+
+When a row still cannot fit — an element whose contract is genuinely prose —
+**flip the catalogue to the record form**: each element defined as a bolded
+lead-in (`**BPROC1.2 — Build and validate.**` — the same definition shape
+goals and principles use), its attributes as prose or a narrow two-column
+field table beneath, its relationships in the `## Relationships` table. The
+validators read both shapes already.
+
+Never fix width in the export: a landscape page, a shrunken font or a
+truncated column is a rendering hiding a content bug, and the next export
+meets it again.
 
 ### Document status
 
@@ -169,7 +226,7 @@ recognizes both:
 | Shape | Used for | Example |
 | ----- | -------- | ------- |
 | The **first column of an inventory table** | Most elements | `` \| `BSVC3` \| Supervised build \| … `` |
-| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows | `- **G1 — Legible guidance.** A prospective adopter…` |
+| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows — and any catalogue flipped to the record form because its rows outgrew a page (§ A row must survive a page) | `- **G1 — Legible guidance.** A prospective adopter…` |
 
 A **qualified** ID in a first column (`` \| `SALES.BSVC3` \| ``) is a
 *reference*, not a definition — that is what a domain charter's "Consumed
@@ -186,15 +243,16 @@ without repeating its full description; the name leads, per `document-style`
 link that visible pair to the element definition; multiple references are one
 per line.
 
-Each document's "How to read this document" table repeats the prefixes it
-uses, expanded — `STK#` = Stakeholder — which is § Write it out applied to
-identifiers. Examples use `#` (and `#.#` for levels), never a plausible real
-identifier that pollutes searches for actual elements.
+Each document's "How to read this document" legend carries, on its nodes,
+every prefix the document uses, expanded — `«Stakeholder» … [STK#]` — which
+is § Write it out applied to identifiers. Examples use `#` (and `#.#` for
+levels), never a plausible real identifier that pollutes searches for actual
+elements.
 
 **The prefix registry, hierarchical numbering, what happens to an identifier
 when the element is retired, and how a reference crosses a domain or a model
 boundary are all in
-[`references/hierarchy-and-ids.md`](./references/hierarchy-and-ids.md).**
+[`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md).**
 
 ### Grounding rule (the most important one)
 
@@ -229,7 +287,7 @@ dashed arrow, because a diagram is not read.
 
 The full rules, including where the marker may and may not go and what
 `check_model.py` holds against the catalogue, are in
-[`references/relationship-tables.md`](./references/relationship-tables.md).
+[`references/archimate-relationships.md`](./references/archimate-relationships.md).
 
 ### Document skeleton
 
@@ -241,10 +299,18 @@ The full rules, including where the marker may and may not go and what
   status. It sits in the preamble, before the first `##`, because that is
   where a validator looks for it and where a reader meets it before anything
   it might be believed for.
-- A **"How to read this document"** section next: the legend diagram and the
-  glyph / shape / element / ID-prefix table.
-- Then one section per element group, each **opening with its diagram**,
-  followed by the inventory table, followed by prose.
+- A **"How to read this document"** section next: the legend diagram, whose
+  nodes name the stereotypes and ID prefixes — and no table restating it
+  (`references/archimate-on-mermaid.md` § Every element document opens with
+  "How to read this document").
+- Then **one section per element family, headed by that family's name** — a
+  catalogue table never rides under another family's heading, because the
+  heading is what tells a reader what the identifiers in front of them
+  describe. A leveled catalogue names the level in the heading
+  (`### Level 1 — the areas`, `### Level 2 — the capabilities`).
+- Each section **opens with its diagram** where one earns its place
+  (`references/archimate-on-mermaid.md` § Diagrams come first, one per
+  section), followed by the inventory table, followed by prose.
 - A **Retired** section, only if something approved has been retired
   (`restate-current-state`).
 - **Additional notes**, last, and only if there is one — see § What the

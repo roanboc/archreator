@@ -8,8 +8,9 @@ leaves this file as it is and nothing reads it.
 
 **Status:** ○ Not started.
 
-A reference that names another model — `other-model::` and then an identifier —
-resolves in one of two ways, and which one depends on where that model is.
+A reference that names another model — its federation ID and then an
+identifier, `ORG.STK#` — resolves in one of two ways, and which one depends
+on where that model is.
 
 | The model is | How the reference resolves |
 | ------------ | -------------------------- |
@@ -37,7 +38,7 @@ somebody running the refresh, not by CI.
 | ------- | ---- | ------- |
 |         |      |         |
 
-Read by position: cell 1 the foreign identifier, backticked; cell 2 the name
+Read by position: cell 1 the qualified identifier, backticked; cell 2 the name
 that model gives it; cell 3 the revision it was read at — a commit, a tag, a
 release. Cell 2 is a copy of somebody else's fact and is treated like every
 other copy the method allows: written once, and checked.

@@ -88,11 +88,12 @@ from pathlib import Path
 import re
 
 from model_graph import (
-    FOREIGN_SEP,
+    FEDERATION_DOC,
     IMPORTS_DOC,
     MODEL_DIR,
     REPO_ROOT,
     domain_of,
+    federation_id_of,
     find_projects,
     imports_of,
     parent_of,
@@ -130,15 +131,27 @@ def check_foreign(project: Path, parsed, known: dict) -> list[str]:
     """
     errors: list[str] = []
     declared = imports_of(project)
+    declared_ids: dict[str, str] = {}
     seen: set[tuple[str, str, Path]] = set()
-    for model, element, md_file in parsed.foreign:
-        if (model, element, md_file) in seen:
+    for alias, model, element, md_file in parsed.foreign:
+        if (alias, element, md_file) in seen:
             continue
-        seen.add((model, element, md_file))
+        seen.add((alias, element, md_file))
         rel = md_file.relative_to(REPO_ROOT)
-        reference = f"{model}{FOREIGN_SEP}{element}"
-        here = known.get(model)
+        reference = f"{alias}.{element}"
+        here = known.get(model) if model else None
         if here is not None:
+            # The target's own front door declares its federation ID; a
+            # mapping that disagrees with it is two names for one model.
+            if alias not in declared_ids:
+                declared_ids[alias] = federation_id_of(here.project)
+            owned = declared_ids[alias]
+            if owned and owned != alias:
+                errors.append(
+                    f"{project.name}/{MODEL_DIR}/{FEDERATION_DOC}: `{alias}` maps to "
+                    f"`{model}`, whose front door declares the federation ID "
+                    f"`{owned}`. The model that declares an ID owns it"
+                )
             if element not in here.defined and element not in here.retired:
                 errors.append(
                     f"{rel}: `{reference}` names no element in `{model}`, which "
@@ -242,9 +255,21 @@ def check_project(project: Path, known: dict | None = None) -> tuple[list[str], 
             continue
         rel = md_file.relative_to(REPO_ROOT)
         if qualifier and qualifier not in parsed.domains:
-            errors.append(f"{rel}: `{reference}` names unknown domain `{qualifier}`")
+            errors.append(
+                f"{rel}: `{reference}` is qualified by `{qualifier}`, which is "
+                f"neither a domain of this model nor a federation ID mapped in "
+                f"{MODEL_DIR}/{FEDERATION_DOC}"
+            )
         else:
             errors.append(f"{rel}: `{reference}` is not defined in this project")
+
+    for legacy_ref, md_file in parsed.legacy:
+        errors.append(
+            f"{md_file.relative_to(REPO_ROOT)}: `{legacy_ref}` uses the retired "
+            f"`model::ID` notation. Reference it by federation ID — `ORG.STK1` — "
+            f"declared on that model's front door and mapped in "
+            f"{MODEL_DIR}/{FEDERATION_DOC}"
+        )
 
     errors.extend(check_foreign(project, parsed, known or {}))
 

@@ -497,7 +497,7 @@ def check_prefix_registry() -> list[str]:
     together.
     """
     skill = (
-        SKILLS_DIR / "architecture-document-style" / "references" / "hierarchy-and-ids.md"
+        SKILLS_DIR / "architecture-document-style" / "references" / "archimate-elements-and-ids.md"
     )
     registry = (
         REPO_ROOT / "plugins" / "archreator" / "scaffold" / "scripts" / "element-prefixes.json"
@@ -511,7 +511,7 @@ def check_prefix_registry() -> list[str]:
         if line.strip().startswith("| Where ") and "Prefixes" in line
     ]
     if not header:
-        return ["architecture-document-style: references/hierarchy-and-ids.md has no element-prefix table"]
+        return ["architecture-document-style: references/archimate-elements-and-ids.md has no element-prefix table"]
 
     documented: dict[str, str] = {}
     for line in lines[header[0] + 2:]:
@@ -539,6 +539,30 @@ def check_prefix_registry() -> list[str]:
                 f"`{code}` is `{documented[code]}` in the rulebook and "
                 f"`{shipped[code]}` in element-prefixes.json"
             )
+
+    # Every non-canvas prefix also carries the standard's one-line definition
+    # in the same reference — § What each element represents: rows of prefix,
+    # element, aspect, definition, and the method's considerations. Canvas
+    # prefixes are Strategyzer blocks, not ArchiMate elements, and are exempt.
+    defined: set[str] = set()
+    for line in lines:
+        stripped = line.strip()
+        if not stripped.startswith("| `"):
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        if len(cells) == 5 and cells[2] and cells[3]:
+            defined.add(cells[0].strip("`"))
+    archimate = {
+        code
+        for label, group in json.loads(registry.read_text(encoding="utf-8"))["prefixes"].items()
+        if not label.startswith("Canvas")
+        for code in group
+    }
+    for code in sorted(archimate - defined):
+        errors.append(
+            f"`{code}` has no row in the rulebook's element-definitions table "
+            f"(§ What each element represents)"
+        )
     return errors
 
 

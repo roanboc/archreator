@@ -113,6 +113,13 @@ proposal the Requester confirms, and detailed below level 2 only where a pain
 justifies it. Asking an organization to recall its capabilities from a blank
 page is the version of this theme that produces an org chart.
 
+**The capability areas are the subject's own.** An organization that builds
+a product will recite the product's abilities — what the product does for
+its users — and those belong in the product's model, not here. The canvas
+already carries the answer: one area per key activity, since a key activity
+is a capability seen as work. If an area reads true with the product's name
+substituted for the organization's, it is the product's.
+
 Theme 6 discovers the **key** business elements — enough for the strategy to
 be judged coherent and for Direction to mean something. Full business and
 information alignment still happens per initiative.

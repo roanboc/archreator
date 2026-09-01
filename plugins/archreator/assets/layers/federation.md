@@ -2,9 +2,10 @@
 
 _[← EA home](./README.md)_
 
-**Used by the topmost model of a federation only** — the organization, or the
-parent business function where no organization is modeled. A project that
-stands alone leaves this file as it is, and nothing reads it.
+**Used by any model that references another model** — the topmost model of a
+federation keeps the full index; a child model maps only the models it cites,
+its parent above all. A project that stands alone leaves this file as it is,
+and nothing reads it.
 
 **Status:** ○ Not started.
 
@@ -26,20 +27,26 @@ somebody opens it, owned by no one.
 
 ## The index
 
-Each row names one model in the federation and where its projection is
-published. This table is the source, and it is what gives a
-`other-model::CAP1` reference a model name to resolve against.
+Each row names one model in the federation, by its **federation ID** — the
+short uppercase code that model declares once on its own front door, as a
+**Federation ID** line in its `architecture/README.md`. The ID leads a
+qualified reference — `ORG.STK#`, `PRD_MTD.BSVC#` — and this table is what
+the qualifier resolves against: `ORG` for the one organization, `DMN_<NAME>`
+for a domain, `PRD_<NAME>` for a product. The tier code stands alone only
+where the tier cannot have siblings — the organization; a domain or product
+carries its short name from birth, because a second one arriving must never
+rename the first. An ID is stable once granted, exactly like an element's.
 
-| Model | Subject | Projection |
-| ----- | ------- | ---------- |
-|       |         |            |
+| ID | Model | Subject | Projection |
+| -- | ----- | ------- | ---------- |
+|    |       |         |            |
 
-**Read by position, not by header word** — cell 1 is the model's name, cell 2
-what it models, cell 3 where its **projection** is published. The same rule the
-rest of the notation follows, for the same reason: a model may be written in
-any language.
+**Read by position, not by header word** — cell 1 the federation ID, cell 2
+the model's key (its tree name, backticked), cell 3 what it models, cell 4
+where its **projection** is published. The same rule the rest of the notation
+follows, for the same reason: a model may be written in any language.
 
-Cell 3 names where a projection of that model is published, for a consumer
+Cell 4 names where a projection of that model is published, for a consumer
 that cannot read its Markdown — `model.json`, written by `model.py export`.
 Leave it empty when nothing publishes one; a model is federated by being
 declared here, not by exporting anything.

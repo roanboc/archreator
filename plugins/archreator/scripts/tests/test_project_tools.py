@@ -205,3 +205,108 @@ class ProjectToolTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+ORG_FRONT = "# Architecture — org probe\n\n**Federation ID:** `ORG`\n"
+PRD_FRONT = "# Architecture — product probe\n\n**Federation ID:** `PRD_MTD`\n"
+
+ORG_MOTIVATION = """\
+# Motivation — org probe
+
+**Status:** ◐ Draft catalogue — a probe.
+
+## Stakeholders
+
+| ID | Stakeholder |
+| -- | ----------- |
+| `STK1` | The owner |
+"""
+
+PRD_BUSINESS = """\
+# Business — product probe
+
+**Status:** ◐ Draft catalogue — a probe.
+
+## Services
+
+| ID | Service | Serves |
+| -- | ------- | ------ |
+| `BSVC1` | Answering | `ORG.STK1` |
+"""
+
+PRD_FEDERATION = """\
+# Federation
+
+| ID | Model | Subject |
+| -- | ----- | ------- |
+| `ORG` | `org-probe` | The organization |
+"""
+
+
+class FederationTests(unittest.TestCase):
+    """Cross-model references resolve by federation ID, and drift is named."""
+
+    def _build(self, root):
+        shutil.copytree(
+            SCAFFOLD / "scripts", root / "scripts",
+            ignore=shutil.ignore_patterns("__pycache__"),
+        )
+        org = root / "org-probe" / "architecture"
+        (org / "1_strategy").mkdir(parents=True)
+        (org / "README.md").write_text(ORG_FRONT, encoding="utf-8")
+        (org / "1_strategy" / "1_motivation.md").write_text(ORG_MOTIVATION, encoding="utf-8")
+        prd = root / "prd-probe" / "architecture"
+        (prd / "2_business").mkdir(parents=True)
+        (prd / "README.md").write_text(PRD_FRONT, encoding="utf-8")
+        (prd / "federation.md").write_text(PRD_FEDERATION, encoding="utf-8")
+        (prd / "2_business" / "README.md").write_text(PRD_BUSINESS, encoding="utf-8")
+        return root / "scripts" / "check_model.py", prd
+
+    def test_a_reference_by_federation_id_resolves_across_models(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            check, _ = self._build(Path(tmp))
+            result = run(check, cwd=tmp)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_a_federation_reference_to_a_missing_element_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            check, prd = self._build(Path(tmp))
+            doc = prd / "2_business" / "README.md"
+            doc.write_text(doc.read_text(encoding="utf-8").replace("ORG.STK1", "ORG.STK9"),
+                           encoding="utf-8")
+            result = run(check, cwd=tmp)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("names no element", result.stdout)
+
+    def test_the_retired_double_colon_notation_is_named(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            check, prd = self._build(Path(tmp))
+            doc = prd / "2_business" / "README.md"
+            doc.write_text(doc.read_text(encoding="utf-8") + "\nSee `org-probe::STK1`.\n",
+                           encoding="utf-8")
+            result = run(check, cwd=tmp)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("retired", result.stdout)
+
+    def test_a_mapping_that_disagrees_with_the_declared_id_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            check, prd = self._build(Path(tmp))
+            fed = prd / "federation.md"
+            fed.write_text(fed.read_text(encoding="utf-8").replace("`ORG`", "`ORGX`"),
+                           encoding="utf-8")
+            doc = prd / "2_business" / "README.md"
+            doc.write_text(doc.read_text(encoding="utf-8").replace("ORG.STK1", "ORGX.STK1"),
+                           encoding="utf-8")
+            result = run(check, cwd=tmp)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("declares the federation ID", result.stdout)
+
+    def test_an_unmapped_qualifier_is_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            check, prd = self._build(Path(tmp))
+            doc = prd / "2_business" / "README.md"
+            doc.write_text(doc.read_text(encoding="utf-8").replace("ORG.STK1", "ZZZ.STK1"),
+                           encoding="utf-8")
+            result = run(check, cwd=tmp)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("federation ID", result.stdout)
