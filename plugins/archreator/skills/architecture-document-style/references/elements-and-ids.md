@@ -49,6 +49,12 @@ the shape of a view). **This method adds** holds archreator's considerations
 for working the element, where there are any — practice beside the
 definition, never a redefinition.
 
+**New element guidance lands in that column first.** An instruction about
+one element — how it levels, when it earns a row, how it draws — goes into
+its cell as it is learned, and earns a reference file of its own only when
+it outgrows the row. Fewer documents saying more is what keeps the
+structure consistent.
+
 ### Motivation
 
 | Prefix | Element | Aspect | The standard says it represents | This method adds |
