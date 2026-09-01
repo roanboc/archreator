@@ -497,7 +497,7 @@ def check_prefix_registry() -> list[str]:
     together.
     """
     skill = (
-        SKILLS_DIR / "architecture-document-style" / "references" / "elements-and-ids.md"
+        SKILLS_DIR / "architecture-document-style" / "references" / "archimate-elements-and-ids.md"
     )
     registry = (
         REPO_ROOT / "plugins" / "archreator" / "scaffold" / "scripts" / "element-prefixes.json"
@@ -511,7 +511,7 @@ def check_prefix_registry() -> list[str]:
         if line.strip().startswith("| Where ") and "Prefixes" in line
     ]
     if not header:
-        return ["architecture-document-style: references/elements-and-ids.md has no element-prefix table"]
+        return ["architecture-document-style: references/archimate-elements-and-ids.md has no element-prefix table"]
 
     documented: dict[str, str] = {}
     for line in lines[header[0] + 2:]:

@@ -1,4 +1,4 @@
-# Element identifiers, levels and namespaces
+# ArchiMate elements and identifiers
 
 _Reference for [`architecture-document-style`](../SKILL.md) § Element IDs._
 
@@ -44,8 +44,8 @@ Two columns are the method's own. **Aspect** carries the standard's
 classification — active structure, behavior, passive structure, with
 motivation and composite beside them — because the aspect is what decides
 how a catalogue draws best
-([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § The aspect decides
-the shape of a view). **This method adds** holds archreator's considerations
+([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § The relationship
+decides the shape of a view). **This method adds** holds archreator's considerations
 for working the element, where there are any — practice beside the
 definition, never a redefinition.
 
@@ -79,8 +79,8 @@ structure consistent.
 
 | Prefix | Element | Aspect | The standard says it represents | This method adds |
 | ------ | ------- | ------ | ------------------------------- | ---------------- |
-| `ACT` | Business Actor | Active structure | A business entity that is capable of performing behavior | An actor earns its row by filling or assisting a role of *this* model; a mere dependency is a partner, a contract and a node ([`actors-and-autonomy.md`](./actors-and-autonomy.md)) |
-| `ROLE` | Business Role | Active structure | The responsibility for performing specific behavior, to which an actor can be assigned, or the part an actor plays in a particular action or event | — |
+| `ACT` | Business Actor | Active structure | A business entity that is capable of performing behavior | An actor earns its row by filling or assisting a role of *this* model — a mere dependency is a partner, a contract and a node. State the kind, `(Human)`, `(AI)` or `(Hybrid)`, on the node and in the row, defaulting to human only when the actor provably never is an AI acting with delegated authority. An `(AI)` or `(Hybrid)` actor's row also carries its autonomy level — advisory, co-pilot, autonomous with checkpoint, fully autonomous — its concrete decision rights, and the role it escalates to; changing any of those is a `record-decision` call |
+| `ROLE` | Business Role | Active structure | The responsibility for performing specific behavior, to which an actor can be assigned, or the part an actor plays in a particular action or event | For every role, ask whether an AI system performs or assists it, and at what autonomy — never let "actor" default to human by omission |
 | `BCOL` | Business Collaboration | Active structure | An aggregate of two or more business internal active structure elements that work together to perform collective behavior | — |
 | `BIF` | Business Interface | Active structure | A point of access where a business service is made available to the environment | — |
 | `BPROC` | Business Process | Behavior | A sequence of business behaviors that achieves a specific result such as a defined set of products or business services | Levels follow the standard process hierarchy — the four categories band the map, macro processes at level 1, processes at level 2, activities below only on pain (`process-and-capability-levels`) |

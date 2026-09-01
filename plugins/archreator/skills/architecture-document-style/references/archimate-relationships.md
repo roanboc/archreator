@@ -1,10 +1,40 @@
-# Declaring relationships
+# ArchiMate relationships
 
 _Reference for [`architecture-document-style`](../SKILL.md) § Relationships
 are declared, never only drawn._
 
-Read this when writing a catalogue column that points at other elements, or a
-`## Relationships` section beside a diagram.
+Read this when writing a catalogue column that points at other elements, a
+`## Relationships` section beside a diagram, or an edge label — and before
+choosing the shape of a view, because **the relationship, more than the
+element, is what decides how a diagram reads best**
+([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § The relationship
+decides the shape of a view).
+
+## What each relationship represents
+
+The semantics are ArchiMate's, exactly as they are for elements
+([`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md) § What
+each element represents carries how the deference works; it holds here
+identically). The definitions are quoted from the ArchiMate 3.2
+Specification (© The Open Group). An edge label or a relationship cell
+prefers the role name for its direction — *serves*, *realized by* — and a
+domain word is allowed where it says more; nothing machine-maps labels onto
+this vocabulary.
+
+| Relationship | Kind | The standard says | Role names |
+| ------------ | ---- | ----------------- | ---------- |
+| Composition | Structural | An element consists of one or more other concepts | → composed of · ← composed in |
+| Aggregation | Structural | An element combines one or more other concepts | → aggregates · ← aggregated in |
+| Assignment | Structural | The allocation of responsibility, performance of behavior, storage, or execution | → assigned to · ← has assigned |
+| Realization | Structural | An element plays a critical role in the creation, achievement, sustenance, or operation of a more abstract element | → realizes · ← realized by |
+| Serving | Dependency | An element provides its functionality to another element | → serves · ← served by |
+| Access | Dependency | The ability of behavior and active structure elements to observe or act upon passive structure elements | → accesses · ← accessed by |
+| Influence | Dependency | An element affects the implementation or achievement of some motivation element | → influences · ← influenced by |
+| Association | Dependency | An unspecified relationship, or one that is not represented by another ArchiMate relationship | associated with · → associated to · ← associated from |
+| Triggering | Dynamic | A temporal or causal relationship between elements | → triggers · ← triggered by |
+| Flow | Dynamic | Transfer from one element to another | → flows to · ← flows from |
+| Specialization | Other | An element is a particular kind of another element | → specializes · ← specialized by |
+| Junction | Connector | Connects relationships of the same type | — |
 
 ## The relationship table
 

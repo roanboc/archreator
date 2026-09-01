@@ -1,6 +1,6 @@
 ---
 name: architecture-document-style
-description: Rulebook — consult when creating or editing any document under architecture/ — the numbering of layer folders, element IDs, how far a document has been validated, the grounding rule, how a relationship is declared, and the skeleton every element document follows. Its references carry the lookup tables — the ArchiMate-on-Mermaid notation, the prefix registry and hierarchical numbering, actor kinds and autonomy, canvases, and where a model sits between enterprise and implementation. Adds to document-style, which governs every document in the repository and which architecture documents obey too.
+description: Rulebook — consult when creating or editing any document under architecture/ — the numbering of layer folders, element IDs, how far a document has been validated, the grounding rule, how a relationship is declared, and the skeleton every element document follows. Its references carry the lookup tables — the ArchiMate-on-Mermaid notation, the element and relationship references with the standard's definitions and the method's considerations, the prefix registry and hierarchical numbering, canvases, and where a model sits between enterprise and implementation. Adds to document-style, which governs every document in the repository and which architecture documents obey too.
 metadata:
   archreator:
     kind: rulebook
@@ -50,9 +50,8 @@ there resolves exactly as one naming a heading here.
 | Read | When |
 | ---- | ---- |
 | [`references/archimate-on-mermaid.md`](./references/archimate-on-mermaid.md) | Before drawing anything — the four notation devices, and where a diagram goes |
-| [`references/elements-and-ids.md`](./references/elements-and-ids.md) | Allocating an identifier — the prefix registry, what each element represents in the standard's words, hierarchical numbering, retirement, domain and federation qualifiers |
-| [`references/relationship-tables.md`](./references/relationship-tables.md) | Declaring a relationship in a catalogue column or a `## Relationships` table |
-| [`references/actors-and-autonomy.md`](./references/actors-and-autonomy.md) | Writing an actor or a role — kinds, autonomy levels, decision rights |
+| [`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md) | Allocating an identifier — the prefix registry, what each element represents in the standard's words, hierarchical numbering, retirement, domain and federation qualifiers |
+| [`references/archimate-relationships.md`](./references/archimate-relationships.md) | Declaring a relationship, and what each one represents in the standard's words with both role names |
 | [`references/model-structure.md`](./references/model-structure.md) | Deciding what this model owns and what it defers to its parent |
 | [`references/canvases.md`](./references/canvases.md) | The model has a `0_business-design/` layer — Depth 2 and 3 only |
 | [`references/reference-documents.md`](./references/reference-documents.md) | Filing source material, or writing anything down from a meeting |
@@ -223,7 +222,7 @@ elements.
 **The prefix registry, hierarchical numbering, what happens to an identifier
 when the element is retired, and how a reference crosses a domain or a model
 boundary are all in
-[`references/elements-and-ids.md`](./references/elements-and-ids.md).**
+[`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md).**
 
 ### Grounding rule (the most important one)
 
@@ -258,7 +257,7 @@ dashed arrow, because a diagram is not read.
 
 The full rules, including where the marker may and may not go and what
 `check_model.py` holds against the catalogue, are in
-[`references/relationship-tables.md`](./references/relationship-tables.md).
+[`references/archimate-relationships.md`](./references/archimate-relationships.md).
 
 ### Document skeleton
 
