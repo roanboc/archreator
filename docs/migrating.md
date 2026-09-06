@@ -41,7 +41,9 @@ decision the agent takes and records — the row's `Source` cell reads
 `adopted — <the call>`, and the document stays `◐`, so a later word from the
 Requester still overrides it. A row nobody can answer that way was a question
 about a future nobody had scheduled; drop it. Once the file is empty, delete
-it and its index entry.
+it and its index entry — and where a merged scope document links to it, repoint
+that link at the initiative retiring the log, which is the one edit a merged
+record accepts.
 
 ## An identifier freezes at merge, not at a gate
 
