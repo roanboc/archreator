@@ -312,7 +312,7 @@ rework Steps 1–3 and present again.
 | Layer | The question |
 | ----- | ------------ |
 | `architecture/4_application/` | Which application services or components change? New ports and interfaces follow `5_interface-contracts.md`; new platforms and adapters follow `4_solution-design.md` |
-| `architecture/5_technology/` | Any impact on runtimes, build, CI or hosting? Where no stack has been chosen, use `stack-selection` rather than re-deriving one |
+| `architecture/5_technology/` | Any impact on runtimes, build, CI or hosting? Where no stack has been chosen, use `stack-selection` rather than deciding from memory |
 
 As in Step 2, a layer filled for the first time gets its README from the
 plugin's assets — `assets/layers/4_application/`, `assets/layers/5_technology/`.

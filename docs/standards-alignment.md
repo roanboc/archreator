@@ -92,7 +92,7 @@ which are the exceptions.
 | **`record-decision`** | **ADR** — Architecture Decision Record (Nygard); MADR | Cite | yes | Its sections parallel MADR's. Not naming the pattern costs it every reader who already knows it |
 | **`shard-stories`** | Vertical slicing; INVEST (Wake) | Cite | partly | The skill names vertical slicing and cites BMAD-METHOD for the context-engineering half. INVEST names the sizing criteria and is not in the skill |
 | **`run-retrospective`** | Retrospective; blameless post-mortem | Cite | yes | |
-| **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | — | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying defaults, not a decision *record* |
+| **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | — | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying criteria, not a decision *record* |
 | **The canvases** | Osterwalder — Business Model Canvas, Value Proposition Canvas | Adopted | yes | |
 | **The skill format** | [AIP](https://github.com/zach-blumenfeld/aip) — the Agent Instruction Protocol | Cite | — | The section vocabulary and the kind-decides-structure idea are AIP's. The fenced-YAML body is not adopted: these skills have no script-backed steps and no graph edges, which is what that format exists to carry. [`docs/skill-format.md`](./skill-format.md) says what was taken and what was left |
 | **`shard-stories`' context packing** | [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) — context-engineered development | Cite | yes | Already cited in the skill itself |

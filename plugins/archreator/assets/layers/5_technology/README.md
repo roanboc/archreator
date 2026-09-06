@@ -16,9 +16,9 @@ their runtime nodes_.
 | 1   | [1_technology-services.md](./1_technology-services.md) | Technology Services and the nodes/system software providing them | What infrastructure services are used?    |
 | 2   | [2_deployment.md](./2_deployment.md)                   | Nodes, Artifacts, and the CI/CD deployment pipeline               | How does the build get to where it runs?  |
 
-If no stack has been chosen yet, use the `stack-selection` skill for a
-decision framework and concrete defaults before writing
-`1_technology-services.md`.
+If no stack has been chosen yet, use the `stack-selection` skill for the
+decision framework and the criteria to judge current options against, before
+writing `1_technology-services.md`.
 
 ## Layer view
 

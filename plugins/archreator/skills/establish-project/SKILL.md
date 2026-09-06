@@ -164,8 +164,8 @@ owns the layer, another model does, it is out of scope, or it is a gap.
 | **3 — Enterprise** | `Gap` until `discover-business-model` fills it | A row per business line, added by `model-domains` |
 
 If no stack is chosen yet and this is a small application, use
-`stack-selection` rather than re-deriving one, and record the choice when
-`5_technology/` is first emitted.
+`stack-selection` rather than deciding from memory, and record the choice —
+with its date — when `5_technology/` is first emitted.
 
 **← Needs** the declared depth.
 
