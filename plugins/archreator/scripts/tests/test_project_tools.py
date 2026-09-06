@@ -29,6 +29,14 @@ ArchiMate Business layer.
 
 **Status:** ◐ Draft catalogue — a probe, not yet validated.
 
+## How to read this document
+
+```mermaid
+flowchart LR
+  bsvc(["⚙ «Business Service» what the business offers [BSVC#]"]):::business
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+```
+
 ## Business services
 
 | ID | Business service | Realized by |
@@ -44,6 +52,14 @@ _A probe, not a model._
 ArchiMate Application layer.
 
 **Status:** ◐ Draft catalogue — a probe, not yet validated.
+
+## How to read this document
+
+```mermaid
+flowchart LR
+  acmp["▭ «Application Component» a piece of software [ACMP#]"]:::application
+  classDef application fill:#c2f0ff,stroke:#0288d1,color:#333
+```
 
 ## Application components
 
@@ -210,11 +226,22 @@ if __name__ == "__main__":
 ORG_FRONT = "# Architecture — org probe\n\n**Federation ID:** `ORG`\n"
 PRD_FRONT = "# Architecture — product probe\n\n**Federation ID:** `PRD_MTD`\n"
 
+LEGEND = """\
+## How to read this document
+
+```mermaid
+flowchart LR
+  n["a probe legend"]
+```
+
+"""
+
 ORG_MOTIVATION = """\
 # Motivation — org probe
 
 **Status:** ◐ Draft catalogue — a probe.
 
+""" + LEGEND + """\
 ## Stakeholders
 
 | ID | Stakeholder |
@@ -227,6 +254,7 @@ PRD_BUSINESS = """\
 
 **Status:** ◐ Draft catalogue — a probe.
 
+""" + LEGEND + """\
 ## Services
 
 | ID | Service | Serves |
@@ -261,6 +289,25 @@ class FederationTests(unittest.TestCase):
         (prd / "federation.md").write_text(PRD_FEDERATION, encoding="utf-8")
         (prd / "2_business" / "README.md").write_text(PRD_BUSINESS, encoding="utf-8")
         return root / "scripts" / "check_model.py", prd
+
+    def test_a_document_without_a_view_or_with_its_view_last_fails(self):
+        """Every element document opens with its views; a picture stapled on last is not that."""
+        with tempfile.TemporaryDirectory() as tmp:
+            script, prd = self._build(Path(tmp))
+            business = prd / "2_business" / "README.md"
+            no_view = PRD_BUSINESS.replace(LEGEND, "")
+            business.write_text(no_view, encoding="utf-8")
+            result = run(script)
+            self.assertNotEqual(result.returncode, 0, "a catalogue with no view passed")
+            self.assertIn("carries no view", result.stdout + result.stderr)
+            view_last = no_view + "\n" + LEGEND
+            business.write_text(view_last, encoding="utf-8")
+            result = run(script)
+            self.assertNotEqual(result.returncode, 0, "a view after the tables passed")
+            self.assertIn("after its first table", result.stdout + result.stderr)
+            business.write_text(PRD_BUSINESS, encoding="utf-8")
+            result = run(script)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_a_reference_by_federation_id_resolves_across_models(self):
         with tempfile.TemporaryDirectory() as tmp:
