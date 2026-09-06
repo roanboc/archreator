@@ -1,7 +1,7 @@
 {
   "name": "archreator",
-  "version": "0.2.0",
-  "description": "Enterprise-architecture-first development with three named human gates: model an organization or an application through numbered ArchiMate layers, stop at Direction, Understanding and Design before any code, and record every approval in a scope document.",
+  "version": "0.3.0",
+  "description": "Enterprise-architecture-first development with two named human gates: model an organization or an application through numbered ArchiMate layers, stop at Direction and Understanding before any code, and record every approval in a scope document.",
   "author": {
     "name": "roanboc",
     "url": "https://github.com/roanboc"
@@ -20,6 +20,6 @@
   "interface": {
     "displayName": "archreator",
     "category": "Productivity",
-    "shortDescription": "Enterprise-architecture-first development with three named human gates"
+    "shortDescription": "Enterprise-architecture-first development with two named human gates"
   }
 }

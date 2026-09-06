@@ -10,9 +10,7 @@ which folders it should actually have.
 
 A model that federates — an organization with applications built under it —
 has the same six layers at every level, and **the layers do not mean the same
-thing at each**. Without a rule for that, the same fact gets written twice at
-different granularity, which is DRY broken across a boundary rather than
-inside a document.
+thing at each**.
 
 **Tier is not depth.** Depth says how much of the six layers a model fills in
 at all. Tier says how much *detail* each layer carries and who it defers to.
@@ -35,11 +33,10 @@ tree cites the organization's strategy by federation ID —
 drivers — and defines only what the product adds. A motivation layer that
 reads correctly with the parent's copied in has restated it.
 
-**And a child's own elements trace to the parent.** What a child defines it
-derives from or aligns to something the parent already knows — a stakeholder
-column naming the parent element each one refines, a driver sharpening a
-parent driver. A child cannot discover a stakeholder the parent has never
-heard of: an element that matters to the product but appears nowhere in the
+**And a child's own elements trace to the parent** — a stakeholder column
+naming the parent element each one refines, a driver sharpening a parent
+driver. A child cannot discover a stakeholder the parent has never heard of:
+an element that matters to the product but appears nowhere in the
 organization's model is a finding **about the organization's model** — raise
 it there first, and refine it below once the parent owns it.
 
@@ -53,16 +50,14 @@ it there first, and refine it below once the parent owns it.
 | 5 technology | Key nodes and dependencies | Product-specific services | Full runtime, deployment and CI design |
 
 The enterprise layer 4 names **that** an application exists, what it offers,
-and who runs it. The tier below says **how** it is built. Neither restates the
-other, and the link between them is a column in the enterprise table naming
-which model carries the detail.
+and who runs it. The tier below says **how** it is built, and the link between
+them is a column in the enterprise table naming which model carries the detail.
 
-**An implementation does own business and information elements** — it is not
-a bare application and technology model. An AI actor with an autonomy level
-and decision rights belongs where the delivery happens, not one tier up in the
-abstract. What an implementation may not do is *restate* a service, an actor
-or an object the tier above already owns: it cites that one and adds only what
-its own delivery requires.
+**An implementation does own business and information elements** — an AI actor
+with an autonomy level and decision rights belongs where the delivery happens.
+What an implementation may not do is *restate* a service, an actor or an object
+the tier above already owns: it cites that one and adds only what its own
+delivery requires.
 
 ### Telling which tier you are in
 
@@ -75,8 +70,7 @@ own — it is a section of its parent.
 ### Where an implementation's model lives
 
 Either in the product's own tree, or in a tree of its own. **That is the
-Requester's call, made per implementation**, and both are legitimate: keep it
-local when the implementation needs little design of its own, split it when it
-needs a lot. The tier rule is unaffected either way — it governs what the
-model contains, not which directory holds it.
+Requester's call, made per implementation**: keep it local when the
+implementation needs little design of its own, split it when it needs a lot.
+The tier rule governs what the model contains, not which directory holds it.
 

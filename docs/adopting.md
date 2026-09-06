@@ -84,10 +84,9 @@ Then follow the bootstrap checklist by hand, or install the skills and let
 
 ## Keeping a project in sync with the method
 
-A project that adopted the method before 0.2 has a one-time crossing to make
-first — the renamed gates, the scripts that moved to the plugin, and what an
-existing model deliberately keeps. That is [`docs/migrating.md`](./migrating.md),
-and it is separate from the routine sync below.
+A project on the 0.2 method has a one-time crossing to make first — the Design
+gate is gone, and so is the open-questions log. That is
+[`docs/migrating.md`](./migrating.md), separate from the routine sync below.
 
 Three things ship in this repo with different lifecycles, and only one of
 them stays in sync automatically:
@@ -98,9 +97,9 @@ them stays in sync automatically:
   `codex plugin update archreator` in Codex. Installed through Option B
   instead, they update by re-running `install_skills.py` after a `git pull`.
 - **The scaffold**, at `plugins/archreator/scaffold/`, is copied *once* into your project by
-  `establish-project`. It does not update afterwards, because a
-  scaffold that changed under a project would rewrite documents the
-  Requester already approved.
+  `establish-project`. It does not update afterwards; a scaffold that
+  changed under a project would rewrite documents the Requester already
+  approved.
 - **The scaffold's own scripts** in `plugins/archreator/scaffold/scripts/` land in your
   project's `scripts/`. They are the same on both sides; if the method's
   validators change, copy the updated files across.
@@ -136,11 +135,8 @@ model.py --project . portal
 uvx --with mkdocs-material mkdocs build -f .archreator/work/portal/mkdocs.yml
 ```
 
-That is the whole of it — a theme, Mermaid, and search. There was a custom
-theme directory once: an overridden template, a comment box, a hand-written
-pan-and-zoom viewer, a PDF cover page. Five hundred lines of front-end that had
-to keep working across two upstream projects, to render documents that render
-fine without them.
+That is the whole of it — a theme, Mermaid, and search. No custom template, no
+viewer, no cover page: the documents render fine without them.
 
 **A brief.** For one question rather than the whole model, `build_brief.py`
 writes a single Markdown document about a named scope — the elements in it,
@@ -151,15 +147,10 @@ say. Hand that to somebody, or convert it to whatever format they asked for.
 build_brief.py --project . --element BSVC1 --focus business
 ```
 
-**A PDF is a conversion, not an export.** There was a PDF exporter once — a
-headless browser printing the whole model through a print-site plugin — and
-it produced the artifact most likely to be mailed around and quoted eight
-months after it stopped being true. What replaced it is a rule rather than a
-tool: a business reader who asks for a PDF gets one brief or scope converted
-by the agent, landing under gitignored `.archreator/work/` beside its
-Markdown source — never the whole model. Turning one page of Markdown into a
-PDF is something any agent can do; the boundary is the part the method owns.
+**A PDF is a conversion, not an export.** The method ships no PDF exporter. A
+business reader who asks for a PDF gets one brief or scope converted by the
+agent, landing under gitignored `.archreator/work/` beside its Markdown source
+— never the whole model.
 
 Everything generated lands under `.archreator/`, which is gitignored. Delete it
-and nothing is lost; a published copy that lives in the repository is the
-second model everyone edits instead.
+and nothing is lost.

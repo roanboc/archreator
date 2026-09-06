@@ -13,8 +13,8 @@ is in [`architecture/`](./architecture/README.md).
 ## Actors
 
 Every change moves through three roles. Nothing here assumes a human fills
-the middle one — an AI agent and a person follow the same steps, in the same
-order, against the same documents.
+the middle one — an AI agent and a person follow the same steps against the
+same documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
@@ -50,19 +50,14 @@ published on merge — see the archreator method's `docs/adopting.md`. It is a
 rendering: the Markdown in this repository stays the model.
 
 If the published site carries comment threads, a thread is a conversation
-about a document and never the record of a change: whatever it settles is
-written into the model, or it did not happen.
-
-Those questions are triaged like anything else a Requester says. A question
-the model owes an answer to is logged in
-[`architecture/scope/open-questions.md`](./architecture/scope/open-questions.md);
-one that turns out to be a change becomes an initiative and passes the gates
-like any other. **Answering in the thread and nowhere else leaves the model
-exactly as wrong as it was.**
+about a document and never the record of a change. Those questions are triaged
+like anything else a Requester says: one that turns out to be a change becomes
+an initiative and passes the gates like any other. **Answering in the thread
+and nowhere else leaves the model exactly as wrong as it was.**
 
 ## Pull requests
 
-The body covers the whole branch (`git diff main...HEAD`), not just the
-latest commit; links the initiative's scope document; and gives every
-affected architecture layer a verdict, including an explicit "no change".
-A pure bug fix states what broke, the root cause, and the fix.
+The body covers the whole branch (`git diff main...HEAD`), links the
+initiative's scope document, and gives every affected architecture layer a
+verdict, including an explicit "no change". A pure bug fix states what broke,
+the root cause, and the fix.

@@ -21,10 +21,9 @@ One question, asked late and hard to answer without it: **where did this come
 from?**
 
 A figure a Requester queries eighteen months on is answerable from the deck it
-was read off. A sentence in a layer document that has stopped making sense can
-be checked against the conversation it was written from. And an element
-identified in a draft catalogue names its source here, which is what lets the
-gate that validates it be a review rather than an act of faith.
+was read off, and an element in a draft catalogue names its source here — which
+is what lets the gate that validates it be a review rather than an act of
+faith.
 
 ## Naming
 
@@ -43,9 +42,8 @@ index row says which one the date is.
 
 **The original filename lives in the index, not on disk.** A file arriving as
 `Strategy Review FINAL v3.pptx` keeps that name in the table below, where it
-is searchable and still matches the sender's copy; on disk it becomes a dated
-slug, because spaces and capitals in a path break links, tooling, and half the
-shells anyone will use on it.
+still matches the sender's copy; on disk it becomes a dated slug, because
+spaces and capitals in a path break links and tooling.
 
 ## Index
 
@@ -72,6 +70,5 @@ this is a record of what was received, not only of what was used.
 | Anything with an element identifier | The model. If it has identifiers, it is not a reference document |
 | Credentials, personal data, or anything shared in confidence that the model does not need | Nowhere in the repository |
 
-The last row is the one worth checking before committing. A transcript is a
-recording of people talking, and people say things in meetings that they did
-not intend to put under version control.
+The last row is the one worth checking before committing: people say things in
+meetings that they did not intend to put under version control.

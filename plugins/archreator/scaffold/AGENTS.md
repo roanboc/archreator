@@ -4,9 +4,8 @@
 [archreator](./README.md) template: the method works, the model is empty.
 Run the `establish-project` skill before anything else — it names the
 project, declares the modeling depth, fills in this file, and hands off to
-discovery. Nothing arrives that the project does not use, so there is
-nothing to prune. Everything in this file below the rule is a
-placeholder it will replace.
+discovery. Everything in this file below the rule is a placeholder it will
+replace.
 
 <!--
   TEMPLATE — establish-project replaces this comment block, the line above,
@@ -27,8 +26,8 @@ alignment and the gates, but still keep the docs true.
 ## Who decides
 
 Every change moves through three roles. Nothing here assumes a human fills the
-middle one — an AI agent and a person follow the same steps, in the same order,
-against the same documents.
+middle one — an AI agent and a person follow the same steps against the same
+documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
@@ -44,12 +43,10 @@ scope document's Approvals table, with who approved, when, and what was shown.
 **Declared depth: _not yet declared_** — `establish-project` sets this.
 
 The six layers describe a weekend app and a twenty-business-line company
-alike; the depth says how much of them gets filled in and which gates apply
-(see [`architecture/README.md`](./architecture/README.md)).
-Depth 1 is one application with a light strategy layer; Depth 2 is one
-organization; Depth 3 splits the model into domains, one per business line.
-It is a starting posture, never a ceiling — deepening or descoping is a
-normal initiative, decided by the Requester.
+alike; the depth says how much of them gets filled in and which gates apply —
+the ladder is in [`architecture/README.md`](./architecture/README.md) and is
+not restated here. It is a starting posture, never a ceiling: deepening or
+descoping is a normal initiative, decided by the Requester.
 
 ## The skills
 
@@ -57,9 +54,7 @@ Your coding agent surfaces the archreator skills from their `description:`
 frontmatter; you don't invoke them by name in normal use. Three kinds: `⚙` a
 procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
 
-The catalogue lives with the skills, in the plugin — it is not restated here,
-because a copy in every generated project is a copy that goes stale in every
-generated project.
+The catalogue lives with the skills, in the plugin, and is not restated here.
 
 ## Layout
 
@@ -79,7 +74,8 @@ generated project.
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing,
   and one that carries no view or whose first view comes after its first
-  table: a document opens with its diagrams, the tables follow.
+  table. **Each section opens with its own diagram and its own tables follow
+  it** — never every diagram stacked at the top with the prose underneath.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
   push. Everything else the method can do runs from the plugin rather than
   from a copy in here.
@@ -101,7 +97,7 @@ python3 scripts/check_model.py    # element-ID references resolve
 ```
 
 Both must be green before pushing. They need nothing but Python — no network,
-no plugin installed — which is the point: this project can check itself.
+no plugin installed — so this project can check itself.
 
 Everything else the method can do runs from the plugin against this project,
 so there is one copy of each tool rather than one per project:

@@ -17,10 +17,9 @@ federated by contract.
 
 ## Nobody owns the union
 
-There is no central model here and there is not meant to be one. A model that
-held every other model's elements would **restate** what those models own,
-which the tier rule in `architecture-document-style` forbids, and its owner
-would need approval rights over elements they did not write.
+There is no central model here and there is not meant to be one: a model
+holding every other model's elements would **restate** what those models own,
+which the tier rule in `architecture-document-style` forbids.
 
 What is centralized is **this list**. The graph is a view, assembled when
 somebody opens it, owned by no one.
@@ -59,16 +58,12 @@ somebody's browser, and it can reach what the web can reach.
 ## What this cannot do
 
 **Private repositories are out of reach.** A static page cannot authenticate,
-and giving it a way to would trade away the property that makes it worth
-having — that it is a file on a static host with nothing to operate and nothing
-to secure.
+and giving it a way to would cost the property that makes it worth having: a
+file on a static host, with nothing to operate and nothing to secure.
 
-**Nothing checks that a location still answers.** A URL here can rot: a model
-moves, is renamed, or stops publishing. Nothing fails a build over it: the
-alternative is a validator making network calls on every pull request, which is
-a slow, flaky check on a fact that changes rarely. A reader who follows a dead
-location learns it the ordinary way.
+**Nothing checks that a location still answers.** A URL here can rot — a model
+moves, is renamed, or stops publishing — and no build fails over it. A reader
+who follows a dead location learns it the ordinary way.
 
-**A relationship still does not cross a model.** Elements are scoped per
-model, and a federated view shows several graphs at once rather than one graph.
-That is worth having on its own, and it is not the same thing.
+**A relationship still does not cross a model.** Elements are scoped per model,
+and a federated view shows several graphs at once rather than one graph.

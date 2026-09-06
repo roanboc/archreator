@@ -57,15 +57,17 @@ workflow it names. The plugin keeps a copy of both workflows in
 
 ```mermaid
 flowchart LR
-  src(["▧ <The source it is built from>"]):::artifact
-  build["⬒ <Where it is built> [NODE1]"]:::technology
-  art["▤ <What the build produces> [ART1]"]:::technology
-  host["⬒ <Where it is served from> [NODE2]"]:::technology
+  src[/"⎔ <The source it is built from> [ART#]"/]:::artifact
+  build["⬒ <Where it is built> [NODE#]"]:::node
+  art[/"⎔ <What the build produces> [ART#]"/]:::artifact
+  host["⬒ <Where it is served from> [NODE#]"]:::node
 
-  src --> build --> art --> host
+  src -->|built on| build
+  build -->|produces| art
+  art -->|deployed on| host
 
-  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333
-  classDef artifact fill:#eef2f7,stroke:#9fb0c4,color:#333
+  classDef artifact fill:#dcefd0,stroke:#7cb342,color:#333
+  classDef node fill:#a9d68f,stroke:#33691e,color:#333
 ```
 
 | ID | Artifact | What it is | Deployed on |

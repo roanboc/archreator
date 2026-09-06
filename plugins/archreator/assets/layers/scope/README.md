@@ -33,20 +33,18 @@ folders are numbered in:
    follows as a separate initiative. If the subject is an **organization**
    rather than an application, the walk starts one layer earlier, at
    [0_business-design](../0_business-design/README.md) — the value
-   proposition and business model canvases, approved at **Direction —
-   Business model** (see the `discover-business-model` skill)
-   before layers 1–2 are derived from them.
+   proposition and business model canvases, approved at **Direction**
+   (see the `discover-business-model` skill) before layers 1–2 are derived
+   from them.
 2. **Document the scope.** Add the next-numbered file to this folder
    describing plateaus, work packages, in/out of scope, gaps, and gate
    approvals — before implementation starts, refined as it proceeds.
-3. **Pass the gates.** Before any code, the Requester approves the
-   strategy, business, and information changes (**Understanding**) and
-   chooses whether to also review the solution design before it is coded
-   (**Design**, optional). Approvals are recorded in the
-   scope document's Approvals table — who approved, when, and what was
-   shown, with `N/A — <why>` for a gate that could have applied and didn't.
-   Which gate
-   applies to which initiative is defined in exactly one place,
+3. **Pass the gates.** There are two: **Direction**, where the change moves
+   why or for whom, and **Understanding**, where the Requester approves the
+   strategy, business, and information changes before any code. Each gate
+   granted is recorded in the scope document's Approvals table — who approved,
+   when, and what was shown; a gate that was not granted gets no row. Which
+   gate applies to which initiative is defined in exactly one place,
    the `align-change-through-layers` skill § The gates, which also says **where**
    an approval can be granted — the conversation, or a reply on the pull
    request for a Requester who doesn't work in a terminal.
@@ -58,11 +56,6 @@ Agent guidance for this process lives in the `align-change-through-layers`,
 `.github/pull_request_template.md` (see the `write-pr-description` skill) and
 must cover the whole branch.
 
-If the project needs a single running index of adopted interpretations that
-still need sign-off from a stakeholder who can't be consulted synchronously,
-keep it in [open-questions.md](./open-questions.md) — optional, see the
-`write-scope-document` skill.
-
 If a work package is too large or long-running to implement in one sitting,
 shard it into self-contained story files instead of leaving it as one
 inline task list — see the `shard-stories` skill.
@@ -72,14 +65,12 @@ often why an AI actor's autonomy level or decision rights were set the way
 they were — see [the decisions index](../decisions/README.md) (optional) and
 the `record-decision` skill.
 
-Scope documents accumulate. After a run of initiatives the EA can be
-accurate line by line and no longer read as a description of *today* —
-shipped work still marked "Pending", elements that were replaced but never
-retired, questions answered in a conversation nobody recorded. The
+Scope documents accumulate, and after a run of initiatives the EA can be
+accurate line by line and still not read as a description of *today* —
+shipped work still marked "Pending", elements replaced but never retired. The
 `restate-current-state` skill compacts that, as its own initiative with its
-own Understanding. It changes the current-state documents only: **a merged scope
-document is never rewritten**, because it is the record of what was
-approved on a date and against what information.
+own Understanding. It changes the current-state documents only: **a merged
+scope document is never rewritten**.
 
 ## Initiatives
 

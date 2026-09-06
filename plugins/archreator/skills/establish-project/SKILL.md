@@ -12,9 +12,8 @@ metadata:
 
 The bridge between an installed method and a modeled project: emit the
 scaffold, turn it into *this* project, declare how deeply the project intends
-to model itself, say where it lives, and hand off to discovery. Everything after that is the
-ordinary `align-change-through-layers` process — there is no separate
-"template mode" to graduate out of.
+to model itself, say where it lives, and hand off to discovery. Everything
+after that is the ordinary `align-change-through-layers` process.
 
 ## ⊕ When to use this
 
@@ -69,27 +68,19 @@ flowchart TD
 ```
 
 The numbered boxes are this skill's steps, and the unfilled ones are the other
-skills it reaches. Both gates belong to those, not to this: where bootstrap
-ends is the thing readers most often get wrong.
+skills it reaches. Both gates belong to those, not to this.
 
 ## ⚓ Invariants
 
 Hold at every step below.
 
 - **Run this before anything else on a fresh project.** An agent that skips
-  straight to `align-change-through-layers` finds placeholder strategy,
-  triggers discovery, and produces a strategy layer for a project with no
-  name, no declared language and no declared depth.
-- **Ask, don't infer.** The three questions in Step 1 are answered by the
-  Requester in their own words, never guessed from the repository. The third
-  is the one most often guessed wrong: a repository with no remote yet, or one
-  generated from a template, tells you nothing reliable about where the
-  project will actually live.
+  straight to `align-change-through-layers` produces a strategy layer for a
+  project with no name, no declared language and no declared depth.
 - **Nothing lands that the project does not use.** The scaffold is eleven
   files, all of them live from the first commit. Everything else — layer
   templates, the pull-request template, the workflows — waits in the plugin's
-  `assets/` until a skill has something to put in it. There is nothing of
-  archreator's to delete afterwards because nothing arrived early.
+  `assets/` until a skill has something to put in it.
 
 ## ⚙ Steps
 
@@ -110,26 +101,19 @@ live?** — which repository host, and is it public or private?
 
 Depth is about the subject, not the effort — a large application is still
 Depth 1. *When in doubt, go shallower:* deepening is a normal initiative,
-while unwinding an over-modeled project throws away documents the Requester
-already approved.
-
-**Then say it out loud, with the reason and the exit.** Never pick silently. A
-Requester who is told can correct you in one sentence; a Requester who is told
-nothing finds out three initiatives later.
+while unwinding an over-modeled project throws away approved documents.
 
 **⚖ Judgement.** The third answer decides what the scaffold's GitHub-shaped
-files are for, and nothing else. It is not a question about tooling
-preference:
+files are for, and nothing else:
 
 | The answer | What it activates |
 | ---------- | ----------------- |
 | A **public** GitHub repository | The checks workflow, and the pull-request template |
-| Any **other** GitHub repository | The same. Publishing stays a separate decision: Pages is not on the free plan for a private repository, and where it is available, publishing a private model is a disclosure decision rather than a default |
+| Any **other** GitHub repository | The same. Publishing stays a separate decision |
 | **Anything else**, or not decided yet | Nothing. `.github/` is GitHub-shaped; the model and the validators are not |
 
-*When the answer is unclear, take the last row.* An unactivated workflow is
-one `git mv` away; a pipeline that publishes a model nobody agreed to publish
-is not undoable.
+*When the answer is unclear, take the last row.* A pipeline that publishes a
+model nobody agreed to publish is not undoable.
 
 **→ Produces** the declared depth, the project description and the recorded
 host, all carried into every step below.
@@ -142,19 +126,18 @@ and every one of them is used on the first commit** — `AGENTS.md`, `README.md`
 `scripts/` with the two validators, the parse they share, its prefix data and
 their own README.
 
-**Copy the dotfiles too.** `.gitignore` is the one the project cannot do
-without: it keeps bytecode, machine-local settings and everything regenerated
-out of the history.
+**Copy the dotfiles too** — `.gitignore` keeps bytecode, machine-local
+settings and everything regenerated out of the history.
 
 **If the project will take contributions from more than its owner**, also emit
 `assets/CONTRIBUTING.md` and fill in its placeholders. For a single owner it
-is ceremony, and it can arrive later with the first contributor.
+can arrive later with the first contributor.
 
 Then, in one pass, so the first commit is coherent:
 
 | File | Fill in |
 | ---- | ------- |
-| `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running; placeholders left here are what make later sessions guess |
+| `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `architecture/README.md` | The status table — one row per layer, each saying `Local`, `External`, `Out of scope` or a named `Gap`. On a fresh project most rows are `Gap — not yet started`, and layer 0 is `Out of scope` unless the subject is an organization |
 | Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
@@ -171,9 +154,8 @@ home of the rule. Emit what it activated: for a GitHub repository,
 **No layer folder is created until it has something to hold.** The templates
 for all of them are in the plugin's `assets/layers/`, and the skill that first
 fills a layer emits its README at that moment. What the project gets on day one
-is one row per layer in `architecture/README.md`, and the row is the whole
-point: it says whether this model owns the layer, another model does, it is out
-of scope, or it is a gap — which an empty README never said.
+is one row per layer in `architecture/README.md`, saying whether this model
+owns the layer, another model does, it is out of scope, or it is a gap.
 
 | Depth | Layer 0 row | Domains |
 | ----- | ----------- | ------- |
@@ -181,13 +163,9 @@ of scope, or it is a gap — which an empty README never said.
 | **2 — Organization** | `Gap` until `discover-business-model` fills it | Not mentioned |
 | **3 — Enterprise** | `Gap` until `discover-business-model` fills it | A row per business line, added by `model-domains` |
 
-An empty folder is not a plan, and a README saying "not started" is a file a
-reader has to open to learn nothing. The row says it on the page they are
-already on.
-
 If no stack is chosen yet and this is a small application, use
-`stack-selection` rather than re-deriving one, and record the choice when
-`5_technology/` is first emitted.
+`stack-selection` rather than deciding from memory, and record the choice —
+with its date — when `5_technology/` is first emitted.
 
 **← Needs** the declared depth.
 
@@ -197,8 +175,7 @@ If no stack is chosen yet and this is a small application, use
 
 Create scope document `1_*.md` in `architecture/scope/` with
 `write-scope-document`, and index it in `architecture/scope/README.md`.
-Discovery is a full initiative, and this is the project's first — which is why
-the index is not empty on day one.
+Discovery is a full initiative, and this is the project's first.
 
 **← Needs** the project description.
 
@@ -219,37 +196,29 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 | `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles that gate every later change, approved at **Direction** |
 | `discover-business-model` | Depth 2 or 3 | The canvases, approved at **Direction** before anything is derived from them; `discover-strategy` then derives the strategy layer |
 | `model-domains` | Depth 3, after the enterprise level | One charter per business line, with its exposed and consumed services |
-| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, approved at **Understanding** and **Design** |
+| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, approved at **Understanding** |
 | `stack-selection` | No stack chosen, small application | A recorded choice in `5_technology/` |
 
 ## ✎ Worked example
 
 > **"I want to build a small tool that reformats our export files."**
 >
-> Depth 1, announced as: *"You're building one application, so I'll treat this
-> as Depth 1 — a light strategy layer (goals and principles, enough to judge
-> changes against), no business-model canvases, and one approval gate before
-> code. If this turns into modelling how the business works, say so and we'll
-> deepen it — that's a normal change, not a restart."*
->
-> Then hand off to `discover-strategy`. The Requester could have corrected the
-> depth in one sentence, and the tool itself is still unbuilt — which Step 5
-> says out loud rather than leaving them to notice.
+> One application, so Depth 1: a light strategy layer, no business-model
+> canvases, layer 0 `Out of scope` in the status table. Scaffold emitted and
+> filled, scope document `1_*.md` opened, then hand off to
+> `discover-strategy`. The tool itself is still unbuilt, which Step 5 says
+> rather than leaving the Requester to notice.
 
 ## ⚠ Anti-patterns
 
 - Inferring the subject, the depth or the host from the repository instead of
   asking. A remote that exists today is not a statement about where the
   project will live.
-- Emitting `assets/github/` onto a project that is not on GitHub, so the
-  project carries two files that look like they run and do not.
+- Emitting `assets/github/` onto a project that is not on GitHub.
 - Writing a workflow from scratch instead of emitting the one in `assets/`.
-- Picking a depth without saying which, why, and how to change it later.
 - Writing the strategy here. Bootstrap hands off to discovery, which does it
   with the Requester against gates.
-- Creating a layer folder before it has anything to hold. The row in
-  `architecture/README.md` is what says the layer exists and is empty; a
-  folder saying it too is a file a reader opens to learn nothing.
+- Creating a layer folder before it has anything to hold.
 - Leaving the Requester's original request unmentioned once discovery
   finishes, so a docs-only PR reads as the process having failed to build
   anything.
@@ -272,5 +241,4 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 - No empty layer folder exists.
 - Scope document `1_*.md` exists and is indexed.
 - `python3 scripts/check_links.py` and `python3 scripts/check_model.py` both
-  pass. They came with the scaffold, so every project has them from its first
-  commit.
+  pass.

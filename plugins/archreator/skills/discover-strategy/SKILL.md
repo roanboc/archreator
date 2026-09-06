@@ -11,11 +11,10 @@ metadata:
 # ⚙ Discover the strategy
 
 When this skill applies, **the entire initiative is discovery**: no code, no
-application design, no stack decisions. The deliverables are the strategy
-layer, the key business elements it implies, and a scope document recording
-**Direction**. Whatever request triggered the discovery follows as a separate
-initiative, which re-enters `align-change-through-layers` and finds the
-strategy filled in and current.
+application design, no stack decisions. The deliverables are the strategy layer,
+the key business elements it implies, and a scope document recording
+**Direction**. The request that triggered it follows as a separate initiative
+through `align-change-through-layers`.
 
 ## ⊕ When to use this
 
@@ -34,8 +33,7 @@ strategy filled in and current.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.3`, and owns **Direction** — the approval every later
-initiative is judged against.
+Realizes `BPROC1.3`, and owns **Direction**.
 
 ```mermaid
 flowchart TD
@@ -61,36 +59,32 @@ flowchart TD
 
 ## ⚓ Invariants
 
-- **Ask, don't assume.** Every element comes from a Requester answer, an
-  existing document, or observable fact — never from what a project like this
-  "usually" wants. What cannot be answered yet is marked **"Pending — future
-  initiative"** or logged as an open question with the interpretation adopted.
-- **Small batches, one theme at a time.** Three to five questions per round in
-  the Requester's business language, not ArchiMate vocabulary — "who would be
-  upset if this didn't exist?" beats "enumerate your stakeholders".
+- **An element comes from a Requester answer, an existing document, or an
+  observable fact.** What no source settles is the agent's call — adopted,
+  applied, and recorded with its `Source` cell reading `adopted — <the call>`
+  (`align-change-through-layers` § Ask only what blocks the work now). What
+  nobody can answer yet is marked **"Pending — future initiative"**.
+- **One theme at a time, in the Requester's business language, not ArchiMate
+  vocabulary** — "who would be upset if this didn't exist?" beats "enumerate
+  your stakeholders".
 - **Consolidate as you go.** Goals differing only in wording are one goal; a
-  capability named twice at different granularity is one capability. A
-  strategy layer with six load-bearing goals is worth more than one with
-  twenty, because every later initiative gets checked against it and nobody
-  checks against twenty. `document-style` § Consolidate before you
-  enumerate holds the rules.
+  capability named twice at different granularity is one capability.
+  `document-style` § Consolidate before you enumerate holds the rules.
 - **Revision, not amnesia.** Where the layer already has real content, start
   from it: confirm what still holds, and focus on what the new requirement
   bends.
 - **Derive, don't re-ask.** Where the canvases are filled, the Requester has
-  already answered most of themes 1, 2, 4 and 5 in business language and had
-  them approved at Direction. Start each theme from the blocks it derives from,
-  draft the elements, and ask only what the canvases leave genuinely open.
-  Re-asking a question already answered on an approved canvas is how a gated
-  process loses trust. Note the source block on each derived element.
+  already answered most of themes 1, 2, 4 and 5 and had them approved at
+  Direction. Start each theme from the blocks it derives from, draft the
+  elements, and ask only what the canvases leave genuinely open. Note the
+  source block on each derived element.
 
 ## ⚙ Steps
 
 ### 1 — Run the conversation, theme by theme
 
-The order matches the strategy layer's own analysis order: who wants what and
-why, then what the project must be able to do, then how value flows — and only
-then the key business elements underneath.
+Themes run in order: who wants what and why, then what the project must be able
+to do, then how value flows, then the key business elements underneath.
 
 | # | Theme | Document | The questions that open it |
 | - | ----- | -------- | -------------------------- |
@@ -101,43 +95,37 @@ then the key business elements underneath.
 | 5 | **Value stream** | `3_value-stream.md` | From the first stakeholder need to value delivered, what are the stages? Which capability serves each stage? |
 | 6 | **Key business elements** | `architecture/2_business/` | Who are the actors and roles — and is any role performed or assisted by an AI, at what autonomy level and decision rights? What core services are offered, what main business objects are handled, and which terms and rules came up repeatedly? |
 
-**⚖ Judgement.** Two themes behave differently depending on the subject.
-
-**Theme 3 has no canvas source.** Principles are discovered directly with the
+**⚖ Judgement. Theme 3 has no canvas source.** Principles are discovered directly with the
 Requester on both tracks, so ask these questions even where the canvases are
 filled and every other theme is being derived.
 
 **Theme 4, on an organization, runs through `process-and-capability-levels`.**
-Capabilities are levelled, seeded from a named industry reference as a
-proposal the Requester confirms, and detailed below level 2 only where a pain
-justifies it. Asking an organization to recall its capabilities from a blank
-page is the version of this theme that produces an org chart.
+Capabilities are levelled, seeded from a named industry reference as a proposal
+the Requester confirms, and detailed below level 2 only where a pain justifies
+it.
 
-**The capability areas are the subject's own.** An organization that builds
-a product will recite the product's abilities — what the product does for
-its users — and those belong in the product's model, not here. The canvas
-already carries the answer: one area per key activity, since a key activity
-is a capability seen as work. If an area reads true with the product's name
-substituted for the organization's, it is the product's.
+**The capability areas are the subject's own.** An organization that builds a
+product will recite the product's abilities, and those belong in the product's
+model, not here. Take one area per key activity on the canvas; if an area reads
+true with the product's name substituted for the organization's, it is the
+product's.
 
-Theme 6 discovers the **key** business elements — enough for the strategy to
-be judged coherent and for Direction to mean something. Full business and
-information alignment still happens per initiative.
+Theme 6 discovers the **key** business elements — enough for the strategy to be
+judged coherent. Full alignment still happens per initiative.
 
 **→ Produces** the answers, theme by theme.
 
 ### 2 — Write the layer as you go
 
 Update the affected documents after each round and reflect a short summary
-back, so a misunderstanding surfaces immediately. The documents are the record
-of the conversation, not a transcript kept elsewhere.
+back, so a misunderstanding surfaces immediately.
 
 **← Needs** the answers from Step 1.
 
 A folder that does not exist yet is created now, from the plugin's assets:
 `assets/layers/1_strategy/` gives the layer its README, the first business
-elements do the same with `assets/layers/2_business/`, and the first filed
-source with `assets/layers/reference/`. Nothing was waiting empty.
+elements `assets/layers/2_business/`, the first filed source
+`assets/layers/reference/`.
 
 Each document opens `◐ Draft catalogue` and its tables carry `Source` and
 `Notes` until Direction — `architecture-document-style` § Document status. Where
@@ -149,16 +137,13 @@ the Requester provided anything to work from, it is filed in
 
 ### 3 — Write the scope document
 
-Discovery is a full initiative, not a detour. Create it with
-`write-scope-document` **before** presenting Direction, so the Requester approves
-against a concrete document.
+Create it with `write-scope-document` **before** presenting Direction, so the
+Requester approves against a concrete document.
 
 The alignment table records the impact on layers 1–2 with an explicit "not
 started" verdict for the rest. The Approvals table carries this skill's
-Direction row — the second one, where `discover-business-model` handed over,
-beside the row that sitting already wrote — and no rows for Understanding or
-Design: a docs-only discovery produces no code, so neither could have
-applied, and a gate that could not have applied gets no row.
+Direction row — the second one, where `discover-business-model` handed over —
+and nothing else: a gate that was not granted gets no row.
 
 **→ Produces** `architecture/scope/<n>_*.md`, and its row in the index.
 
@@ -171,12 +156,11 @@ stream, key business elements — with **full branch links to each document
 behind it** (`align-change-through-layers` § Show the Requester what they are
 approving), and ask explicitly for approval of the strategy.
 
-Record the approval in the Approvals table: who, when, what was shown, and
-move every document it covered from `◐` to `● Validated at Direction`, emptying
-`Notes` as you go — each note becomes a fact in the model, a row in the
-open-questions log, or nothing. Only after Direction is granted may an
-implementation initiative build on this strategy. If changes are requested,
-revise from Step 2 and present again, leaving the status lines where they are.
+Record the approval in the Approvals table — who, when, what was shown — and
+promote every document it covered (`architecture-document-style` § Document
+status). Only after Direction is granted may an implementation initiative build
+on this strategy. If changes are requested, revise from Step 2 and present
+again, leaving the status lines where they are.
 
 **← Needs** the strategy layer, the scope document.
 
@@ -192,21 +176,18 @@ revise from Step 2 and present again, leaving the status lines where they are.
 
 ## ✎ Worked example
 
-> A project created from the scaffold gets its first feature request. Step 1c
-> of the spine finds placeholders, so the initiative becomes discovery. Theme
-> 2 yields eleven goals; consolidation leaves six, and the Direction summary says
-> so. Direction is granted against branch links to three documents — and the
-> feature that triggered all this is then opened as its own initiative, which
-> is the thing the closing step has to say out loud.
+> A project created from the scaffold gets its first feature request. Step 1c of
+> the spine finds placeholders, so the initiative becomes discovery. Theme 2
+> yields eleven goals; consolidation leaves six, and the Direction summary says
+> so. Direction is granted against branch links to three documents, and the
+> feature that triggered it is opened as its own initiative.
 
 ## ⚠ Anti-patterns
 
 - **Writing down a reading of a person.** A transcript summary records
-  decisions, constraints, numbers and names — never who seemed frustrated or
-  whose team is difficult. A repository keeps a sentence long after anyone can
-  correct it. See `architecture-document-style` § A summary of a meeting
-  records facts, not judgements.
-
+  decisions, constraints, numbers and names, never who seemed frustrated
+  (`architecture-document-style` § A summary of a meeting records facts, not
+  judgements).
 - Filling an element from what a project like this usually wants.
 - Re-asking a question the Requester already answered on an approved canvas.
 - Twenty goals, because nobody checks a change against twenty.
@@ -220,7 +201,6 @@ revise from Step 2 and present again, leaving the status lines where they are.
 - Every element names what realizes it, or is marked "Pending — future initiative".
 - Derived elements note the canvas block they came from.
 - The scope document's alignment table covers every layer, and its Approvals
-  table has a row for every gate reached, and for any that could have applied
-  and did not — `N/A` with a reason.
-- Open questions are logged for everything adopted but unconfirmed.
+  table has a row for every gate granted and none for one that was not.
+- Every call the agent adopted is recorded where it applies, still marked `◐`.
 - The request that triggered discovery has been named, and offered as the next initiative.

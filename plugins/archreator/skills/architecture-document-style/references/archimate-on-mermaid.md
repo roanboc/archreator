@@ -2,13 +2,11 @@
 
 _Reference for [`architecture-document-style`](../SKILL.md) § What is here, and what is one file away._
 
-Read this before drawing anything. It carries the four devices that encode
-ArchiMate semantics onto Mermaid, and the rules for where a diagram goes.
-
-ArchiMate has no native Mermaid profile — no element icons, no standard
-shapes. These documents encode ArchiMate semantics onto Mermaid flowcharts
-with four devices, and **this file is the single source** for all of them. Copy its values;
-never re-tabulate them in a document.
+Read this before drawing anything. ArchiMate has no native Mermaid profile —
+no element icons, no standard shapes — so these documents encode its semantics
+onto Mermaid flowcharts with four devices, and **this file is the single
+source** for all of them. Copy its values; never re-tabulate them in a
+document. The rules for where a diagram goes are below them.
 
 ## 1. Node labels: one line, identifier last
 
@@ -19,26 +17,21 @@ never re-tabulate them in a document.
 `✦ <Capability name> [CAP#]`. The `#` marks an example, not an element.
 
 **One line, always.** A label spanning two lines needs the viewer to render
-`<br>`, and whether it does depends on that viewer's HTML-label setting — so
-the same diagram reads correctly in one place and runs together into a single
-string in another. A single-line label cannot break anywhere. The identifier
-sits last in brackets, still in the same place on every node, and the tables
-below the diagram carry the full context.
+`<br>`, and whether it does depends on that viewer's HTML-label setting. The
+identifier sits last in brackets, in the same place on every node, and the
+tables below the diagram carry the full context.
 
 **The stereotype does not appear on the node.** `«Business Service»` is written
 in exactly one kind of diagram: one whose **subject is the notation** — the
 legend under "How to read this document", and the examples in this section.
-Everywhere else the type is already carried three times, by glyph, shape and
-colour, with the legend one screen above; a fourth carrier is the widest thing
-on the node and the least informative. A legend node reads
-`<glyph> «Stereotype» <what the type is> [<PREFIX>#]`, and it is the only
-place the stereotype and the example identifier earn their width.
+Everywhere else glyph, shape and colour carry the type already, with the legend
+one screen above. A legend node reads
+`<glyph> «Stereotype» <what the type is> [<PREFIX>#]`.
 
 **One carve-out: an actor's kind rides on the node.** `(Human)`, `(AI)` or
-`(Hybrid)` stays in the label — `⚇ Requester (Human) [ACT1]` — because it is
-information nothing else carries. Colour distinguishes an `(AI)` actor and
-nothing distinguishes a `(Hybrid)` one, and defaulting a reader to "person" is
-the mistake the actor considerations exist to prevent
+`(Hybrid)` stays in the label — `⚇ Requester (Human) [ACT1]` — because nothing
+else carries it: colour distinguishes an `(AI)` actor and nothing distinguishes
+a `(Hybrid)` one
 ([`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md) § What
 each element represents).
 
@@ -61,25 +54,17 @@ legend says which is which.
 | Canvas (VPC) | `◍` Customer Segment · `⚙` Job · `✖` Pain · `✔` Gain · `▣` Product · `⊖` Pain Reliever · `⊕` Gain Creator |
 | Canvas (BMC) | `⧉` Key Partner · `⚙` Key Activity · `▤` Key Resource · `⊸` Channel · `⇄` Customer Relationship · `▲` Revenue Stream · `▼` Cost |
 
-`⌕` is ArchiMate's Assessment magnifier, `◎` its Goal, `◉` its Outcome, `⊸`
-its interface lollipop; `✳` echoes the Driver's steering wheel; `▧` is a
-deliberate near-neighbour of `▦`, because a Business Object and the Data
-Object holding it are usually one thing seen from two layers; `⊖`/`⊕` and
-`▲`/`▼` make canvas arithmetic visible. **Unicode only** — glyphs render
-everywhere Markdown does, which was found not to be true of the alternatives
-tried before (SVG icons, emoji, image tags).
-
-Repeats across groups are deliberate: a Key Resource *is* a Resource, a
-Channel *is* a Business Interface, and an element that appears in two
-documents should look the same in both.
+**Unicode only** — no SVG icons, no emoji, no image tags. Repeats across
+groups are deliberate: a Key Resource *is* a Resource, a Channel *is* a
+Business Interface, and an element that appears in two documents looks the
+same in both.
 
 ## 3. Element shapes
 
 Within one document each element type takes a distinct Mermaid shape. Shapes
 are scoped **per document**, not globally — Mermaid has about a dozen usable
-ones and ArchiMate has fifty elements — so each document's legend declares
-its own. The assignments below are the defaults; follow them where the
-element appears.
+ones and ArchiMate has fifty elements — so each document's legend declares its
+own. The assignments below are the defaults.
 
 | Shape | Mermaid | Default element |
 | ----- | ------- | --------------- |
@@ -113,10 +98,9 @@ ArchiMate palette:
 | Technology                  | `technology`     | green `#c9e7b7`  |
 | Implementation & Migration  | `implementation` | rose `#ffd6d6`   |
 
-This table is the **single source** for the layer palette; the `architecture-document-style`
-skill and every other document point here for the exact fills. Mermaid
-`classDef` blocks necessarily inline these hexes per diagram (Mermaid has no
-cross-file classDef), but no other prose table restates them.
+This table is the **single source** for the layer palette. Mermaid `classDef`
+blocks necessarily inline these hexes per diagram, but no other prose table
+restates them.
 
 **In a single-layer view, ramp the layer's hue by element type** — light at
 the start of the chain, dark at the end — so type is readable without
@@ -133,50 +117,32 @@ technology, not one motivation element from another.
 | Technology | Service `#c9e7b7` → Artifact `#dcefd0` → Node `#a9d68f` |
 | Implementation & Migration | Plateau `#ffe8e8` → Gap `#ffd6d6` |
 
-Strokes darken with the fill. Text stays `#333` throughout — every fill above
-is light enough to carry it in both GitHub themes.
+Strokes darken with the fill. Text stays `#333` throughout.
 
 **Two colours override the layer's own.** An `(AI)` actor is drawn in the
-Application cyan even inside a business diagram, because a reader should
-never mistake it for a person. And an element borrowed from another layer for
-context keeps its home layer's colour, shape and glyph, so it is recognisable
-as a visitor.
+Application cyan even inside a business diagram, so a reader never mistakes it
+for a person. An element borrowed from another layer for context keeps its home
+layer's colour, shape and glyph, so it reads as a visitor.
 
 ## 5. Relationships are declared in tables; a diagram renders them
 
 **A diagram is a rendering.** Nothing reads one — the projection builds the
-graph from catalogue columns and relationship tables, and a relationship drawn
-in Mermaid and written nowhere else is invisible to every tool and to every
-reader who is not looking at that document.
-
-Two places declare one:
-
-- **A catalogue column**, when its cell is a list of identifiers and nothing
-  else. The header is the relationship's name.
-- **A `## Relationships` table**, beside the diagram it explains, for anything
-  a single row cannot carry — above all a relationship between two peers in one
-  layer, which a catalogue has no column shape for.
-
-Its columns are fixed by position: 1 and 3 hold the two identifiers, 2 and 4
-describe them as `<glyph> «Archetype» <name>`, 5 is the relationship, and
-anything after is notes. No header word is read, so the table works in a model
-written in any language. The worked example and the full rule — where the
-`Pending` marker may go, and what is held against the catalogue — are in
-[`archimate-relationships.md`](./archimate-relationships.md), and not here. **Each end
-names its archetype and its name because a table cell has no glyph, shape or
-colour to carry the type** — and because the name is a copy of what the
-catalogue owns, `scripts/check_model.py` holds the two in step.
-
-**Dashed edges mean Pending in a diagram; a table says it in words**, with the
-same `Pending — future initiative` marker the grounding rule uses.
+graph from catalogue columns and relationship tables, so a relationship drawn
+in Mermaid and written nowhere else is invisible to every tool. Two places
+declare one: a **catalogue column** whose cell is a list of identifiers and
+nothing else, and a **`## Relationships` table** beside the diagram it
+explains, whose columns are fixed by position — 1 and 3 the identifiers, 2 and
+4 `<glyph> «Archetype» <name>`, 5 the relationship, anything after notes. No
+header word is read, so the table works in a model written in any language,
+and `scripts/check_model.py` holds each end's name against the catalogue that
+owns it. The worked example and the full rule are in
+[`archimate-relationships.md`](./archimate-relationships.md).
 
 ## Drawing rules
 
-Two of them are big enough to hold their own sections below — a section's
-diagram comes first (§ Diagrams come first, one per section), and every
-element document opens with the legend that lets the diagrams below it drop
-their stereotypes (§ Every element document opens with "How to read this
-document"). What remains here is the rest:
+Two of them hold their own sections below — § Diagrams come first, one per
+section, and § Every element document opens with "How to read this document".
+What remains here is the rest:
 
 **Dashed edges mean Pending; solid is true today.** The fact lives in a table
 either way — a dashed arrow renders a Pending row, and is never the
@@ -216,10 +182,7 @@ elements' layer or aspect:
 - **Influence chains motivation** — stakeholder through driver to goal and
   outcome — and **specialization trees**, drawn rarely and small.
 
-The **aspect** is the corollary, not the rule: passive structure is mostly
-composed and aggregated, so it nests; behavior mostly triggers and flows, so
-it chains; active structure is mostly assigned and serving, so it connects.
-Each element's aspect is in
+The **aspect** is the corollary, not the rule. Each element's aspect is in
 [`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md) § What
 each element represents; the relationships and their role names are
 [`archimate-relationships.md`](./archimate-relationships.md) § What each
@@ -227,16 +190,21 @@ relationship represents.
 
 ## Diagrams come first, one per section
 
-**A section that has a diagram opens with it**, and the tables and prose
-below describe it. Not the reverse: a reader who meets three tables before a
-picture has to build the picture themselves, and most will not.
+**This rule is per section, not per document.** A section that has a diagram
+**opens with it**, and *that section's* tables and prose follow immediately
+below it. The next section opens with its own diagram, and so on down the
+document.
+
+**Never stack a document's diagrams at the top.** A gallery of every view
+ahead of all the prose is the failure this rule names: each diagram is then
+separated from the tables that explain it, and a reader meeting three pictures
+before a single row cannot tell which one describes what.
 
 **One diagram per section, not one per document.** Past roughly fifteen
 elements a single view of a layer can only be a selection, and a selection
-that looks complete is worse than several honest parts — it teaches the
-reader something false about the size of the model. Draw one link of the
-chain per section, letting consecutive diagrams overlap by one rank so they
-can be read as a sequence.
+that looks complete teaches the reader something false about the size of the
+model. Draw one link of the chain per section, letting consecutive diagrams
+overlap by one rank so they can be read as a sequence.
 
 **A diagram earns its place by saying something the table cannot.** Which
 element has the most edges, which has none, where every path converges,
@@ -252,17 +220,26 @@ legend node carries everything a reader needs to decode the diagrams below —
 element's own shape and colour. **This is the one diagram that names the
 stereotypes**, which is what lets every diagram below it drop them.
 
-**The legend diagram is the whole section — no table restates it.** The
-diagram already renders each type's shape and colour, and its nodes name the
-glyph, the stereotype and the ID prefix; a glyph/shape/prefix table beside it
-is a second copy the reader can only reconcile by matching glyphs.
+**The legend marks itself with `%% legend` as the first line of its Mermaid
+body**, on the line after `flowchart …`:
+
+```
+flowchart LR
+  %% legend
+  stk([" ◍ «Stakeholder» whose interests the model serves [STK#] "])
+```
+
+The validator reads that marker, not the heading above it, so a stereotype
+label is permitted in this diagram and nowhere else whatever language the
+document's headings are written in.
+
+**The legend diagram is the whole section — no table restates it.** Its nodes
+already name the glyph, the stereotype and the ID prefix, and the diagram
+renders each type's shape and colour.
 
 **A layer README that only indexes other documents is exempt**: it has no
-elements to legend, and giving it one would be ceremony rather than help.
+elements to legend.
 
-The cost is a few lines per document. What it buys is that **each layer is
-self-documenting**: a reader arriving from a deep link, or an agent loading
-one file, has the notation in front of them and needs no second file open.
-That matters more here than in most documentation, because these documents
-are read one at a time and out of order.
+Each layer is then self-documenting: a reader arriving from a deep link has the
+notation in front of them and needs no second file open.
 

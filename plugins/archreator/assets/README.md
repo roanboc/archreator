@@ -3,17 +3,10 @@
 Templates a skill emits into a project **when that project has something to put
 in them.** Nothing here ships on the first commit.
 
-This is the half of the old scaffold that was arriving empty. A generated
-project used to receive forty-four files and six and a half thousand lines
-before anybody had said a word about the project itself — seven layer READMEs
-with nothing in them, two workflows that did not run where they sat, a question
-form for a comment box nobody had switched on. Emptiness is not structure, and
-a folder is not a plan.
-
-So the structure lives here, where an agent reads it, and a project's
+The structure lives here, where an agent reads it, and a project's
 `architecture/README.md` carries a status row per layer instead: `Local`,
-`External`, `Out of scope`, or a named `Gap`. A missing layer becomes a stated
-fact, which an empty README never was.
+`External`, `Out of scope`, or a named `Gap`. A missing layer is a stated
+fact; an empty README never was one.
 
 | Asset | Emitted by | When |
 | ----- | ---------- | ---- |
@@ -34,10 +27,9 @@ fact, which an empty README never was.
 ## Their links resolve where they land, not here
 
 A template links the way the emitted copy needs to — `../README.md` means the
-project's architecture front door. Resolving those here would be asking whether
-they work in the one place they were never meant to, so `check_links.py` skips
-this tree and the project's own copy of it checks the copy that matters.
+project's architecture front door — so `check_links.py` skips this tree and the
+project's own copy checks the copy that matters.
 
-What that would let rot instead is caught by `check_skills.py`: an asset no
+What that would let rot is caught by `check_skills.py` instead: an asset no
 skill names, and an index row naming an asset that is not here, are both
 errors.

@@ -16,10 +16,6 @@ purpose larger than itself. Some of its customers are external; some are other
 domains. The model shape repeats at every level, so a business line can be
 understood on its own terms.
 
-Reaching for this is a decision, not a default. At Depth 2 the whole
-organization shares one `architecture/` tree, and that is correct until it
-isn't.
-
 ## ⊕ When to use this
 
 | The situation | What it looks like |
@@ -74,22 +70,18 @@ flowchart TD
   you would not want another domain building on it, do not list it.
 - **The grounding rule still applies.** Every exposed service names the team,
   written procedure or component that realizes it, or is marked "Pending —
-  future initiative". A charter full of aspirations is how a federated model
-  rots.
+  future initiative".
 - **A domain's exposed services are its contract; everything else is
   internal.** Referencing another domain's internal element is a modeling
   error, not a shortcut.
-- **Say the verdict out loud, with its reason.** "Three of the five tests hold
-  — own customers, own economics, own decision rights — so I would model
-  Advisory as a domain" is a sentence the Requester can disagree with.
-  Silently restructuring the tree is not.
+- **State the split verdict with the tests that carried it** before any folder
+  moves. Silently restructuring the tree is not a verdict.
+- **Work domains one at a time.** Nothing coordinates two agents editing two
+  domains at once.
 
 ## ⚙ Steps
 
 ### 1 — Decide whether to split at all
-
-Splitting costs a charter to maintain, a boundary to respect, and a set of
-Requesters to consult on every contract change.
 
 **⚖ Judgement.** Carve a domain out only when **two or more** hold: its own
 customers, its own economics, its own decision rights, its own capabilities, a
@@ -111,9 +103,7 @@ lives in another repository.
 
 The domain's `README.md` **is** its charter — the contract between it and the
 rest of the organization, and the only part other domains may depend on. Write
-it before filling in any layer: the charter is what the split is *for*, and
-writing it first is what catches a domain that turns out to have nothing to
-expose.
+it before filling in any layer.
 
 ```markdown
 # Domain — <Name>
@@ -199,10 +189,10 @@ business's own word for the domain over an invented one.
 ## ✎ Worked example
 
 > An advisory line has its own clients, its own margin and its own hiring
-> decisions — three tests — but nobody can name what it exposes. The verdict
-> is stated as a "not yet", with the reason. Six months later it publishes a
-> referral service other lines consume, the fifth test holds, and the split
-> proceeds with that service as the first row of its charter.
+> decisions — three tests — but nobody can name what it exposes, so the verdict
+> is "not yet". Six months later it publishes a referral service other lines
+> consume, the fifth test holds, and the split proceeds with that service as
+> the first row of its charter.
 
 ## ⚠ Anti-patterns
 
@@ -230,8 +220,6 @@ business's own word for the domain over an invented one.
 
 ## Cross-domain changes
 
-A contract has two sides, and that yields four rules.
-
 | Situation | What it requires |
 | --------- | ---------------- |
 | A change inside a domain touching nothing exposed | The owning domain's Requester only. Most changes |
@@ -242,11 +230,3 @@ A contract has two sides, and that yields four rules.
 A change spanning domains is still **one** initiative with one scope document
 — its alignment table names each domain touched, and its Approvals table
 carries an Understanding row per Requester.
-
-## Not yet: parallel work
-
-Domain boundaries are what would make parallel work by several agents safe —
-one agent per domain, coordinating only on charters. That is not set up. Doing
-it well needs a queryable projection of the model so agents can see each
-other's work (`stack-selection` § A persisted projection needs one of four
-triggers). Until then, work domains one at a time.

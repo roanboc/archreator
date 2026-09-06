@@ -2,50 +2,35 @@
 
 _[← Repository README](../../../README.md)_
 
-The eighteen skills that are the archreator method. Your coding agent picks
-them up automatically from their `description:` frontmatter — you don't
-invoke them by name in normal use, they surface when their situation
-applies.
+The eighteen skills that are the archreator method, and the only catalogue of
+them. Your coding agent picks them up from their `description:` frontmatter —
+they surface when their situation applies rather than being invoked by name.
 
 **A skill is named for what it does.** A verb and an object —
 `establish-project`, `write-scope-document` — is a skill you run; a noun
-phrase — `architecture-document-style` — is one you consult. That is the rule
-[`process-and-capability-levels`](./process-and-capability-levels/SKILL.md)
-gives for naming a level-2 process, applied to the skills that realize them,
-so a reader can tell from the name alone whether a skill is run or consulted.
+phrase — `architecture-document-style` — is one you consult.
 
 **Three kinds, marked in the tables and in each skill's own title.** `⚙` a
-procedure you run, `▤` a document you write, `※` a rulebook you consult. The
-grouping below is by *process*, and two of the bands hold both procedures and
-documents, so the kind is its own column rather than something the grouping
-implies. [`docs/skill-format.md`](../../../docs/skill-format.md) specifies all
-three.
+procedure you run, `▤` a document you write, `※` a rulebook you consult.
+[`docs/skill-format.md`](../../../docs/skill-format.md) specifies all three.
 
-**The order below is the order they are used in**, which is not the order the
-processes of [`docs/process/`](../../../docs/process/README.md) are numbered in:
-`BPROC5` joined the model last and runs second, and an assigned identifier is
-never reallocated. The four rulebooks that realize no process come last.
+**The order below is the order they are used in**, not the order the processes
+of [`docs/process/`](../../../docs/process/README.md) are numbered in. The four
+rulebooks that realize no process come last.
 
 This folder sits inside the **`archreator` plugin**, whose root is
 `plugins/archreator/` — its manifest is written twice, as
-[`plugin.json`](../plugin.json) for the hosts that read the plugin root and
-[`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json) for the one
-that doesn't, and the marketplace that publishes it is
+[`plugin.json`](../plugin.json) and
+[`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json), and the
+marketplace that publishes it is
 [`.claude-plugin/marketplace.json`](../../../.claude-plugin/marketplace.json)
 at the repository root.
 
-**A skill only links to files inside this folder.** Installing the plugin
-copies its directory to a cache, so a relative link out of it resolves to
-nothing for anyone who installed rather than cloned. Skills refer to a
-consuming project's documents by naming the path in a code span —
-`` `architecture/README.md` `` — which reads correctly on both paths.
-
-**This page is the catalogue.** It is the only one — the rest of the
-repository links here rather than restating it, and the scaffold's
-`AGENTS.md` deliberately carries no copy: a generated project's skills come
-from the plugin, and a table restated there was a table that drifted.
-[`check_skills.py`](../scripts/check_skills.py) holds this one against the
-skill directories that exist.
+**A skill only links to files inside this folder**, and names a consuming
+project's documents in a code span — `` `architecture/README.md` `` — because
+installing the plugin copies this directory to a cache.
+[`check_skills.py`](../scripts/check_skills.py) holds the catalogue below
+against the skill directories that exist.
 
 ## Establishing the model — `BPROC1`
 
@@ -67,9 +52,8 @@ Turning a described present into a destination and an order for reaching it.
 | ----- | ---- | ----------------- |
 | [`plan-the-transition`](./plan-the-transition/SKILL.md) | ⚙ Procedure | The question is where the architecture should go and in what order — target plateaus, a gap register and a sequence |
 
-The only skill whose output describes a future. Everything else in the corpus is
-held to describing what is true now, which is a rule worth keeping precisely
-because exactly one folder is exempt from it.
+The only skill whose output describes a future; everything else in the corpus
+describes what is true now.
 
 ## Delivering a change — `BPROC2`
 
@@ -88,7 +72,7 @@ Turning a model that has drifted back into a description of today.
 
 | Skill | Kind | Reach for it when |
 | ----- | ---- | ----------------- |
-| [`restate-current-state`](./restate-current-state/SKILL.md) | ⚙ Procedure | The model has accumulated history — shipped "Pending"s, superseded elements, resolved questions — and no longer reads as a description of today |
+| [`restate-current-state`](./restate-current-state/SKILL.md) | ⚙ Procedure | The model has accumulated history — shipped "Pending"s, superseded elements — and no longer reads as a description of today |
 | [`record-decision`](./record-decision/SKILL.md) | ▤ Document | One consequential call smaller than an initiative — most often an AI actor's autonomy level |
 | [`answer-architecture-question`](./answer-architecture-question/SKILL.md) | ⚙ Procedure | A reader wants a focused, disposable brief about one element, domain, concern, impact or decision |
 
@@ -100,10 +84,7 @@ Turning a model that has drifted back into a description of today.
 
 ## The rulebooks
 
-Consulted rather than run, and realizing no process. `document-style` governs
-every document in the repository; `architecture-document-style` adds what a
-model needs and obeys it; `process-and-capability-levels` shapes a catalogue;
-and `stack-selection` is a decision aid reached for inside `BPROC2.2`.
+Consulted rather than run, and realizing no process.
 
 | Skill | Kind | Reach for it when |
 | ----- | ---- | ----------------- |

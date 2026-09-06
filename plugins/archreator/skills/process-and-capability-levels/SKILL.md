@@ -10,10 +10,8 @@ metadata:
 # ※ Process and capability levels
 
 An organization's processes and capabilities are the two catalogues that grow
-without limit. Every other layer is bounded by something real — the products
-that exist, the systems that run, the people employed — but "decompose the
-processes" has no natural floor, and an agent that finds none will keep going.
-The result is a model that is correct, complete, and read by nobody.
+without limit: every other layer is bounded by something real, and "decompose
+the processes" has no natural floor.
 
 `architecture-document-style` governs how these documents are written. This
 governs how they are **shaped**.
@@ -35,8 +33,8 @@ governs how they are **shaped**.
 
 ## ⌖ Where this sits
 
-**Realizes no process.** It is a rule the discovery and alignment procedures
-comply with, reached for while they run rather than run on its own.
+**Realizes no process.** A rule the discovery and alignment procedures comply
+with while they run.
 
 ## ※ Rules
 
@@ -50,17 +48,15 @@ decomposition cites the `PAIN` on the value proposition canvas it serves, or
 the `ASM` or `DRV` that pain became. A branch with no such citation is not
 detailed, and **says so in the focus table** rather than trailing off.
 
-Horizontal completeness is what makes a model trustworthy: a reader who sees
-the whole map knows nothing is hidden. Vertical completeness is what makes it
-unreadable. Only the second is optional, so only the second gets cut. This is
-`document-style` § Consolidate before you enumerate applied to
-depth instead of to count.
+Horizontal completeness is what makes a model trustworthy; vertical
+completeness is what makes it unreadable. Only the second is optional, so only
+the second gets cut — `document-style` § Consolidate before you enumerate,
+applied to depth instead of to count.
 
 ### What is here, and what is one file away
 
 **This page holds the judgement — how far to decompose, and what a process is
-as against a capability.** The lookup content is one file away, read when you
-have already decided a level is needed.
+as against a capability.** The lookup content is one file away.
 
 | Read | When |
 | ---- | ---- |
@@ -73,8 +69,7 @@ have already decided a level is needed.
 A process is work the organization *does*, in sequence, with a trigger. A
 capability is what it *is able to do*, with no sequence and no trigger —
 "Claims adjudication", not "Adjudicate a claim". A capability map whose entries
-all start with a verb is a process list wearing the wrong label, and it is the
-most common failure of this document.
+all start with a verb is a process list wearing the wrong label.
 
 | Level | ID | It is | Usual count |
 | ----- | -- | ----- | ----------- |
@@ -82,19 +77,15 @@ most common failure of this document.
 | **2 — Capability** | `CAP1.2` | A distinct ability, realized by people, systems and information | 3–8 per area |
 | **3 — Sub-capability** | `CAP1.2.3` | Only where a pain justifies it | — |
 
-Only the leaves name a realizing artifact. An area is realized by its parts,
-and asking it to point at something real is the grounding rule applied one
-level too high.
+Only the leaves name a realizing artifact: an area is realized by its parts.
 
 ## ✎ Worked example
 
 > A consultancy's operational band derives cleanly from the value stream, and
-> the Evaluation band comes back empty. That is reported as a finding — the
-> organization has documented how it delivers and not how it improves — rather
-> than left blank. Capabilities are seeded from a named cross-industry
-> framework, taken back one area at a time, and the two areas the Requester
-> adds are the ones the reference could not have known. One branch reaches
-> level 3, citing `PAIN2`; the focus table gives the other seven a dash.
+> the Evaluation band comes back empty — reported as a finding rather than
+> left blank. Capabilities are seeded from a named cross-industry framework
+> and taken back one area at a time. One branch reaches level 3, citing
+> `PAIN2`; the focus table gives the other seven a dash.
 
 ## ⚠ Anti-patterns
 

@@ -27,9 +27,9 @@ derived from them.
 ## Analysis order
 
 Files are numbered in the order they are analyzed: first _who we serve and
-what they need_, then _how each offering is delivered and paid for_. The
-value proposition comes first because the business model is built per
-product, and the products are named by the value proposition.
+what they need_, then _how each offering is delivered and paid for_. The value
+proposition comes first — the business model is built per product, and the
+products are named by the value proposition.
 
 | #   | Document                                                             | Elements                                                                          | Question it answers                                     |
 | --- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------- |
@@ -39,9 +39,8 @@ product, and the products are named by the value proposition.
 `1_value-proposition-canvas.md` carries one canvas **per customer segment**;
 `2_business-model-canvas.md` carries one canvas **per product or service**.
 A company with two product lines serving two different segments therefore
-has two of each — and the interesting architecture is usually in what they
-_share_ (capabilities, resources, partners) versus what they don't (channels,
-revenue, cost).
+has two of each, and the interesting architecture is usually in what they
+_share_ versus what they don't.
 
 ### Fit is a rule, not a comment
 
@@ -59,11 +58,10 @@ capability or a customer you have decided not to serve. Say which.
 
 ## From canvas to ArchiMate
 
-This is the load-bearing part of this folder: the canvases are only worth
-filling in if the architecture is *derived* from them. Each block below has
-a defined destination, and the receiving document records where the element
-came from. This table is the **single source** for the mapping; other
-documents and skills link here rather than restating it.
+The canvases are only worth filling in if the architecture is *derived* from
+them. Each block below has a defined destination, and the receiving document
+records where the element came from. This table is the **single source** for
+the mapping; other documents and skills link here rather than restating it.
 
 ### Value Proposition Canvas
 
@@ -94,8 +92,7 @@ documents and skills link here rather than restating it.
 Revenue and cost have no first-class ArchiMate element, and inventing a
 stereotype for them would put the model out of step with the standard. They
 stay as tables in `2_business-model-canvas.md`, keyed by element ID to the
-Product, Resource, or Capability they attach to — which keeps them
-traceable without pretending they are architecture.
+Product, Resource, or Capability they attach to.
 
 ## Layer view
 
@@ -133,8 +130,6 @@ flowchart LR
   classDef strategy fill:#f5deaa,stroke:#c8a24a,color:#333
 ```
 
-The canvas blocks are drawn with the Motivation and Strategy fills because
-that is where they land once derived — the customer profile becomes
-motivation elements, the value map becomes strategy elements. The fills come
-from the `architecture-document-style` rulebook § ArchiMate on Mermaid,
-which stays the single source for the palette.
+The canvas blocks take the Motivation and Strategy fills because that is
+where they land once derived. The palette's single source is the
+`architecture-document-style` rulebook § ArchiMate on Mermaid.

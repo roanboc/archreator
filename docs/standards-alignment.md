@@ -6,10 +6,6 @@ Most of what archreator asks for has an established name. This page holds the
 mapping: for every term the method coins, the standard it corresponds to, and
 whether the coined name or the standard one is the one to use.
 
-A private name is a tax on every reader who already knows the standard one, and
-it hides that a rule has decades of practice behind it rather than being one
-repository's opinion. The mapping exists so that neither cost is paid silently.
-
 ## How to read this page
 
 Each row carries one of three verdicts.
@@ -21,18 +17,12 @@ Each row carries one of three verdicts.
 | **Ours** | No established equivalent. The method is on its own here, and says so rather than implying borrowed rigour |
 
 Mappings that hold only loosely are marked **approximate** in the Note column.
-A correspondence claimed where none holds would be a worse error than coining
-the name.
 
 **A skill names its standard only where the name helps the reader of that
-skill.** `record-decision` says ADR, because a reader who knows the pattern
-recognises it instantly and one who does not can go and read about it.
-`stack-selection` does not say "TOGAF architecture partitioning by level of
-detail", because that would cost a line and buy nothing at the point of use.
-
-So most of the correspondences below live **here and only here**. This page is
-where the mapping is kept; the skills carry a standard's name where it earns
-its space, and the table says which those are.
+skill.** `record-decision` says ADR; `stack-selection` does not say "TOGAF
+architecture partitioning by level of detail". So most of the correspondences
+below live **here and only here**, and the `Named in the skill` column says
+which are the exceptions.
 
 ## Partitioning and scope
 
@@ -54,16 +44,16 @@ its space, and the table says which those are.
 | **Plateau** | ArchiMate **Plateau** (Implementation & Migration) | Adopted | yes | The standard name and the standard meaning: a relatively stable state the architecture passes through |
 | **Gap** | ArchiMate **Gap**; TOGAF **gap analysis** | Adopted | yes | Also standard. What archreator adds is that a gap must name the baseline element it is measured from, which makes a gap register checkable rather than a wish list |
 | **The sequence** — initiatives ordered by dependency, without dates | TOGAF Phase E and F — Opportunities and Solutions, Migration Planning; the **Architecture Roadmap** | Cite | — | Approximate. TOGAF's roadmap carries work packages and timing; this one carries order and preconditions, and refuses dates on the grounds that a stale date stops a document being read |
-| **`architecture/6_transition/` as the only folder describing a future** | Adjacent only: TOGAF's Transition Architectures | **Ours** | — | The partition is archreator's. Confining intent to one folder so that every other document can be read as present tense without qualification has no standard equivalent, and it exists to serve the agent that reads the model, not the architect who writes it |
+| **`architecture/6_transition/` as the only folder describing a future** | Adjacent only: TOGAF's Transition Architectures | **Ours** | — | The partition is archreator's. Confining intent to one folder so that every other document reads as present tense without qualification has no standard equivalent |
 | **A roadmap approves direction, not work** | Adjacent only: the distinction between an approved roadmap and an approved project in most stage-gate governance | **Ours** | yes | Stated as a rule rather than left to practice, because an agent handed a roadmap will otherwise treat it as a backlog it has been told to build |
 
 ## Provenance and standing
 
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
-| **Document status** — `○` not started, `◐` draft catalogue, `●` validated at a gate | Adjacent only: document control and revision status in records management; ISO/IEC/IEEE 42010's *architecture description* has no equivalent | **Ours** | yes | The distinction being marked is not maturity but *authority*: whether a person with the standing to say so has agreed the document is true. No architecture standard marks that on the document itself, and every one of them assumes a reader who knows which is which |
-| **Draft catalogue** — elements identified with notes, not an architecture draft | Adjacent only: an inventory, a discovery log, TOGAF's Baseline Architecture *before* it is validated | **Ours** | yes | The naming is the whole contribution. "Draft architecture" invites a reader to critique the structure; "draft catalogue" tells them the structure is not the claim — the existence of the items is, and it has not been checked |
-| **`Source` and `Notes` columns, and emptying `Notes` at the gate** | Adjacent only: issue logs, RAID logs | **Ours** | yes | The rule that a note cannot survive its gate is the part worth having: it forces every open thread to become a fact, a logged question, or an admission that nobody cared |
+| **Document status** — `○` not started, `◐` draft catalogue, `●` validated at a gate | Adjacent only: document control and revision status in records management; ISO/IEC/IEEE 42010's *architecture description* has no equivalent | **Ours** | yes | The distinction marked is not maturity but *authority*: whether a person with the standing to say so has agreed the document is true |
+| **Draft catalogue** — elements identified with notes, not an architecture draft | Adjacent only: an inventory, a discovery log, TOGAF's Baseline Architecture *before* it is validated | **Ours** | yes | "Draft architecture" invites a reader to critique the structure; "draft catalogue" tells them the structure is not the claim — the existence of the items is, and it has not been checked |
+| **`Source` and `Notes` columns, and emptying `Notes` at the gate** | Adjacent only: issue logs, RAID logs | **Ours** | yes | A note cannot survive its gate: every open thread becomes a fact, a recorded call, or an admission that nobody cared |
 | **`architecture/reference/`** — provided source material, dated and indexed | TOGAF **Architecture Repository**, loosely; ISO/IEC/IEEE 42010 *architecture rationale* | Cite | yes | Approximate. TOGAF's repository is a governed store of reference models and standards; this is narrower and more mundane — the actual documents a client handed over, kept so a claim can be taken back to them |
 | **Date precedence** — the meeting, else the sharing, else the filing | Adjacent only: archival description practice, which distinguishes creation from accession date | Cite | yes | The archival distinction is the same one, and the ordering here is the practical form of it: prefer the date the content is *about* over the date it arrived |
 
@@ -71,7 +61,7 @@ its space, and the table says which those are.
 
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
-| **the three gates** | Architecture board review; Stage-Gate (Cooper) | Cite | — | The named-gate-before-proceeding shape is Stage-Gate's; the subject matter is TOGAF's architecture governance |
+| **the gates** | Architecture board review; Stage-Gate (Cooper) | Cite | — | The named-gate-before-proceeding shape is Stage-Gate's; the subject matter is TOGAF's architecture governance |
 | **The Approvals table** | TOGAF Architecture Contract | Cite | — | Approximate. A Contract is a fuller artifact; this is the record of who approved what, when, and against which document |
 | **Scope document** | TOGAF Architecture Definition Document, narrowed to one initiative | Cite | — | Approximate |
 | **Requester / Agent / Reviewer** | RACI, narrowed to three fixed roles | Cite | — | Approximate. What archreator adds is that the middle role is not assumed human |
@@ -102,7 +92,7 @@ its space, and the table says which those are.
 | **`record-decision`** | **ADR** — Architecture Decision Record (Nygard); MADR | Cite | yes | Its sections parallel MADR's. Not naming the pattern costs it every reader who already knows it |
 | **`shard-stories`** | Vertical slicing; INVEST (Wake) | Cite | partly | The skill names vertical slicing and cites BMAD-METHOD for the context-engineering half. INVEST names the sizing criteria and is not in the skill |
 | **`run-retrospective`** | Retrospective; blameless post-mortem | Cite | yes | |
-| **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | — | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying defaults, not a decision *record* |
+| **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | — | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying criteria, not a decision *record* |
 | **The canvases** | Osterwalder — Business Model Canvas, Value Proposition Canvas | Adopted | yes | |
 | **The skill format** | [AIP](https://github.com/zach-blumenfeld/aip) — the Agent Instruction Protocol | Cite | — | The section vocabulary and the kind-decides-structure idea are AIP's. The fenced-YAML body is not adopted: these skills have no script-backed steps and no graph edges, which is what that format exists to carry. [`docs/skill-format.md`](./skill-format.md) says what was taken and what was left |
 | **`shard-stories`' context packing** | [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) — context-engineered development | Cite | yes | Already cited in the skill itself |

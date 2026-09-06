@@ -3,18 +3,16 @@
 _Reference for [`process-and-capability-levels`](../SKILL.md) § What is here, and
 what is one file away._
 
-Read this when a leveled catalogue is being laid out — processes above all,
-because they are the part of a model business people actually relate to and
-have to understand well. *What* each level must say is
-[`levels-and-descriptions.md`](./levels-and-descriptions.md); *which file* a
-level lives in is [`starting-and-filing.md`](./starting-and-filing.md); how a
-node or an edge is drawn is `architecture-document-style` and its notation
-reference. This page holds only how the content reads once those are settled.
+Read this when a leveled catalogue is being laid out. *What* each level must
+say is [`levels-and-descriptions.md`](./levels-and-descriptions.md); *which
+file* a level lives in is
+[`starting-and-filing.md`](./starting-and-filing.md); how a node or an edge is
+drawn is `architecture-document-style` and its notation reference. This page
+holds only how the content reads once those are settled.
 
 Everything here is a maximum, not a requirement. Combine, reorder or drop an
-artifact when the level's meaning is already clear — the page is right when a
-reader recovers that meaning without reconciling duplicate facts, and wrong
-the moment two artifacts on it say the same thing twice.
+artifact when the level's meaning is already clear, and never let two artifacts
+on the page say the same thing twice.
 
 ## One question per level
 
@@ -29,31 +27,28 @@ answers more than one:
 
 **A child adds meaning, not size.** A level-2 element that restates its
 parent with a longer name is a synonym, not a decomposition — `document-style`
-§ Consolidate before you enumerate, applied vertically. And depth is per
-branch, on pain (`process-and-capability-levels` § Breadth first, depth on
-pain): most models never need the third question anywhere but one or two
-branches, and the focus table is what keeps that a visible decision.
+§ Consolidate before you enumerate, applied vertically. Depth is per branch, on
+pain (`process-and-capability-levels` § Breadth first, depth on pain), and the
+focus table keeps that a visible decision.
 
-**The first two questions are both answered, everywhere.** Levels 1 and 2
-are complete across the whole subject — the same § Breadth first, depth on
-pain — so a catalogue stopping at level 1 is a table of contents, not a
-model: the map says what is there and never what each element owes. Only the
-third question is optional.
+**The first two questions are both answered, everywhere.** Levels 1 and 2 are
+complete across the whole subject — the same § Breadth first, depth on pain —
+so a catalogue stopping at level 1 is a table of contents, not a model. Only
+the third question is optional.
 
 **Each level gets a heading that names it** — `### Level 1 — the areas`,
-`### Level 2 — the contract` — so a reader knows which question the
-identifiers in front of them answer without counting dots in an ID.
+`### Level 2 — the contract` — so the question in front of the reader needs no
+counting of dots in an ID.
 
 ## Level 1 — the landscape
 
 One diagram of the whole boundary, opening the document. The four bands are
 subgraphs — visual containers, no IDs, because a classification is not an
-element — with one node per macro process inside them, drawn in the standard
-notation. Two restraints do most of the work:
+element — with one node per macro process inside them, in standard notation.
+Two restraints do most of the work:
 
 - **Only declared relationships and the real value chain get edges.** Never
-  draw one to make a band look connected; a landscape whose every box touches
-  every other says nothing.
+  draw one to make a band look connected.
 - **The bands stay in their fixed order** — Strategic, Operational, Support,
   Evaluation — so two models, and two years of one model, read the same way.
 
@@ -86,36 +81,33 @@ carries: why the boundary sits where it does, and what an empty band means.
 ## Level 2 — the contract
 
 **The catalogue rows are the presentation, and a row must survive a portrait
-page** (`architecture-document-style` § A row must survive a page). The
-SIPOC facts are all on the page — laid out to fit it rather than overflow
-it:
+page** (`architecture-document-style` § A row must survive a page). The SIPOC
+facts are all on the page, laid out to fit it:
 
 - **The row carries what stays narrow**: the ID, the name, the purpose
-  formula, the owner, what realizes it. The purpose formula is the
-  contract's spine — shaped "turns X into Y", it names the trigger and the
-  output in one sentence, so neither needs a column of its own.
+  formula, the owner, what realizes it. The purpose formula is shaped "turns X
+  into Y", naming the trigger and the output in one sentence, so neither needs
+  a column of its own.
 - **The chain is declared beside the diagram, not in the row.** Who triggers
   whom, and who supplies a process from outside, are rows of the
   `## Relationships` table, rendered by the level-2 diagram — **one diagram
-  per macro process, in value order**, never invented for symmetry, so a
-  reader sees where a request enters and where value leaves.
+  per macro process, in value order**, never invented for symmetry.
 - **Every cell is one line.** A row that stops fitting is not asking for a
   wider table — it is asking whether prose is hiding in a cell that belongs
   under the diagram, or whether this process earned level 3.
 - **The boundary is visible.** A supplier or customer outside the model is
   named plainly in the purpose or the prose (`Requester`, `Regulator`) and
-  gets an ID only if the model defines it. Where the chain leaves the
-  organization is information; do not model the world to avoid a plain word.
+  gets an ID only if the model defines it. Do not model the world to avoid a
+  plain word.
 
 ## Level 3 — the flow
 
-Only where the focus table justifies it. This is the one level whose page is
-built around a diagram, because sequence is the first thing a list cannot say.
+Only where the focus table justifies it, and the one level whose page is built
+around a diagram: sequence is the first thing a list cannot say.
 
 **The document names its whole branch before anything else** — an H1 like
-`# Validate an order [BPROC2.2] — the level-3 flow`, and a nav line linking
-up to the level-2 document — so a reader arriving from a deep link knows
-where they stand without decoding an identifier.
+`# Validate an order [BPROC2.2] — the level-3 flow`, and a nav line linking up
+to the level-2 document.
 
 **The flow diagram opens the document.** Sub-processes in standard notation;
 decision diamonds are flow notation and get no IDs; a stop that needs a
@@ -133,10 +125,10 @@ outcome, the controls — are said once above the table, never repeated per
 row. And exceptions are one list at the end: an exception lane per exception
 is how a flow becomes a wall.
 
-**Level 4 stays out of the model.** The content contract already refuses it;
-what presentation adds is the seam — the level-3 row links the operating
-instruction where one exists, in whatever runbook or procedure library owns
-it, and that instruction uses plain step numbers, never architecture IDs.
+**Level 4 stays out of the model.** What presentation adds is the seam: the
+level-3 row links the operating instruction where one exists, in whatever
+runbook or procedure library owns it, and that instruction uses plain step
+numbers, never architecture IDs.
 
 ## The same three questions, for the other leveled catalogues
 
@@ -152,7 +144,6 @@ map, then the contract — and none of them earns the third question:
 Domains at Depth 3 look like a fourth case and are not: their map and
 charters belong to `model-domains`, which owns that shape entirely.
 
-When in doubt about the third question, don't ask it: a contract kept
-current beats a flow that was drawn once and never again opened. The doubt
-never reaches level 2 — the contract is complete across the subject, per
-§ One question per level.
+When in doubt about the third question, don't ask it: a contract kept current
+beats a flow drawn once and never reopened. The doubt never reaches level 2 —
+the contract is complete across the subject, per § One question per level.

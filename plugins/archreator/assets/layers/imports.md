@@ -19,18 +19,16 @@ on where that model is.
 
 ## Why a declaration rather than a lookup
 
-Nothing here fetches anything. A validator that read a sibling repository on
-every pull request would be slow, would fail whenever somebody else's site was
-down, and would let another team's push break this build.
+Nothing here fetches anything: a validator reading a sibling repository on
+every pull request would let another team's push break this build.
 
 So what is checked is that the dependency was **written down**: an identifier
-somebody typed becomes a dependency this model states. That is the same shape
-[`domains/`](./domains/README.md) already gives a domain contract — what you
-consume is declared, and changing it is a conversation rather than a surprise.
+somebody typed becomes a dependency this model states — the same shape
+[`domains/`](./domains/README.md) gives a domain contract.
 
-The cost is honest and worth saying out loud: **a row here can be internally
-consistent and out of date.** Whether it still matches the upstream is asked by
-somebody running the refresh, not by CI.
+The cost: **a row here can be internally consistent and out of date.** Whether
+it still matches the upstream is asked by somebody running the refresh, not by
+CI.
 
 ## What this model consumes
 
@@ -40,8 +38,7 @@ somebody running the refresh, not by CI.
 
 Read by position: cell 1 the qualified identifier, backticked; cell 2 the name
 that model gives it; cell 3 the revision it was read at — a commit, a tag, a
-release. Cell 2 is a copy of somebody else's fact and is treated like every
-other copy the method allows: written once, and checked.
+release.
 
 ## What this cannot do
 

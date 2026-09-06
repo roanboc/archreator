@@ -3,8 +3,8 @@
 _[← EA home](../README.md)_
 
 Who interacts with the system, the services it offers them, the processes
-those services run through, the business objects they handle, and the
-domain vocabulary and rules that constrain all of it.
+those services run through, the business objects they handle, and the domain
+vocabulary and rules that constrain all of it.
 
 ## Analysis order
 
@@ -28,35 +28,31 @@ named pain justifies detailing. Past roughly fifteen elements in a level the
 file becomes a folder of the same name with one document per level.
 **Identifiers carry the level**, so no table needs a parent column. The
 `process-and-capability-levels` skill holds the categories, the level
-definitions, the description each level carries, and the focus table that
-records which branches were deliberately left at level 2 — that table is what
-separates a scoped model from an unfinished one.
+definitions, and the focus table recording which branches were deliberately
+left at level 2.
 
-`5_domain-context-and-rules.md` carries the project's **glossary** (reuse
-its terms in code and commits) and its **business rules table** — every new
-rule gets a row there, with its rationale, before it gets a line of code.
-It is also the natural home for a role × operation access matrix if the
-project has segregated roles.
+`5_domain-context-and-rules.md` carries the project's **glossary** (reuse its
+terms in code and commits) and its **business rules table** — every new rule
+gets a row there, with its rationale, before it gets a line of code. A role ×
+operation access matrix belongs there too.
 
 `2_business-services.md` is where a **«Product»** aggregates the services
-that make it up. A single-application project usually has one implicit
-product and can leave it out; an organization sells several, and the
-portfolio is what makes the rest of the model make sense — two products may
-share every capability and still need entirely different channels and
-processes. On the company track the products, channels, and customer
-relationships are derived from the business model canvases (see
+that make it up. A single-application project usually has one implicit product
+and can leave it out; an organization sells several, and the portfolio is what
+makes the rest of the model make sense. On the company track the products,
+channels, and customer relationships are derived from the business model
+canvases (see
 [0_business-design/](../0_business-design/README.md#from-canvas-to-archimate)),
-and Key Partners land in `1_business-actors-and-roles.md` as external
-actors, each with the «Contract» or «Business Collaboration» that binds
-them.
+and Key Partners land in `1_business-actors-and-roles.md` as external actors,
+each with the «Contract» or «Business Collaboration» that binds them.
 
-`1_business-actors-and-roles.md` states each actor's **kind** — human, AI,
-or hybrid — and, for AI/hybrid actors, its autonomy level, decision
-rights, and escalation path (see the `architecture-document-style` skill's actor
-notation). This is where an AI system's role **in the business being
-modeled** gets stated explicitly — not just its role in how this repo is
-developed (see `CONTRIBUTING.md`). If an initiative changes one of those
-values, consider a `record-decision` alongside the scope document.
+`1_business-actors-and-roles.md` states each actor's **kind** — human, AI, or
+hybrid — and, for AI/hybrid actors, its autonomy level, decision rights, and
+escalation path (see the `architecture-document-style` skill's actor notation).
+This is an AI system's role **in the business being modeled**, not its role in
+how this repository is developed (see `CONTRIBUTING.md`). If an initiative
+changes one of those values, consider a `record-decision` alongside the scope
+document.
 
 ## Layer view
 
@@ -87,10 +83,9 @@ flowchart TB
   classDef application fill:#c2f0ff,stroke:#0288d1,color:#333
 ```
 
-The AI actor is drawn in the Application cyan even though it sits in a
-business diagram — one of the two colour overrides in
-the `architecture-document-style` rulebook § ArchiMate on Mermaid, so a
-reader never mistakes it for a person.
+The AI actor takes the Application cyan inside a business diagram — one of the
+two colour overrides in the `architecture-document-style` rulebook § ArchiMate
+on Mermaid — so a reader never mistakes it for a person.
 
 Every business service is realized by application services — the mapping is
 in [4_application/1_application-services.md](../4_application/1_application-services.md).

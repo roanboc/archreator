@@ -4,11 +4,9 @@ _[← The process model](./README.md)_
 
 The five macro processes, each with its level-2 children, ordered on this page by
 when they run rather than by identifier — `BPROC5` was added last and runs second.
-That is the method eating its own rule: an identifier is assigned once and never
-reallocated, so a number says when a process joined the model, and the sequence
-is carried by this page's order and the map — never by the number. Renumbering
-to restore the flow would silently repoint every reference ever written to
-`BPROC2`, `BPROC3` and `BPROC4`.
+An identifier is assigned once and never reallocated, so a number says when a
+process joined the model; the sequence is carried by this page's order and the
+map, never by the number.
 The map that places them relative to one another is on
 [the index page](./README.md#the-macro-process-map); this page opens each one up.
 What every child process consumes and produces is in
@@ -32,7 +30,7 @@ flowchart TD
   p14["⚙ Split the model into domains [BPROC1.4]"]
   est{"Does an estate already run?"}
   p15["⚙ Discover the current landscape [BPROC1.5]"]
-  g23{{"❖ Understanding, then Design — the landscape"}}
+  g2{{"❖ Understanding — the described baseline"}}
   done(["A model a change can be judged against"])
 
   req --> p11 --> org
@@ -45,15 +43,15 @@ flowchart TD
   g1 -->|approved| deep
   deep -->|yes, Depth 3| p14 --> est
   deep -->|no| est
-  est -->|yes| p15 --> g23
-  g23 -->|changes requested| p15
-  g23 -->|approved| done
+  est -->|yes| p15 --> g2
+  g2 -->|changes requested| p15
+  g2 -->|approved| done
   est -->|no, greenfield| done
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
   classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class p11,p12,p13,p14,p15,req,done business
-  class g0,g1,g23 implementation
+  class g0,g1,g2 implementation
 ```
 
 The depth question is asked once, at `BPROC1.1`, and it decides which of these
@@ -63,8 +61,7 @@ Depth 3 enterprise enters `BPROC1.4`.
 `BPROC1.5` is decided by a different question, asked later: whether the subject was
 already running before anyone modeled it. A greenfield project skips it and fills its
 lower layers one initiative at a time through `BPROC2`; an organization that has
-existed for years cannot, because the estate is not a consequence of any requirement
-and no requirement will ever ask for it to be written down.
+existed for years cannot, because the estate is not a consequence of any requirement.
 
 ## `BPROC5` — Plan the transition
 
@@ -92,13 +89,11 @@ flowchart TD
   class g1 implementation
 ```
 
-The only process whose output describes a future. Everything else in the model —
-every layer document, every validator, every restatement — is held to describing
-what is true now, and that rule is worth keeping precisely because one place is
-exempt from it. The exemption is a folder, `architecture/6_transition/`, and it is the
-whole of `BPROC5`'s output.
+The only process whose output describes a future. Everything else in the model is
+held to describing what is true now; the exemption is one folder,
+`architecture/6_transition/`, and it is the whole of `BPROC5`'s output.
 
-It reuses Direction rather than adding a gate of its own. The reasoning is in
+It reuses Direction rather than adding a gate of its own — see
 [`2_level-2-processes.md`](./2_level-2-processes.md).
 
 ## `BPROC2` — Deliver an architected change
@@ -111,29 +106,22 @@ flowchart TD
   req(["A requirement, or a problem"])
   p21["⚙ Align the change through the layers [BPROC2.1]"]
   g2{{"❖ Understanding — strategy, business, information"}}
-  g3{{"❖ Design — the solution design"}}
   p22["⚙ Implement and verify [BPROC2.2]"]
   p23["⚙ Hand over for review [BPROC2.3]"]
   merged(["Merged"])
 
   req --> p21 --> g2
   g2 -->|changes requested| p21
-  g2 -->|approved, Design requested| g3
-  g3 -->|changes requested| p21
-  g3 -->|approved| p22
-  g2 -->|approved, Design not requested| p22
-  p22 --> p23 --> merged
+  g2 -->|approved| p22 --> p23 --> merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
   classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class p21,p22,p23,req,merged business
-  class g2,g3 implementation
+  class g2 implementation
 ```
 
-`BPROC2.1` is the only process in the model that can reach two gates, and the second
-is the Requester's option rather than the method's requirement. Its interior is the
-one branch detailed to level 3, in
-[`3_level-3-align-a-change.md`](./3_level-3-align-a-change.md).
+`BPROC2.1` reaches Understanding, and its interior is the one branch detailed to
+level 3, in [`3_level-3-align-a-change.md`](./3_level-3-align-a-change.md).
 
 ## `BPROC3` — Keep the model true
 
@@ -164,9 +152,9 @@ flowchart TD
   class g2b implementation
 ```
 
-The three children share a band and nothing else. They answer different triggers, run
-independently, and never hand off to one another, which is why the band has no
-internal sequence.
+The three children share a band and nothing else: different triggers, run
+independently, never handing off to one another, so the band has no internal
+sequence.
 
 ## `BPROC4` — Learn from the engagement
 
@@ -185,5 +173,5 @@ flowchart TD
   class p41,fin,prop business
 ```
 
-One child, and the thinnest band in the model. It earns its place because its output
-is the only input `BPROC1` has for changing the method itself.
+One child, and the thinnest band in the model. Its output is the only input
+`BPROC1` has for changing the method itself.
