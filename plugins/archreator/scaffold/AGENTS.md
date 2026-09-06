@@ -77,7 +77,9 @@ generated project.
   validated**, with `○` not started, `◐` a draft catalogue of things somebody
   said exist, or `●` validated at a named gate on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
-  `scripts/check_model.py` fails a defining document that declares nothing.
+  `scripts/check_model.py` fails a defining document that declares nothing,
+  and one that carries no view or whose first view comes after its first
+  table: a document opens with its diagrams, the tables follow.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
   push. Everything else the method can do runs from the plugin rather than
   from a copy in here.
