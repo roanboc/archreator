@@ -9,11 +9,8 @@ means, and the minimum a description carries.
 
 ## Level 1 is the macro process map, in four categories
 
-This is the process map quality management has used for decades, which matters
-beyond convention: **an organization with a quality system already thinks in
-these bands**, and arriving with a different decomposition of work it has
-already decomposed spends credibility on nothing. Ask what exists before
-drawing one.
+**An organization with a quality system already thinks in these bands.** Ask
+what exists before drawing one.
 
 | Category | Holds | Test — if it stopped tomorrow |
 | -------- | ----- | ----------------------------- |
@@ -23,16 +20,15 @@ drawing one.
 | **Evaluation** | Measurement, audit, customer feedback, corrective action, improvement | Nothing breaks, and nothing improves |
 
 **The categories are a classification, not elements.** They get no IDs and no
-rows: nothing realizes a band, so the grounding rule would have nothing to
-point at. Draw them as subgraphs and carry the band as a column on each
-level-1 process.
+rows — nothing realizes a band. Draw them as subgraphs and carry the band as a
+column on each level-1 process.
 
 **The value stream fills exactly one band.** Deriving processes from the value
 stream — the right way to get the operational band, and how `discover-strategy`
-theme 5 already works — produces nothing for the other three. That is the
-categories' main use: they make it possible to notice that an organization has
-documented how it delivers and not how it decides, staffs, or improves. Report
-an empty band as a finding, not as a blank.
+theme 5 already works — produces nothing for the other three, which is how an
+organization that has documented how it delivers and not how it decides,
+staffs or improves becomes visible. Report an empty band as a finding, not as
+a blank.
 
 ## What each level means
 
@@ -43,10 +39,8 @@ an empty band as a finding, not as a blank.
 | **3 — Sub-process** | `BPROC7.2.1` | The ordered steps inside a level-2 process — the first level where a flow diagram says something a list cannot | Verb + object | Only where a pain justifies it |
 | **4 — Task** | — | What one person or system does in one sitting | Verb + object | Belongs in a work instruction, not in the model |
 
-Level 4 is named here so it can be refused. When a Requester asks for it, the
-answer is that the model stops at 3 and the procedure continues in whatever the
-organization uses for work instructions — the model is not the operating
-manual, and the two have different lifecycles.
+Level 4 is named here so it can be refused: the model stops at 3, and the
+procedure continues in whatever the organization uses for work instructions.
 
 ## The minimum description
 
@@ -69,16 +63,12 @@ delivered shipment for the customer who placed it" is a definition.
 
 **Supplier and customer are named, not implied.** With them the level-2 row is
 a SIPOC — supplier, input, process, output, customer — and a SIPOC belongs to
-*each* process, never one to the whole map. They cost two columns and they are
-what turns a catalogue into a chain: a process whose supplier is nobody is
-either triggered from outside the organization or missing a predecessor, and a
-process whose customer is nobody produces an output no one consumes. Neither is
-visible from trigger and output alone.
+*each* process, never one to the whole map. A process whose supplier is nobody
+is either triggered from outside the organization or missing a predecessor;
+one whose customer is nobody produces an output no one consumes.
 
 Name the neighbouring process by ID where there is one (`BPROC7.2`), and the
-external party where there is not (`Requester`, `Regulator`). A chain the
-reader can follow by ID is the payoff — and the identifiers already carry the
-tree, so the chain and the hierarchy are readable from the same table.
+external party where there is not (`Requester`, `Regulator`).
 
 `realized by` is the grounding rule (`architecture-document-style` § Grounding
 rule) on the organization track: a process is realized by a team, a role, or a

@@ -13,9 +13,8 @@ document says a thing, that is what the project claims is true today.
 ## What is modeled, and what is not
 
 **One row per layer, and every row says something.** A layer with no file yet
-is a stated fact — `Out of scope`, `External`, or a named `Gap` — not a silence.
-That is the whole point of this table: a reader can tell what was decided from
-what was never looked at.
+is a stated fact — `Out of scope`, `External`, or a named `Gap` — not a
+silence, so a reader can tell what was decided from what was never looked at.
 
 | # | Layer | The question it answers | Status |
 | - | ----- | ----------------------- | ------ |
@@ -46,9 +45,9 @@ what was never looked at.
 
 | Depth | The subject is | You get | Gates |
 | ----- | -------------- | ------- | ----- |
-| **1 — Application** | one app or tool | a light strategy layer — goals and principles, enough to judge a change against | Understanding, and Design if you ask |
-| **2 — Organization** | a company, department, or service line | the canvases, and the operating model derived from them | Direction, Understanding, Design |
-| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter | The three, plus each affected domain's owner on a contract change |
+| **1 — Application** | one app or tool | a light strategy layer — goals and principles, enough to judge a change against | Understanding |
+| **2 — Organization** | a company, department, or service line | the canvases, and the operating model derived from them | Direction and Understanding |
+| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter | Both, plus each affected domain's owner on a contract change |
 
 Depth is about the subject, not the effort — a large application is still
 Depth 1. It is a starting posture, never a ceiling: deepening is an ordinary
@@ -67,16 +66,15 @@ three marks:
 
 **A draft catalogue is not an architecture draft.** One is a proposal about how
 something should be structured; the other is a list of what somebody said is
-there, so it can be checked. On the page they look identical, and this mark is
-the only thing separating them — which is why `scripts/check_model.py` fails a
-document that defines something without one.
+there, so it can be checked. `scripts/check_model.py` fails a document that
+defines something without a mark.
 
 ## Conventions
 
 The numbering, the element identifiers, and the notation the diagrams are
-drawn in are all part of the method rather than of this project, so they are
-not restated here. Your agent reads them from the `architecture-document-style`
-rulebook; a human who wants them can read the same file.
+drawn in belong to the method rather than to this project, so they are not
+restated here. Your agent reads them from the `architecture-document-style`
+rulebook; a human who wants them reads the same file.
 
 The one thing worth knowing before reading a diagram: **cyan is always an AI
 actor**, so you never mistake one for a person, and **a dashed edge means not

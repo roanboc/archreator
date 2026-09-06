@@ -3,10 +3,7 @@
   template, which must live at .github/pull_request_template.md (this file).
   This repository uses that single default for every kind of change; a pure
   bug fix fills the same body with what broke, the root cause, and the fix.
-  If named alternates are ever added for the "choose a template" flow, they
-  must live in a .github/PULL_REQUEST_TEMPLATE/ directory and are selected
-  via ?template=<name>.md. How to fill this in: CONTRIBUTING.md and the
-  write-pr-description skill.
+  How to fill this in: CONTRIBUTING.md and the write-pr-description skill.
 -->
 <!--
   Describe the WHOLE branch, not just the latest commit:
@@ -23,11 +20,11 @@
 
 <!-- Link the initiative's scope document in the sibling repository,
      https://github.com/roanboc/architecture-archreator — usually under
-     product-archreator/architecture/scope/. Its Approvals table records
-     the gates the change passed (Understanding at minimum for any change in
-     documented behavior). A change with no documented behavior change —
-     a bug fix, a packaging or CI change — states "no scope document"
-     here with the reason. -->
+     product-archreator/architecture/scope/. Its Approvals table records the
+     gates the change was granted (Understanding at minimum for any change in
+     documented behavior), and nothing for a gate it was not. A change with no
+     documented behavior change — a bug fix, a packaging or CI change —
+     states "no scope document" here with the reason. -->
 
 ## What changed here
 

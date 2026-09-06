@@ -8,9 +8,9 @@ a level belongs in.
 
 ## Start from the industry, then ask
 
-"What must this organization be able to do?" is a question businesses answer
-badly — they describe their org chart, or the projects currently running. Turn
-recall into recognition:
+"What must this organization be able to do?" is answered badly — businesses
+describe their org chart, or the projects currently running. Turn recall into
+recognition:
 
 1. **Name the industry** as precisely as the business actually operates in it,
    and confirm that naming with the Requester before using it.
@@ -32,12 +32,11 @@ reproduce its content into the model.
 
 ## A reference proposes; it never fills
 
-Both discovery skills forbid assuming, and a plausible industry catalogue is
-exactly the filler that rule exists to stop — it reads as agreed when nobody
-agreed it. The reference changes the *question*, not the *authority*: every
-element still comes from a Requester answer, and anything unconfirmed is marked
-**"Pending — future initiative"** or logged as an open question, never left
-sitting in the table looking approved.
+A plausible industry catalogue reads as agreed when nobody agreed it. The
+reference changes the *question*, not the *authority*: every element comes from
+a Requester answer or an adopted call recorded in its `Source` cell
+(`align-change-through-layers` § Ask only what blocks the work now), and
+anything unconfirmed is marked **"Pending — future initiative"**.
 
 Name the reference in the document, so a reader can tell which rows started as
 a proposal and check them against the source.
@@ -52,11 +51,10 @@ It lives in the catalogue's index and carries **every** level-2 element.
 | `BPROC7.3` | Bill and collect | Level 2 | — | No pain raised. Revisit when one is |
 
 A branch stopping at level 2 with a dash in the justification column is a
-decision a reader can disagree with. The same branch with nothing written is a
-gap they cannot tell from an oversight — and they will assume the oversight.
+decision a reader can disagree with; the same branch with nothing written is a
+gap they cannot tell from an oversight.
 
-**Present this table at the gate.** It is usually the most contested thing in
-the model, and it should be: it is where the engagement's scope actually lives.
+**Present this table at the gate.** It is where the engagement's scope lives.
 
 ## Where the documents live
 
@@ -82,19 +80,16 @@ not renumber, and a second focused branch renumbers nothing outside the folder.
 
 Each level document is a full element document — legend, diagram per section,
 inventory table. The index README carries the focus table and links the levels;
-it defines no elements of its own, so it needs no legend.
+defining no elements of its own, it needs no legend.
 
 ## The identifier carries the level
 
 A level-2 process under macro process `BPROC7` is `BPROC7.2`, and a level-3
 sub-process under that is `BPROC7.2.1` — `architecture-document-style` § Levels
 number hierarchically holds the rule, including what re-parenting an approved
-element costs. Splitting the catalogue into a folder changes none of it: the
-files exist for readability, and the identifiers say the same thing they would
-say in one table.
+element costs. Splitting the catalogue into a folder changes none of it.
 
-This is what makes a partial model navigable. The focus table says which
-branches were detailed; the IDs say the same thing element by element, so a
-`BPROC7.2.1` cited from the application layer announces both its parent and the
-fact that this branch was one of the few taken to level 3.
+The focus table says which branches were detailed; the IDs say the same thing
+element by element, so a `BPROC7.2.1` cited from the application layer
+announces both its parent and that this branch was taken to level 3.
 

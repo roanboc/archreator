@@ -17,16 +17,14 @@ which parts are modeled, which belong to somebody else, and which are still
 missing.
 
 Folders appear as they earn their place. A layer with nothing to say yet is a
-row on that page, not an empty directory — so what was decided is never
-confused with what was never looked at.
+row on that page, not an empty directory.
 
 ## How changes are made
 
 A requirement is not built directly. It is worked through the model and
-approved at named gates — **Direction**, **Understanding**, **Design** —
-before anything is built. [`AGENTS.md`](./AGENTS.md) states the rule and the
-declared modeling depth; the `align-change-through-layers` skill runs the
-process.
+approved at two named gates — **Direction** and **Understanding** — before
+anything is built. [`AGENTS.md`](./AGENTS.md) states the rule and the declared
+modeling depth; the `align-change-through-layers` skill runs the process.
 
 ## Built with
 

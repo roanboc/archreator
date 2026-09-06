@@ -34,26 +34,23 @@ holds the registry and, below it, what each element means.
 **The semantics are ArchiMate's, not this method's.** Where archreator says
 nothing about what an element means, the
 [ArchiMate® specification](https://pubs.opengroup.org/architecture/archimate32-doc/)
-decides — and where the two ever disagree, the specification prevails over
-any transcription here. The one-liners below are quoted from the ArchiMate
-3.2 Specification (© The Open Group; ArchiMate is a registered trademark of
-The Open Group) so a model can be built where the specification is not
-reachable, which an agent's environment often is not.
+decides, and where the two ever disagree the specification prevails over any
+transcription here. The one-liners below are quoted from the ArchiMate 3.2
+Specification (© The Open Group; ArchiMate is a registered trademark of The
+Open Group).
 
 Two columns are the method's own. **Aspect** carries the standard's
 classification — active structure, behavior, passive structure, with
-motivation and composite beside them — because the aspect is what decides
-how a catalogue draws best
+motivation and composite beside them — and decides how a catalogue draws best
 ([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § The relationship
-decides the shape of a view). **This method adds** holds archreator's considerations
-for working the element, where there are any — practice beside the
-definition, never a redefinition.
+decides the shape of a view). **This method adds** holds archreator's
+considerations for working the element, where there are any — practice beside
+the definition, never a redefinition.
 
-**New element guidance lands in that column first.** An instruction about
-one element — how it levels, when it earns a row, how it draws — goes into
-its cell as it is learned, and earns a reference file of its own only when
-it outgrows the row. Fewer documents saying more is what keeps the
-structure consistent.
+**New element guidance lands in that column first.** An instruction about one
+element — how it levels, when it earns a row, how it draws — goes into its
+cell as it is learned, and earns a reference file of its own only when it
+outgrows the row.
 
 ### Motivation
 
@@ -138,18 +135,14 @@ any catalogue with levels behaves the same way.
 | **3** | `CAP#.#.#` | `BPROC#.#.#` | — |
 
 The last segment is numbered **per parent, not across the level**: the second
-child of `CAP1` is `CAP1.2` and the second child of `CAP2` is `CAP2.2`. So
-the identifier states where the element sits in the tree, and a reader meeting
-`BPROC1.3.4` in a technology document knows which macro process it belongs to
-without opening the catalogue.
+child of `CAP1` is `CAP1.2` and the second child of `CAP2` is `CAP2.2`. So the
+identifier states where the element sits in the tree.
 
-Two consequences, and they are most of the point:
+Two consequences:
 
 - **The ID carries the parent, so the table drops its parent column.** A
-  `Parent` column beside `CAP1.2` restates what the identifier already says,
-  which is DRY — each fact in one place — broken inside a single row. A column naming what a parent is
-  *composed of* survives, because it carries the children's **names**, which
-  no identifier holds.
+  column naming what a parent is *composed of* survives, because it carries
+  the children's **names**, which no identifier holds.
 - **A level is not a type.** `CAP1.2` is a Capability exactly as `CAP1` is.
   The dot says where it sits, not what it is, and every rule about prefixes,
   glyphs and colours applies to it unchanged.
@@ -160,38 +153,26 @@ stays a column or an edge: a process realizing a service, a capability using
 a resource, a product tier refining its enterprise parent. An identifier can
 encode one tree, so it encodes the one the catalogue is organised by.
 
-**Moving an element under a different parent changes its ID.** That is what a
-meaningful identifier costs, and it is paid like any other removal: before the
-gate that approves the element, renumber it; afterwards, retire the old ID and
-define the element under its new parent, with the Retired row naming the ID
-that replaced it (§ Never-reused starts at the gate). Re-parenting an approved
-process is a modeling change a Requester should be shown — a leveled ID puts
-it in front of them instead of letting it pass as an edited column.
+**Moving an element under a different parent changes its ID**, and it is paid
+like any other removal: while the change carrying the element is unmerged,
+renumber it; afterwards, retire the old ID and define the element under its
+new parent, with the Retired row naming the ID that replaced it
+(§ Never-reused starts at merge). Re-parenting a merged process is a modeling
+change a Requester should be shown.
 
-## Never-reused starts at the gate
+## Never-reused starts at merge
 
-**An identifier is draft until the gate that approves its element, and
-permanent afterwards.** Which of the two a reader is looking at is declared at
-the top of the document — § Document status — so this rule is visible rather
-than remembered.
+**An identifier is renumbered freely while the change carrying it is unmerged,
+and frozen the moment that change merges.** Nothing before the merge is an
+identifier anyone outside the branch has seen.
 
 | The element was | Removing it means |
 | --------------- | ----------------- |
-| **Never approved** — added while drafting, before the gate covering its layer | Renumber so the sequence stays continuous. No Retired row, no note explaining the gap. It never existed as far as the model is concerned |
-| **Approved at a gate** | The identifier is retired permanently and never reused, and the retirement is recorded (see `restate-current-state` § The Retired section) |
+| **Introduced by a change still open** | Renumber so the sequence stays continuous. No Retired row, no note explaining the gap. It never existed as far as the model is concerned |
+| **Merged** | The identifier is retired permanently and never reused, and the retirement is recorded (see `restate-current-state` § The Retired section) |
 
-Which gate covers which element is `align-change-through-layers` § The gates:
-canvases and the strategy layer freeze at Direction, business and
-information at Understanding. An element added to an already-approved layer by a
-later initiative is draft until *that* initiative's gate.
-
-The reason is what a gap in a sequence should mean. If identifiers freeze the
-moment they are typed, a reader finding `CS1`, `CS3`, `CS4` has to wonder what
-happened to a customer segment that in fact existed for one afternoon of
-drafting and was never shown to anyone. If they freeze at the gate, a gap means
-something real was retired — which is exactly what never reusing an identifier
-is protecting, and nothing is protected by preserving the history of a draft
-nobody approved.
+So a gap in a sequence means something real was retired, never a draft that
+lived for one afternoon.
 
 **A gate presentation on a renumbered draft says so in one line.** The
 validators only check that references resolve, so renumbering passes silently;
@@ -202,8 +183,8 @@ shift under them without explanation.
 resolves, no ID is defined twice, no retired ID reappears as live, and every
 leveled ID has its parent defined. It checks `architecture/` only. Scope
 documents, decision records, and reviews are narrative *about* the model —
-they cite retired elements, illustrate the convention, and are frozen once
-merged (`write-scope-document`), so a reference check there could never be made to
+they cite retired elements and are frozen once merged
+(`write-scope-document`), so a reference check there could never be made to
 pass. Keep IDs accurate in them anyway; nothing but review will catch a
 mistake.
 
@@ -219,10 +200,9 @@ IDs by domain, the way a module path qualifies a symbol:
 | From another domain, or from the enterprise level | `<DOMAIN>.` prefix, domain in upper case | `SALES.BSVC3` |
 | An element owned at the enterprise level | always bare | `G1` |
 
-The domain segment is the folder name under `architecture/domains/`, upper-cased
-(`domains/sales/` → `SALES.`). A subdomain chains it — `SALES.EMEA.BSVC2` —
-which is also why the tree is capped at three levels; beyond that the IDs
-stop being readable, and the thing being modeled is a team, not a domain.
+The domain segment is the folder name under `architecture/domains/`,
+upper-cased (`domains/sales/` → `SALES.`). A subdomain chains it —
+`SALES.EMEA.BSVC2` — and the tree is capped at three levels.
 
 **Both qualifiers use a dot, and the prefix tells them apart**: upper-case
 segments *before* the prefix are the domain path, numeric segments *after* it
@@ -231,9 +211,7 @@ process `BPROC1`, owned by the sales domain. Read outwards from the prefix and
 neither half is ambiguous.
 
 Numbering stays per prefix **per domain**: two domains may both own a
-`BSVC3`, and the qualifier is what tells them apart. This is deliberate —
-domains are meant to be modeled independently, and forcing globally unique
-numbers would make every new domain a merge conflict against every other.
+`BSVC3`, and the qualifier is what tells them apart.
 
 Only a domain's **exposed** services (the ones in its charter) may be
 referenced from outside it. Referencing another domain's internal process or
@@ -242,10 +220,8 @@ it up with that domain's charter instead.
 
 ## Crossing a model boundary
 
-An identifier is scoped to its model. Two models may each own a `G1`, which is
-deliberate — globally unique numbering would make every new model a merge
-conflict against every other — and it is why a bare identifier can only ever
-mean something inside the model that wrote it.
+An identifier is scoped to its model. Two models may each own a `G1`, so a
+bare identifier can only ever mean something inside the model that wrote it.
 
 **A reference to another model leads with that model's federation ID**:
 `ORG.STK#`, `PRD_MTD.BSVC#`, `DMN_SALES.EMEA.BSVC#`. The federation ID is a
@@ -261,18 +237,15 @@ is stable once granted, exactly like an element's.**
 The underscore belongs inside the ID, so the dot keeps exactly two meanings:
 ownership before the type prefix — a federation ID, a domain path, or both —
 and catalogue levels after it. Read outwards: model, then domain path, then
-prefix, then levels; each kind of segment appears at most once, and always
-in that order. One grammar carries domains and federation alike; which one a
-qualifier is depends on what the model declared, never on how it is spelled.
+prefix, then levels; each kind of segment appears at most once, and always in
+that order.
 
 **A model declares its own federation ID once, on its front door** — a
 `**Federation ID:** \`ORG\`` line in its `architecture/README.md` — and the
-citing model maps the IDs it uses in `architecture/federation.md` (cell 1
-the ID, cell 2 the model's key). That mapping is the point rather than a
-convenience: a model you may reference is a model you have declared you
-federate with, and `check_model.py` holds the mapping against the ID the
-target's own front door declares. There is no way to reach into something
-you never said you depend on.
+citing model maps the IDs it uses in `architecture/federation.md` (cell 1 the
+ID, cell 2 the model's key). A model you may reference is a model you have
+declared you federate with, and `check_model.py` holds the mapping against the
+ID the target's own front door declares.
 
 **How it resolves depends on where the other model is**, and the two cases are
 genuinely different:
@@ -282,9 +255,7 @@ genuinely different:
 | **In this repository** | Against that model's own definitions, exactly and immediately | A stale identifier fails the build, like any other |
 | **In another repository** | Against a row in `architecture/imports.md` declaring it | The row can be internally consistent and out of date |
 
-Nothing fetches anything. A validator that read a sibling repository on every
-pull request would be slow, would fail when somebody else's site was down, and
-would let another team's push break this build. What is checked is that the
-dependency was **stated** — and the name the import row restates is held
-against the upstream only when the upstream is here to be read.
+Nothing fetches anything. What is checked is that the dependency was
+**stated** — and the name the import row restates is held against the upstream
+only when the upstream is here to be read.
 

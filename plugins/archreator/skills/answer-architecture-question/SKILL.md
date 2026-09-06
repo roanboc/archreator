@@ -1,6 +1,6 @@
 ---
 name: answer-architecture-question
-description: Procedure — use this when someone wants a focused, human-readable brief about an architecture element, domain, data concern, solution, impact, or decision. Confirms the reader's viewpoint, resolves a model anchor, and generates a disposable Markdown brief from the model.
+description: Procedure — use this when someone wants a focused, human-readable brief about an architecture element, domain, data concern, solution, impact, or decision. Picks the reader's viewpoint, resolves a model anchor, and generates a disposable Markdown brief from the model.
 metadata:
   archreator:
     kind: gated-procedure
@@ -10,10 +10,9 @@ metadata:
 
 # ⚙ Answer an architecture question
 
-A reader arrives with a question, not a layer list. Confirm what they need to
-understand, centre the question on something the model actually contains, and
-generate one disposable brief. The Markdown model remains authoritative; the
-brief is a reproducible reading of it.
+A reader arrives with a question, not a layer list. Decide what they need to
+understand, centre it on something the model actually contains, and generate
+one disposable brief. The Markdown model stays authoritative.
 
 ## ⊕ When to use this
 
@@ -35,44 +34,41 @@ brief is a reproducible reading of it.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC3.3`. It carries **no gate** because it asserts nothing new:
-the brief contains declared relationships, catalogue facts and verbatim model
-prose. It is generated under `.archreator/work/briefs/`, never committed, and says on its
-face that the repository is the model.
+Realizes `BPROC3.3`. It carries **no gate**: the brief asserts nothing new,
+holding only declared relationships, catalogue facts and verbatim model prose.
+It is generated under `.archreator/work/briefs/` and never committed.
 
 ## ◈ Invariants
 
-- Confirm the reader's focus before generating, even when one option appears
-  likely. Recommend one and make correction easy; do not ask them to choose
-  ArchiMate layers.
+- Pick the focus from the question yourself. Never hand the reader a menu of
+  the method's options, and never ask them to choose ArchiMate layers.
 - Use exactly one focus: `business`, `information`, `solution`, `impact` or
   `decision`. Combined viewpoints are separate briefs.
 - Resolve the anchor against the model. Suggest actual names and identifiers
   when the request is ambiguous; never invent an identifier.
-- Pass the confirmed focus to the plugin's `build_brief.py` — it ships beside
-  the skills, not in the project, and reads a project through `--project`. Do
-  not imitate its graph selection or write a competing summary.
+- Pass the chosen focus to the plugin's `build_brief.py` — it ships beside the
+  skills, not in the project, and reads a project through `--project`. Do not
+  imitate its graph selection or write a competing summary.
 - Return the generated Markdown as disposable output. Do not move it into the
   architecture tree or treat it as approved evidence.
 
 ## ⚙ Steps
 
-### 1. Confirm the question's focus
+### 1. Pick the question's focus
 
-Ask: **What should this architecture view help you understand?** Present these
-five options in human language, with the inferred option first and recommended:
+Read what the reader asked and choose one focus. Say which one you picked, in
+one clause, and move on:
 
-| Focus | Offer it as | Use when |
-| ----- | ----------- | -------- |
-| `business` | **Business and operations** | Capabilities, services, actors, processes and why they exist |
-| `information` | **Information and data** | Information, ownership, use, flow and the applications managing it |
-| `solution` | **Solution and technology** | Applications, integrations, components, platforms and deployment |
-| `impact` | **End-to-end impact** | One topic or change traced through every connected layer |
-| `decision` | **Decision overview** | The reason, affected capabilities, key impacts and transition |
+| Focus | Read it as | Pick it when |
+| ----- | ---------- | ------------ |
+| `business` | Business and operations | Capabilities, services, actors, processes and why they exist |
+| `information` | Information and data | Information, ownership, use, flow and the applications managing it |
+| `solution` | Solution and technology | Applications, integrations, components, platforms and deployment |
+| `impact` | End-to-end impact | One topic or change traced through every connected layer |
+| `decision` | Decision overview | The reason, affected capabilities, key impacts and transition |
 
-Recommend `impact` for a change unless the request clearly centres another
-question. If the user already chose a focus, confirm it in one sentence rather
-than asking the same question again.
+Default to `impact` for a change unless the request clearly centres another
+question. Where the reader named a focus themselves, use theirs.
 
 ### 2. Resolve the anchor and scope
 
@@ -87,9 +83,7 @@ replacement for the named scope.
 
 ### 3. Generate the brief
 
-Run the matching command from the project root. `build_brief.py` lives in the
-plugin's `scripts/` — not in the project — and `--project` points it at the
-model, for example:
+Run the matching command from the project root, for example:
 
 ```bash
 python3 <plugin>/scripts/build_brief.py --project . --element BSVC1 --depth 2 --focus business
@@ -102,20 +96,16 @@ scope with the user; do not silently choose a different question.
 
 ### 4. Hand the reading back
 
-Give the path to the generated brief and state its focus, anchor and boundary.
-Remind the reader that it is disposable and should be regenerated after the
-model changes. Answer follow-up questions from the model or generate a second
-brief with a different confirmed focus.
+Give the path to the generated brief, state its focus, anchor and boundary,
+and say it is disposable and regenerated after the model changes. Answer
+follow-ups from the model, or generate a second brief with a different focus.
 
 **A reader who asks for a PDF gets one — converted, not exported.** Convert
 the generated brief yourself, with whatever converter the environment offers,
-and put the result beside its source under `.archreator/work/` — disposable,
-like everything there. The method owns the boundary, not a converter: one
-brief or scope per PDF, never the whole model, which is the artifact that
-gets mailed around and quoted eight months after it stopped being true.
-A table that overflows the page is fixed in the source, never by rotating
-or shrinking the page — `architecture-document-style` § A row must survive
-a page.
+and put the result beside its source under `.archreator/work/`. One brief or
+scope per PDF, never the whole model. A table that overflows the page is fixed
+in the source, never by rotating or shrinking the page —
+`architecture-document-style` § A row must survive a page.
 
 ## ⇥ Hands off to
 
@@ -126,17 +116,17 @@ a page.
 
 ## ⚠ Anti-patterns
 
-- Asking "which layers?" instead of what the reader wants to understand.
+- Handing the reader a menu of focuses, or asking "which layers?".
 - Selecting every layer just in case.
 - Inferring an anchor identifier from a name without checking the model.
-- Generating before confirming the focus.
+- Generating without naming the focus the brief was built on.
 - Summarizing or editorializing model prose inside the disposable brief.
 - Committing a generated brief as architecture content.
 
 ## ☑ Done when
 
-- The user confirmed one of the five focuses.
+- Exactly one focus was picked, and named to the reader in a clause.
 - The anchor or scope resolves to model content and any ambiguity is settled.
-- `build_brief.py` ran with the confirmed `--focus` and relevant scope flags.
+- `build_brief.py` ran with that `--focus` and the relevant scope flags.
 - The output names its focus, scope, depth, emphasis and boundary.
 - The user receives the disposable brief and knows the repository remains the model.

@@ -48,20 +48,18 @@ cross-platform path and URL-encoding issues. If ArchiMate stereotypes are
 translated, keep a correspondence table to the standard English element
 names near the top of `architecture/README.md`.
 
-The method's own vocabulary translates the same way. The three gate names may
-be written in the project's language — «Dirección», «Entendimiento»,
-«Diseño» — with the English originals in the same correspondence table. The
-validators read the status glyph, never the words beside it, so a translated
-gate name costs nothing.
+The method's own vocabulary translates the same way. The two gate names may
+be written in the project's language — «Dirección», «Entendimiento» — with the
+English originals in the same correspondence table. The validators read the
+status glyph, never the words beside it.
 
 #### Write it out
 
-**Language is the interface** — to a human reader, and to an agent that has
-nothing but the text. So spell things out:
+Spell things out:
 
 - **Expand every acronym on its first use in each document**, then use the
-  short form freely. Per document, not per project: a reader arriving from a
-  deep link shouldn't have to hunt for what a prefix means.
+  short form freely. Per document, not per project: a deep link is an
+  arrival.
 - **Element IDs are acronyms too.** First mention in a document names the
   element the ordinary way — **business and solution designers [CS1]** — and
   expands the prefix beside it (`CS` = Customer Segment), or sits in a table
@@ -81,10 +79,6 @@ nothing but the text. So spell things out:
   better than "CS" in a sentence; the short form earns its place in tables,
   diagrams, and cross-references where space is genuinely tight.
 
-This costs a few characters and buys the thing the whole method is for: a
-document that means the same to the person who wrote it, the person reading
-it a year later, and the agent acting on it.
-
 #### The name leads, and the identifier rides along
 
 `CAP3` is a key, not a name. In a sentence, a heading, a diagram label or a
@@ -92,31 +86,23 @@ brief, write the name and let the identifier ride along — `Name [ID]`:
 
 > …which is why **the Supervised build service [BSVC3]** was split from…
 
-Not "which is why `BSVC3` was split from", which sends every reader who is not
-holding the catalogue in their head to go and look it up — and most of them
-are the people the model was written for.
+Not "which is why `BSVC3` was split from".
 
-**Two places keep the identifier first, and both earn it.** A catalogue's own
-definition row opens with the ID — and the bolded lead-in `**G1 — Legible
-guidance.**` is the same defining shape in prose — because the leading
-identifier is what exposes the sequence and the hierarchy at a glance. And a
-**relationship column** holds bare identifiers and nothing else, because a
-parser reads it before a person does and a name written there silently deletes
-the relationship — `architecture-document-style` § Relationships are declared,
-never only drawn.
+**Two places keep the identifier first.** A catalogue's own definition row
+opens with the ID — and the bolded lead-in `**G1 — Legible guidance.**` is the
+same defining shape in prose — because the leading identifier exposes the
+sequence and the hierarchy at a glance. And a **relationship column** holds
+bare identifiers and nothing else, because a parser reads it before a person
+does and a name written there silently deletes the relationship —
+`architecture-document-style` § Relationships are declared, never only drawn.
 
-Everywhere else the name leads. Nothing checks this: no validator can tell an
-identifier a reader would have wanted named from one they would not. It is a
-rule a writer follows and a reviewer reads for.
+Everywhere else the name leads.
 
 #### Consolidate before you enumerate
 
-**Fewer, better-defined elements beat many narrow ones.** Every element in a
-catalogue is a row someone has to read and an edge someone has to trace in a
-diagram. Ten well-named elements with clear relationships are more useful
-than thirty precise ones nobody can hold in their head.
-
-Three rules follow:
+**Fewer, better-defined elements beat many narrow ones.** Ten well-named
+elements with clear relationships are more useful than thirty precise ones
+nobody can hold in their head. Three rules follow:
 
 - **If two elements differ only in degree, they are one element.** The same
   pain felt by two customer segments at different severity is one pain with
@@ -127,12 +113,8 @@ Three rules follow:
   angles, not how to organise the list.
 - **This applies to what an agent proposes, not only to what it writes.**
   Offer a consolidated recommendation, not an exhaustive menu. A Requester
-  reading five overlapping options has been handed the analysis work the
-  agent was supposed to do.
-
-The reason is the diagrams. The catalogues connect to each other, and the
-value of the model is in seeing how — which is exactly what a long list
-destroys.
+  reading five overlapping options has been handed the analysis the agent was
+  supposed to do.
 
 ### What the document contains: the subject, not its own construction
 
@@ -142,10 +124,9 @@ document.**
 
 **This governs every document in the repository, not only those under
 `architecture/`** — a README, a page under `docs/`, a process model, a
-contributing guide. A layer document is the common case and the examples below
-are drawn from one, but nothing in the rule is specific to architecture. A
-reference page that narrates which of its entries were added last is doing the
-same thing as a layer document narrating its own drafting.
+contributing guide. A layer document is the common case the examples below are
+drawn from; a reference page narrating which of its entries were added last
+breaks the same rule.
 
 | Stays — it is about the subject | Goes — it is about making the document |
 | ------------------------------- | -------------------------------------- |
@@ -154,17 +135,15 @@ same thing as a layer document narrating its own drafting.
 | "`VAL1` is the only value every stakeholder receives" | "Twelve pains were consolidated into five" |
 | "The areas have no realizing artifact, and that is correct rather than a gap" | "Identifiers were renumbered once, here, before the gate" |
 
-Interpretation of the subject is not only allowed, it is most of what makes a
-model worth reading — the left column is the payoff of § Diagrams come first.
-What goes is the document narrating its own drafting.
+Interpretation of the subject stays; what goes is the document narrating its
+own drafting.
 
-**The removed material is not lost; it moves to where it was already
-required.** A consolidation — what was merged into what, and how many elements
-each catalogue ended up with — is a modeling decision the Requester approves at
-a gate, so it belongs in the scope document and the gate presentation
+**The removed material moves to where it was already required.** A
+consolidation — what was merged into what, and how many elements each
+catalogue ended up with — is a modeling decision the Requester approves at a
+gate, so it belongs in the scope document and the gate presentation
 (`discover-business-model` § 5 — Present for approval already asks for it
-there). Writing it in
-the layer document as well is a second copy of a fact, which is DRY broken.
+there).
 
 #### Two carve-outs
 
@@ -183,23 +162,19 @@ the layer document as well is a second copy of a fact, which is DRY broken.
 No "as of initiative N", no note about what an unapproved proposal would
 change, no record of a draft's revisions, no "Retired — None". The document
 states what is true now; git holds how it got there and the scope documents
-hold why. A model carrying its own changelog gives a reader two accounts to
-reconcile and no way to tell which is current.
+hold why.
 
 **A rebuilt document carries none of the rebuild.** When a model is rebuilt
 or crosses a method version, the new documents never mention the corpus they
 replaced, the version they crossed, or the ref where the old text is
 preserved — the initiative's scope document says all of that once. A status
-line names the mark and the gate that covers the document, nothing else:
-state the state and the reason it holds, never the history of how the page
-got here.
+line names the mark and the gate that covers the document, nothing else.
 
 #### Notes that survive go to the end
 
 A note worth keeping that belongs to no single section goes in a final
-**Additional notes** section, after the last element group — not woven between
-a diagram and the table it explains, where it displaces what the reader came
-for.
+**Additional notes** section, after the last element group — never woven
+between a diagram and the table it explains.
 
 ### Links
 
@@ -211,12 +186,10 @@ for.
 - When renaming or moving a doc, grep the whole repo for the old path and
   fix every reference in the same change.
 - **Skill files are the exception: they link only within the plugin's own
-  `skills/` directory.**
-  A skill points at a consuming project's documents by naming the path in a
-  code span — `` `architecture/README.md` § Modeling depth `` — never as a
-  relative link. Skills ship as a plugin, and installing one copies its
-  directory to a cache, so a link reaching outside that directory resolves
-  to nothing for anyone who installed rather than cloned.
+  `skills/` directory.** A skill points at a consuming project's documents by
+  naming the path in a code span — `` `architecture/README.md` § Modeling
+  depth `` — never as a relative link. Installing a plugin copies its
+  directory to a cache, so a link reaching outside it resolves to nothing.
 
 ## ⚠ Anti-patterns
 

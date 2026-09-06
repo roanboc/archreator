@@ -12,10 +12,7 @@ metadata:
 
 A **blameless retrospective**, narrowed to one subject: the gap between what
 the method says and what the work needed. Every method improvement starts as
-somebody improvising. An experienced person hits a moment the instructions do
-not cover, does something sensible, and moves on — and the knowledge stays in
-their head. This is the mechanism that stops that, by asking while the
-improvising is still fresh.
+somebody improvising, so ask while the improvising is still fresh.
 
 ## ⊕ When to use this
 
@@ -36,10 +33,8 @@ Run it after the work, never during.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC4.1`, the whole of the Evaluation band. It carries no gate, and
-that is the point: it **proposes**, and each proposal becomes its own change
-through the gates. That is what keeps a human between the learning and the
-method.
+Realizes `BPROC4.1`, the whole of the Evaluation band. It carries no gate: it
+**proposes**, and each proposal becomes its own change through the gates.
 
 ```mermaid
 flowchart LR
@@ -63,8 +58,7 @@ flowchart LR
 ## ▤ Template
 
 One file per retrospective, numbered chronologically, in the organization's
-own `docs/engagements/` — or wherever the consuming project keeps them, named
-in that project's `AGENTS.md`.
+own `docs/engagements/` — or wherever that project's `AGENTS.md` names.
 
 ```markdown
 # N — <what the work was, in the most general terms that stay true>
@@ -107,8 +101,8 @@ Never the material itself.>
 
 ### The six questions
 
-Ask them in order, in one pass, of whoever did the work. Three to five minutes
-of real thinking beats an hour of thorough recollection.
+Ask them in order, in one pass, of whoever did the work. Minutes of real
+thinking, not an hour of recollection.
 
 | # | Question | What it is for |
 | - | -------- | -------------- |
@@ -129,8 +123,7 @@ not the case.
 > the fifth question contradicted the first" is a pattern. The same sentence
 > with the company in it is a leak.
 
-The crossing from confidential material to a public note is the risky part of
-this skill, and it is one-directional. Two tests before writing a sentence:
+Two tests before writing a sentence:
 
 - **Would the client recognise themselves in it?** Generalize until they would
   not, or drop it.
@@ -140,21 +133,19 @@ this skill, and it is one-directional. Two tests before writing a sentence:
 ### A note that proposes nothing is still a note
 
 Not every engagement teaches something. Recording "nothing generalizable this
-time" is evidence — it is how you find out whether the method is converging,
-or whether the mechanism is manufacturing lessons to justify itself. **Never
-invent a finding to make a note look worthwhile.**
+time" is evidence in its own right. **Never invent a finding to make a note
+look worthwhile.**
 
 ### Proposals become initiatives, not edits
 
 This skill never edits a skill, a layer document or a rule. Each proposal is
-picked up as its own change with the gates that implies.
+picked up as its own change, with the gates that implies.
 
 ### Two notes make a pattern
 
 When something appears in **two** notes it has stopped being a coincidence and
-should be raised that week. When it appears in one, wait: the generalization
-test is unreliable on a single case, and encoding a one-off makes the method
-worse rather than better.
+should be raised that week. When it appears in one, wait — the generalization
+test is unreliable on a single case.
 
 ## ⇄ Hands off to
 

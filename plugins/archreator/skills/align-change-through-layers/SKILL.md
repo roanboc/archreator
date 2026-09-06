@@ -1,22 +1,21 @@
 ---
 name: align-change-through-layers
-description: Procedure — run this when requirements change or a new feature or behavior change is requested. Assesses whether the change needs strategy discovery first, aligns it through the architecture layers (strategy → business → information → application → technology) with explicit Requester approval gates before implementation, records it in a scope document, and only then implements. Not needed for pure bug fixes that change no documented behavior.
+description: Procedure — run this when requirements change or a new feature or behavior change is requested. Assesses whether the change needs strategy discovery first, aligns it through the architecture layers (strategy → business → information → application → technology) with Requester approval before implementation, records it in a scope document, and only then implements. Not needed for pure bug fixes that change no documented behavior.
 metadata:
   archreator:
     kind: gated-procedure
     realizes_process: BPROC2.1, BPROC2.2, BPROC2.3
-    gates: Understanding, Design
+    gates: Understanding
 ---
 
 # ⚙ Align a change through the layers
 
 **The spine.** Strategy and business architecture are validated before any
-other layer is touched — and validated means the Requester explicitly approves
-at named gates before development proceeds, the way a business reference group
-signs off before building starts.
+other layer is touched, and validated means the Requester approves before
+development proceeds.
 
 A requirement change is never implemented directly. It is aligned through the
-documents in `architecture/`, approved at the gates below, captured in a scope
+documents in `architecture/`, approved at the gate below, captured in a scope
 document, and only then coded. The folder numbers give the assessment order.
 
 ## ⊕ When to use this
@@ -40,13 +39,12 @@ document, and only then coded. The folder numbers give the assessment order.
 ## ⌖ Where this sits
 
 Realizes `BPROC2.1`, `BPROC2.2` and `BPROC2.3` — the whole of the Operational
-band's delivery. It owns **Understanding** and, at the Requester's option,
-**Design**; the **Direction** gate belongs to the discovery it hands off to.
+band's delivery. It owns **Understanding**; the **Direction** gate belongs to
+the discovery it hands off to.
 
 ```mermaid
 flowchart TD
   req(["A requirement, or a problem"])
-  s0["⚙ 0 — Check the open-questions log"]
   s1["⚙ 1 — Locate the change, assess strategy"]
   v{"Which verdict?"}
   disc(["⇄ discover-business-model · discover-strategy"])
@@ -55,38 +53,30 @@ flowchart TD
   s2["⚙ 2 — Align business and information"]
   s3["⚙ 3 — Draft the scope document"]
   g2{{"❖ Understanding — strategy, business, information"}}
-  opt{"Design requested?"}
-  s5["⚙ 5 — Align application and technology"]
-  g3{{"❖ Design — the solution design"}}
-  s6["⚙ 6 — Implement"]
-  s7["⚙ 7 — Verify alignment"]
-  s8["⚙ 8 — Open the pull request"]
+  s4["⚙ 4 — Align application and technology"]
+  s5["⚙ 5 — Implement"]
+  s6["⚙ 6 — Verify alignment"]
+  s7["⚙ 7 — Open the pull request"]
   merged(["Merged"])
 
-  req --> s0 --> s1 --> v
+  req --> s1 --> v
   v -->|discovery needed| disc
   v -->|conflicts with a Principle| stop
   v -->|aligned| bug
-  bug -->|yes| s6
+  bug -->|yes| s5
   bug -->|no| s2 --> s3 --> g2
   g2 -->|changes requested| s2
-  g2 -->|approved| opt
-  opt -->|yes| s5 --> g3
-  g3 -->|changes requested| s5
-  g3 -->|approved| s6
-  opt -->|no| s6
-  s6 --> s7 --> s8 --> merged
+  g2 -->|approved| s4 --> s5
+  s5 --> s6 --> s7 --> merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
   classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class s0,s1,s2,s3,s5,s6,s7,s8,req,merged,stop business
-  class g2,g3 implementation
+  class s1,s2,s3,s4,s5,s6,s7,req,merged,stop business
+  class g2 implementation
 ```
 
-Every edge leaving a rhombus is a verdict the agent **states and records** — a
-"no change" on a layer, a "pure bug fix, no scope document", an open question
-logged. None of them is a silent skip, and that is the difference between a
-branch and a shortcut.
+Every edge leaving a rhombus is a verdict the agent **records** — a "no change"
+on a layer, a "pure bug fix, no scope document". None of them is a silent skip.
 
 ## ⚓ Invariants
 
@@ -104,58 +94,60 @@ handed six overlapping options at a gate has been handed the analysis the
 process exists to do for them. And to what is **presented**: a gate summary is
 a consolidation, not a table of contents.
 
-The reason is not brevity. The value of the model is in the relationships
-between its elements, and a catalogue nobody can hold in their head has none
-that anyone will trace.
+### Every verdict is recorded
 
-### Every verdict is stated
+A layer with no impact still gets a "no change" verdict, written into the
+scope document's alignment table. A reader cannot tell an unconsidered layer
+from an unaffected one.
 
-A layer with no impact still gets a "no change" verdict, said out loud and
-written down. Silence is not a decision, and a reader cannot tell an
-unconsidered layer from an unaffected one.
+### Ask only what blocks the work now
+
+**Decide what you can decide.** A question reaches the Requester only when
+both are true: the answer changes what gets built now, and nothing in the
+model or the request settles it. Everything else is the agent's call — taken,
+applied, and written into the document it affects with its `Source` cell
+reading `adopted — <the call>`. That document stays `◐`, so a later word from
+the Requester overrides it where an approved fact would not.
+
+**Never ask about a state that does not exist yet.** A question about what
+will be true after work nobody has scheduled is not a question; it is the
+work, unstarted.
+
+**Speak the subject's language, never the method's.** The Requester is shown
+what changes about their business and asked whether it is right. They are not
+asked to choose between the method's options, and never have to know what a
+gate is to answer.
 
 ## ❖ The gates
 
-**Three gates, named for what the Requester approves.** The names are the ones
-the method's front door already uses — you approve the direction, you approve
-before any code exists, and you may ask to see the design first.
+**Two gates, named for what the Requester approves** — you approve the
+direction, and you approve before any code exists.
 
 | Gate | When | The Requester approves |
 | ---- | ---- | ----------------------- |
 | **❖ Direction** | Only when the change moves *why* or *for whom* — Step 1 finds the initiative is modeling an organization, triggers strategy discovery, or the initiative is planning rather than building | Where the subject is an organization, the Value Proposition Canvas per customer segment and the Business Model Canvas per product, before anything is derived from them — see `discover-business-model`. Then the strategy layer itself (motivation, capabilities, value stream) and the key business elements discovered with it — see `discover-strategy`; or the target plateaus, the gap register and the sequence — see `plan-the-transition` |
 | **❖ Understanding** | Every initiative that changes documented behavior, which is every initiative that will produce code. A docs-only initiative passes Direction instead | The changes, or explicit "no change" verdicts, to `1_strategy`, `2_business` and `3_information` |
-| **❖ Design** | Only if the Requester opts in when asked at Understanding | The solution architecture and logical application components, with the good practices and design patterns applied called out |
 
-**On an ordinary change, a Depth 1 project meets one gate and one offer.**
-Understanding is mandatory; Design is offered at it. Direction belongs to
-discovery and planning, so an application project meets it only when one of
-those runs — its first strategy discovery, or a roadmap — and an ordinary
-change never sees it. It gets no row saying so, because a gate that could not
-have applied is not a gate that was skipped.
+**On an ordinary change, a Depth 1 project meets one gate.** Understanding is
+mandatory. Direction belongs to discovery and planning, so an application
+project meets it only when one of those runs — its first strategy discovery,
+or a roadmap.
 
 **Direction may be granted in two sittings, and it is still one gate.** Where
 the subject is an organization the canvases are approved first and the strategy
-derived from them second, because deriving strategy from unapproved canvases is
-the error the ordering exists to prevent. Two rows in the Approvals table, each
-naming what was shown; one gate, because both are the same act — a Requester
-settling where this is going. Splitting them into two named gates would add a
-row to every Approvals table ever written to record a decision the other one
-already names.
+derived from them second: deriving strategy from unapproved canvases is the
+error the ordering prevents. Two rows in the Approvals table, each naming what
+was shown; one gate.
 
 **Direction approving a roadmap approves no work.** Every initiative on a
 sequence still arrives here, still walks the layers, and still stops at its own
-Understanding gate. A roadmap read as pre-approval has removed every gate in
-this table.
+Understanding gate.
 
-**A granted gate moves a status line, and that is what makes it visible.** An
-element added or changed by this initiative sits in a document marked
-`◐ Draft catalogue` until the gate covering its layer is granted; the moment it
-is, the document says `● Validated at <gate>, <date>` and its `Notes` column is
-emptied — `architecture-document-style` § Document status. Changing the marker
-before the approval is the one edit that makes the model lie about its own
-standing, and changing it afterwards is not optional: a layer that stays `◐`
-after its gate tells every later reader not to rely on something a Requester
-approved.
+**A granted gate moves a status line.** An element added or changed by this
+initiative sits in a document marked `◐ Draft catalogue` until the gate
+covering its layer is granted; the moment it is, the document says
+`● Validated at <gate>, <date>` and its `Notes` column is emptied —
+`architecture-document-style` § Document status.
 
 **This table is the single source for which gate applies when.** `AGENTS.md`,
 `architecture/scope/README.md` and `write-scope-document` point here rather than
@@ -163,45 +155,35 @@ restating it.
 
 Approval is granted by the **Requester** (see `AGENTS.md` § Who decides) and
 recorded in the scope document's Approvals table — which gate, who approved,
-when, and what was shown. **An approval that isn't recorded didn't happen.**
-
-**Only a gate that could have applied and did not gets an `N/A — <why>` row** —
-a Requester who declined Design, a Direction gate on an organization whose
-strategy this initiative left alone. A gate the project's depth never had is
-simply absent, because a row saying "not applicable, and never could be" is
-ceremony that teaches a reader nothing.
+when, and what was shown. **An approval that isn't recorded didn't happen**, and
+**a gate that was not granted gets no row**: an Approvals table holds what
+happened, never a census of what did not.
 
 ### Unscheduled stops
 
-The three gates are the stops you can see coming. Two things stop the work
-between them, and the agent **names which one** rather than just asking a
-question:
+The gates are the stops you can see coming. Two things stop the work between
+them, and the agent **names which one** rather than just asking a question:
 
 | Stop | It fires when |
 | ---- | ------------- |
 | **Material uncertainty** | Two readings of the request lead to materially different work, and nothing in the model settles which. Not "I would like confirmation" — a coin-flip whose two sides build different things |
 | **Authorization** | The work would commit the Requester to something they have not agreed: spend, public exposure, publishing the model, a direction |
 
-Naming the stop is what makes it answerable. "I need authorization before I
+Naming the stop is what makes it answerable: "I need authorization before I
 publish this" tells a Requester what kind of answer is wanted; "is this okay?"
-does not. An unscheduled stop is recorded in the Approvals table like any
-other, with the reason in place of a gate name.
+does not. A stop is recorded in the Approvals table like a gate, with the
+reason in place of a gate name.
 
 ### Where a gate happens
 
-The skill says to *present* to the Requester; this says **where**, because for
-a Requester who does not work in a terminal that surface is the entire
-experience.
-
-| Surface | Use it when | Why |
-| ------- | ----------- | --- |
-| **The conversation** | The Requester is in the session with you | Fastest; the discovery back-and-forth already lives here. Web and desktop need no terminal, so a non-technical Requester can use them |
-| **A pull-request comment** | The Requester is not in the session, or the approval should be durable and reviewable by others | The reply *is* the record — it satisfies "an approval that isn't recorded didn't happen" without anyone editing a file |
-| **A published view of the model** | Stakeholders need to read the model but will never open GitHub | Only worth it once the project publishes a site |
+| Surface | Use it when |
+| ------- | ----------- |
+| **The conversation** | The Requester is in the session with you |
+| **A pull-request comment** | The Requester is not in the session, or the approval should be reviewable by others. The reply *is* the record |
+| **A published view of the model** | Stakeholders read the model but never open GitHub. Only once the project publishes a site |
 
 Whichever surface is used, the approval is transcribed into the Approvals table
-with its date and what was shown. The table is the durable record; the surface
-is where the conversation happened.
+with its date and what was shown.
 
 ### Show the Requester what they are approving
 
@@ -213,32 +195,13 @@ to the default branch:
 https://github.com/<owner>/<repo>/blob/<branch>/<path>
 ```
 
-Not a repository-relative path, not a file name, not "see the canvases". A
-Requester approving a business model is usually not the person who knows how to
-check out a branch, and on a hosted surface may have no working copy at all. A
-summary they cannot verify against the document is not something they can
-meaningfully approve — and an approval granted against a summary is an approval
-of the summary.
-
-Two rules follow. **Link the branch, never the default branch**, because the
-work is not merged and the default-branch URL shows old content or a 404. And
-**give one link per document**, not a link to a folder — the Requester should
-land on the thing, not on a listing to navigate.
-
-The same applies in a pull-request comment: GitHub renders relative links there
-inconsistently, so write the full URLs.
+Not a repository-relative path, not a file name, not "see the canvases": an
+approval granted against a summary is an approval of the summary. Link the
+branch, never the default branch, and give one link per document rather than a
+link to a folder. In a pull-request comment write the full URLs — GitHub
+renders relative links there inconsistently.
 
 ## ⚙ Steps
-
-### 0 — Check the open-questions log
-
-If the project maintains `architecture/scope/open-questions.md`, read it: does
-any row bear on the requested change? If the Requester answers one during this
-conversation, record the answer there and in the originating scope document's
-Resolved section in the same change, before continuing. Skip where the project
-has no such log — it is optional.
-
-**→ Produces** any resolved rows, recorded in both places.
 
 ### 1 — Locate the change, then assess strategy
 
@@ -289,9 +252,9 @@ against a concrete document. Then it finishes at Step 7 and Step 8 like any
 other.
 
 What a discovery initiative skips is Steps 2, 4, 5 and 6 — no business or
-information alignment beyond what discovery produces, no Understanding, no application
-layer, no code. Its Approvals table records Direction, with Understanding and
-Design marked `N/A`.
+information alignment beyond what discovery produces, no Understanding, no
+application layer, no code. Its Approvals table records Direction and nothing
+else.
 
 ### 2 — Align business and information
 
@@ -333,22 +296,16 @@ against a concrete document; refine it as implementation proceeds.
 
 Present, in one message: the changed or added strategy, business and
 information documents — or their explicit "no change" verdicts — and the draft
-scope document. Then ask two explicit questions:
+scope document. Ask one question, in the subject's own words: **does this
+describe the business correctly, so implementation can start?**
 
-1. **Do you approve these strategy, business and information changes**, so
-   implementation can start?
-2. **Do you also want to review the solution design before it is coded** —
-   Design: the application architecture, logical components, good practices and
-   design patterns? A per-initiative choice aimed at technically inclined
-   Requesters; declining means layers 4–5 are covered by ordinary review.
-
-Do not write application or technology documents, or code, until question 1 is
-answered with an approval. Record it in the Approvals table; if changes are
-requested, rework Steps 1–3 and present again.
+Do not write application or technology documents, or code, until it is answered
+with an approval. Record it in the Approvals table; if changes are requested,
+rework Steps 1–3 and present again.
 
 **← Needs** the aligned layers and the scope document.
 
-**→ Produces** the Understanding row, and the Requester's answer on Design.
+**→ Produces** the Understanding row.
 
 ### 5 — Align application and technology
 
@@ -356,12 +313,6 @@ requested, rework Steps 1–3 and present again.
 | ----- | ------------ |
 | `architecture/4_application/` | Which application services or components change? New ports and interfaces follow `5_interface-contracts.md`; new platforms and adapters follow `4_solution-design.md` |
 | `architecture/5_technology/` | Any impact on runtimes, build, CI or hosting? Where no stack has been chosen, use `stack-selection` rather than re-deriving one |
-
-**❖ Design — the solution design**, where the Requester opted in at Understanding.
-Present the affected application services and logical components, their ports
-and interfaces, and name the good practices and design patterns applied — and,
-where a pattern is load-bearing, why it is needed. Wait for approval and record
-it before implementing; rework this step if changes are requested.
 
 As in Step 2, a layer filled for the first time gets its README from the
 plugin's assets — `assets/layers/4_application/`, `assets/layers/5_technology/`.
@@ -399,21 +350,15 @@ the delta back to the Requester instead of silently absorbing it.
   another model's layer documents is a statement that was true before and may
   not be now.
 - The scope document's in-scope/out-of-scope table matches the diff.
-- Its Approvals table has a row for every gate this initiative reached, and
-  for any that could have applied and did not — `N/A — <why>`.
+- Its Approvals table has a row for every gate this initiative was granted,
+  and no row for one it was not.
 - At Depth 3: every cross-domain ID reference points at a service the owning
   domain's charter actually exposes.
 - Cross-links resolve, paths and anchors both.
-- If the scope document gained or resolved an open question, the project's log
-  reflects the same.
 
-**Why the cross-model check is a step and not a nicety.** Neither validator can
-find these. `check_model` verifies that an element *reference* resolves;
-`check_links` verifies that a *link* resolves. Neither reads what a "Realized
-by" cell claims about a path, so a cell naming a directory that no longer exists
-passes both silently. The one time this was left to notice rather than to a
-step, an initiative that moved a scaffold and renamed three trees falsified
-seven statements in a second model and shipped them.
+**Neither validator can find these.** `check_model` verifies that an element
+*reference* resolves and `check_links` that a *link* resolves; neither reads
+what a "Realized by" cell claims about a path.
 
 **If this was a discovery initiative, say what comes next.** Discovery ends at
 Direction having delivered documents and no code — which is correct, but
@@ -447,11 +392,12 @@ branch (`main...HEAD`), not just the latest commit.
 > A Requester asks for an export feature. Step 1a states Depth 1. Step 1c finds
 > the strategy filled and the change serving an existing goal — **aligned** —
 > and records which goal. Step 2 adds one business service and one data object,
-> and gives `1_strategy` an explicit "no change". Understanding is presented with
-> branch links to three documents and the draft scope document; the Requester
-> approves and declines Design. Steps 6–8 implement, verify and open the PR,
-> and Step 7 catches that a renamed directory falsified two rows in a second
-> model — which is the check nothing automated would have found.
+> and gives `1_strategy` an explicit "no change". Understanding is presented
+> with branch links to three documents and the draft scope document, and one
+> question: does this describe the business correctly? Steps 5–8 implement,
+> verify and open the PR, and Step 7 catches that a renamed directory falsified
+> two rows in a second model — which is the check nothing automated would have
+> found.
 
 ## ⚠ Anti-patterns
 
@@ -464,14 +410,16 @@ branch (`main...HEAD`), not just the latest commit.
 - Deciding process decomposition depth per initiative rather than through
   `process-and-capability-levels`.
 - Skipping the cross-model check because both validators are green.
+- Asking the Requester something the model already settles, or something about
+  a state that does not exist yet.
+- Writing a row for a gate that was never granted.
 
 ## ☑ Done when
 
 - The depth is stated, and at Depth 3 the owning domain is named.
 - Step 1c's verdict is recorded, whichever of the four it was.
 - Every layer has a verdict in the scope document's alignment table.
-- Every gate reached has a row, and every gate that could have applied and
-  did not says `N/A — <why>`.
+- Every gate granted has a row, and no gate that was not granted has one.
 - Every element added names what realizes it, or is marked Pending.
 - Every other model this change falsifies has been corrected in the same change.
 - The pull request covers the whole branch.

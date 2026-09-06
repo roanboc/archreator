@@ -11,7 +11,7 @@ metadata:
 # ⚙ Write a PR description
 
 The handover. A pull request is reviewed and merged as a unit, so its body
-describes the whole branch — not the commit that happened to be last.
+describes the whole branch, not the commit that happened to be last.
 
 ## ⊕ When to use this
 
@@ -30,8 +30,8 @@ describes the whole branch — not the commit that happened to be last.
 ## ⌖ Where this sits
 
 Realizes `BPROC2.3`, the last process before merge. It carries **no gate** —
-the gates are granted before code exists. What waits here is the Reviewer,
-whose approval is ordinary review rather than a recorded gate.
+the gates were granted before code existed. What waits here is the Reviewer,
+whose approval is ordinary review, not a recorded gate.
 
 ```mermaid
 flowchart LR
@@ -52,11 +52,10 @@ flowchart LR
 
 ## ⚓ Invariants
 
-- **The body describes the branch, not the commit.** A reader approving a PR
-  is approving everything in `main...HEAD`.
-- **The description is a living document until merge.** A body that was true
-  at the first push and stale at the fifth is worse than no body, because it
-  reads as current.
+- **The body describes the branch, not the commit** — a reviewer approves
+  everything in `main...HEAD`.
+- **The description is a living document until merge.** A body true at the
+  first push and stale at the fifth reads as current and is not.
 
 ## ⚙ Steps
 
@@ -81,16 +80,15 @@ change fills the same body — a pure bug fix included.
 | Section | Holds |
 | ------- | ----- |
 | **Summary** | What the branch delivers, in two to four sentences |
-| **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Its Approvals table must already record the gates the change required — Understanding at minimum, per `align-change-through-layers` § The gates. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
+| **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Its Approvals table must already record the gates this change was granted — Understanding at minimum, per `align-change-through-layers` § The gates — and nothing for a gate it never met. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
 | **EA layers touched** | The verdicts copied from the scope document's alignment table. Every layer gets one, including an explicit "no change" |
 | **Changes** | Grouped by work package or area, covering the full `main...HEAD` diff |
 | **Complexity** | What was removed, and what new recurring cost the change adds — a file in the scaffold, a check to keep green, a copy to hold together — with why it is justified. "Nothing removed, nothing recurring added" is a complete answer |
 | **Verification** | The commands run — lint, typecheck, tests, build — and their results, plus manual and end-to-end checks |
 | **Out of scope / follow-ups** | The scope document's gap notes, mirrored |
 
-**⚖ Judgement.** If a file change is not explainable under Changes, it either
-needs a mention or does not belong on the branch. An unexplainable diff is the
-signal, not the inconvenience.
+**⚖ Judgement.** A file change that is not explainable under Changes either
+needs a mention or does not belong on the branch.
 
 **← Needs** the commit list, the file list, the scope document.
 
@@ -98,8 +96,8 @@ signal, not the inconvenience.
 
 ### 3 — Keep it current
 
-When the branch gains commits, re-run the two commands from Step 1 and
-reconcile the body against them.
+When the branch gains commits, re-run Step 1's two commands and reconcile the
+body against them.
 
 **← Needs** the branch, as it now stands.
 
@@ -115,10 +113,9 @@ reconcile the body against them.
 
 > A branch carries six commits: four bug fixes and two that add a process
 > model. `git log main..HEAD` shows both initiatives, so Changes gets two
-> subsections, Scope document links the one initiative that needed a document
-> and states "no scope document" with a root cause for the fixes, and EA
-> layers touched carries an explicit "no change" for the four layers neither
-> initiative moved.
+> subsections; Scope document links the initiative that needed one and states
+> "no scope document" with a root cause for the fixes; EA layers touched
+> carries an explicit "no change" for the four layers neither moved.
 
 ## ⚠ Anti-patterns
 

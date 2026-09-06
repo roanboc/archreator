@@ -8,8 +8,7 @@
   Describe the WHOLE branch, not just the latest commit:
     git log --oneline main..HEAD
     git diff main...HEAD --stat
-  Keep this body updated as the branch gains commits — a body that was true at
-  the first push and stale at the fifth reads as current and is not.
+  Keep this body updated as the branch gains commits.
 -->
 
 ## Summary
@@ -19,8 +18,9 @@
 ## Scope document
 
 <!-- Link the initiative's document in architecture/scope/. Its Approvals
-     table must already record the gates the change required — Understanding at
-     minimum for anything that changes documented behavior.
+     table must already record every gate the change was granted —
+     Understanding at minimum for anything that changes documented behavior —
+     and no row for a gate it was not granted.
 
      A pure bug fix has no scope document. Write "No scope document" and say
      what broke, the root cause, and the fix. -->
@@ -29,8 +29,7 @@
 
 <!-- Copied from the scope document's alignment table. EVERY layer gets a
      verdict, including an explicit "no change" — silence is not a decision.
-     Delete the rows for layers this project does not use, and say so in the
-     row rather than dropping it silently. -->
+     Delete the rows for layers this project does not model. -->
 
 | Layer | Verdict |
 | ----- | ------- |
@@ -43,9 +42,9 @@
 
 ## Changes
 
-<!-- Grouped by work package or area, covering the full main...HEAD diff. If
-     a changed file is not explainable here, it either needs a mention or does
-     not belong on the branch. -->
+<!-- Grouped by work package or area, covering the full main...HEAD diff. A
+     changed file that cannot be explained here does not belong on the
+     branch. -->
 
 ## Complexity
 

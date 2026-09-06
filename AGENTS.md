@@ -12,7 +12,7 @@ more: worked examples of the method applied to real organizations live in
 | [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The eighteen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/plugin.json`](./plugins/archreator/plugin.json) · [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests. The two plugin manifests are the same fact in the two places hosts look for it, and `check_skills.py` holds them together |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model, and [`install_skills.py`](./plugins/archreator/scripts/install_skills.py), which copies the skills into `.agents/skills/` for a host that installs no plugin. Both stay out of `scaffold/` because a downstream project has no skills |
-| [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the status table that replaced an empty layer tree), and `scripts/` with the two validators and the parse they share |
+| [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the per-layer status table), and `scripts/` with the two validators and the parse they share |
 | [`plugins/archreator/assets/`](./plugins/archreator/assets/README.md) | The templates a skill emits **when the project has something to put in them** — the layer READMEs, the non-layer folders, the GitHub-shaped files, `CONTRIBUTING.md`. Their relative links resolve where they land, so `check_links.py` skips the tree and `check_skills.py` proves instead that every asset is reachable from a skill |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, [how to adopt it and how a model is published](./docs/adopting.md), [how an existing project crosses a breaking version](./docs/migrating.md), and [the format every skill follows](./docs/skill-format.md). The method's own initiative records and retrospectives live in the sibling repository [architecture-archreator](https://github.com/roanboc/architecture-archreator), never here. The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The public site, deployed to <https://roanboc.github.io/archreator/> — a landing page, [a get-started page](./site/start.html) with the install recipe per host, and the stylesheet both share |
@@ -83,24 +83,18 @@ build_brief.py --project . --element CAP1 --focus impact
 
 `build_brief.py` names a scope and writes one Markdown brief into
 `.archreator/work/briefs/` — the elements that matter, generated ArchiMate
-views of how they depend on each other across the layers, and the paragraphs
-the documents already write. Disposable, never committed, stamped with the
-revision it came from.
+views of how they depend on each other, and the paragraphs the documents
+already write. Disposable, never committed, stamped with its revision.
 
 **Nothing is cached.** Every tool parses the Markdown fresh, which takes well
-under a second on the largest model built on this method. There was a
-persisted SQLite graph; in that model it had gone stale and was answering from
-a revision that no longer described the architecture, with nothing to tell the
-reader. A cache that is silently wrong is worse than no cache.
+under a second on the largest model built on this method.
 
 A reference can name an element in another model by its federation ID —
 `ORG.CAP1`, declared on that model's front door and mapped in
 `architecture/federation.md` — and `check_model.py` resolves it against that
 model when it is in the same repository, or against
-`architecture/imports.md` when it is not. Nothing
-fetches: a validator reading a sibling repository on every pull request would
-be slow, would fail when somebody else's site was down, and would let another
-team's push break this build.
+`architecture/imports.md` when it is not. **Nothing fetches**, so no other
+team's push can break this build.
 
 `check_skills.py` needs PyYAML, which `uv run` supplies from the script's own
 inline metadata.

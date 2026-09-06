@@ -22,11 +22,10 @@ classified, and retained_.
 | 4   | [4_data-architecture.md](./4_data-architecture.md) | Schema, classification, retention                     | Where does it live, how sensitive is it, how long?   |
 
 **Every data object belongs to a domain, and the identifier carries it.** A
-domain is the level-1 row of the same catalogue — `DOBJ1`, Customer data,
-with an owner — and its objects extend it: `DOBJ1.2`. A subdomain earns a
-level only where a domain genuinely splits; a small model's domain map is a
-handful of boxes and is finished. No new prefix, no new element kind — the
-leveled identifier does the work, exactly as a capability area's does.
+domain is the level-1 row of the same catalogue — `DOBJ1`, Customer data, with
+an owner — and its objects extend it: `DOBJ1.2`. A subdomain earns a level only
+where a domain genuinely splits; a small model's domain map is a handful of
+boxes and is finished.
 
 `3_data-architecture.md` is where **data classification** (public,
 internal, sensitive, regulated, …) and **retention** live — reference it
@@ -36,24 +35,22 @@ piece of data is.
 ## Layer view
 
 <!--
-  TEMPLATE — replace with the project's real data objects and how they
-  flow between representations (input format, in-memory model, persisted
-  form) once known.
+  TEMPLATE — replace with the project's real data domain, its objects, the
+  business object each one represents, and where it is persisted. Keep the
+  label shape: glyph, name, identifier. The business object and the artifact
+  are visitors from their own layers and keep their own colour.
 -->
 
 ```mermaid
 flowchart TB
-  subgraph CORE["Domain (in-memory)"]
-    obj["«Data Object» <Domain type>"]:::application
-  end
+  domain["▦ <Who owns this information> [DOBJ#]"]:::application
+  obj["▦ <What information exists> [DOBJ#.#]"]:::application
+  bobj["▧ <What the business calls it> [BOBJ#]"]:::business
+  store[/"⎔ <Where it is persisted> [ART#]"/]:::technology
 
-  subgraph EDGE["Representations"]
-    input["«Representation» <Input format>"]:::business
-    store[("«Artifact» <Persisted form>")]:::technology
-  end
-
-  input -->|parsed into| obj
-  obj -->|persisted as| store
+  domain -->|aggregates| obj
+  obj -->|realizes| bobj
+  store -->|realizes| obj
 
   classDef business fill:#fffbb5,stroke:#b8a200,color:#333
   classDef application fill:#c2f0ff,stroke:#0288d1,color:#333

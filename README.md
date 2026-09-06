@@ -17,23 +17,20 @@ explicit gates before a line of code exists.
 
 Building software was hard, and slow. That was the visible problem, and it
 covered for everything behind it — a requirement nobody had pinned down,
-business context that lived in one person's head, an assumption three people
-each understood differently. None of it had to be settled, because the build
-was always the thing running late.
+business context that lived in one person's head. None of it had to be
+settled, because the build was always the thing running late.
 
 AI took that delay away faster than anyone planned for, and what it was
 covering is now the whole problem. **Vague requirements and missing context
 no longer slow a project down — they get built.** An agent handed an
-assumption nobody stated does not stop and ask. It fills the gap with
-something plausible and carries on, at speed, and you get a working version of
-the wrong thing in an afternoon. Understanding the problem, and which solution
-actually fits it, is the part that stays human.
+assumption nobody stated fills the gap with something plausible and carries
+on, at speed, and you get a working version of the wrong thing in an
+afternoon.
 
-So the thing worth building now is not a faster way to produce software. It is
-a way to get your own assumptions written down where people can disagree with
+So what is worth building now is not a faster way to produce software. It is a
+way to get your own assumptions written down where people can disagree with
 them — who you serve, what you offer, who does what, and which system does
-each piece — early, while disagreeing is still cheap. The fix isn't a better
-prompt.
+each piece — early, while disagreeing is still cheap.
 
 ## How it works
 
@@ -58,7 +55,6 @@ flowchart LR
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
-  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
@@ -68,8 +64,8 @@ one you arrived with — who it serves, what it has to do, and which of your
 assumptions turned out to disagree with each other. The dotted edges are the
 loops that can't be skipped, and neither gate here is about code.
 
-**Those names are the method's, not the diagram's.** Direction, Understanding
-and Design are what the skills call them too, so nothing you read later
+**Those names are the method's, not the diagram's.** Direction and
+Understanding are what the skills call them too, so nothing you read later
 renames what you just approved.
 
 ### Then — what gets built from it
@@ -78,32 +74,27 @@ renames what you just approved.
 flowchart LR
   inp(["What you agreed"]):::done
   realization["<b>Realization</b><br/>what builds it"]:::ai
-  gC{{"❖ <b>Design</b><br/>only if you ask to see it first"}}:::gateopt
   build["Builds it"]:::ai
   check{{"You check<br/>the delivery"}}:::gate
   out(["The outcome you asked for,<br/>and the next requirement"]):::done
 
-  inp --> realization --> gC --> build --> check --> out
+  inp --> realization --> build --> check --> out
   check -.->|"changes"| build
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
-  classDef gateopt fill:#ffd6d6,stroke:#c62828,color:#333,stroke-dasharray: 5 5
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
 
 **Nobody asks you to read the code.** What comes back to you is the working
 thing, and the question is whether it does what you asked for. If you *are*
-technical, or someone on your side is, the pull request is right there and the
-dashed gate will show you the design before it is built — but that is an
-option you take, not a toll you pay.
+technical, or someone on your side is, the pull request is right there.
 
 Each half is bounded, and each ends in something worth having: the first in
-understanding, the second in the outcome. That is also why the second picture
-ends where the first one began.
+understanding, the second in the outcome.
 
-Drawn in the method's own palette: cyan is always an AI actor, here and in
-every model you'll build, so you never mistake one for a person.
+Cyan is always an AI actor, here and in every model you'll build, so you never
+mistake one for a person.
 
 ### The six layers
 
@@ -188,8 +179,8 @@ Because the reader that matters can't open a modeling tool.
 An architecture kept in a tool's own format is invisible to your agent and
 invisible to code review. Markdown in git is diffable, greppable, reviewable
 in a pull request, and readable natively by the thing you're asking to build
-from it. That single choice is why nothing has to be exported before the model
-can be used, and why there is nothing to keep running.
+from it. Nothing has to be exported before the model can be used, and there is
+nothing to keep running.
 
 Rendering it for people is a separate, optional step —
 [a portal](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) is one command, regenerated

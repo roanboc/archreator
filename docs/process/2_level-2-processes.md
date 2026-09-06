@@ -4,8 +4,8 @@ _[← The process model](./README.md) · [Level 1](./1_level-1-macro-processes.m
 
 Every level-2 process, with the full supplier-input-output-customer set. `Realized
 by` is the [grounding rule](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
-on the method's own track — a process here is realized by a written procedure, and a
-skill is a written procedure.
+on the method's own track: a process here is realized by a written procedure, and a
+skill is one.
 
 ## `BPROC1` — Establish the architecture model
 
@@ -15,33 +15,28 @@ skill is a written procedure.
 | `BPROC1.2` | Discover the business model | Turns what the Requester knows about customers and offerings into approved canvases the strategy is derived from | The subject is an organization, not a single application | Requester | Customers, offerings, revenue, partners | A Value Proposition canvas per segment; a Business Model canvas per product; **Direction** recorded | `BPROC1.3` | Requester approves, Agent drafts | `discover-business-model` |
 | `BPROC1.3` | Discover the strategy | Turns approved canvases, or an empty template, into a strategy layer a change can be judged against | The strategy layer is unfilled, or a change shifts it | `BPROC1.2`; Requester | Approved canvases, or a placeholder strategy layer | A filled `1_strategy/`; the key business elements found with it; **Direction** recorded | `BPROC2.1` | Requester approves, Agent drafts | `discover-strategy`, shaped by `process-and-capability-levels` |
 | `BPROC1.4` | Split the model into domains | Turns one enterprise tree that has outgrown itself into domains with contracts between them | The organization has several business lines, or a change crosses a boundary | Requester; `BPROC1.3` | An enterprise-level model that has outgrown one tree | One charter per domain, with its exposed and consumed services | `BPROC2.1`; each domain's Requester | Agent | `model-domains` |
-| `BPROC1.5` | Discover the current landscape | Turns an estate that already runs into described business, information, application and technology layers a target can be measured from | The strategy is approved and the layers below it are empty | Requester; `BPROC1.3` | The running estate — repositories, licences, identity entries, runbooks, the people who operate it | A filled `2_business/` through `5_technology/`, each with a declared coverage; **Understanding** and **Design** recorded | `BPROC5.1`; `BPROC2.1` | Requester approves, Agent drafts | `discover-current-landscape`, shaped by `process-and-capability-levels` |
+| `BPROC1.5` | Discover the current landscape | Turns an estate that already runs into described business, information, application and technology layers a target can be measured from | The strategy is approved and the layers below it are empty | Requester; `BPROC1.3` | The running estate — repositories, licences, identity entries, runbooks, the people who operate it | A filled `2_business/` through `5_technology/`, each with a declared coverage; **Understanding** recorded once over the whole described baseline | `BPROC5.1`; `BPROC2.1` | Requester approves, Agent drafts | `discover-current-landscape`, shaped by `process-and-capability-levels` |
 
 ## `BPROC5` — Plan the transition
 
 Fifth by identifier and second by sequence. An identifier is assigned once and never
 reused, so the number records when a process joined the model rather than where it
-runs — the rule
-[`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
-§ Never-reused starts at the gate states, applied to the method's own model. The
-pages order these sections by the flow, and the map on
-[the index page](./README.md#the-macro-process-map) is authoritative for it.
+runs — [`architecture-document-style`](../../plugins/archreator/skills/architecture-document-style/SKILL.md)
+§ Never-reused starts at merge. These pages order their sections by the flow, and
+the map on [the index page](./README.md#the-macro-process-map) is authoritative for it.
 
 | ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
 | -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
 | `BPROC5.1` | Define the target and sequence the roadmap | Turns an approved description of today into a named destination, the distance to it, and the order the distance is closed in | The Requester asks where the architecture should go, or changes keep arriving with nothing to rank them against | `BPROC1.3`; `BPROC1.5`; Requester | The strategy layer's goals; the current-state layers; the gap notes left by earlier scope documents | Target plateaus, a derived gap register and a sequence of initiatives in `architecture/6_transition/`; **Direction** recorded | `BPROC2.1`, once per initiative on the sequence | Requester approves, Agent drafts | `plan-the-transition` |
 
 **It reuses `BPROC1.3`'s gate rather than adding one.** Direction is where a Requester
-approves direction, and a sequenced target is direction. A gate of its own would add a
-row to every Approvals table in every model built on the method — including merged
-scope documents that no rule permits rewriting — to record a decision an existing gate
-already names.
+approves direction, and a sequenced target is direction.
 
 ## `BPROC2` — Deliver an architected change
 
 | ID | Process | Purpose | Trigger | Suppliers | Inputs | Outputs | Customers | Owner role | Realized by |
 | -- | ------- | ------- | ------- | --------- | ------ | ------- | --------- | ---------- | ----------- |
-| `BPROC2.1` | Align the change through the layers | Turns a requirement into approved changes to the upper layers, or explicit verdicts that none were needed | A Requester presents a requirement or reports a problem | Requester; `BPROC1.3` | The requirement; the current `architecture/` | Changed layer documents, or explicit "no change" verdicts; a scope document; **Understanding** and, if requested, **Design** | `BPROC2.2` | Agent | `align-change-through-layers` Steps 0–5, `write-scope-document` |
+| `BPROC2.1` | Align the change through the layers | Turns a requirement into approved changes to the upper layers, or explicit verdicts that none were needed | A Requester presents a requirement or reports a problem | Requester; `BPROC1.3` | The requirement; the current `architecture/` | Changed layer documents, or explicit "no change" verdicts; a scope document; **Understanding** recorded | `BPROC2.2` | Agent | `align-change-through-layers` Steps 1–5, `write-scope-document` |
 | `BPROC2.2` | Implement and verify | Turns an approved scope document into code the architecture documents are still true of | A scope document has passed its gates | `BPROC2.1` | The approved scope document; the aligned layer documents | Code; architecture and scope documents still true to it; a green validator run | `BPROC2.3` | Agent | `align-change-through-layers` Steps 6–7, `shard-stories`, `stack-selection` |
 | `BPROC2.3` | Hand over for review | Turns a finished branch into a pull request a Reviewer can judge without reading every commit | The work is implemented and verified | `BPROC2.2` | The whole branch, `main...HEAD` | A pull request describing every change on the branch | Reviewer | Agent | `align-change-through-layers` Step 8, `write-pr-description` |
 
@@ -74,6 +69,4 @@ They should not be made to. A rule is not a step.
 A process boundary is drawn by accountability — one trigger, one definable output,
 one owner role. A skill boundary is drawn by activation — when an agent reaches for
 it, and what must be in context when it does. `align-change-through-layers` spans
-all three of `BPROC2`'s children because that is the coherent unit an agent
-activates on; splitting it to match the process model would serve the diagram at the
-reader's expense.
+all three of `BPROC2`'s children because that is the unit an agent activates on.

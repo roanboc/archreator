@@ -10,14 +10,8 @@ metadata:
 
 # ▤ Shard stories
 
-Vertical slicing, with the context packed in. The practice is adapted from
-[BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD)'s context-engineered
-development, and the failure mode it targets is an agent — or a person
-returning after a break — re-reading the whole model just to work out what one
-slice of work requires.
-
-A story fixes that by being **self-contained**: actionable from its own text
-plus the links it cites, and nothing else.
+Vertical slicing, with the context packed in. A story is **self-contained**:
+actionable from its own text plus the links it cites, and nothing else.
 
 ## ⊕ When to use this
 
@@ -33,14 +27,12 @@ plus the links it cites, and nothing else.
 | ------------- | ----------- |
 | The work package finishes in one sitting | An inline task list in the scope document — the default |
 | The scope itself is wrong | Fix the scope document; a story never renegotiates scope |
-
-Small initiatives do not need this file at all.
+| The initiative is small | Nothing — it needs no stories |
 
 ## ⌖ Where this sits
 
-Realizes `BPROC2.2`, inside implementation. It carries no gate: the gates were
-granted against the scope document before any of this work began, and a story
-inherits them rather than adding one.
+Realizes `BPROC2.2`, inside implementation. It carries no gate: a story
+inherits the gates granted against its scope document.
 
 ```mermaid
 flowchart LR
@@ -64,10 +56,9 @@ flowchart LR
 
 ## ▤ Template
 
-Stories live alongside the initiative's scope document, in
-`architecture/scope/<n>_<name>-stories/`, one file per story, numbered in build
-order. The work package keeps its **Deliverables** and **Outcome** summary and
-links to the stories instead of expanding into a task list inline.
+Stories live in `architecture/scope/<n>_<name>-stories/`, one file per story,
+numbered in build order. The work package keeps its **Deliverables** and
+**Outcome** summary and links the stories instead of listing their tasks.
 
 ```markdown
 # Story <n>.<m> — <Name>
@@ -106,11 +97,9 @@ glossary terms this story needs, e.g.:>
   is missing context. Add the link; do not assume prior chat history carries
   it.
 - **Links, not restated rationale.** A story points at the document that owns
-  a rule or a component; it never re-explains the rule. Rationale keeps one
-  home.
+  a rule or a component; it never re-explains the rule.
 - **Treat every story as a cold handoff.** Picking one up, read only the story
-  and what it links to before starting. Needing the conversation that produced
-  the scope document is the defect this skill exists to prevent.
+  and what it links to before starting.
 - **The scope document stays the source of truth for scope.** Stories inherit
   its alignment table and its in-and-out-of-scope decisions. Where a story
   reveals the scope document was wrong, fix the scope document in the same
@@ -121,11 +110,10 @@ glossary terms this story needs, e.g.:>
 ## ✎ Worked example
 
 > A work package delivers an importer, a schema migration and a settings
-> screen. Three deliverables, reviewable separately, spanning several
-> sessions — so three stories in build order, the migration first because the
-> other two cite it. Each names the business rule it implements by link, and
-> the work package in the scope document shrinks to an outcome sentence and
-> three links.
+> screen — three deliverables, reviewable separately, spanning several
+> sessions. Three stories in build order, the migration first because the
+> other two cite it, each naming the business rule it implements by link. The
+> work package shrinks to an outcome sentence and three links.
 
 ## ⚠ Anti-patterns
 

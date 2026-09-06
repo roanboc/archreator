@@ -9,10 +9,9 @@ empty and keeps everything in the layer folders above.
 A **domain** is a part of the organization modeled as though it were an
 organization in its own right: it has customers, it offers services, it owns
 capabilities and resources, and it exists to serve a purpose larger than
-itself. Some of its customers are outside the company; some are other
-domains. That is the whole idea — the same model shape repeats at every
-level, so a business line can be understood on its own terms without
-flattening it into the enterprise's.
+itself. Some of its customers are outside the company; some are other domains.
+The same model shape repeats at every level, so a business line is understood
+on its own terms rather than flattened into the enterprise's.
 
 ## The tree
 
@@ -37,10 +36,10 @@ and marks the rest "not started" — the
 [depth ladder](../README.md#modeling-depth) governs how much gets filled in,
 not which folders exist.
 
-**Three levels maximum**: enterprise → domain → subdomain. Past that, IDs
-stop being readable and the thing being modeled is a team, not a domain. An
-organization that genuinely needs more structure than this wants separate
-repositories federated by contract, not a fourth level of nesting.
+**Three levels maximum**: enterprise → domain → subdomain. Past that, IDs stop
+being readable and the thing being modeled is a team, not a domain. An
+organization that needs more structure wants separate repositories federated by
+contract, not a fourth level of nesting.
 
 ## When to split a domain out
 
@@ -79,11 +78,6 @@ entitled to depend on. It carries:
 | **Decision rights and escalation** | What it decides alone, and who it escalates to |
 | **Operated by** | Human, AI, or hybrid — with the autonomy level, decision rights, and escalation path from `architecture-document-style`'s actor notation, applied to the domain as a whole |
 
-That last row is what makes this useful for an AI-first organization: a
-domain operated by an AI at a declared autonomy level, with declared
-decision rights and a named escalation path, is a delegation boundary you
-can actually reason about — and eventually hand to an agent.
-
 ## The federation rule
 
 **A domain's exposed services are its contract; everything else is
@@ -100,18 +94,12 @@ internal.**
 - Changing anything a charter doesn't expose needs only the owning domain's
   Requester. This is the point of the boundary: most changes stay local.
 
-The rule is also what makes parallel work safe later — a domain boundary is
-the largest unit one agent or one team can own without coordinating on every
-change.
-
 ## Element IDs
 
 An identifier is written bare inside the domain that owns it, qualified by
-that domain's name from outside, and bare at the enterprise level. Numbering
-is per prefix **per domain**, so two domains may each own the same number —
-the qualifier is what distinguishes them, and this is deliberate: globally
-unique numbering would make every new domain a merge conflict against every
-other.
+that domain's name from outside, and bare at the enterprise level. Numbering is
+per prefix **per domain**, so two domains may each own the same number and the
+qualifier is what distinguishes them.
 
 A leveled element extends its parent's identifier, so one identifier can
 carry both qualifiers at once. Read outwards from the prefix: upper-case
@@ -119,9 +107,8 @@ segments before it are the domain path, numeric segments after it are the
 levels.
 
 The worked examples live in `architecture-document-style` § Element IDs and
-not here. A scaffold document that shows a specimen identifier ships that
-identifier into every generated project, where it becomes a reference to an
-element nobody defined.
+not here: a specimen identifier in a template ships into every generated
+project as a reference to an element nobody defined.
 
 ## Layer view
 
@@ -134,7 +121,7 @@ element nobody defined.
 ```mermaid
 flowchart TB
   subgraph ENT["Enterprise"]
-    goal("◎ <What the whole organization is for> [G1]"):::motivation
+    goal("◎ <What the whole organization is for> [G#]"):::motivation
   end
 
   subgraph D1["Domain — <name>"]

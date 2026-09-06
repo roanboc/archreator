@@ -35,8 +35,7 @@ language, what a document may contain, and how it links — are in
 ## ⌖ Where this sits
 
 **Realizes no process.** It is the rulebook every process complies with, and
-the most-cited skill in the corpus — every skill that writes or edits a model
-document reaches for it. Nothing here is a step.
+the most-cited skill in the corpus. Nothing here is a step.
 
 ## ※ Rules
 
@@ -75,8 +74,7 @@ there resolves exactly as one naming a heading here.
   documents are numbered in analysis order like a layer's are, because a gap
   cannot be derived before the plateau it is measured against exists. It is
   **the only folder in the model that describes a future**; every numbered
-  layer describes the current state, and that division is what lets a reader
-  trust a layer document without checking its date.
+  layer describes the current state.
 
 ### One document per layer, until it is not
 
@@ -89,37 +87,31 @@ already anticipate: `1_business-actors-and-roles.md`,
 Split when any of these becomes true, and not before:
 
 - **A reader scrolls through one family to reach another** — past roughly
-  twenty-five elements in the document, counting every level, the page has
-  stopped being scannable.
-- **One family carries a leveled catalogue of its own** — a process map
-  with its level-2 contracts, a capability decomposition — big enough to be
-  the document a reader opens on purpose.
+  twenty-five elements in the document, counting every level.
+- **One family carries a leveled catalogue of its own** — a process map with
+  its level-2 contracts, a capability decomposition — big enough to be the
+  document a reader opens on purpose.
 - **Two families are validated at different sittings of a gate.** What is
-  approved together can live together; what is approved separately should
-  be separable.
+  approved together can live together.
 
 Each split document keeps the full skeleton — its own "How to read" legend,
 its own status line — and the layer README's analysis-order table is the
-index. Split along family lines only: levels 1 and 2 of one catalogue stay
-in one document, with only a level-3 flow earning a file of its own
+index. Split along family lines only: levels 1 and 2 of one catalogue stay in
+one document, with only a level-3 flow earning a file of its own
 (`process-and-capability-levels` § What is here, and what is one file away).
-And merge back when a change leaves stubs: two half-empty documents are
-worse than one honest one.
+Merge back when a change leaves stubs.
 
 ### A row must survive a page
 
 **A table is the preferred display, and a table that fits stays a table.**
-Rows scanned against columns are what catalogues exist for, and flipping a
-fitting table into prose or a vertical record loses exactly that. The rule
-here fires on one symptom only: **horizontal scroll**. A table that
-overflows sideways — on the rendered page, or on the portrait PDF a brief
-or scope is converted to — is unreadable there and barely readable before
-it; a table that fits never flips, whatever its column count.
+The rule here fires on one symptom only: **horizontal scroll** — on the
+rendered page, or on the portrait PDF a brief or scope is converted to. A
+table that fits never flips, whatever its column count.
 
 Past roughly **six columns, or more than one column of sentence-length
-cells**, a table usually starts to scroll — that is the symptom threshold
-to check at, never a cap to conform to pre-emptively. When a table does
-scroll, slim it first, in this order:
+cells**, a table usually starts to scroll — a symptom threshold to check at,
+never a cap to conform to pre-emptively. When a table does scroll, slim it
+first, in this order:
 
 - **A fact that is a relationship is not a column of its own** — it is a
   relationship column of bare identifiers, or a row of the `## Relationships`
@@ -133,16 +125,14 @@ scroll, slim it first, in this order:
 
 Only when a slimmed row still scrolls — an element whose contract is
 genuinely prose — **flip that catalogue to the record form**: each element
-defined as a bolded lead-in (`**BPROC1.2 — Build and validate.**` — the
-same definition shape goals and principles use), its attributes as prose or
-a narrow two-column field table beneath, its relationships in the
-`## Relationships` table. The validators read both shapes already; the
-record form is an exception with a named cause, never a style, and never
-applied to a neighbouring table "for consistency".
+defined as a bolded lead-in (`**BPROC1.2 — Build and validate.**`, the same
+shape goals and principles use), its attributes as prose or a narrow
+two-column field table beneath, its relationships in the `## Relationships`
+table. The record form is an exception with a named cause, never a style, and
+never applied to a neighbouring table "for consistency".
 
 Never fix width in the export: a landscape page, a shrunken font or a
-truncated column is a rendering hiding a content bug, and the next export
-meets it again.
+truncated column is a rendering hiding a content bug.
 
 ### Document status
 
@@ -153,11 +143,12 @@ three glyphs:
 | Glyph | Status | What it means |
 | ----- | ------ | ------------- |
 | `○` | **Not started** | The document exists so the gap is visible. It defines nothing yet, and a claim about this part of the subject is not in the model |
-| `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has approved them. Identifiers are still draft, figures are unconfirmed, and nothing here may be built on |
-| `●` | **Validated** | Confirmed by whoever is accountable for it, on a named date. Identifiers are permanent and a change to any of them is an initiative |
+| `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has approved them. Identifiers may still be renumbered, figures are unconfirmed, and nothing here may be built on |
+| `●` | **Validated** | Confirmed by whoever is accountable for it, on a named date |
 
-The line names the gate too, so a reader knows what would move it — or what
-already did:
+The line names the gate too — **Direction** or **Understanding**, the two the
+method has (`align-change-through-layers` § The gates) — so a reader knows what
+would move it, or what already did:
 
 ```markdown
 **Status:** ◐ Draft catalogue — identified from the sources named below, not
@@ -166,41 +157,20 @@ yet validated. **Understanding** covers this layer.
 **Status:** ● Validated at **Understanding**, 2026-08-24.
 ```
 
-**A `●` earned outside a gate names the decision that put it there.** Not
-every layer is covered by one: a Requester may decline Design and route the
-solution design to ordinary pull-request review, and that is a real decision by
-the person with the standing to make it. Such a document is validated, and its
-line says by what:
-
-```markdown
-**Status:** ● Validated — **Design** declined at Understanding (scope document 1,
-2026-08-22), which routed this layer to pull-request review.
-```
-
-This is the one place `●` can be claimed without a gate, and the escape is
-narrow on purpose: it needs a recorded decision to point at. "I checked it" is
-not one, because an approval that is not recorded did not happen.
-
-`○` is the only one that is optional, and necessarily so: a document that
-defines nothing has nothing a reader could mistake, so the validator does not
-ask for a status there. Use it anyway where an empty document exists to keep a
-gap visible.
+`○` is the only one that is optional — the validator asks for no status on a
+document that defines nothing. Use it anyway where an empty document exists to
+keep a gap visible.
 
 **The glyph carries the meaning; the sentence beside it is prose in whatever
-language the model is written in.** That is the same arrangement the element
-notation uses, and it is why `scripts/check_model.py` can enforce this in a
-model written in any language: it checks that a document defining elements
-carries exactly one status glyph before its first `##`, and never reads the
-words.
+language the model is written in**, which is what lets
+`scripts/check_model.py` enforce this in any language: it checks that a
+document defining elements carries exactly one status glyph before its first
+`##`, and never reads the words.
 
-**A draft catalogue is not an architecture draft, and the distinction is the
-point of the marker.** An architecture draft is a proposal about how something
-should be structured. A draft catalogue is a list of things somebody said
-exist, written down so they can be checked. Presenting the second as the first
-is the failure this exists to prevent: a Requester who is shown a catalogue
-and hears "architecture" approves a description nobody has verified, and an
-agent that reads one will build on a system that was mentioned once in a
-meeting.
+**A draft catalogue is not an architecture draft.** An architecture draft
+proposes how something should be structured; a draft catalogue lists things
+somebody said exist, written down so they can be checked. A Requester shown
+the second as the first approves a description nobody has verified.
 
 **So a draft catalogue's tables carry two extra columns**, and they earn their
 width:
@@ -210,10 +180,13 @@ width:
 | `Source` | Which reference document or conversation the element came from — [`references/reference-documents.md`](./references/reference-documents.md). An element with no source in a draft catalogue is an invention |
 | `Notes` | What is uncertain, contested or awaiting confirmation. Two names for what may be one thing; a figure nobody could stand behind; a system whose owner is unknown |
 
+**A row the agent decided for itself is sourced `adopted — <the call>`, and
+the document stays `◐`** so a later word from the Requester overrides it
+(`align-change-through-layers` § Ask only what blocks the work now).
+
 At the gate, `Source` stays — provenance does not expire. **`Notes` is
-emptied**, because a note that survives its own gate is one of three things: a
-fact, which belongs in the model; a question, which belongs in the
-open-questions log; or something nobody cared about, which belongs nowhere.
+emptied**, because a note that survives its own gate is either a fact, which
+belongs in the model, or something nobody cared about, which belongs nowhere.
 
 **Mixed documents are normal, and the status is the weakest part.** A
 validated layer that a new initiative adds elements to is `◐` until that
@@ -240,22 +213,22 @@ A **qualified** ID in a first column (`` \| `SALES.BSVC3` \| ``) is a
 *reference*, not a definition — that is what a domain charter's "Consumed
 services" table holds. Anywhere else, a backticked ID is a reference.
 
-Rules: an ID is assigned once and **never reused** after the element is
-removed (a dangling reference should fail loudly, not silently point at
-something else); numbering is per prefix, not global — and per parent inside
-a leveled catalogue; and an element's ID never changes when it is renamed.
-Referencing an element in prose or an ordinary table cell means writing its
-name with the stable ID riding along — `relieves Faster approval [GAIN2]` —
-without repeating its full description; the name leads, per `document-style`
-§ The name leads, and the identifier rides along. Cross-document references
-link that visible pair to the element definition; multiple references are one
-per line.
+Rules: an identifier is renumbered freely while the change carrying it is
+unmerged, and **frozen and never reused** once that change merges
+([`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md)
+§ Never-reused starts at merge); numbering is per prefix, not global — and
+per parent inside a leveled catalogue; and an element's ID never changes when
+it is renamed. Referencing an element in prose or an ordinary table cell means
+writing its name with the stable ID riding along — `relieves Faster approval
+[GAIN2]` — without repeating its full description; the name leads, per
+`document-style` § The name leads, and the identifier rides along.
+Cross-document references link that visible pair to the element definition;
+multiple references are one per line.
 
 Each document's "How to read this document" legend carries, on its nodes,
-every prefix the document uses, expanded — `«Stakeholder» … [STK#]` — which
-is § Write it out applied to identifiers. Examples use `#` (and `#.#` for
-levels), never a plausible real identifier that pollutes searches for actual
-elements.
+every prefix the document uses, expanded — `«Stakeholder» … [STK#]` — which is
+`document-style` § Write it out applied to identifiers. Examples use `#` (and
+`#.#` for levels), never a plausible real identifier.
 
 **The prefix registry, hierarchical numbering, what happens to an identifier
 when the element is retired, and how a reference crosses a domain or a model
@@ -268,16 +241,13 @@ Every EA element must name the code artifact that realizes it — a page, a
 module path, a pipeline file. If you cannot point at the realizing
 artifact, either the element doesn't belong in the docs, or the code is
 missing and the element should be marked explicitly **"Pending — future
-initiative"** (ideally linked to the initiative that will deliver it). This
-keeps the whole set verifiable against the code at any time — an outsider
-should be able to open any EA document and check it against the repo.
+initiative"** (ideally linked to the initiative that will deliver it).
 
 ### Relationships are declared, never only drawn
 
 An element's relationships are **declared**, in one of two places, and a
 diagram renders what was declared. A relationship whose only home is a Mermaid
-block is a fact living inside a rendering, which `P1` does not allow — and it
-is invisible to everything except a person reading that one document.
+block is invisible to every tool.
 
 - **A catalogue column**, when its cell is a list of identifiers and nothing
   else. The header is the relationship's name, carried verbatim into the
@@ -304,25 +274,23 @@ The full rules, including where the marker may and may not go and what
   (scope docs link to the scope index instead).
 - State the **ArchiMate elements/viewpoint** covered near the top.
 - Then the **status line**, where the document defines elements — § Document
-  status. It sits in the preamble, before the first `##`, because that is
-  where a validator looks for it and where a reader meets it before anything
-  it might be believed for.
+  status. It sits in the preamble, before the first `##`, which is where a
+  validator looks for it.
 - A **"How to read this document"** section next: the legend diagram, whose
   nodes name the stereotypes and ID prefixes — and no table restating it
   (`references/archimate-on-mermaid.md` § Every element document opens with
   "How to read this document").
 - Then **one section per element family, headed by that family's name** — a
-  catalogue table never rides under another family's heading, because the
-  heading is what tells a reader what the identifiers in front of them
-  describe. A leveled catalogue names the level in the heading
-  (`### Level 1 — the areas`, `### Level 2 — the capabilities`).
-- Each section **opens with its diagram** where one earns its place
+  catalogue table never rides under another family's heading. A leveled
+  catalogue names the level in its heading (`### Level 1 — the areas`).
+- Each section **opens with its own diagram** where one earns its place, with
+  that section's tables and prose below it
   (`references/archimate-on-mermaid.md` § Diagrams come first, one per
-  section), followed by the inventory table, followed by prose.
+  section).
 - A **Retired** section, only if something approved has been retired
   (`restate-current-state`).
 - **Additional notes**, last, and only if there is one — see § What the
   document contains.
 - Prefer tables for element inventories, Mermaid for relationships, and
-  prose only for rationale (the "why", not the "what" — the diagrams and
-  tables already say what), and only where the "why" is about the subject.
+  prose only for rationale (the "why", not the "what"), and only where the
+  "why" is about the subject.

@@ -12,10 +12,9 @@ metadata:
 
 The company track. When this skill applies, **the product is the
 architecture**: the deliverable is a documented business model and the
-operating model derived from it — no application design, no stack decisions,
-no code. Whatever gets built later is a separate initiative that runs the
-ordinary `align-change-through-layers` process and finds the organization
-already modeled.
+operating model derived from it — no application design, no stack decisions, no
+code. Whatever gets built later is a separate initiative through
+`align-change-through-layers`.
 
 ## ⊕ When to use this
 
@@ -33,14 +32,13 @@ already modeled.
 | The subject is a single application | `discover-strategy` directly |
 | The canvases exist and still hold | `align-change-through-layers` — this is an ordinary change |
 
-The two are not alternatives for the same subject. This skill **runs first and
-hands off**, because a company's strategy layer is a consequence of its
-business model rather than an independent statement.
+The two are not alternatives for the same subject: on an organization this
+skill **runs first and hands off**.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.2`, and owns **Direction** — the first approval any organization
-model receives. Nothing is derived until it is granted.
+Realizes `BPROC1.2`, and owns **Direction**. Nothing is derived until it is
+granted.
 
 ```mermaid
 flowchart TD
@@ -69,27 +67,25 @@ flowchart TD
   class g0,g1 implementation
 ```
 
-Direction is one gate granted in two sittings, and this skill owns only the
-first — the business model. The second sitting, the strategy layer, is
-`discover-strategy`'s. One scope document covers both: the same file gains its
-second Direction row at the handoff, so don't open a second.
+Direction is one gate granted in two sittings: this skill owns the first, the
+business model, and `discover-strategy` the second. One scope document covers
+both — the same file gains its second Direction row at the handoff.
 
 ## ⚓ Invariants
 
-- **Ask, don't assume.** Every block comes from a Requester answer, an
-  existing document, or observable fact — never from what a business of this
-  kind "usually" looks like. Generic canvas filler is worse than a blank: it
-  reads as agreed when nobody agreed it. What the Requester cannot answer yet
-  is marked **"Pending — future initiative"** or logged as an open question
-  with the interpretation adopted.
-- **Small batches, one theme at a time.** Three to five questions per round,
-  in theme order, in business language rather than canvas jargon — "what do
-  they try that doesn't work today?" beats "enumerate the pains".
+- **A block comes from a Requester answer, an existing document, or an
+  observable fact** — never from what a business of this kind "usually" looks
+  like. What no source settles is the agent's call — adopted, applied, and
+  recorded with its `Source` cell reading `adopted — <the call>`
+  (`align-change-through-layers` § Ask only what blocks the work now). What
+  nobody can answer yet is marked **"Pending — future initiative"**.
+- **One theme at a time, in theme order, in business language rather than
+  canvas jargon** — "what do they try that doesn't work today?" beats
+  "enumerate the pains".
 - **Consolidate as you go, not at the end.** A round about pains easily yields
   twelve. Merge the ones that are the same pain at different severity, or the
   same job seen from two segments, and give the survivor a per-segment column.
-  `document-style` § Consolidate before you enumerate has the
-  rules. Consolidating at the end means renumbering everything.
+  `document-style` § Consolidate before you enumerate has the rules.
 - **One segment and one product at a time.** Canvases filled in parallel drift
   into each other.
 - **Revision, not amnesia.** Where canvases already exist, start from them:
@@ -114,21 +110,18 @@ fills one Business Model Canvas per product.
 
 **⚖ Judgement.** Theme 6 is where fit gets tested. An unaddressed pain means
 either a missing capability or a customer the business has decided not to
-serve — and the Requester should say which out loud, rather than the gap
-being left for a reader to find.
+serve, and the Requester says which rather than leaving the gap for a reader.
 
 Ask at theme 7, and again while deriving, whether any activity or role is
 performed or assisted by an **AI system** — at what autonomy level, with what
-decision rights, escalating to which role. An organization with AI in its
-delivery or its products should say so in the model rather than leave it
-implicit.
+decision rights, escalating to which role.
 
 **→ Produces** the answers, per segment and per product.
 
 ### 2 — Write the canvases as you go
 
 Update the canvas documents after each round and reflect a short summary back,
-so a misread segment surfaces in minutes rather than at the gate.
+so a misread segment surfaces immediately.
 
 **← Needs** the answers from Step 1.
 
@@ -140,18 +133,16 @@ from the plugin's `assets/layers/0_business-design/` before the first canvas,
 and the first filed source does the same with `assets/layers/reference/`.
 
 The canvases open `◐ Draft catalogue` and carry `Source` and `Notes` until
-Direction grants them — `architecture-document-style` § Document status. A canvas
-is the most tempting document in the model to read as settled, because it
-looks finished the moment it is drawn; the marker is what says it is not.
+Direction grants them — `architecture-document-style` § Document status.
 Anything the Requester provided is filed in `architecture/reference/` first,
 and the `Source` column points there.
 
-Lead the Business Model Canvas with the products at a glance — one column
-per product: segments, channels, relationship, revenue, dominant cost,
-whether it scales — before any block catalogue, and open each canvas with
-the generic how-to-read legend rather than a nine-block overview
-(`architecture-document-style` § What is here, and what is one file away —
-the canvases reference).
+Lead the Business Model Canvas with the products at a glance — one column per
+product: segments, channels, relationship, revenue, dominant cost, whether it
+scales — before any block catalogue, and open each canvas with the generic
+how-to-read legend rather than a nine-block overview
+(`architecture-document-style` § What is here, and what is one file away — the
+canvases reference).
 
 ### 3 — Verify fit before presenting
 
@@ -169,10 +160,8 @@ Check, and fix or flag — never quietly present an unfit canvas:
 
 ### 4 — Write the scope document
 
-Discovery is a full initiative, not a detour. Create the scope document with
-`write-scope-document` **before** presenting Direction, so the Requester approves
-against a concrete document and the approval has somewhere to be recorded the
-moment it is granted.
+Create the scope document with `write-scope-document` **before** presenting
+Direction, so the Requester approves against a concrete document.
 
 **→ Produces** `architecture/scope/<n>_*.md`, and its row in the index.
 
@@ -187,13 +176,9 @@ channels, dominant cost) — with **full branch links to each canvas document**
 Then ask explicitly for approval of the business model.
 
 Name the consolidation in the summary: how many elements each catalogue holds,
-and what was merged to get there. A Requester who can see that twelve pains
-became five is being shown a modeling decision they can overturn — usually
-more consequential than any single element in the list.
-
-**In the summary and the scope document, not in the canvas.** The canvas
-describes the business; how many elements it took to describe it is a fact
-about the modeling (`document-style` § What the document contains).
+and what was merged to get there — a merge the Requester can overturn. It goes
+in the summary and the scope document, never in the canvas
+(`document-style` § What the document contains).
 
 Record the approval in the Approvals table — who, when, what was shown. If
 changes are requested, revise from Step 2 and present again.
@@ -204,9 +189,7 @@ changes are requested, revise from Step 2 and present again.
 
 ### 6 — Hand off to strategy discovery
 
-**Nothing is derived until Direction is granted.** The strategy layer is a
-consequence of an approved business model; deriving from an unapproved canvas
-means redoing layers 1 and 2 when the canvas moves.
+**Nothing is derived until Direction is granted.**
 
 Then run `discover-strategy`, which finds the canvases filled and **derives
 rather than re-asks**. Its themes map onto the canvas blocks; the only theme
@@ -223,12 +206,11 @@ with no canvas source is **Principles**, still discovered directly.
 
 ## ✎ Worked example
 
-> **"We're a three-person consultancy and I want to document how we actually work."**
+> **"We're a three-person consultancy and I want to document how we work."**
 >
-> Depth 2, so this track rather than `discover-strategy`. Theme 3 yields
-> twelve pains; consolidation merges them to five with a per-segment severity
-> column, and the Direction summary says so — the Requester overturns one merge,
-> which is exactly what naming the consolidation is for.
+> Depth 2, so this track rather than `discover-strategy`. Theme 3 yields twelve
+> pains; consolidation merges them to five with a per-segment severity column,
+> the Direction summary says so, and the Requester overturns one merge.
 >
 > Two offerings turn out to have separate economics at theme 5, so theme 7
 > produces two Business Model Canvases rather than one. Direction is granted
@@ -241,22 +223,21 @@ with no canvas source is **Principles**, still discovered directly.
   rather than from an answer.
 - Deriving the strategy layer before Direction is granted.
 - Presenting a canvas whose pains have no relievers, without flagging it.
-- Consolidating at the end, which renumbers everything the Requester has
-  already read.
-- Writing the consolidation counts into the canvas, where they describe the
-  modeling rather than the business.
+- Consolidating at the end, which renumbers everything already read.
+- Writing the consolidation counts into the canvas rather than the summary.
 - Opening a second scope document at the handoff to `discover-strategy`.
 
 ## ☑ Done when
 
 - One Value Proposition Canvas per customer segment, and one Business Model
   Canvas per product, both with their fit check.
-- Every element names the team, role or written procedure that realizes it, or
-  is marked "Pending — future initiative". An organization's processes are
-  realized by people and procedures, not source files.
+- Every element names the team, role or written procedure that realizes it —
+  an organization's processes are realized by people, not source files — or is
+  marked "Pending — future initiative".
 - The scope document's EA-alignment table records the impact on layers 0–2 and
   an explicit "not started" verdict for the rest.
-- Its Approvals table records **Direction** for the canvases, and gains a
-  second **Direction** row for the strategy at the handoff.
-- Open questions are logged for everything adopted but unconfirmed.
+- Its Approvals table records **Direction** for the canvases, gains a second
+  **Direction** row for the strategy at the handoff, and holds no row for a
+  gate that was not granted.
+- Every call the agent adopted is recorded on a canvas still marked `◐`.
 - `python3 scripts/check_links.py` and `python3 scripts/check_model.py` pass.

@@ -15,10 +15,9 @@ For an explanation of the method that these files publish, see
 | **A docs improvement** to the guidance under `docs/` or `site/` | A PR here; short scope note in the PR body if the doc changes what the method claims |
 | **A packaging or CI change** — plugin manifest, workflows, `.github/` | A PR here |
 
-The split reflects federation. This repository holds *the method as it
-ships*; the sibling repository holds *the models that describe why the
-method is what it is*. A method change without a scope document is a
-change without a rationale — the rationale lives where the model does.
+This repository holds *the method as it ships*; the sibling repository
+holds *the models that describe why the method is what it is*, which is
+where a method change's rationale belongs.
 
 ## The method governs itself
 
@@ -31,9 +30,7 @@ projects run through. In practice:
   implemented here.
 - **Direction** applies when the change adds or shifts a
   Stakeholder, Driver, Goal, or Principle of the method itself — and when an
-  initiative sets a direction rather than building one, which is the same
-  approval pointed at a target instead of a strategy layer.
-- **Design** is the Requester's option at Understanding.
+  initiative sets a direction rather than building one.
 
 Pure bug fixes skip the gates, per the method's own rule.
 
@@ -47,19 +44,17 @@ python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID refer
 python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 
-The first two live under `plugins/archreator/scaffold/` because they ship with
-the scaffold — the same scripts land in every project the method emits. Running
-them from the root of this repository is a smoke test: since there is no
-`architecture/` folder here, `check_model.py` reports the scaffold as having no
-elements and passes trivially, while `check_links.py` checks the docs, the
+The first two live under `plugins/archreator/scaffold/` because the same
+scripts land in every project the method emits. Run from this repository's
+root they are a smoke test: there is no `architecture/` folder here, so
+`check_model.py` passes trivially while `check_links.py` checks the docs, the
 scaffold, and the site.
 
 `check_skills.py` sits outside `scaffold/` because a downstream project has no
 skills to check. It reads the process model in [`docs/process/`](./docs/process/README.md)
-and every skill's frontmatter and headings, checking them against
+and every skill's frontmatter and headings against
 [the skill format](./docs/skill-format.md). It needs PyYAML — use `uv run` in
-place of `python3` where that is not installed, and it will supply it from the
-script's own inline metadata.
+place of `python3` where that is not installed.
 
 ## Pull requests
 
@@ -67,8 +62,8 @@ One template for every change:
 **[`.github/pull_request_template.md`](./.github/pull_request_template.md)**.
 The body links the scope document in the sibling repository (if the change
 needed one), gives every affected surface a verdict, and describes the whole
-branch (`git diff main...HEAD`), not just the latest commit. For a pure bug
-fix, say what broke, the root cause, the fix, and any regression coverage.
+branch (`git diff main...HEAD`). For a pure bug fix, say what broke, the root
+cause, the fix, and any regression coverage.
 
 The [`write-pr-description`](./plugins/archreator/skills/write-pr-description/SKILL.md)
 skill keeps the body current.

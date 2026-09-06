@@ -17,8 +17,7 @@ and in what order the distance is closed.
 **A roadmap is a direction, not a permission.** What is approved here is that
 this is the right destination and the right order. Each initiative on it still
 enters the spine, still aligns through the layers, and still stops at its own
-gates before anything is built. A roadmap that is treated as pre-approval for
-the changes on it has quietly deleted every gate the method has.
+gate before anything is built.
 
 ## ⊕ When to use this
 
@@ -45,12 +44,8 @@ the changes on it has quietly deleted every gate the method has.
 Realizes `BPROC5.1`, and it is the only process in the method whose output
 describes a future rather than a present.
 
-It owns **Direction**, which `discover-strategy` also owns. That is deliberate
-rather than a collision: Direction is the gate at which a Requester approves
-**direction**, and a sequenced target is direction in the same sense a
-strategy layer is. Giving the roadmap a gate of its own would add a row to
-every Approvals table in every model — including the merged scope documents no
-rule permits rewriting — to record a decision an existing gate already names.
+It owns **Direction**, which `discover-strategy` also owns: a sequenced target
+is direction in the same sense a strategy layer is.
 
 ```mermaid
 flowchart TD
@@ -83,50 +78,41 @@ flowchart TD
 
 - **The roadmap is the only place the model describes a future.** The numbered
   layers describe today and are kept that way by `restate-current-state`;
-  `architecture/6_transition/` describes intent, and is the reason the two never
-  have to be mixed. A target element written into a numbered layer breaks the
-  one property that makes the current-state documents trustworthy.
+  `architecture/6_transition/` describes intent. A target element never goes
+  into a numbered layer.
 - **A gap is derived, never asserted.** Every gap names the baseline it starts
   from — an element that exists and is wrong, or an element that is absent —
-  and the plateau that closes it. A gap that names neither is an opinion
-  wearing an identifier.
+  and the plateau that closes it.
 - **A plateau is a state, not a project.** It is named for what is true when
   you arrive, and it is reached or it is not. "Single customer record across
   all channels" is a plateau; "the data migration programme" is the work.
 - **Sequence by dependency and appetite, not by ambition.** What must be true
   before something else can start is the method's business; how much change
-  the organization can absorb at once is the Requester's, and asking is
-  cheaper than discovering.
+  the organization can absorb at once is the Requester's, and it is asked.
 - **The roadmap declares its own standing.** Its documents define elements, so
   they carry a status line like any others: `◐ Draft catalogue` while the
   target is being drafted, `● Validated at Direction` once the Requester has
-  settled it (`architecture-document-style` § Document status). A roadmap
-  nobody has approved and one that was agreed last quarter are read very
-  differently, and only the marker says which is on the screen.
+  settled it (`architecture-document-style` § Document status).
 - **Nothing here is approved to build.** Direction approves the destination and
   the order. Every initiative on the roadmap runs the spine, and no gate is
   skipped because the roadmap already named it.
-- **A roadmap that is not revisited is worse than none**, because it is
-  trusted. Every plateau reached, abandoned or invalidated is written back.
+- **Every plateau reached, abandoned or invalidated is written back.** A
+  roadmap that is not revisited is worse than none, because it is trusted.
 
 ## ⚙ Steps
 
 ### 1 — Confirm the baseline is worth planning from
 
-Read what the model actually says about today before proposing a tomorrow. A
-gap computed against an empty or stale layer is fiction that will survive
-several meetings before anyone notices.
-
-Check three things and say the verdict out loud: the strategy layer is filled
-and approved; the layers relevant to the question hold elements rather than
+Read what the model says about today before proposing a tomorrow. Check three
+things and record the verdict: the strategy layer is filled and approved; the layers relevant to the question hold elements rather than
 placeholders; and the current-state documents have not obviously drifted from
 what shipped.
 
 **⚖ Judgement.** Empty lower layers mean stopping and handing to
-`discover-current-landscape` — the target is worth nothing until the estate is
-described. Drifted layers mean handing to `restate-current-state` first.
-Partial coverage is different from either: a baseline with a declared boundary
-is plannable *within that boundary*, and the roadmap simply says so.
+`discover-current-landscape`. Drifted layers mean handing to
+`restate-current-state` first. Partial coverage is different from either: a
+baseline with a declared boundary is plannable *within that boundary*, and the
+roadmap says so.
 
 **→ Produces** the verdict on the baseline, and a handoff if it does not hold.
 
@@ -137,11 +123,10 @@ have to be true of the architecture for the goal to be met, and name that
 state. That is a plateau, and it belongs in `architecture/6_transition/`.
 
 Keep them few. Two or three plateaus for a two-year horizon is a plan a
-Requester can hold in their head and argue with; eleven is a backlog with
-dates on it, and nobody checks anything against eleven.
+Requester can argue with; eleven is a backlog with dates on it.
 
-Each plateau names the goals it serves, so that a plateau serving no goal is
-visible as the unjustified ambition it is.
+Each plateau names the goals it serves, so a plateau serving no goal is
+visible.
 
 **⚖ Judgement.** A plateau that cannot be described without naming the project
 that delivers it is a project. Rename it for the state, and if that cannot be
@@ -162,13 +147,11 @@ three systems.
 
 Each gap gets an identifier, the baseline it is measured from, the plateau it
 is closed by, and — where the baseline says so — the element it concerns. A
-Pending row from a landscape sweep is the most productive source there is: an
-application nobody could locate an owner for is already a gap, written down by
-somebody else, waiting to be named as one.
+Pending row from a landscape sweep is already a gap; harvest them.
 
 Say what is *not* a gap, too. A duplicated system the organization has decided
 to live with is a deliberate state, and recording it as a gap invites somebody
-to close it in three years without knowing it was a decision.
+to close it later without knowing it was a decision.
 
 **← Needs** the plateaus, and the current-state layers.
 
@@ -182,12 +165,10 @@ what must be true before it can start. It is not a scope document, and it does
 not become one until it is actually started.
 
 Order by dependency first, and where dependencies leave a choice, ask the
-Requester. Two orderings that are equally sound to an architect are rarely
-equally sound to the person paying for them.
+Requester.
 
 Mark each initiative with what it depends on rather than with a date. A
-sequence survives a slipped quarter; a date does not, and a roadmap full of
-stale dates stops being read.
+sequence survives a slipped quarter; a date does not.
 
 **← Needs** the gap register.
 
@@ -200,19 +181,17 @@ Planning is a full initiative. Create the scope document with
 document.
 
 The alignment table gets a verdict for every numbered layer, and for most of
-them that verdict is an explicit "no change": a plan describes a future, and
-the numbered layers describe today. The one exception is `1_strategy`, where
-naming a target routinely surfaces a course of action the layer did not carry
-— record that as a change, because it is one.
+them that verdict is an explicit "no change". The one exception is
+`1_strategy`, where naming a target routinely surfaces a course of action the
+layer did not carry — record that as a change.
 
 **❖ Direction — the target and the sequence.** The Requester approves.
 
 Present the plateaus, the gaps under each, and the order, with full branch
 links (`align-change-through-layers` § Show the Requester what they are
-approving). Two things have to be said out loud rather than left in the
-document: that approving this approves the **destination and the order**, not
-the work; and what is deliberately not on it, because a roadmap's exclusions
-are the half a Requester is most likely to disagree with.
+approving). Say two things rather than leaving them in the document: that
+approving this approves the **destination and the order**, not the work; and
+what is deliberately not on it.
 
 Record the approval in the Approvals table, naming the roadmap documents shown.
 
@@ -223,20 +202,16 @@ Approvals table's Direction row.
 
 ### 6 — Bind the roadmap to the spine
 
-A roadmap nothing points at is a document that ages quietly. Two bindings stop
-that, and both are small.
+Two bindings keep a roadmap from ageing quietly.
 
 **Each initiative, when it starts, cites the gaps it closes** in its own scope
 document, and the roadmap's entry is marked as in flight. `write-scope-document`
 already requires every meaningful exclusion to carry a gap note; those notes
-are now candidate rows in the register rather than observations that expire
-with the document they were written in.
+are candidate rows in the register.
 
 **Each plateau, when it is reached, is recorded rather than deleted.** The
-plateau stays, marked reached, with the initiative that arrived at it — which
-is what makes the roadmap a record of direction over time instead of a
-perpetually optimistic present tense. A plateau abandoned is marked abandoned,
-with why, for the same reason.
+plateau stays, marked reached, with the initiative that arrived at it. A
+plateau abandoned is marked abandoned, with why.
 
 **← Needs** Direction.
 
@@ -258,12 +233,11 @@ with why, for the same reason.
 > the goals into two plateaus, one of them "every customer-facing service
 > authenticates against one identity provider". Step 3 subtracts and finds
 > eleven gaps, four of which are Pending rows left by the landscape sweep.
-> Step 4 groups them into five initiatives and finds that three of them cannot
-> start until the identity work lands, which settles most of the ordering
-> without asking anyone. The Requester, at Direction, moves one initiative later
-> because a contract renewal makes next year cheaper than this one — an
-> ordering fact no architect had. The roadmap records the reason beside the
-> sequence, so the next reader does not re-derive it.
+> Step 4 groups them into five initiatives and finds that three cannot start
+> until the identity work lands, which settles most of the ordering. The
+> Requester, at Direction, moves one initiative later because a contract
+> renewal makes next year cheaper — an ordering fact no architect had, recorded
+> beside the sequence.
 
 ## ⚠ Anti-patterns
 

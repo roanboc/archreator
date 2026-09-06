@@ -13,9 +13,8 @@ legend every element document gets: the canvas blocks as legend nodes —
 `<glyph> «Key Partner» who is depended on [KP#]` — connected by the
 relationships the canvas itself defines (a partner and a resource enable an
 activity, an activity delivers through a channel, a channel establishes a
-relationship, a relationship produces revenue, an activity incurs cost).
-That one generic diagram teaches the whole notation; the block catalogues
-below it carry the content.
+relationship, a relationship produces revenue, an activity incurs cost). The
+block catalogues below it carry the content.
 
 **The products lead the Business Model Canvas.** Before any block catalogue,
 a products-at-a-glance section — one column per product: its segments,
@@ -25,7 +24,7 @@ products before the blocks that serve them. Each canvas gets its own `###`
 heading naming the segment or product it belongs to.
 
 **No nine-block overview diagram.** Packing every row into a handful of
-nodes restates the tables in a form that is harder to read, and a diagram
+nodes restates the tables in a form that is harder to read; a diagram
 earns its place by saying what the table cannot
 ([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § Diagrams come
 first, one per section).

@@ -33,6 +33,7 @@ ArchiMate Business layer.
 
 ```mermaid
 flowchart LR
+  %% legend
   bsvc(["⚙ «Business Service» what the business offers [BSVC#]"]):::business
   classDef business fill:#fffbb5,stroke:#b8a200,color:#333
 ```
@@ -57,6 +58,7 @@ ArchiMate Application layer.
 
 ```mermaid
 flowchart LR
+  %% legend
   acmp["▭ «Application Component» a piece of software [ACMP#]"]:::application
   classDef application fill:#c2f0ff,stroke:#0288d1,color:#333
 ```
@@ -271,6 +273,46 @@ PRD_FEDERATION = """\
 """
 
 
+SECTION_VIEW_FIRST = """\
+## Delivery
+
+```mermaid
+flowchart LR
+  d["a probe section view"]
+```
+
+| ID | Service |
+| -- | ------- |
+| `BSVC2` | Delivering |
+"""
+
+SECTION_VIEW_LAST = """\
+## Delivery
+
+| ID | Service |
+| -- | ------- |
+| `BSVC2` | Delivering |
+
+```mermaid
+flowchart LR
+  d["a probe section view"]
+```
+"""
+
+STEREOTYPED_VIEW = """\
+## Delivery
+
+```mermaid
+flowchart LR
+  d(["⬭ «Business Service» Delivering [BSVC2]"])
+```
+
+| ID | Service |
+| -- | ------- |
+| `BSVC2` | Delivering |
+"""
+
+
 class FederationTests(unittest.TestCase):
     """Cross-model references resolve by federation ID, and drift is named."""
 
@@ -291,7 +333,7 @@ class FederationTests(unittest.TestCase):
         return root / "scripts" / "check_model.py", prd
 
     def test_a_document_without_a_view_or_with_its_view_last_fails(self):
-        """Every element document opens with its views; a picture stapled on last is not that."""
+        """Every element document opens with its legend; a picture stapled on last is not that."""
         with tempfile.TemporaryDirectory() as tmp:
             script, prd = self._build(Path(tmp))
             business = prd / "2_business" / "README.md"
@@ -306,6 +348,41 @@ class FederationTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0, "a view after the tables passed")
             self.assertIn("after its first table", result.stdout + result.stderr)
             business.write_text(PRD_BUSINESS, encoding="utf-8")
+            result = run(script)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_a_section_whose_own_diagram_follows_its_own_table_fails(self):
+        """One diagram per section, and the section opens with it.
+
+        The document-wide test alone is a gradient towards stacking every
+        diagram at the top, which is what this catches.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            script, prd = self._build(Path(tmp))
+            business = prd / "2_business" / "README.md"
+            stacked = PRD_BUSINESS.replace(
+                "## Services\n",
+                "## Services\n",
+            ) + SECTION_VIEW_LAST
+            business.write_text(stacked, encoding="utf-8")
+            result = run(script)
+            self.assertNotEqual(result.returncode, 0, "a section's view after its table passed")
+            self.assertIn("that section's first table", result.stdout + result.stderr)
+            business.write_text(PRD_BUSINESS + SECTION_VIEW_FIRST, encoding="utf-8")
+            result = run(script)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_a_stereotype_outside_a_legend_diagram_fails(self):
+        """Glyph, shape and colour carry the type; a legend says so with `%% legend`."""
+        with tempfile.TemporaryDirectory() as tmp:
+            script, prd = self._build(Path(tmp))
+            business = prd / "2_business" / "README.md"
+            business.write_text(PRD_BUSINESS + STEREOTYPED_VIEW, encoding="utf-8")
+            result = run(script)
+            self.assertNotEqual(result.returncode, 0, "a stereotyped content node passed")
+            self.assertIn("stereotype", result.stdout + result.stderr)
+            marked = STEREOTYPED_VIEW.replace("flowchart LR\n", "flowchart LR\n  %% legend\n")
+            business.write_text(PRD_BUSINESS + marked, encoding="utf-8")
             result = run(script)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
