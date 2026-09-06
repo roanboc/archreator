@@ -203,12 +203,8 @@ list, everything marked Pending. Carry full branch links to every document
 behind it (`align-change-through-layers` § Show the Requester what they are
 approving). Name the counts, and name what was consolidated into what.
 
-Record the approval in the Approvals table. **Then change the status line of
-every document it covered from `◐` to `● Validated at Understanding`, on that
-date, and empty the `Notes` column** — each note is by then a fact that goes
-into the model, a call the agent takes and records
-(`align-change-through-layers` § Ask only what blocks the work now), or
-something nobody cared about. `Source` stays; provenance does not expire.
+Record the approval in the Approvals table, and promote every document it
+covered — `architecture-document-style` § Document status.
 
 If changes are requested, revise from Step 3 and present again — the documents
 stay `◐` until they are actually approved.

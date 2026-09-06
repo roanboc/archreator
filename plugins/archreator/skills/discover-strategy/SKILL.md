@@ -157,10 +157,10 @@ behind it** (`align-change-through-layers` § Show the Requester what they are
 approving), and ask explicitly for approval of the strategy.
 
 Record the approval in the Approvals table — who, when, what was shown — and
-move every document it covered from `◐` to `● Validated at Direction`, emptying
-`Notes` as you go. Only after Direction is granted may an implementation
-initiative build on this strategy. If changes are requested, revise from Step 2
-and present again, leaving the status lines where they are.
+promote every document it covered (`architecture-document-style` § Document
+status). Only after Direction is granted may an implementation initiative build
+on this strategy. If changes are requested, revise from Step 2 and present
+again, leaving the status lines where they are.
 
 **← Needs** the strategy layer, the scope document.
 

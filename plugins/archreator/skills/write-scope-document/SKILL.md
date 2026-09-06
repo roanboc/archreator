@@ -133,11 +133,9 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
   records what happened, never a census of what did not. Which gate applies is
   defined in exactly one place — `align-change-through-layers` § The gates.
   **An approval that isn't recorded didn't happen.**
-- **A granted gate promotes the documents it covered.** Recording the approval
-  is half of it; the other half is moving each covered document's status line
-  from `◐ Draft catalogue` to `● Validated`, with the gate and the date, and
-  emptying its `Notes` column (`architecture-document-style` § Document
-  status). A row without the status lines leaves the model claiming nothing
+- **A granted gate promotes the documents it covered**
+  (`architecture-document-style` § Document status). Recording the approval is
+  half of it; a row without the status lines leaves the model claiming nothing
   was approved.
 - **An interpretation the agent adopted is recorded where it applies**, never
   in a register of pending questions: the affected row's `Source` cell reads

@@ -35,6 +35,12 @@ that actually ran):
   from its SKILL.md, so nothing citable is unreachable.
 - **Scaffold specimens** - no plausible element identifier ships in the
   scaffold as an example a generated project would inherit.
+- **Asset diagrams** - an asset template obeys the diagram rules it teaches:
+  no stereotype on a node outside a fence marked `%% legend`, no plausible
+  real identifier in a node label, and a section's diagram before its tables.
+  `check_model.py` never sees these files - `assets/` is outside every
+  project's model, and once a template is emitted it stops being a template -
+  so what lands wrong here lands wrong in every project it reaches.
 - **Catalogue** - the table in `skills/README.md` names exactly the skills
   that exist, with the kind each declares. The scaffold's `AGENTS.md`
   deliberately does not restate it.
@@ -457,6 +463,74 @@ def check_required_sections(known: set[str]) -> list[str]:
     return errors
 
 
+def _check_model():
+    """The scaffold's validator, imported for the fence parse it already owns.
+
+    An asset template is never checked downstream — it is emitted into a
+    project and stops being an asset — so the diagram rules are checked here,
+    at the only point where the file is still known to be a template. The
+    walk comes from `check_model.py` so there is one reading of a Mermaid
+    fence rather than one per validator.
+    """
+    scripts = SCAFFOLD_DIR / "scripts"
+    if str(scripts) not in sys.path:
+        sys.path.insert(0, str(scripts))
+    import check_model
+
+    return check_model
+
+
+# An identifier inside a Mermaid node label. A template writes `[CAP#]`; a
+# template that writes `[CAP1]` teaches a shape that is wrong everywhere it
+# lands (`architecture-document-style` § Identifiers).
+ASSET_EXAMPLE_ID_RE = re.compile(r"\[([A-Z][A-Z0-9]*\.)*[A-Z]+\d+(\.\d+)*\]")
+
+
+def check_asset_diagrams() -> list[str]:
+    """An asset template obeys the diagram rules it is teaching.
+
+    Three of them, all invisible to `check_model.py`: `assets/` is outside
+    every project's model, and a template's placeholders would fail the
+    element checks if it were not. What lands wrong here lands wrong in every
+    project the template is emitted into, which is how a layer README that
+    drew `\u00abData Object\u00bb <Domain type>` taught four projects a node
+    label with no glyph and no identifier.
+    """
+    if not ASSETS_DIR.is_dir():
+        return []
+    model = _check_model()
+    errors: list[str] = []
+    for path in sorted(ASSETS_DIR.rglob("*.md")):
+        rel = path.relative_to(REPO_ROOT)
+        text = path.read_text(encoding="utf-8")
+        for line_no, body in model._mermaid_fences(text):
+            if re.search(r"^\s*%%\s*legend\b", body, re.M):
+                continue
+            if "\u00ab" in body:
+                errors.append(
+                    f"{rel}:{line_no}: a node label carries a "
+                    f"\u00abstereotype\u00bb. Write `<glyph> <name> [<PREFIX>#]`; "
+                    f"a notation diagram declares itself with `%% legend` "
+                    f"inside the fence"
+                )
+            for match in ASSET_EXAMPLE_ID_RE.finditer(body):
+                errors.append(
+                    f"{rel}:{line_no}: a node label shows {match.group(0)}, a "
+                    f"plausible real identifier. A template's examples use `#` "
+                    f"— `[CAP#]`, `[CAP#.#]` — so nothing it emits reads as a "
+                    f"reference to an element nobody defined"
+                )
+        for heading, line_no, fence_line, table_line in model._sections(text):
+            if fence_line and table_line and fence_line > table_line:
+                where = f'under "{heading}"' if heading else "in the preamble"
+                errors.append(
+                    f"{rel}:{line_no}: the view {where} comes after that "
+                    f"section's first table. A section opens with its own "
+                    f"diagram and its tables follow it"
+                )
+    return errors
+
+
 def check_scaffold_specimens() -> list[str]:
     """No scaffold document under architecture/ may show an element identifier.
 
@@ -794,6 +868,7 @@ def main() -> int:
         ("prefix registry", check_prefix_registry()),
         ("reference files", check_references_reachable(known)),
         ("scaffold specimens", check_scaffold_specimens()),
+        ("asset diagrams", check_asset_diagrams()),
         ("catalogue", check_catalogue(known)),
         ("assets", check_assets(known)),
         ("manifests", check_manifests()),
