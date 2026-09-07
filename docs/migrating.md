@@ -18,9 +18,11 @@ Three skills surface on their own — `align-change-through-layers`,
 off to one reads it from disk. On a host that ignores the key, nothing
 changes.
 
-A project changes one thing: the skills section of its `AGENTS.md`, which
-said the agent surfaces every skill from its description. The validators, the
-model and the scope documents are untouched.
+A project changes two things in its `AGENTS.md`: the skills section, which
+said the agent surfaces every skill from its description, and the rule
+paragraph, which now says a change inside an element the model already names
+is coded directly and documents nothing. The validators, the model and the
+scope documents are untouched.
 
 ## The Design gate is gone
 

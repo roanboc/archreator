@@ -139,6 +139,35 @@ class ProjectToolTests(unittest.TestCase):
         self.assertIn("1 granted, 0 document(s) validated — the gap", result.stdout)
         self.assertIn("1 of 2 name what realizes them", result.stdout)
 
+    def test_names_says_which_element_a_path_belongs_to(self):
+        """A change inside a path an element names is inside the model; a change
+        to a path nothing names is a new element in disguise."""
+        folder = self.probe / "architecture" / "5_technology"
+        folder.mkdir(exist_ok=True)
+        doc = folder / "README.md"
+        doc.write_text(
+            "# Technology layer — Probe\n\n_A probe, not a model._\n\n"
+            "ArchiMate Technology layer.\n\n"
+            "**Status:** ◐ Draft catalogue — a probe, not yet validated.\n\n"
+            "## How to read this document\n\n"
+            "```mermaid\nflowchart LR\n  %% legend\n"
+            '  art[/"⎔ «Artifact» a file the build reads [ART#]"/]:::technology\n'
+            "  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333\n```\n\n"
+            "## Artifacts\n\n"
+            "| ID | Artifact | Realized by |\n| -- | -------- | ----------- |\n"
+            "| `ART1` | The enquiry module | `src/probe/enquiry.py`, `src/probe/filters/` |\n",
+            encoding="utf-8",
+        )
+        self.addCleanup(shutil.rmtree, folder)
+        for path in ("src/probe/enquiry.py", "src/probe/filters/by_date.py", "src/probe/"):
+            result = run(MODEL, "--project", self.probe, "names", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("ART1", result.stdout, path)
+        result = run(MODEL, "--project", self.probe, "names", "src/other/report.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Nothing names", result.stdout)
+        self.assertNotIn("ART1", result.stdout)
+
     def test_trace_walks_across_layers_with_no_database(self):
         result = run(MODEL, "--project", self.probe, "trace", "BSVC1")
         self.assertEqual(result.returncode, 0, result.stderr)

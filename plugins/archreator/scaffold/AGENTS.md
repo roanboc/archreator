@@ -17,11 +17,14 @@ replace.
 
 **Strategy and business architecture are validated before any other layer,
 and the Requester approves at explicit gates before development.** A change
-in requirements is never coded directly: align it through the numbered EA
-layers (`architecture/1_strategy` → … → `5_technology`), stop at the gates for
-the Requester's approval, record it in a scope document (`architecture/scope/`),
-then implement. Pure bug fixes that change no documented behavior skip the
-alignment and the gates, but still keep the docs true.
+to what the model claims — an element added, removed or re-related, a rule it
+states contradicted — is never coded directly: align it through the numbered
+EA layers (`architecture/1_strategy` → … → `5_technology`), stop at the gates
+for the Requester's approval, record it in a scope document
+(`architecture/scope/`), then implement. A change inside an element the model
+already names — a screen, a filter, a format, a defect — is coded directly and
+documents nothing; one that only keeps a row true edits the row in the same
+commit.
 
 ## Who decides
 
@@ -107,6 +110,7 @@ so there is one copy of each tool rather than one per project:
 ```bash
 model.py --project . trace BSVC1     # what a change here would touch
 model.py --project . coverage        # what names no realizing artifact
+model.py --project . names src/x.py  # which elements name this path — is a change here inside the model?
 model.py --project . health          # how much is validated, and whether a granted gate moved a status line
 model.py --project . portal          # the model as a website, for a reader outside the repo
 build_brief.py --project . --element BSVC1 --focus impact

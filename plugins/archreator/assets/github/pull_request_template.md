@@ -22,8 +22,10 @@
      Understanding at minimum for anything that changes documented behavior —
      and no row for a gate it was not granted.
 
-     A pure bug fix has no scope document. Write "No scope document" and say
-     what broke, the root cause, and the fix. -->
+     A change inside an element the model already names — a bug fix, a
+     screen, a filter, a format — has no scope document. Write "No scope
+     document", say what changed, and name the element whose artifact it sits
+     in (`model.py --project . names <path>`). -->
 
 ## EA layers touched
 

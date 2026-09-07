@@ -6,10 +6,12 @@ _[← Repository README](../README.md)_
 arrived with** — who it serves, what it has to do, and which of your
 assumptions turned out to disagree with each other.
 
-The one-paragraph version of how: **a requirement never becomes code
-directly.** It is worked through numbered architecture layers, stopped at
-the named gates you grant, captured in a scope document, and only then
-implemented. You keep the strategy and business judgement; AI agents do the
+The one-paragraph version of how: **a change to what the model claims never
+becomes code directly.** It is worked through numbered architecture layers,
+stopped at the named gates you grant, captured in a scope document, and only
+then implemented. A change inside something the model already names — a
+screen, a filter, a file format — is just built, and the model stays true by
+construction. You keep the strategy and business judgement; AI agents do the
 modeling and the building in between, and every actor's kind and autonomy is
 written down.
 
@@ -116,7 +118,9 @@ defined in exactly one place — the
 [`align-change-through-layers` skill](../plugins/archreator/skills/align-change-through-layers/SKILL.md)
 § The gates. This page names the gates; it does not restate the rule.
 
-Pure bug fixes that change no documented behavior pass no gates.
+A bug fix, or a change inside an element the model already names, passes no
+gate and documents nothing; a change that only keeps a row true edits the row
+in the same commit.
 
 ## Process flow
 

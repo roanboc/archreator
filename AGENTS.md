@@ -28,8 +28,8 @@ a change to *the method itself* is recorded in the sibling repository
 whose `product-archreator/architecture/scope/` is where the method's own
 initiatives live.
 
-Pure bug fixes to the method that change no documented behavior skip the
-gates but still update whatever the fix falsifies.
+A change inside something the method already documents — a bug fix, a
+wording — skips the gates but still updates whatever it falsifies.
 
 ## Portability
 
@@ -80,6 +80,7 @@ one parse of the document convention rather than one per project.
 ```bash
 model.py --project . trace CAP1     # what a change to one element would touch
 model.py --project . coverage       # what names no realizing artifact
+model.py --project . names src/x.py # which elements name this path — is a change here inside the model?
 model.py --project . health         # how much is validated, and whether a granted gate ever moved a status line
 model.py --project . portal         # a stock MkDocs config in .archreator/work/portal/
 model.py --project . export         # .model/model.json, which nothing here reads back

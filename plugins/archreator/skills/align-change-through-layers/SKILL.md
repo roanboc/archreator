@@ -1,6 +1,6 @@
 ---
 name: align-change-through-layers
-description: Procedure — run when a requirement, feature or behavior change arrives. Not for a bug fix that changes no documented behavior.
+description: Procedure — run when a change adds, removes or re-relates an element, or contradicts a rule the model states. Not for a change inside one.
 metadata:
   archreator:
     kind: gated-procedure
@@ -14,27 +14,39 @@ metadata:
 other layer is touched, and validated means the Requester approves before
 development proceeds.
 
-A requirement change is never implemented directly. It is aligned through the
-documents in `architecture/`, approved at the gate below, captured in a scope
-document, and only then coded. The folder numbers give the assessment order.
+A change to what the model claims is never implemented directly. It is
+aligned through the documents in `architecture/`, approved at the gate below,
+captured in a scope document, and only then coded. The folder numbers give the
+assessment order. A change inside an element the model already names is coded
+directly — § When not to.
 
 ## ⊕ When to use this
 
 | The situation | What it looks like |
 | ------------- | ------------------ |
-| A requirement changes | Someone asks for a feature, a behavior change, or reports a problem |
-| A change to documented behavior | Anything that will produce code, or alter what a document claims |
+| A change reaches the model | It adds, removes or re-relates an element — an actor, a service, a process, a data object, a component, a runtime, an integration |
+| A change to what a document claims | A business rule, a decision right, an autonomy level, a classification, a retention period, an interface contract |
 | Work resumes after discovery | Discovery finished at Direction, and the original request is still unbuilt |
 
 ## ⊖ When not to
 
 | The situation | Use instead |
 | ------------- | ----------- |
-| A pure bug fix changing no documented behavior | The bug-fix path — no gates, no scope document, but still update whatever the fix falsifies |
+| A change inside an element the model already names — a screen, a filter, a validation, an import format for an ingestion service that exists, a defect | Implement. Nothing is documented; the element's realizing artifact is where a reader looks |
+| A change that only keeps the model true — a row's wording or realizing path, nothing added, removed or re-related, no rule contradicted | Implement, and edit the row in the same commit. No scope document, no gate; a `●` document stays `●`, because what was approved was the element, not its label |
 | The project was never bootstrapped | `establish-project` first. `AGENTS.md` declaring no depth is the signal |
 | The model has drifted rather than the requirement | `restate-current-state` — its own initiative, with its own diff |
 | The question is where to go rather than what to build | `plan-the-transition` — a target state, a gap register and a sequence, approved as direction and not as work |
 | The subject already runs and the lower layers are empty | `discover-current-landscape` — there is nothing for a change to be aligned against yet |
+
+**A change reaches this process only if it makes a row false or missing.**
+The noun test decides: does the request introduce a thing the model would
+have to name, or change what an existing thing connects to, permits or is
+classified as? If neither, it is inside an element. Either lighter path
+checks one thing before the pull request: every file it touched sits under
+an artifact some element names — `model.py --project . names <path>` says
+which. A file nothing names is a new element in disguise, and this process
+opens then, before merge.
 
 ## ⌖ Where this sits
 
@@ -49,7 +61,7 @@ flowchart TD
   v{"Which verdict?"}
   disc(["⇄ discover-business-model · discover-strategy"])
   stop(["Stop — surface the conflict to the Requester"])
-  bug{"Pure bug fix?"}
+  bug{"Inside an element the model names?"}
   s2["⚙ 2 — Align business and information"]
   s3["⚙ 3 — Draft the scope document"]
   g2{{"❖ Understanding — strategy, business, information"}}
@@ -75,8 +87,9 @@ flowchart TD
   class g2 implementation
 ```
 
-Every edge leaving a rhombus is a verdict the agent **records** — a "no change"
-on a layer, a "pure bug fix, no scope document". None of them is a silent skip.
+Every edge leaving a rhombus is a verdict the agent **states** — a "no change"
+on a layer, an "inside an element, no scope document" in the pull request.
+None of them is a silent skip.
 
 ## ⚓ Invariants
 
@@ -321,7 +334,8 @@ the delta back to the Requester instead of silently absorbing it.
 
 ### 7 — Verify alignment before finishing
 
-- Every new or changed code artifact is named by some architecture document.
+- Every new or changed code artifact is named by some architecture document
+  (`model.py --project . names <path>` says which, or that none does).
 - Every element added names the code artifact that realizes it, or is marked
   "Pending — future initiative" with a link to the initiative that will deliver
   it.
