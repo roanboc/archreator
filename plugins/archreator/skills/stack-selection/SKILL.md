@@ -1,6 +1,7 @@
 ---
 name: stack-selection
-description: Rulebook — consult when bootstrapping a new project and no technology stack has been chosen yet, when assessing architecture/5_technology/ for a small application, or when deciding whether the model needs a persisted projection. Carries the decision framework and the criteria to judge today's options against, never a list of named products.
+description: Rulebook — consult when a new project has no technology stack yet, when assessing 5_technology/ for a small application, or when deciding whether the model needs a persisted projection. The decision framework and the criteria, never a list of named products.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: rulebook

@@ -40,8 +40,11 @@ any file is _would this need editing if one host vanished tomorrow, or just
 moving?_ Further platforms are additive — each adds a manifest, none forks
 the method.
 
-Three rules keep that true. A skill names no host: no tool names, no
-`allowed-tools`, no path into a host's own configuration. The project entry
+Three rules keep that true. A skill's body names no host: no tool names, no
+`allowed-tools`, no path into a host's own configuration — its frontmatter may
+carry a host's invocation keys, `disable-model-invocation` and `argument-hint`,
+which another host ignores, and one substitution variable,
+`${CLAUDE_SKILL_DIR}`, which reads as a path where it is not expanded. The project entry
 point is `AGENTS.md`, and the `CLAUDE.md` and `GEMINI.md` beside it hold
 nothing but an `@AGENTS.md` import, because Claude Code reads `CLAUDE.md`
 only and has no `AGENTS.md` fallback. And a fact that has to exist in two
@@ -58,6 +61,7 @@ host.
 python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve, per project
 uv run    plugins/archreator/scripts/check_skills.py           # the skill corpus against the process model
+uv run    plugins/archreator/scripts/check_skills.py --report  # per-skill sizes, and what the listing spends
 uv run    --with pytest pytest plugins/archreator/scripts/tests/
 ```
 
@@ -76,6 +80,7 @@ one parse of the document convention rather than one per project.
 ```bash
 model.py --project . trace CAP1     # what a change to one element would touch
 model.py --project . coverage       # what names no realizing artifact
+model.py --project . health         # how much is validated, and whether a granted gate ever moved a status line
 model.py --project . portal         # a stock MkDocs config in .archreator/work/portal/
 model.py --project . export         # .model/model.json, which nothing here reads back
 build_brief.py --project . --element CAP1 --focus impact

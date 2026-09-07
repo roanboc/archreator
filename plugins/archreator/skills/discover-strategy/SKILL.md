@@ -1,6 +1,7 @@
 ---
 name: discover-strategy
-description: Procedure — run this when the align-change-through-layers process finds that a change needs a new or significantly revised strategy — the strategy layer does not exist yet or still holds template text, or the change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Runs a question-driven discovery with the Requester to document the strategy and the key business elements, ending at an explicit strategy approval gate (Direction) before anything else is built.
+description: Procedure — run this when the strategy layer is empty or still template text, or a change adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream. Question-driven discovery with the Requester of the strategy and the key business elements, approved at Direction.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -167,6 +168,9 @@ again, leaving the status lines where they are.
 **→ Produces** the Approvals table's Direction row.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

@@ -1,6 +1,7 @@
 ---
 name: discover-business-model
-description: Procedure — run this when the initiative is modeling an organization rather than building a single application — a company, a department, or a service line whose operating model is itself the deliverable. Runs a question-driven discovery with the Requester over the Value Proposition Canvas and a Business Model Canvas per product, ending at an explicit business-model approval gate (Direction), then hands off to discover-strategy to derive the enterprise architecture from it.
+description: Procedure — run this when the subject is an organization — a company, a department, a service line — whose operating model is the deliverable. Question-driven discovery with the Requester over a Value Proposition Canvas and a Business Model Canvas per product, approved at Direction.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -198,6 +199,9 @@ with no canvas source is **Principles**, still discovered directly.
 **← Needs** the granted Direction.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

@@ -1,6 +1,6 @@
 ---
 name: architecture-document-style
-description: Rulebook — consult when creating or editing any document under architecture/ — the numbering of layer folders, element IDs, how far a document has been validated, the grounding rule, how a relationship is declared, and the skeleton every element document follows. Its references carry the lookup tables — the ArchiMate-on-Mermaid notation, the element and relationship references with the standard's definitions and the method's considerations, the prefix registry and hierarchical numbering, canvases, and where a model sits between enterprise and implementation. Adds to document-style, which governs every document in the repository and which architecture documents obey too.
+description: Rulebook — consult before creating or editing any document under architecture/.
 metadata:
   archreator:
     kind: rulebook
@@ -54,6 +54,7 @@ there resolves exactly as one naming a heading here.
 | [`references/model-structure.md`](./references/model-structure.md) | Deciding what this model owns and what it defers to its parent |
 | [`references/canvases.md`](./references/canvases.md) | The model has a `0_business-design/` layer — Depth 2 and 3 only |
 | [`references/reference-documents.md`](./references/reference-documents.md) | Filing source material, or writing anything down from a meeting |
+| [`references/document-size.md`](./references/document-size.md) | A layer document or a table has outgrown a page — when a layer splits into files, and how a table is slimmed before it is flipped to the record form |
 
 ### Numbering
 
@@ -75,64 +76,6 @@ there resolves exactly as one naming a heading here.
   cannot be derived before the plateau it is measured against exists. It is
   **the only folder in the model that describes a future**; every numbered
   layer describes the current state.
-
-### One document per layer, until it is not
-
-A layer opens as **one document**, and a small subject stays that way — a
-whole business layer can be one honest file. A larger subject splits **by
-element family, in analysis order**, the shape the canonical file names
-already anticipate: `1_business-actors-and-roles.md`,
-`2_business-services.md`, `3_business-processes.md`.
-
-Split when any of these becomes true, and not before:
-
-- **A reader scrolls through one family to reach another** — past roughly
-  twenty-five elements in the document, counting every level.
-- **One family carries a leveled catalogue of its own** — a process map with
-  its level-2 contracts, a capability decomposition — big enough to be the
-  document a reader opens on purpose.
-- **Two families are validated at different sittings of a gate.** What is
-  approved together can live together.
-
-Each split document keeps the full skeleton — its own "How to read" legend,
-its own status line — and the layer README's analysis-order table is the
-index. Split along family lines only: levels 1 and 2 of one catalogue stay in
-one document, with only a level-3 flow earning a file of its own
-(`process-and-capability-levels` § What is here, and what is one file away).
-Merge back when a change leaves stubs.
-
-### A row must survive a page
-
-**A table is the preferred display, and a table that fits stays a table.**
-The rule here fires on one symptom only: **horizontal scroll** — on the
-rendered page, or on the portrait PDF a brief or scope is converted to. A
-table that fits never flips, whatever its column count.
-
-Past roughly **six columns, or more than one column of sentence-length
-cells**, a table usually starts to scroll — a symptom threshold to check at,
-never a cap to conform to pre-emptively. When a table does scroll, slim it
-first, in this order:
-
-- **A fact that is a relationship is not a column of its own** — it is a
-  relationship column of bare identifiers, or a row of the `## Relationships`
-  table beside the diagram that renders it
-  ([`references/archimate-relationships.md`](./references/archimate-relationships.md)).
-- **A fact the description already carries is not a second column.** A
-  purpose formula shaped "turns X into Y" names the trigger and the output;
-  columns restating them are width without information.
-- **What is shared by every row is said once above the table**, never
-  repeated per row.
-
-Only when a slimmed row still scrolls — an element whose contract is
-genuinely prose — **flip that catalogue to the record form**: each element
-defined as a bolded lead-in (`**BPROC1.2 — Build and validate.**`, the same
-shape goals and principles use), its attributes as prose or a narrow
-two-column field table beneath, its relationships in the `## Relationships`
-table. The record form is an exception with a named cause, never a style, and
-never applied to a neighbouring table "for consistency".
-
-Never fix width in the export: a landscape page, a shrunken font or a
-truncated column is a rendering hiding a content bug.
 
 ### Document status
 
@@ -207,7 +150,7 @@ recognizes both:
 | Shape | Used for | Example |
 | ----- | -------- | ------- |
 | The **first column of an inventory table** | Most elements | `` \| `BSVC3` \| Supervised build \| … `` |
-| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows — and any catalogue flipped to the record form because its rows outgrew a page (§ A row must survive a page) | `- **G1 — Legible guidance.** A prospective adopter…` |
+| A **bolded lead-in**, ID then an em dash | Goals and Principles, which read better as prose than as rows — and any catalogue flipped to the record form because its rows outgrew a page ([`references/document-size.md`](./references/document-size.md) § A row must survive a page) | `- **G1 — Legible guidance.** A prospective adopter…` |
 
 A **qualified** ID in a first column (`` \| `SALES.BSVC3` \| ``) is a
 *reference*, not a definition — that is what a domain charter's "Consumed

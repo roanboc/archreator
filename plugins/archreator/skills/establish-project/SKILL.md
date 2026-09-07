@@ -1,6 +1,7 @@
 ---
 name: establish-project
-description: Procedure — run this to set up a project that has the archreator method available but no model yet — the user just installed the plugin, cloned or generated the repository, or architecture/ still holds nothing but scaffolding. Emits the scaffold, names the project, declares the modeling depth, records where the project lives, and hands off to discovery. Not needed once AGENTS.md declares a depth.
+description: Procedure — run this to set up a project that has the method but no model yet — the plugin just installed, the repository just cloned or generated, or architecture/ still scaffolding. Names the project, declares the depth, hands off to discovery.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -190,6 +191,9 @@ me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
 **← Needs** the declared depth, the first scope document.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

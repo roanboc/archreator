@@ -29,6 +29,11 @@ that actually ran):
 - **Required sections** - a skill declaring `metadata.archreator.kind` carries
   the headings its kind requires. A skill declaring no kind is skipped, which
   is what lets the corpus be converted in waves.
+- **Listing** - exactly three skills are listed for the agent; every other
+  one carries `disable-model-invocation: true` and is invoked by name. A
+  listed description is at most 140 characters and the three together at most
+  400, because that is what every session loads; a by-name description is at
+  most 300. `--report` prints the sizes instead of checking them.
 - **Prefix registry** - the prefix table in the style rulebook matches
   `element-prefixes.json`, the machine-readable copy the scaffold ships.
 - **Reference files** - every file under a skill's `references/` is linked
@@ -124,6 +129,23 @@ KIND_MARKERS = {
     "document-template": ("Document —", "▤"),
     "rulebook": ("Rulebook —", "※"),
 }
+# The three skills an agent has to reach without being told - the spine that
+# aligns a change, and the two rulebooks every edit obeys. Every other skill
+# carries `disable-model-invocation: true`, leaves the host's listing, and is
+# invoked by name. A host loads every listed description at startup against a
+# budget and evicts the least-used first, so a listed description is short
+# because the three together are all the method spends, and a by-name one has
+# room because it costs nothing in context. Defined once, in
+# docs/skill-format.md § Frontmatter; this is the machine-readable copy.
+ALWAYS_LISTED = {
+    "align-change-through-layers",
+    "architecture-document-style",
+    "document-style",
+}
+BY_NAME_KEY = "disable-model-invocation"
+LISTED_DESCRIPTION_MAX = 140
+LISTED_TOTAL_MAX = 400
+BY_NAME_DESCRIPTION_MAX = 300
 
 REQUIRED_SECTIONS = {
     "gated-procedure": [
@@ -461,6 +483,78 @@ def check_required_sections(known: set[str]) -> list[str]:
                 if target not in known and "-" in target:
                     errors.append(f"{skill}: hands off to `{target}`, which does not exist")
     return errors
+
+
+def check_listing(known: set[str]) -> list[str]:
+    """Three skills are listed; every other one leaves the listing and is
+    invoked by name.
+
+    The key and the two lengths are the whole mechanism: a skill without the
+    key is loaded into every session, so only `ALWAYS_LISTED` may lack it, and
+    only those three pay against the listing budget.
+    """
+    errors: list[str] = []
+    for skill in sorted(ALWAYS_LISTED - known):
+        errors.append(f"`{skill}` is named as always listed but does not exist")
+    listed_total = 0
+    for skill in sorted(known):
+        front = _frontmatter(skill)
+        description = str(front.get("description", ""))
+        by_name = front.get(BY_NAME_KEY)
+        if skill in ALWAYS_LISTED:
+            listed_total += len(description)
+            if by_name:
+                errors.append(f"{skill}: is always listed and must not carry `{BY_NAME_KEY}`")
+            if len(description) > LISTED_DESCRIPTION_MAX:
+                errors.append(
+                    f"{skill}: a listed description is at most "
+                    f"{LISTED_DESCRIPTION_MAX} characters - it has {len(description)}"
+                )
+        else:
+            if by_name is not True:
+                errors.append(f"{skill}: is invoked by name and must carry `{BY_NAME_KEY}: true`")
+            if len(description) > BY_NAME_DESCRIPTION_MAX:
+                errors.append(
+                    f"{skill}: a by-name description is at most "
+                    f"{BY_NAME_DESCRIPTION_MAX} characters - it has {len(description)}"
+                )
+    if listed_total > LISTED_TOTAL_MAX:
+        errors.append(
+            f"the listed descriptions total {listed_total} characters, over the "
+            f"{LISTED_TOTAL_MAX} the listing is allowed"
+        )
+    return errors
+
+
+def report(known: set[str]) -> None:
+    """Per-skill sizes, and the number the listing spends.
+
+    Printed rather than checked: the limits are enforced by `check_listing`,
+    and this is what somebody reads before deciding what to move into a
+    reference.
+    """
+    rows = []
+    for skill in sorted(known, key=lambda s: (s not in ALWAYS_LISTED, s)):
+        description = str(_frontmatter(skill).get("description", ""))
+        body = (SKILLS_DIR / skill / "SKILL.md").read_text(encoding="utf-8")
+        references = SKILLS_DIR / skill / "references"
+        ref_lines = sum(
+            len(p.read_text(encoding="utf-8").splitlines())
+            for p in (sorted(references.glob("*.md")) if references.is_dir() else [])
+        )
+        reach = "listed" if skill in ALWAYS_LISTED else "by name"
+        rows.append((skill, reach, len(description), len(body.splitlines()), ref_lines))
+    print(f"{'skill':30} {'reach':8} {'desc':>5} {'body':>5} {'refs':>5}")
+    for skill, reach, chars, body_lines, ref_lines in rows:
+        print(f"{skill:30} {reach:8} {chars:5d} {body_lines:5d} {ref_lines:5d}")
+    listed = [r for r in rows if r[1] == "listed"]
+    print()
+    print(
+        f"listed descriptions: {sum(r[2] for r in listed)} characters over "
+        f"{len(listed)} skills, of {LISTED_TOTAL_MAX} allowed - what every session loads"
+    )
+    print(f"listed bodies: {sum(r[3] for r in listed)} lines - loaded on nearly every change")
+    print(f"all descriptions: {sum(r[2] for r in rows)} characters")
 
 
 def _check_model():
@@ -859,12 +953,17 @@ def main() -> int:
         print(f"No skills found under {SKILLS_DIR.relative_to(REPO_ROOT)} - nothing to check.")
         return 0
 
+    if "--report" in sys.argv[1:]:
+        report(known)
+        return 0
+
     # The labels are also what the success line reports, so a check added here
     # is announced without a second list to keep in step.
     checks = [
         ("section markers", check_section_markers(known)),
         ("process binding", check_process_binding(known)),
         ("required sections", check_required_sections(known)),
+        ("listing", check_listing(known)),
         ("prefix registry", check_prefix_registry()),
         ("reference files", check_references_reachable(known)),
         ("scaffold specimens", check_scaffold_specimens()),

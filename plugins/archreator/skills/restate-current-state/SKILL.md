@@ -1,6 +1,7 @@
 ---
 name: restate-current-state
-description: Procedure — run this when the model has accumulated history that obscures what is true now — shipped work still marked "Pending", superseded elements still listed as live, decision records that no longer bind, or a Requester asking "what does this actually look like today?". Compacts the current-state documents so only live elements remain, without rewriting the immutable record of how they got there.
+description: Procedure — run this when history obscures what is true now — shipped work still marked Pending, superseded elements still listed as live, decisions that no longer bind, or a Requester asking what this looks like today. Compacts the current-state documents without rewriting the record.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -201,6 +202,9 @@ Restating is a change to the model, so it gets a scope document with
 - Cross-links resolve.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

@@ -1,6 +1,6 @@
 ---
 name: document-style
-description: Rulebook — consult when writing or editing any document in this repository, whatever it is about — a README, a page under docs/, a contributing guide, a layer document. Covers the documentation language and how acronyms and identifiers are written out, what a document may contain (its subject rather than its own construction, and no version commentary), where a surviving note goes, and the link conventions. Architecture documents obey these too, and architecture-document-style adds the rest.
+description: Rulebook — consult before writing or editing any Markdown document in this repository.
 metadata:
   archreator:
     kind: rulebook

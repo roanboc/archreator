@@ -1,13 +1,26 @@
-# Crossing to 0.3 — for a project on the 0.2 method
+# Crossing versions — for a project on 0.2 or 0.3
 
 _[← Repository README](../README.md) · [Adopting archreator](./adopting.md)_
 
 A new project needs none of this: `establish-project` emits the current
-scaffold. This page is for a repository already running on 0.2, and says what
-its own files have to change.
+scaffold. This page is for a repository already running on an earlier method,
+and says what its own files have to change. Each section names the version
+that introduced it.
 
 The plugin itself updates the ordinary way — see
 [keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
+
+## Fifteen skills are invoked by name (0.4)
+
+Three skills surface on their own — `align-change-through-layers`,
+`architecture-document-style` and `document-style`. Every other skill is
+`/archreator:<skill>`, out of context until called, and a skill that hands
+off to one reads it from disk. On a host that ignores the key, nothing
+changes.
+
+A project changes one thing: the skills section of its `AGENTS.md`, which
+said the agent surfaces every skill from its description. The validators, the
+model and the scope documents are untouched.
 
 ## The Design gate is gone
 

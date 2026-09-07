@@ -93,5 +93,63 @@ class AssetDiagramTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
+LISTED_SKILL = REPO_ROOT / "plugins" / "archreator" / "skills" / "document-style" / "SKILL.md"
+BY_NAME_SKILL = REPO_ROOT / "plugins" / "archreator" / "skills" / "record-decision" / "SKILL.md"
+
+
+class ListingTests(unittest.TestCase):
+    """Three skills are listed; the rest are invoked by name.
+
+    A skill that drifts back into the listing is loaded into every session,
+    and a listed description that grows spends the budget for all three - so
+    both are failures, not style.
+    """
+
+    def setUp(self):
+        self.listed = LISTED_SKILL.read_text(encoding="utf-8")
+        self.by_name = BY_NAME_SKILL.read_text(encoding="utf-8")
+        self.addCleanup(LISTED_SKILL.write_text, self.listed, encoding="utf-8")
+        self.addCleanup(BY_NAME_SKILL.write_text, self.by_name, encoding="utf-8")
+
+    def _fails_with(self, path, mutated, fragment):
+        path.write_text(mutated, encoding="utf-8")
+        result = run_check()
+        output = result.stdout + result.stderr
+        self.assertNotEqual(result.returncode, 0, f"the mutation passed:\n{output}")
+        self.assertIn(fragment, output)
+
+    def test_a_listed_description_that_grows_fails(self):
+        line = re.search(r"^description: .*$", self.listed, re.M).group(0)
+        self._fails_with(
+            LISTED_SKILL,
+            self.listed.replace(line, line + " " + "again and " * 30, 1),
+            "a listed description is at most",
+        )
+
+    def test_a_by_name_skill_without_the_key_fails(self):
+        self.assertIn("disable-model-invocation: true\n", self.by_name)
+        self._fails_with(
+            BY_NAME_SKILL,
+            self.by_name.replace("disable-model-invocation: true\n", "", 1),
+            "must carry `disable-model-invocation: true`",
+        )
+
+    def test_a_listed_skill_carrying_the_key_fails(self):
+        self._fails_with(
+            LISTED_SKILL,
+            self.listed.replace("\nmetadata:", "\ndisable-model-invocation: true\nmetadata:", 1),
+            "must not carry `disable-model-invocation`",
+        )
+
+    def test_the_report_prints_what_the_listing_spends(self):
+        result = subprocess.run(
+            [sys.executable, str(CHECK_SKILLS), "--report"],
+            capture_output=True, text=True, cwd=REPO_ROOT,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("listed descriptions:", result.stdout)
+        self.assertIn("document-style", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

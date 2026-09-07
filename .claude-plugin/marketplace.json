@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "archreator",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "source": "./plugins/archreator",
       "description": "Enterprise-architecture-first development with two named human gates: model an organization or an application through numbered ArchiMate layers, stop at Direction and Understanding before any code, and record every approval in a scope document."
     }

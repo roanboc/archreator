@@ -2,7 +2,7 @@
 
 **This project has not been bootstrapped yet.** It is a fresh copy of the
 [archreator](./README.md) template: the method works, the model is empty.
-Run the `establish-project` skill before anything else — it names the
+Run `/archreator:establish-project` before anything else — it names the
 project, declares the modeling depth, fills in this file, and hands off to
 discovery. Everything in this file below the rule is a placeholder it will
 replace.
@@ -50,9 +50,11 @@ descoping is a normal initiative, decided by the Requester.
 
 ## The skills
 
-Your coding agent surfaces the archreator skills from their `description:`
-frontmatter; you don't invoke them by name in normal use. Three kinds: `⚙` a
-procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
+Three archreator skills surface on their own — `align-change-through-layers`
+when a requirement arrives, `architecture-document-style` and `document-style`
+when a document is edited. Every other skill is invoked by name,
+`/archreator:<skill>`, and typing `/archreator:` lists them. Three kinds: `⚙`
+a procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
 
 The catalogue lives with the skills, in the plugin, and is not restated here.
 
@@ -105,6 +107,7 @@ so there is one copy of each tool rather than one per project:
 ```bash
 model.py --project . trace BSVC1     # what a change here would touch
 model.py --project . coverage        # what names no realizing artifact
+model.py --project . health          # how much is validated, and whether a granted gate moved a status line
 model.py --project . portal          # the model as a website, for a reader outside the repo
 build_brief.py --project . --element BSVC1 --focus impact
 ```

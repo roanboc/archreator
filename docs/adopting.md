@@ -84,9 +84,10 @@ Then follow the bootstrap checklist by hand, or install the skills and let
 
 ## Keeping a project in sync with the method
 
-A project on the 0.2 method has a one-time crossing to make first — the Design
-gate is gone, and so is the open-questions log. That is
-[`docs/migrating.md`](./migrating.md), separate from the routine sync below.
+A project on the 0.2 or 0.3 method has a crossing to make first — the Design
+gate is gone, so is the open-questions log, and fifteen skills are now invoked
+by name. That is [`docs/migrating.md`](./migrating.md), separate from the
+routine sync below.
 
 Three things ship in this repo with different lifecycles, and only one of
 them stays in sync automatically:

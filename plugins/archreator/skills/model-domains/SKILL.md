@@ -1,6 +1,7 @@
 ---
 name: model-domains
-description: Procedure — run this when an organization's model is large enough to split into business lines or domains, when adding a new domain to an existing enterprise model, or when a change crosses a domain boundary. Covers the split test, writing a domain charter, namespaced element IDs, and the federation rule that governs cross-domain contracts. Not needed for a project modeling a single application or a single organization.
+description: Procedure — run this when an organization's model is large enough to split into business lines or domains, when adding a domain, or when a change crosses a domain boundary. The split test, the domain charter, namespaced identifiers and the federation rule for cross-domain contracts.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -179,6 +180,9 @@ business's own word for the domain over an invented one.
 **→ Produces** namespaced identifiers across the domain's documents.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

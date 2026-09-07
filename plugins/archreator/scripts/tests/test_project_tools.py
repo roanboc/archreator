@@ -117,6 +117,28 @@ class ProjectToolTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("2 live element(s)", result.stdout)
 
+    def test_health_counts_grants_against_promotions(self):
+        """A granted gate is meant to move a status line; the report says
+        whether one ever did. A dated row in the Approvals table is the grant,
+        whatever language the heading above it is written in."""
+        scope = self.probe / "architecture" / "scope"
+        scope.mkdir(exist_ok=True)
+        doc = scope / "1_probe.md"
+        doc.write_text(
+            "# Probe\n\n## Aprobaciones\n\n"
+            "| Compuerta | Aprobó | Fecha | Qué se mostró |\n"
+            "| --------- | ------ | ----- | ------------- |\n"
+            "| Entendimiento | The owner | 2026-09-07 | The probe |\n",
+            encoding="utf-8",
+        )
+        self.addCleanup(doc.unlink)
+        result = run(MODEL, "--project", self.probe, "health")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("1 initiative(s), 2 live element(s)", result.stdout)
+        self.assertIn("1 dated approval row(s)", result.stdout)
+        self.assertIn("1 granted, 0 document(s) validated — the gap", result.stdout)
+        self.assertIn("1 of 2 name what realizes them", result.stdout)
+
     def test_trace_walks_across_layers_with_no_database(self):
         result = run(MODEL, "--project", self.probe, "trace", "BSVC1")
         self.assertEqual(result.returncode, 0, result.stderr)

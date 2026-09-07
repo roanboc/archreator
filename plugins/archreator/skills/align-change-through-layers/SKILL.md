@@ -1,6 +1,6 @@
 ---
 name: align-change-through-layers
-description: Procedure — run this when requirements change or a new feature or behavior change is requested. Assesses whether the change needs strategy discovery first, aligns it through the architecture layers (strategy → business → information → application → technology) with Requester approval before implementation, records it in a scope document, and only then implements. Not needed for pure bug fixes that change no documented behavior.
+description: Procedure — run when a requirement, feature or behavior change arrives. Not for a bug fix that changes no documented behavior.
 metadata:
   archreator:
     kind: gated-procedure
@@ -174,32 +174,13 @@ publish this" tells a Requester what kind of answer is wanted; "is this okay?"
 does not. A stop is recorded in the Approvals table like a gate, with the
 reason in place of a gate name.
 
-### Where a gate happens
+### Where a gate happens, and what is shown
 
-| Surface | Use it when |
-| ------- | ----------- |
-| **The conversation** | The Requester is in the session with you |
-| **A pull-request comment** | The Requester is not in the session, or the approval should be reviewable by others. The reply *is* the record |
-| **A published view of the model** | Stakeholders read the model but never open GitHub. Only once the project publishes a site |
-
-Whichever surface is used, the approval is transcribed into the Approvals table
-with its date and what was shown.
-
-### Show the Requester what they are approving
-
-**Every gate presentation carries full clickable links to the exact content
-under review** — one per document, resolving to the branch the work is on, not
-to the default branch:
-
-```
-https://github.com/<owner>/<repo>/blob/<branch>/<path>
-```
-
-Not a repository-relative path, not a file name, not "see the canvases": an
-approval granted against a summary is an approval of the summary. Link the
-branch, never the default branch, and give one link per document rather than a
-link to a folder. In a pull-request comment write the full URLs — GitHub
-renders relative links there inconsistently.
+In the conversation, in a pull-request comment, or on a published view of
+the model — and always with one full link per document, to the branch under
+review, never the default branch. The surfaces and the link rule are in
+[`references/presenting-a-gate.md`](./references/presenting-a-gate.md);
+read it before presenting.
 
 ## ⚙ Steps
 
@@ -374,6 +355,9 @@ branch (`main...HEAD`), not just the latest commit.
 **→ Produces** a pull request a Reviewer can judge.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
