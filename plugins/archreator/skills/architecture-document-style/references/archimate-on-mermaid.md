@@ -235,7 +235,10 @@ document's headings are written in.
 
 **The legend diagram is the whole section — no table restates it.** Its nodes
 already name the glyph, the stereotype and the ID prefix, and the diagram
-renders each type's shape and colour.
+renders each type's shape and colour. **Its edges are the document's own**:
+one per pair of types the diagrams below connect, labelled with the
+relationship they draw. `check_model.py` fails a legend of two or more types
+that draws no edge while the document's diagrams do.
 
 **A layer README that only indexes other documents is exempt**: it has no
 elements to legend.

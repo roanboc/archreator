@@ -1,6 +1,7 @@
 ---
 name: discover-current-landscape
-description: Procedure — run this when the subject already exists and its lower layers are empty. Sweeps an organization's estate into the business, information, application and technology layers — actors, services, processes, data, applications, runtimes — from evidence rather than from a requirement, declares how far the sweep went, and presents the whole described baseline once at Understanding. Use it when the strategy layer is filled but layers 2 to 5 hold nothing, when an architect inherits a landscape nobody documented, or when a baseline is needed before a target state can be planned.
+description: Procedure — run this when the subject already exists and layers 2 to 5 are empty. Sweeps the estate — actors, services, processes, data, applications, runtimes — into a described baseline from evidence rather than a requirement, declares how far it went, and presents it once at Understanding.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -234,6 +235,9 @@ the sweep found the estate, not the ambition.
 **→ Produces** a Coverage section in each swept layer's README.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

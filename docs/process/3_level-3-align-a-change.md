@@ -4,7 +4,7 @@ _[← The process model](./README.md) · [Level 2](./2_level-2-processes.md)_
 
 The one process decomposed past level 2, and the
 [focus table](./README.md#the-focus-table) says why: the branching around its gate —
-discovery, conflict, a pure bug fix — is more than one diagram can carry legibly.
+discovery, conflict, a change inside an element — is more than one diagram can carry legibly.
 
 ```mermaid
 flowchart TD
@@ -13,7 +13,7 @@ flowchart TD
   assess["⚙ Assess the strategy layer against the change [BPROC2.1.2]"]
   verdict{"Which verdict?"}
   stop(["Stop — surface the conflict to the Requester"])
-  bugfix{"Pure bug fix, no documented behavior changes?"}
+  bugfix{"Inside an element the model names?"}
   walk23["⚙ Align business and information [BPROC2.1.3]"]
   scope["⚙ Draft the scope document [BPROC2.1.4]"]
   g2{{"❖ Understanding — strategy, business, information"}}
@@ -40,12 +40,12 @@ flowchart TD
 | -- | ----------- | ------- | ------ |
 | `BPROC2.1.1` | Confirm the depth; at Depth 3, locate the domain | A requirement arrives | A stated depth, and the owning domain where there is one |
 | `BPROC2.1.2` | Assess the strategy layer against the change | The depth is stated | One of four verdicts, stated and recorded |
-| `BPROC2.1.3` | Align business and information | The verdict is "aligned" and this is not a pure bug fix | Changed `2_business/` and `3_information/`, or explicit "no change" verdicts |
+| `BPROC2.1.3` | Align business and information | The verdict is "aligned" and the change reaches the model | Changed `2_business/` and `3_information/`, or explicit "no change" verdicts |
 | `BPROC2.1.4` | Draft the scope document | The layers are aligned | The next numbered document in `architecture/scope/`, indexed |
 | `BPROC2.1.5` | Align application and technology | Understanding is approved | Changed `4_application/` and `5_technology/` |
 
 Every edge leaving a rhombus is a verdict the agent **states and records** — a "no
-change" on a layer, a "pure bug fix, no scope document", a call the agent took and
+change" on a layer, an "inside an element, no scope document", a call the agent took and
 wrote into the document it affects as draft. None of them is a silent skip.
 
 Two edges leave the happy path. A **conflict** stops the process: the change

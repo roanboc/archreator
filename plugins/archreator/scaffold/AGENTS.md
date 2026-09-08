@@ -2,7 +2,7 @@
 
 **This project has not been bootstrapped yet.** It is a fresh copy of the
 [archreator](./README.md) template: the method works, the model is empty.
-Run the `establish-project` skill before anything else — it names the
+Run `/archreator:establish-project` before anything else — it names the
 project, declares the modeling depth, fills in this file, and hands off to
 discovery. Everything in this file below the rule is a placeholder it will
 replace.
@@ -17,11 +17,14 @@ replace.
 
 **Strategy and business architecture are validated before any other layer,
 and the Requester approves at explicit gates before development.** A change
-in requirements is never coded directly: align it through the numbered EA
-layers (`architecture/1_strategy` → … → `5_technology`), stop at the gates for
-the Requester's approval, record it in a scope document (`architecture/scope/`),
-then implement. Pure bug fixes that change no documented behavior skip the
-alignment and the gates, but still keep the docs true.
+to what the model claims — an element added, removed or re-related, a rule it
+states contradicted — is never coded directly: align it through the numbered
+EA layers (`architecture/1_strategy` → … → `5_technology`), stop at the gates
+for the Requester's approval, record it in a scope document
+(`architecture/scope/`), then implement. A change inside an element the model
+already names — a screen, a filter, a format, a defect — is coded directly and
+documents nothing; one that only keeps a row true edits the row in the same
+commit.
 
 ## Who decides
 
@@ -50,9 +53,11 @@ descoping is a normal initiative, decided by the Requester.
 
 ## The skills
 
-Your coding agent surfaces the archreator skills from their `description:`
-frontmatter; you don't invoke them by name in normal use. Three kinds: `⚙` a
-procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
+Three archreator skills surface on their own — `align-change-through-layers`
+when a requirement arrives, `architecture-document-style` and `document-style`
+when a document is edited. Every other skill is invoked by name,
+`/archreator:<skill>`, and typing `/archreator:` lists them. Three kinds: `⚙`
+a procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
 
 The catalogue lives with the skills, in the plugin, and is not restated here.
 
@@ -73,9 +78,10 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   said exist, or `●` validated at a named gate on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing,
-  and one that carries no view or whose first view comes after its first
-  table. **Each section opens with its own diagram and its own tables follow
-  it** — never every diagram stacked at the top with the prose underneath.
+  one that carries no view or whose first view comes after its first table,
+  and one whose legend shows its types without how they connect. **Each
+  section opens with its own diagram and its own tables follow it** — never
+  every diagram stacked at the top with the prose underneath.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
   push. Everything else the method can do runs from the plugin rather than
   from a copy in here.
@@ -105,6 +111,8 @@ so there is one copy of each tool rather than one per project:
 ```bash
 model.py --project . trace BSVC1     # what a change here would touch
 model.py --project . coverage        # what names no realizing artifact
+model.py --project . names src/x.py  # which elements name this path — is a change here inside the model?
+model.py --project . health          # how much is validated, and whether a granted gate moved a status line
 model.py --project . portal          # the model as a website, for a reader outside the repo
 build_brief.py --project . --element BSVC1 --focus impact
 ```

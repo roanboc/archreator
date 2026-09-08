@@ -1,6 +1,7 @@
 ---
 name: write-pr-description
 description: Procedure — run this when creating or updating a pull request in this repo. The PR body follows the template at .github/pull_request_template.md and covers every change on the branch, diffed against main — never just the latest commit.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -104,6 +105,9 @@ body against them.
 **→ Produces** an updated pull-request body.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

@@ -1,6 +1,7 @@
 ---
 name: shard-stories
-description: Document — write one when a scope document's work package is too large or long-running to implement in one sitting — shard it into small, self-contained story files so each can be picked up, by an agent or a person, without re-deriving the whole plan from the architecture documents and scope document each time.
+description: Document — write one when a scope document's work package is too large to implement in one sitting — split it into small, self-contained story files an agent or a person can pick up without re-deriving the plan from the model and the scope document.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: document-template

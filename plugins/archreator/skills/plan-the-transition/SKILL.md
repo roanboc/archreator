@@ -1,6 +1,7 @@
 ---
 name: plan-the-transition
-description: Procedure — run this when the Requester wants to know where the architecture should go and in what order, rather than how to deliver one change. Turns an approved baseline into named target plateaus, a derived gap register and a sequence of initiatives, recorded in architecture/6_transition/ and approved at Direction. Use it for target state, to-be architecture, gap analysis, transition planning, a roadmap, or when changes keep arriving with nothing to judge their priority against.
+description: Procedure — run this when the Requester asks where the architecture should go and in what order — target state, to-be, gap analysis, roadmap — rather than how to deliver one change. Turns an approved baseline into plateaus, a gap register and a sequence in 6_transition/, approved at Direction.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: gated-procedure
@@ -218,6 +219,9 @@ plateau abandoned is marked abandoned, with why.
 **→ Produces** the roadmap's status column, kept current by later initiatives.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

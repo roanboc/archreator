@@ -117,6 +117,57 @@ class ProjectToolTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("2 live element(s)", result.stdout)
 
+    def test_health_counts_grants_against_promotions(self):
+        """A granted gate is meant to move a status line; the report says
+        whether one ever did. A dated row in the Approvals table is the grant,
+        whatever language the heading above it is written in."""
+        scope = self.probe / "architecture" / "scope"
+        scope.mkdir(exist_ok=True)
+        doc = scope / "1_probe.md"
+        doc.write_text(
+            "# Probe\n\n## Aprobaciones\n\n"
+            "| Compuerta | Aprobó | Fecha | Qué se mostró |\n"
+            "| --------- | ------ | ----- | ------------- |\n"
+            "| Entendimiento | The owner | 2026-09-07 | The probe |\n",
+            encoding="utf-8",
+        )
+        self.addCleanup(doc.unlink)
+        result = run(MODEL, "--project", self.probe, "health")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("1 initiative(s), 2 live element(s)", result.stdout)
+        self.assertIn("1 dated approval row(s)", result.stdout)
+        self.assertIn("1 granted, 0 document(s) validated — the gap", result.stdout)
+        self.assertIn("1 of 2 name what realizes them", result.stdout)
+
+    def test_names_says_which_element_a_path_belongs_to(self):
+        """A change inside a path an element names is inside the model; a change
+        to a path nothing names is a new element in disguise."""
+        folder = self.probe / "architecture" / "5_technology"
+        folder.mkdir(exist_ok=True)
+        doc = folder / "README.md"
+        doc.write_text(
+            "# Technology layer — Probe\n\n_A probe, not a model._\n\n"
+            "ArchiMate Technology layer.\n\n"
+            "**Status:** ◐ Draft catalogue — a probe, not yet validated.\n\n"
+            "## How to read this document\n\n"
+            "```mermaid\nflowchart LR\n  %% legend\n"
+            '  art[/"⎔ «Artifact» a file the build reads [ART#]"/]:::technology\n'
+            "  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333\n```\n\n"
+            "## Artifacts\n\n"
+            "| ID | Artifact | Realized by |\n| -- | -------- | ----------- |\n"
+            "| `ART1` | The enquiry module | `src/probe/enquiry.py`, `src/probe/filters/` |\n",
+            encoding="utf-8",
+        )
+        self.addCleanup(shutil.rmtree, folder)
+        for path in ("src/probe/enquiry.py", "src/probe/filters/by_date.py", "src/probe/"):
+            result = run(MODEL, "--project", self.probe, "names", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("ART1", result.stdout, path)
+        result = run(MODEL, "--project", self.probe, "names", "src/other/report.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Nothing names", result.stdout)
+        self.assertNotIn("ART1", result.stdout)
+
     def test_trace_walks_across_layers_with_no_database(self):
         result = run(MODEL, "--project", self.probe, "trace", "BSVC1")
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -312,6 +363,33 @@ flowchart LR
 | `BSVC2` | Delivering |
 """
 
+TWO_TYPE_LEGEND = """\
+## How to read this document
+
+```mermaid
+flowchart LR
+  %% legend
+  a(["⬭ «Business Service» what is offered [BSVC#]"])
+  b["⚙ «Business Process» how it is delivered [BPROC#]"]
+```
+
+"""
+
+CONNECTED_VIEW = """\
+## Delivery
+
+```mermaid
+flowchart LR
+  s(["⬭ Delivering"])
+  p["⚙ Answer an enquiry"]
+  p -->|realizes| s
+```
+
+| ID | Service |
+| -- | ------- |
+| `BSVC2` | Delivering |
+"""
+
 
 class FederationTests(unittest.TestCase):
     """Cross-model references resolve by federation ID, and drift is named."""
@@ -383,6 +461,30 @@ class FederationTests(unittest.TestCase):
             self.assertIn("stereotype", result.stdout + result.stderr)
             marked = STEREOTYPED_VIEW.replace("flowchart LR\n", "flowchart LR\n  %% legend\n")
             business.write_text(PRD_BUSINESS + marked, encoding="utf-8")
+            result = run(script)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_a_legend_that_shows_types_without_their_connections_fails(self):
+        """A legend shows the types and how they connect. Two types with no
+        edge, above a diagram that draws one, is a key to the notation and
+        not to the layer."""
+        with tempfile.TemporaryDirectory() as tmp:
+            script, prd = self._build(Path(tmp))
+            business = prd / "2_business" / "README.md"
+            business.write_text(
+                PRD_BUSINESS.replace(LEGEND, TWO_TYPE_LEGEND) + CONNECTED_VIEW,
+                encoding="utf-8",
+            )
+            result = run(script)
+            self.assertNotEqual(result.returncode, 0, "a disconnected legend passed")
+            self.assertIn("no connection", result.stdout + result.stderr)
+            connected = TWO_TYPE_LEGEND.replace(
+                '[BPROC#]"]\n', '[BPROC#]"]\n  b -->|realizes| a\n', 1
+            )
+            business.write_text(
+                PRD_BUSINESS.replace(LEGEND, connected) + CONNECTED_VIEW,
+                encoding="utf-8",
+            )
             result = run(script)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 

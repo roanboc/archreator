@@ -1,6 +1,8 @@
 ---
 name: answer-architecture-question
 description: Procedure — use this when someone wants a focused, human-readable brief about an architecture element, domain, data concern, solution, impact, or decision. Picks the reader's viewpoint, resolves a model anchor, and generates a disposable Markdown brief from the model.
+disable-model-invocation: true
+argument-hint: "[element] [focus]"
 metadata:
   archreator:
     kind: gated-procedure
@@ -108,6 +110,9 @@ in the source, never by rotating or shrinking the page —
 `architecture-document-style` § A row must survive a page.
 
 ## ⇥ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 - `align-change-through-layers` when the answer becomes a requested change.
 - `record-decision` when the conversation takes a consequential call that

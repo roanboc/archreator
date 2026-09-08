@@ -70,3 +70,5 @@ A process boundary is drawn by accountability — one trigger, one definable out
 one owner role. A skill boundary is drawn by activation — when an agent reaches for
 it, and what must be in context when it does. `align-change-through-layers` spans
 all three of `BPROC2`'s children because that is the unit an agent activates on.
+A skill the Requester starts is invoked by name; one that must fire on its own —
+the spine, the two style rulebooks — is listed for the agent.

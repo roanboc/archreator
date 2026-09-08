@@ -1,6 +1,7 @@
 ---
 name: process-and-capability-levels
-description: Rulebook — consult when modeling an organization's business processes or capabilities — building a process map, deciding how far to decompose, drafting a capability model, or numbering leveled elements. Covers the four macro process categories (strategic, operational, support, evaluation), what each level means and how its elements are described, the hierarchical identifiers that carry the level (`BPROC7`, `BPROC7.2`, `BPROC7.2.1`), seeding a capability map from an industry reference model, and the breadth-first depth-on-pain rule that says which branches to detail and which to leave alone. Not needed for a single application, which has no process map of its own.
+description: Rulebook — consult when modeling an organization's processes or capabilities — a process map, a capability model, how far to decompose, numbering leveled elements. The four macro categories, the levels, hierarchical identifiers, seeding from an industry reference model, breadth-first depth-on-pain.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: rulebook

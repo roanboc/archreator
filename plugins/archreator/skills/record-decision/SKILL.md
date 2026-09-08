@@ -1,6 +1,8 @@
 ---
 name: record-decision
-description: Document — write one when a choice needs a durable rationale but doesn't rise to a full scope document — architecture-significant calls like an AI actor's autonomy level, a library or pattern choice, or a tradeoff a future reader will ask "why did we do it this way?" about. Writes a numbered, indexed decision record.
+description: Document — write one when a choice needs a durable rationale but not a scope document — an AI actor's autonomy level, a library or pattern choice, a tradeoff a future reader will ask why about. A numbered, indexed decision record.
+disable-model-invocation: true
+argument-hint: "[title]"
 metadata:
   archreator:
     kind: document-template

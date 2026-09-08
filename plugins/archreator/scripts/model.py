@@ -9,6 +9,11 @@ from.
     model.py --project . trace CAP3     # what would a change here touch?
     model.py --project . coverage       # what is not grounded, and what
                                         # is not yet approved?
+    model.py --project . health         # how much is validated, how many
+                                        # gates were granted, and whether
+                                        # any of them moved a status line
+    model.py --project . names src/x.py # which elements name this path —
+                                        # is a change here inside the model?
     model.py --project . inventory      # one line per element
     model.py --project . export         # write .model/model.json
 
@@ -37,6 +42,7 @@ fails — consult it rather than teaching this list a new language.
 import argparse
 import os
 import json
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -121,6 +127,12 @@ REALIZATION_HEADERS = {
     "realizado por",
     "realizadas por",
     "realizados por",
+    # A component's or an artifact's realizing column is routinely headed by
+    # what the cell holds rather than by the relationship.
+    "code",
+    "path",
+    "código",
+    "ruta",
 }
 
 # The interchange format's version. A second project fetching this file is
@@ -192,6 +204,12 @@ def collect() -> list[dict]:
                     for edge in parsed.edges
                 ],
                 "mentions": [list(mention) for mention in parsed.mentions],
+                # Every document the parse read, with the status its preamble
+                # declares - "" where it declared none, or more than one.
+                "documents": [
+                    {"doc": doc, "status": status if count == 1 else ""}
+                    for doc, (status, count) in sorted(parsed.statuses.items())
+                ],
                 "excerpts": [
                     {
                         "element": excerpt.element,
@@ -571,6 +589,139 @@ def coverage(projects: list[dict]) -> int:
     return 0
 
 
+# A granted gate is a row in a table of four or more columns under `scope/`
+# with a cell that opens with a date - the Approvals table's Date column, in
+# every shape the scope template has carried. A row without one records
+# nothing that happened; a row that says `N/A` records a gate that did not
+# apply, the shape an earlier method version wrote, dated or not; and a date
+# inside a sentence is a work package saying when it shipped, not a grant.
+# Language-independent on purpose: the heading above the table is in whatever
+# language the model is written in, and the date is not.
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\b")
+NOT_APPLICABLE = "N/A"
+
+
+def grants_in(scope_dir: Path) -> tuple[int, int]:
+    """(dated approval rows, scope documents), read from a project's scope/."""
+    if not scope_dir.is_dir():
+        return 0, 0
+    docs = sorted(p for p in scope_dir.glob("*.md") if p.name.lower() != "readme.md")
+    dated = 0
+    for doc in docs:
+        in_table, width = False, 0
+        for line in doc.read_text(encoding="utf-8").splitlines():
+            row = line.strip()
+            if not row.startswith("|"):
+                in_table = False
+                continue
+            cells = row.strip("|").split("|")
+            if not in_table:
+                in_table, width = True, len(cells)
+                continue
+            if set(row.replace("|", "").strip()) <= set("-: "):
+                continue  # the separator under the header
+            if (
+                width >= 4
+                and NOT_APPLICABLE not in row
+                and any(DATE_RE.match(cell.strip()) for cell in cells)
+            ):
+                dated += 1
+    return dated, len(docs)
+
+
+def health(projects: list[dict]) -> int:
+    """The numbers that say whether the method is doing what it claims.
+
+    `coverage` says what is grounded. This says what is **approved**: how much
+    of the model has been validated, how many gates were granted, and - the
+    one number nothing else prints - whether a granted gate ever moved a
+    status line. A gate is granted so that a document can say `●`; a model
+    with grants and no `●` has a promotion gap, and this is where it shows.
+
+    Read fresh every run, like everything else here, and language-independent
+    throughout: a status is a glyph, a grant is a dated row, an initiative is
+    a file.
+    """
+    if not projects:
+        print("No model found — nothing to report.")
+        return 0
+
+    glyph = {"validated": "●", "draft catalogue": "◐", "not started": "○"}
+    for entry in sorted(projects, key=lambda p: p["project"]):
+        project = entry["project"]
+        root = REPO_ROOT if project == "." else REPO_ROOT / project
+        live = [e for e in entry["elements"] if not e["retired"]]
+        defining = {e["doc"] for e in live}
+        docs = [d for d in entry["documents"] if d["doc"] in defining]
+        dated, scope_docs = grants_in(root / MODEL_DIR / "scope")
+
+        def count(rows: list[dict], status: str) -> int:
+            return sum(1 for r in rows if r["status"] == status)
+
+        def line(rows: list[dict]) -> str:
+            return "   ".join(f"{glyph[s]} {count(rows, s):3d}" for s in glyph)
+
+        grounded = [e for e in live if e["realized_by"] and not is_pending(e)]
+        validated_docs = count(docs, "validated")
+
+        print(f"{project} — {scope_docs} initiative(s), {len(live)} live element(s)")
+        print(f"  elements    {line(live)}")
+        print(f"  documents   {line(docs)}   of {len(docs)} that define elements")
+        print(f"  grants      {dated} dated approval row(s) across {scope_docs} scope document(s)")
+        gap = " — the gap" if dated and not validated_docs else ""
+        print(f"  promotion   {dated} granted, {validated_docs} document(s) validated{gap}")
+        print(f"  grounded    {len(grounded)} of {len(live)} name what realizes them")
+        print()
+
+    print("A report, not a gate. Nothing here fails a build.")
+    return 0
+
+
+# A path, wherever a row writes one: anything with a slash in it, or a bare
+# file name with an extension. Read from every cell of the row rather than
+# the realizing column alone, because which column holds a path is the one
+# language-dependent guess in this file and a path is recognisable without it.
+PATH_RE = re.compile(r"[\w.-]*/[\w./-]*|\b[\w-]+\.[A-Za-z]{1,6}\b")
+
+
+def paths_in(element: dict) -> list[str]:
+    text = " ".join([element["realized_by"], *element["attrs"].values()])
+    return [token.rstrip("/.") for token in PATH_RE.findall(text) if token.strip("/.")]
+
+
+def names(projects: list[dict], wanted: str) -> int:
+    """Which elements name a code path — `coverage` read the other way.
+
+    A change inside an artifact an element already names is inside the model
+    and documents nothing; a change to a file no element names is a new
+    element in disguise. This is how an agent tells the two apart before
+    deciding whether an initiative opens (`align-change-through-layers`
+    § When not to). A directory matches every path under it, in either
+    direction: asking for a file finds the element naming its folder, asking
+    for a folder finds every element naming a file inside.
+    """
+    wanted = wanted.strip().rstrip("/")
+    hits: list[tuple[str, dict, str]] = []
+    for entry in projects:
+        for element in entry["elements"]:
+            if element["retired"]:
+                continue
+            for token in paths_in(element):
+                if wanted == token or wanted.startswith(token + "/") or token.startswith(wanted + "/"):
+                    hits.append((entry["project"], element, token))
+                    break
+    if not hits:
+        print(
+            f"Nothing names `{wanted}`. A change here is a new element in disguise "
+            f"unless an element names a wider path in words — `align-change-through-layers` decides."
+        )
+        return 0
+    print(f"`{wanted}` is named by:")
+    for project, element, token in hits:
+        where = f"{project}/" if project != "." else ""
+        print(f"  {label(element['id'], element['name'], element['type'])}  — `{token}` in {where}{element['doc']}")
+    return 0
+
 
 WORK_DIR = ".archreator/work"
 
@@ -666,6 +817,12 @@ def main() -> int:
                    help="narrow to one model, where the repository holds several")
 
     sub.add_parser("coverage", help="what is grounded, and what is not yet approved")
+    sub.add_parser(
+        "health",
+        help="how much is validated, how many gates were granted, and whether any moved a status line",
+    )
+    n = sub.add_parser("names", help="which elements name a code path — is a change there inside the model?")
+    n.add_argument("path", help="a file or directory, relative to the project")
     sub.add_parser("inventory", help="one line per element; writes nothing")
     sub.add_parser("portal", help="write a stock MkDocs config into .archreator/work/portal/")
 
@@ -697,6 +854,10 @@ def main() -> int:
 
     if args.command == "coverage":
         return coverage(projects)
+    if args.command == "health":
+        return health(projects)
+    if args.command == "names":
+        return names(projects, args.path)
     if args.command == "inventory":
         print_inventory(projects)
         return 0

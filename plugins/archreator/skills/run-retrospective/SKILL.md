@@ -1,6 +1,7 @@
 ---
 name: run-retrospective
-description: Document — write one at the end of a completed initiative or client engagement, once the work has merged or been delivered — captures what the method failed to tell you to do and what you did instead, as a pattern note that can become a method improvement. Not a project retrospective about what went well; specifically about the gap between the method and the judgement the work actually needed.
+description: Document — write one when an initiative or engagement has merged or been delivered — what the method failed to say and what you did instead, as a pattern note that can become a method improvement. Not a project retrospective about what went well.
+disable-model-invocation: true
 metadata:
   archreator:
     kind: document-template
@@ -148,6 +149,9 @@ should be raised that week. When it appears in one, wait — the generalization
 test is unreliable on a single case.
 
 ## ⇄ Hands off to
+
+Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
+— read when it applies, never assumed loaded.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

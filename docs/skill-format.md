@@ -17,7 +17,9 @@ to enforce. What that script checks is this page, expressed as code.
 | Field | Required | Holds |
 | ----- | -------- | ----- |
 | `name` | Yes | Matches the folder. Lowercase, hyphens, no leading or trailing hyphen |
-| `description` | Yes | The activation summary — the only signal an agent has before opening the file. Keyword-rich, and **no unquoted colon**, which makes the frontmatter unparseable |
+| `description` | Yes | What the `/` menu shows — or, on the three skills that surface on their own, the trigger. One line, and **no unquoted colon**, which makes the frontmatter unparseable |
+| `disable-model-invocation` | On fifteen of the eighteen | `true` — the skill leaves the listing, costs no context, and is invoked by name as `/archreator:<skill>`. Absent on the three that surface on their own: `align-change-through-layers`, `architecture-document-style`, `document-style` |
+| `argument-hint` | Optional | What may follow the name — `[element] [focus]` |
 | `metadata.archreator.kind` | Yes | `gated-procedure`, `document-template` or `rulebook` |
 | `metadata.archreator.realizes_process` | When one applies | The level-2 process IDs from [`docs/process/`](./process/README.md) |
 | `metadata.archreator.gates` | Yes | The gates this skill stops at, or `none` |
@@ -32,9 +34,12 @@ can change what the agent reaches for. The title repeats it as a glyph — `# �
 **Values are strings.** Agent Skills types `metadata.*` as string to string, so
 a list is one comma-separated string rather than a YAML sequence.
 
-The description carries the keywords that make the skill findable; the body's
-**When to use this** carries the checkable conditions. Writing the full
-condition list in both is one fact in two places.
+**Two lengths.** A listed description is at most 140 characters, because the
+three listed together are all that spends the host's skill-listing budget. A
+by-name description is at most 300 — free in context, the `/` menu line, and
+the trigger on a host that ignores the key. Either way the body's **When to use
+this** carries the checkable conditions, not the description. `check_skills.py`
+enforces both limits and which skills carry the key.
 
 ## Sections
 
@@ -95,6 +100,13 @@ in a code span instead — `` `architecture/README.md` ``.
 **A skill never cites an element ID from a specific model.** `P3` is that
 model's third principle, and in a downstream project it resolves to something
 else entirely. Name the principle.
+
+**A hand-off is a file, not a loaded skill.** A skill invoked by name is out
+of context until something reads it, so every **Hands off to** section opens
+with the same sentence: *Each is a file beside this one —
+`${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md` — read when it applies, never
+assumed loaded.* The variable is the host's; where it is not expanded, the
+path still reads as a path.
 
 ## References
 
