@@ -74,7 +74,20 @@ not a definition.
 document is immutable and will outlive the elements it names, so
 reference-checking it is incoherent rather than merely awkward.
 
-Installed dependencies and tool caches — a virtual environment, a package
-directory, a test or lint cache — are skipped for a third reason: what a
-package ships is not the project's to answer for. A validator that walks
-them reports somebody else's broken links, and the project cannot fix them.
+**Every dot-directory** is skipped for a third reason: by convention it is
+local state rather than repository content — a host's own settings, a tool's
+cache, an installed dependency, a generated working surface, the evidence a
+test round wrote this morning. What a package ships is not the project's to
+answer for, and a validator that walks one reports somebody else's broken
+links, which the project cannot fix. The rule is the convention rather than a
+list of the names anyone thought of, so a project can invent a dot-directory
+without teaching the validators about it; `venv/` and `node_modules/` are
+named because they are the same thing without the dot.
+
+`.github/` is the exception, because it is content the repository answers
+for: the pull-request template and the workflows README carry relative links,
+and a broken one there is as broken as one anywhere else.
+
+The rule reads the path **inside the repository**, so a checkout that itself
+lives under a dot-directory — `~/.cache/somewhere`, an agent's worktree — is
+still read rather than skipped whole and silently reported as clean.

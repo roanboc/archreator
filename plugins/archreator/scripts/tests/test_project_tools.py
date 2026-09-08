@@ -221,6 +221,66 @@ class ProjectToolTests(unittest.TestCase):
         finally:
             (site / "index.html").unlink()
 
+    def test_a_dot_directory_nobody_named_is_not_walked(self):
+        """The rule is the convention, not a list of the ones we thought of.
+
+        A project grows dot-directories this method never hears of — a test
+        round's evidence, a framework's build output, an agent's worktree — and
+        each one used to be a fresh pull request against the scaffold.
+        """
+        junk = self.probe / ".somebody-elses-tool" / "notes.md"
+        junk.parent.mkdir(parents=True, exist_ok=True)
+        junk.write_text("[gone](./missing.md)\n", encoding="utf-8")
+        try:
+            for validator in ("check_links.py", "check_model.py"):
+                result = run(self.probe / "scripts" / validator, cwd=self.probe)
+                self.assertEqual(
+                    result.returncode, 0,
+                    f"{validator} read a directory that is not the project's: "
+                    f"{result.stdout}{result.stderr}",
+                )
+        finally:
+            junk.unlink()
+
+    def test_github_is_read_because_it_is_content(self):
+        """`.github` is the exception the rule needs.
+
+        The pull-request template and the workflows README ship with relative
+        links, and a broken one there is as broken as one anywhere else.
+        """
+        template = self.probe / ".github" / "pull_request_template.md"
+        template.parent.mkdir(parents=True, exist_ok=True)
+        template.write_text("[gone](./missing.md)\n", encoding="utf-8")
+        try:
+            result = run(self.probe / "scripts" / "check_links.py", cwd=self.probe)
+            self.assertEqual(
+                result.returncode, 1,
+                f"check_links skipped .github: {result.stdout}{result.stderr}",
+            )
+            self.assertIn("pull_request_template.md", result.stdout + result.stderr)
+        finally:
+            template.unlink()
+
+    def test_a_checkout_under_a_dot_directory_is_still_read(self):
+        """The rule is about the path inside the repository.
+
+        A checkout that lives under `~/.cache`, or under an agent's
+        `.worktrees`, would otherwise match on a segment above the project and
+        skip the whole model without saying anything.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            hidden = Path(tmp) / ".worktrees" / "probe"
+            shutil.copytree(self.probe, hidden)
+            (hidden / "architecture" / "broken.md").write_text(
+                "# Broken\n\n[gone](./missing.md)\n", encoding="utf-8"
+            )
+            result = run(hidden / "scripts" / "check_links.py", cwd=hidden)
+            self.assertEqual(
+                result.returncode, 1,
+                "a checkout under a dot-directory was skipped whole: "
+                f"{result.stdout}{result.stderr}",
+            )
+
     def test_help_answers_outside_a_project(self):
         """--help is a question about the tool, not about any project."""
         with tempfile.TemporaryDirectory() as empty:
