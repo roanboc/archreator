@@ -73,3 +73,8 @@ not a definition.
 `engagements/` folder are skipped for the older reason: a merged scope
 document is immutable and will outlive the elements it names, so
 reference-checking it is incoherent rather than merely awkward.
+
+Installed dependencies and tool caches — a virtual environment, a package
+directory, a test or lint cache — are skipped for a third reason: what a
+package ships is not the project's to answer for. A validator that walks
+them reports somebody else's broken links, and the project cannot fix them.
