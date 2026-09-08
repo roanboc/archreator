@@ -78,9 +78,10 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   said exist, or `●` validated at a named gate on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing,
-  and one that carries no view or whose first view comes after its first
-  table. **Each section opens with its own diagram and its own tables follow
-  it** — never every diagram stacked at the top with the prose underneath.
+  one that carries no view or whose first view comes after its first table,
+  and one whose legend shows its types without how they connect. **Each
+  section opens with its own diagram and its own tables follow it** — never
+  every diagram stacked at the top with the prose underneath.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
   push. Everything else the method can do runs from the plugin rather than
   from a copy in here.

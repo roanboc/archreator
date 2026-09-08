@@ -363,6 +363,33 @@ flowchart LR
 | `BSVC2` | Delivering |
 """
 
+TWO_TYPE_LEGEND = """\
+## How to read this document
+
+```mermaid
+flowchart LR
+  %% legend
+  a(["⬭ «Business Service» what is offered [BSVC#]"])
+  b["⚙ «Business Process» how it is delivered [BPROC#]"]
+```
+
+"""
+
+CONNECTED_VIEW = """\
+## Delivery
+
+```mermaid
+flowchart LR
+  s(["⬭ Delivering"])
+  p["⚙ Answer an enquiry"]
+  p -->|realizes| s
+```
+
+| ID | Service |
+| -- | ------- |
+| `BSVC2` | Delivering |
+"""
+
 
 class FederationTests(unittest.TestCase):
     """Cross-model references resolve by federation ID, and drift is named."""
@@ -434,6 +461,30 @@ class FederationTests(unittest.TestCase):
             self.assertIn("stereotype", result.stdout + result.stderr)
             marked = STEREOTYPED_VIEW.replace("flowchart LR\n", "flowchart LR\n  %% legend\n")
             business.write_text(PRD_BUSINESS + marked, encoding="utf-8")
+            result = run(script)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_a_legend_that_shows_types_without_their_connections_fails(self):
+        """A legend shows the types and how they connect. Two types with no
+        edge, above a diagram that draws one, is a key to the notation and
+        not to the layer."""
+        with tempfile.TemporaryDirectory() as tmp:
+            script, prd = self._build(Path(tmp))
+            business = prd / "2_business" / "README.md"
+            business.write_text(
+                PRD_BUSINESS.replace(LEGEND, TWO_TYPE_LEGEND) + CONNECTED_VIEW,
+                encoding="utf-8",
+            )
+            result = run(script)
+            self.assertNotEqual(result.returncode, 0, "a disconnected legend passed")
+            self.assertIn("no connection", result.stdout + result.stderr)
+            connected = TWO_TYPE_LEGEND.replace(
+                '[BPROC#]"]\n', '[BPROC#]"]\n  b -->|realizes| a\n', 1
+            )
+            business.write_text(
+                PRD_BUSINESS.replace(LEGEND, connected) + CONNECTED_VIEW,
+                encoding="utf-8",
+            )
             result = run(script)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
