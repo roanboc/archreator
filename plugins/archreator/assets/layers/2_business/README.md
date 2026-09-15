@@ -77,6 +77,8 @@ flowchart LR
   proc1{{"⚙ «Business Process» level 1, a process group [BPROC#]"}}:::business1
   proc2{{"⚙ «Business Process» level 2, a process [BPROC#.#]"}}:::business
   proc3{{"⚙ «Business Process» level 3, an activity of a process [BPROC#.#.#]"}}:::business
+  task["«Task» what one person does inside an activity; no identifier"]:::business
+  taskAI["«Task» run by an agent; no identifier"]:::application
   obj["▧ «Business Object» what a process handles [BOBJ#]"]:::business
   rule[/"※ «Business Rule» what must not happen [RULE#]"/]:::business1
   val["◈ «Value» what the service is worth [VAL#]"]:::business
@@ -88,6 +90,8 @@ flowchart LR
   role -->|accountable for| proc2
   proc1 -->|composed of| proc2
   proc2 -->|composed of| proc3
+  proc3 -->|composed of| task
+  proc3 -->|composed of| taskAI
   proc2 -->|realizes| svc
   prod -->|aggregates| svc
   svc -->|exposed at| bif
@@ -104,8 +108,9 @@ flowchart LR
 
 An AI actor takes the Application cyan inside a business diagram — one of the
 two colour overrides in the `architecture-document-style` rulebook § ArchiMate
-on Mermaid — so a reader never mistakes it for a person. The darker yellow
-marks a level-1 process and a rule.
+on Mermaid — so a reader never mistakes it for a person; the same cyan marks a
+task an agent runs, and an agent covers tasks, never a whole activity. The
+darker yellow marks a level-1 process and a rule.
 
 ## Layer view
 

@@ -139,7 +139,9 @@ output, who is accountable, and a tool only where it adds a fact. No field
 paraphrases another: an "Agent" bullet restating the task table goes, a
 closing bold paragraph goes, and no summary table restates the records. A
 column holding one value down a task table is said once above the table and
-dropped.
+dropped. Where agents work, the task table says which tasks they run: an agent
+covers tasks, never a whole activity, because a person stays accountable for
+the activity, so a flow never colours an activity as the agent's.
 
 **Level 4 stays out of the model.** What presentation adds is the seam: the
 level-3 row links the operating instruction where one exists, in whatever
