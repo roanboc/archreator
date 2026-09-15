@@ -32,6 +32,36 @@ internal, sensitive, regulated, …) and **retention** live — reference it
 whenever a business rule or technology decision depends on how sensitive a
 piece of data is.
 
+## Metamodel
+
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  domain["▦ «Data Object» a domain, who owns this information [DOBJ#]"]:::application1
+  obj["▦ «Data Object» what information exists [DOBJ#.#]"]:::application
+  bobj["▧ «Business Object» what the business calls it [BOBJ#]"]:::business
+  store[/"⎔ «Artifact» where it is persisted [ART#]"/]:::technology
+
+  domain -->|aggregates| obj
+  obj -->|realizes| bobj
+  store -->|realizes| obj
+
+  classDef application fill:#c2f0ff,stroke:#0288d1,color:#333
+  classDef application1 fill:#9adcf0,stroke:#0288d1,color:#333
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333
+```
+
+The business object and the artifact are visitors from their own layers and
+keep their own colour; the darker cyan marks a data domain.
+
 ## Layer view
 
 <!--

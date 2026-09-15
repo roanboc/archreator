@@ -29,6 +29,36 @@ every component row must point at the module or file that implements it.
 `4_solution-design.md` is where "how to add a new X" recipes go — a new port, a
 new adapter, a new platform — once the shape repeats.
 
+## Metamodel
+
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  svc(["⬮ «Application Service» what the software offers [ASVC#]"]):::appservice
+  cmp["⊞ «Application Component» what provides it [ACMP#]"]:::application
+  aif["⊸ «Application Interface» where it is reached [AIF#]"]:::application
+  bsvc(["⬭ «Business Service» what it realizes, from the business layer [BSVC#]"]):::business
+
+  cmp -->|realizes| svc
+  svc -->|exposed at| aif
+  svc -->|realizes| bsvc
+  cmp -->|serves| cmp
+
+  classDef appservice fill:#c2f0ff,stroke:#0288d1,color:#333
+  classDef application fill:#9adcf0,stroke:#0288d1,color:#333
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+```
+
+A single-layer view, so the cyan ramps from service to component; the
+business service is a visitor and keeps its yellow.
+
 ## Layer view
 
 <!--

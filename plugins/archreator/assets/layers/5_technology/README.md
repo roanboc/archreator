@@ -20,6 +20,35 @@ If no stack has been chosen yet, use the `stack-selection` skill for the
 decision framework and the criteria to judge current options against, before
 writing `1_technology-services.md`.
 
+## Metamodel
+
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  node["⬒ «Node» where it runs [NODE#]"]:::technology
+  tsvc(["⬯ «Technology Service» what the platform offers [TSVC#]"]):::technology
+  art[/"⎔ «Artifact» what is deployed or persisted [ART#]"/]:::technology
+  cmp["⊞ «Application Component» what it hosts, from the application layer [ACMP#]"]:::application
+
+  node -->|realizes| tsvc
+  node -->|hosts| art
+  art -->|realizes| cmp
+  tsvc -->|serves| cmp
+
+  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333
+  classDef application fill:#9adcf0,stroke:#0288d1,color:#333
+```
+
+Green is Technology; the application component is a visitor and keeps its
+cyan.
+
 ## Layer view
 
 <!--

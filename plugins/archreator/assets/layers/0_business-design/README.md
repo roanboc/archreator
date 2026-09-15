@@ -94,6 +94,68 @@ stereotype for them would put the model out of step with the standard. They
 stay as tables in `2_business-model-canvas.md`, keyed by element ID to the
 Product, Resource, or Capability they attach to.
 
+## Metamodel
+
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  subgraph VPC["Value Proposition Canvas"]
+    cs(["◍ «Customer Segment» who we serve [CS#]"]):::motivation
+    job{{"⚙ «Job» what they are trying to do [JOB#]"}}:::motivation
+    pain>"✖ «Pain» what hurts today [PAIN#]"]:::motivation
+    gain[["✔ «Gain» what they would call a win [GAIN#]"]]:::motivation
+    prod["▣ «Product» what they get [PROD#]"]:::strategy
+    prel[/"⊖ «Pain Reliever» how the pain is removed [PREL#]"\]:::strategy
+    gcre[/"⊕ «Gain Creator» how the gain is produced [GCRE#]"\]:::strategy
+  end
+  subgraph BMC["Business Model Canvas"]
+    kp{{"⧉ «Key Partner» who we depend on [KP#]"}}:::business
+    kr[("▤ «Key Resource» what we have [KR#]")]:::strategy
+    ka{{"⚙ «Key Activity» what we do with it [KA#]"}}:::strategy
+    vp["◈ «Value Proposition» what the product promises [VP#]"]:::strategy
+    ch["⊸ «Channel» how it reaches them [CH#]"]:::business
+    cr["⇄ «Customer Relationship» how we treat them [CR#]"]:::business
+    rs[/"▲ «Revenue Stream» what comes in [RS#]"\]:::technology
+    cost[\"▼ «Cost» what it costs [COST#]"/]:::implementation
+  end
+
+  cs -->|performs| job
+  job -->|frustrated by| pain
+  job -->|rewarded by| gain
+  prod -->|aggregates| prel
+  prod -->|aggregates| gcre
+  prel -->|addresses| pain
+  gcre -->|produces| gain
+  kp -->|enables| ka
+  kr -->|enables| ka
+  ka -->|produces| prod
+  prod -->|promises| vp
+  prod -->|reaches through| ch
+  ch -->|reaches| cs
+  cr -->|keeps| cs
+  cs -->|pays| rs
+  ka -->|incurs| cost
+
+  classDef motivation fill:#e6d6f5,stroke:#7e57c2,color:#333
+  classDef strategy fill:#f5deaa,stroke:#c8a24a,color:#333
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333
+  classDef implementation fill:#ffd6d6,stroke:#b06060,color:#333
+```
+
+The customer profile takes the Motivation fill and the value map the Strategy
+fill, because that is where each block lands once derived; the segment and the
+product are the same elements on both canvases. Revenue borrows the Technology
+green and cost the Implementation rose, because no ArchiMate element lends
+them a colour.
+
 ## Layer view
 
 <!--

@@ -54,6 +54,59 @@ how this repository is developed (see `CONTRIBUTING.md`). If an initiative
 changes one of those values, consider a `record-decision` alongside the scope
 document.
 
+## Metamodel
+
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  actorH(["⚇ «Business Actor (Human)» a unit of the organization [ACT#]"]):::business
+  actorAI(["⚇ «Business Actor (AI)» a pool of agents [ACT#]"]):::application
+  bcol{{"⧉ «Business Collaboration» actors working as one [BCOL#]"}}:::business
+  role["⚉ «Business Role» the responsibility somebody holds [ROLE#]"]:::business
+  prod["▣ «Product» what the customer buys [PROD#]"]:::business
+  svc(["⬭ «Business Service» what is offered [BSVC#]"]):::business
+  bif["⊸ «Business Interface» where it is reached [BIF#]"]:::business
+  ctr["❒ «Contract» what was agreed [CTR#]"]:::business
+  proc1{{"⚙ «Business Process» level 1, a macro process [BPROC#]"}}:::business1
+  proc2{{"⚙ «Business Process» level 2, what it must achieve [BPROC#.#]"}}:::business
+  proc3{{"⚙ «Business Process» level 3, a step of a procedure [BPROC#.#.#]"}}:::business
+  obj["▧ «Business Object» what a process handles [BOBJ#]"]:::business
+  rule[/"※ «Business Rule» what must not happen [RULE#]"/]:::business1
+  val["◈ «Value» what the service is worth [VAL#]"]:::business
+
+  actorH -->|owns| proc1
+  actorH -->|participates in| bcol
+  actorH -->|assigned to| role
+  actorAI -->|assigned to| role
+  role -->|accountable for| proc2
+  proc1 -->|composed of| proc2
+  proc2 -->|composed of| proc3
+  proc2 -->|realizes| svc
+  prod -->|aggregates| svc
+  svc -->|exposed at| bif
+  ctr -->|governs| svc
+  svc -->|delivers| val
+  proc3 -->|accesses| obj
+  rule -->|verified in| proc3
+  rule -->|constrains| obj
+
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+  classDef business1 fill:#e5d95f,stroke:#8a7a00,color:#333
+  classDef application fill:#c2f0ff,stroke:#0288d1,color:#333
+```
+
+An AI actor takes the Application cyan inside a business diagram — one of the
+two colour overrides in the `architecture-document-style` rulebook § ArchiMate
+on Mermaid — so a reader never mistakes it for a person. The darker yellow
+marks a level-1 process and a rule.
+
 ## Layer view
 
 <!--

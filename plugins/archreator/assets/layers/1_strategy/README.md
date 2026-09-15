@@ -45,6 +45,54 @@ change is checked against in step 1 of `align-change-through-layers`. Keep them
 few, load-bearing, and testable (e.g. "role determines access", not "be
 secure").
 
+## Metamodel
+
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  subgraph MOT["Motivation"]
+    stk(["◍ «Stakeholder» who cares [STK#]"]):::motivation
+    drv{{"✳ «Driver» what pressures them [DRV#]"}}:::motivation
+    asm>"⌕ «Assessment» what we found when we looked [ASM#]"]:::motivation
+    g("◎ «Goal» what must become true [G#]"):::motivation
+    out[["◉ «Outcome» how we will know it happened [OUT#]"]]:::motivation
+    p[/"⚑ «Principle» what constrains how we do it [P#]"/]:::motivation
+  end
+  subgraph STR["Strategy"]
+    vs[["⇉ «Value Stream» end to end [VS#]"]]:::strategy
+    cap1["✦ «Capability» level 1, an area [CAP#]"]:::strategy1
+    cap2["✦ «Capability» level 2, what composes it [CAP#.#]"]:::strategy
+    res[("▤ «Resource» what it is built with [RES#]")]:::strategy
+    coa{{"➤ «Course of Action» what we do about it [COA#]"}}:::strategy
+  end
+
+  stk -->|concerned with| drv
+  drv -->|assessed by| asm
+  asm -->|influences| g
+  g -->|realized by| out
+  p -->|constrains| g
+  g -->|realized by| vs
+  vs -->|requires| cap2
+  cap1 -->|composed of| cap2
+  res -->|assigned to| cap2
+  coa -->|strengthens| cap2
+  coa -->|responds to| drv
+
+  classDef motivation fill:#e6d6f5,stroke:#7e57c2,color:#333
+  classDef strategy fill:#f5deaa,stroke:#c8a24a,color:#333
+  classDef strategy1 fill:#eed4a0,stroke:#c8a24a,color:#333
+```
+
+Purple is Motivation and tan is Strategy; the darker tan marks a level-1
+capability.
+
 ## Layer view
 
 <!--

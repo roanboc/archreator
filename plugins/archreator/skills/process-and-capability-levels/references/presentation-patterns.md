@@ -90,8 +90,10 @@ facts are all on the page, laid out to fit it:
   a column of its own.
 - **The chain is declared in the relationship catalogue, not in the row.** Who
   triggers whom, and who supplies a process from outside, are rows of
-  `architecture/relationships.md`, rendered by the level-2 diagram — **one
-  diagram per macro process, in value order**, never invented for symmetry.
+  `architecture/relationships.md`, drawn where they are needed: the level-1
+  map draws the chain between macro processes, and each procedure's
+  inputs-and-outputs diagram draws what its process receives and delivers.
+  **No diagram per macro process**: it restated the map and the table.
 - **Every cell is one line.** A row that stops fitting is not asking for a
   wider table — it is asking whether prose is hiding in a cell that belongs
   under the diagram, or whether this process earned level 3.
@@ -106,10 +108,14 @@ Only where the focus table justifies it, and the one level whose page is built
 around a diagram: sequence is the first thing a list cannot say.
 
 **The document names its whole branch before anything else** — an H1 like
-`# Validate an order [BPROC2.2] — the level-3 flow`, and a nav line linking up
-to the level-2 document.
+`# Validate an order [BPROC2.2] — procedure`, and a nav line linking up to the
+process document that defines the process.
 
-**The flow diagram opens the document.** Sub-processes in standard notation;
+**An inputs-and-outputs diagram opens the document.** The procedure in the
+middle, the processes that feed it on one side and the processes that receive
+its output on the other, every edge a relationship the catalogue declares;
+one sentence under it says which colour is this procedure and which is
+context. Then **the flow diagram**: sub-processes in standard notation;
 decision diamonds are flow notation and get no IDs; a stop that needs a
 person is the rose conditional-human-decision hexagon, and it gets no ID
 either. Then the ordered-flow table, when responsibility and artifacts matter

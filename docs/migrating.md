@@ -30,10 +30,13 @@ nodes.
 The "How to read this document" section goes too. A diagram explains itself:
 node labels carry glyph, name and identifier, the section heading names the
 type, and one sentence under a diagram says what a colour or a dashed border
-means where it matters. `check_model.py` still asks a defining document for a
-diagram before its first table and one per section; it no longer asks for a
-legend, and a stereotype on a node still fails outside a diagram marked
-`%% legend`.
+means where it matters. The notation moves up one level: each layer README
+gains `## Metamodel` before its `## Layer view` — one `%% legend` diagram of
+the layer's element types with glyph, shape, colour, stereotype and prefix —
+and the layer templates under `assets/layers/` ship it. `check_model.py`
+still asks a defining document for a diagram before its first table and one
+per section; it no longer asks for a legend, and a stereotype on a node still
+fails outside a diagram marked `%% legend`.
 
 Four things move in an existing project: each `## Relationships` table
 becomes rows of the catalogue under its document's heading, with the pending

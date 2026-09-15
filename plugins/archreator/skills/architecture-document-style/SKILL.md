@@ -254,7 +254,9 @@ may and may not go and what `check_model.py` holds against it — are in
 - **No "How to read this document" section.** A diagram explains itself: its
   node labels carry glyph, name and identifier, the section heading names the
   type, and one sentence under the diagram says what a colour or a dashed
-  border means where it carries meaning. No node carries a stereotype
+  border means where it carries meaning. No node carries a stereotype. The
+  layer's notation is written once, in the layer README's `## Metamodel`,
+  before its `## Layer view`
   (`references/archimate-on-mermaid.md` § A diagram explains itself).
 - Then **one section per element family, headed by that family's name** — a
   catalogue table never rides under another family's heading. A leveled

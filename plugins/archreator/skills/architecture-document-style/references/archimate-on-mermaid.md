@@ -218,12 +218,22 @@ beneath it, cut it — that is DRY applied to pictures.
 
 No element document opens with a legend. A reader decodes a diagram from what
 is on it: each node carries `<glyph> <name> [ID]`, the section heading names
-the type the diagram draws, and the identifier's prefix resolves in
+the type the diagram draws, and the identifier's prefix resolves in the
+layer's metamodel and in
 [`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md). A legend
-drawn once at the top drifted from the diagrams below it and was read instead
-of them, so it is gone; what `check_model.py` still asks of a defining document
-is a diagram before its first table and one per section (§ Diagrams come
-first, one per section).
+drawn once per document drifted from the diagrams below it and was read
+instead of them, so it is gone; what `check_model.py` still asks of a defining
+document is a diagram before its first table and one per section (§ Diagrams
+come first, one per section).
+
+**The notation lives once per layer, in the layer README.** Its diagrams open
+with `## Metamodel`: one `%% legend` diagram of the layer's element types, each
+node `<glyph> «Stereotype» <what the type is> [<PREFIX>#]` in the type's own
+shape and colour, connected as the layer's diagrams typically connect them,
+with any type the layer borrows for context. `## Layer view` follows it and
+shows the layer's main elements in that notation. A reader who needs the key
+to any document of the layer has it one click up, in one place, and the
+assets under `assets/layers/*/README.md` ship each layer's metamodel.
 
 **One sentence carries what the picture cannot.** Where a colour or a dashed
 border means something — a process of another group, a step an agent runs, an
