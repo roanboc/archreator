@@ -91,8 +91,8 @@ facts are all on the page, laid out to fit it:
 - **The chain is declared in the relationship catalogue, not in the row.** Who
   triggers whom, and who supplies a process from outside, are rows of
   `architecture/relationships.md`, drawn where they are needed: the level-1
-  map draws the chain between macro processes, and each procedure's
-  inputs-and-outputs diagram draws what its process receives and delivers.
+  map draws the chain between macro processes, and each detailed process's
+  inputs-and-outputs diagram draws what it receives and delivers.
   **No diagram per macro process**: it restated the map and the table.
 - **Every cell is one line.** A row that stops fitting is not asking for a
   wider table — it is asking whether prose is hiding in a cell that belongs
@@ -108,20 +108,20 @@ Only where the focus table justifies it, and the one level whose page is built
 around a diagram: sequence is the first thing a list cannot say.
 
 **The document names its whole branch before anything else** — an H1 like
-`# Validate an order [BPROC2.2] — procedure`, and a nav line linking up to the
+`# Validate an order [BPROC2.2] — activities`, and a nav line linking up to the
 process document that defines the process.
 
-**An inputs-and-outputs diagram opens the document.** The procedure in the
+**An inputs-and-outputs diagram opens the document.** The process in the
 middle, the processes that feed it on one side and the processes that receive
 its output on the other, every edge a relationship the catalogue declares;
-one sentence under it says which colour is this procedure and which is
-context. Then **the flow diagram**: sub-processes in standard notation;
+one sentence under it says which colour is this process and which is
+context. Then **the flow diagram**: activities in standard notation;
 decision diamonds are flow notation and get no IDs; a stop that needs a
 person is the rose conditional-human-decision hexagon, and it gets no ID
 either. Then the ordered-flow table, when responsibility and artifacts matter
 as much as sequence:
 
-| Sub-process | Performed by | Uses | Produces | Control or handoff |
+| Activity | Performed by | Uses | Produces | Control or handoff |
 | ----------- | ------------ | ---- | -------- | ------------------ |
 
 `Uses` and `Produces` name the data objects and application services by

@@ -74,9 +74,9 @@ flowchart LR
   svc(["⬭ «Business Service» what is offered [BSVC#]"]):::business
   bif["⊸ «Business Interface» where it is reached [BIF#]"]:::business
   ctr["❒ «Contract» what was agreed [CTR#]"]:::business
-  proc1{{"⚙ «Business Process» level 1, a macro process [BPROC#]"}}:::business1
-  proc2{{"⚙ «Business Process» level 2, what it must achieve [BPROC#.#]"}}:::business
-  proc3{{"⚙ «Business Process» level 3, a step of a procedure [BPROC#.#.#]"}}:::business
+  proc1{{"⚙ «Business Process» level 1, a process group [BPROC#]"}}:::business1
+  proc2{{"⚙ «Business Process» level 2, a process [BPROC#.#]"}}:::business
+  proc3{{"⚙ «Business Process» level 3, an activity of a process [BPROC#.#.#]"}}:::business
   obj["▧ «Business Object» what a process handles [BOBJ#]"]:::business
   rule[/"※ «Business Rule» what must not happen [RULE#]"/]:::business1
   val["◈ «Value» what the service is worth [VAL#]"]:::business

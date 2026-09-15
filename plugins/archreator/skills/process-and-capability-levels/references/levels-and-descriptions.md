@@ -36,11 +36,14 @@ a blank.
 | ----- | -- | ----- | ----- | ----------- |
 | **1 — Macro process** | `BPROC7` | A band's major grouping of work, end to end | Verb + object, or a noun phrase where the organization already has one | 8–15 for a whole organization |
 | **2 — Process** | `BPROC7.2` | An end-to-end process with a trigger, a definable output, and one accountable role | Verb + object | 3–8 per macro process |
-| **3 — Sub-process** | `BPROC7.2.1` | The ordered steps inside a level-2 process — the first level where a flow diagram says something a list cannot | Verb + object | Only where a pain justifies it |
+| **3 — Activity** | `BPROC7.2.1` | The ordered steps inside a level-2 process — the first level where a flow diagram says something a list cannot | Verb + object | Only where a pain justifies it |
 | **4 — Task** | — | What one person or system does in one sitting | Verb + object | Belongs in a work instruction, not in the model |
 
-Level 4 is named here so it can be refused: the model stops at 3, and the
-procedure continues in whatever the organization uses for work instructions.
+The names follow APQC's five levels — category, process group, process,
+activity, task — with the category carrying no identifier, so the numbered
+levels start one below it. Level 4 is named here so it can be refused as an
+element: a task is a row under its activity, never an identifier, and the
+work instruction continues in whatever the organization uses for it.
 
 ## The minimum description
 

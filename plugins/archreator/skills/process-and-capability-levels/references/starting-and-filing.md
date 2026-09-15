@@ -70,17 +70,18 @@ each macro process a table of its processes with purpose, owner and state. A
 document per macro process restated the map and the table and said nothing
 of its own, so it is not written.
 
-**Level 3 is a procedure, one file per detailed process**, in a flat folder
-beside the document, named by the process identifier and its name:
+**Level 3 is the activities of one process, one file per detailed process**,
+in a flat folder beside the document, named by the process identifier and its
+name:
 
 ```
 2_business/3_business-processes.md                            levels 1 and 2, the focus table
-2_business/procedures/bproc4.2-develop-agents-and-applications.md   one per focused branch
+2_business/activities/bproc4.2-develop-agents-and-applications.md   one per focused branch
 ```
 
 No folder per category or per macro process: the identifier already carries
-the tree. A procedure opens with its inputs-and-outputs diagram, then its
-flow, then its activities
+the tree. The document opens with the process's inputs-and-outputs diagram,
+then the flow of its activities, then each activity with its tasks
 ([`presentation-patterns.md`](./presentation-patterns.md) § Level 3 — the
 flow).
 
@@ -95,7 +96,7 @@ the index defines no elements and needs no diagram.
 ## The identifier carries the level
 
 A level-2 process under macro process `BPROC7` is `BPROC7.2`, and a level-3
-sub-process under that is `BPROC7.2.1` — `architecture-document-style` § Levels
+activity under that is `BPROC7.2.1` — `architecture-document-style` § Levels
 number hierarchically holds the rule, including what re-parenting an approved
 element costs. Splitting the catalogue into a folder changes none of it.
 
