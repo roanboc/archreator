@@ -127,15 +127,17 @@ layer's colour, shape and glyph, so it reads as a visitor.
 ## 5. Relationships are declared in tables; a diagram renders them
 
 **A diagram is a rendering.** Nothing reads one — the projection builds the
-graph from catalogue columns and relationship tables, so a relationship drawn
-in Mermaid and written nowhere else is invisible to every tool. Two places
-declare one: a **catalogue column** whose cell is a list of identifiers and
-nothing else, and a **`## Relationships` table** beside the diagram it
-explains, whose columns are fixed by position — 1 and 3 the identifiers, 2 and
-4 `<glyph> «Archetype» <name>`, 5 the relationship, anything after notes. No
-header word is read, so the table works in a model written in any language,
-and `scripts/check_model.py` holds each end's name against the catalogue that
-owns it. The worked example and the full rule are in
+graph from catalogue columns and the relationship catalogue, so a relationship
+drawn in Mermaid and written nowhere else is invisible to every tool. Two
+places declare one: a **catalogue column** whose cell is a list of identifiers
+and nothing else, and the **relationship catalogue**,
+`architecture/relationships.md` at the model root, whose rows are read by
+shape — `From | To | Relationship | Notes`, or the full form with
+`<glyph> «Archetype» <name>` between the identifiers. No header word is read,
+so the catalogue works in a model written in any language, and
+`scripts/check_model.py` holds a full row's names against the catalogue that
+owns them. A content document draws and declares nothing. The worked example
+and the full rule are in
 [`archimate-relationships.md`](./archimate-relationships.md).
 
 ## Drawing rules
@@ -144,9 +146,9 @@ Two of them hold their own sections below — § Diagrams come first, one per
 section, and § Every element document opens with "How to read this document".
 What remains here is the rest:
 
-**Dashed edges mean Pending; solid is true today.** The fact lives in a table
-either way — a dashed arrow renders a Pending row, and is never the
-declaration itself.
+**Dashed edges mean Pending; solid is true today.** The fact lives in the
+relationship catalogue either way — a dashed arrow renders a Pending row, and
+is never the declaration itself.
 
 Relationships are labeled with the standard's role name for the drawn
 direction — *serves*, *realized by*, *triggers* — the set and both
@@ -239,6 +241,13 @@ renders each type's shape and colour. **Its edges are the document's own**:
 one per pair of types the diagrams below connect, labelled with the
 relationship they draw. `check_model.py` fails a legend of two or more types
 that draws no edge while the document's diagrams do.
+
+**A document whose diagrams draw a single element type may replace the legend
+with one sentence** under its content diagram, saying what each colour and a
+dashed border mean; that sentence names the prefix. A document drawing two or
+more types keeps the legend diagram, because its edges are what a sentence
+cannot carry. Neither form is restated: the paragraph that says in prose what
+the legend shows is never written.
 
 **A layer README that only indexes other documents is exempt**: it has no
 elements to legend.

@@ -88,10 +88,10 @@ facts are all on the page, laid out to fit it:
   formula, the owner, what realizes it. The purpose formula is shaped "turns X
   into Y", naming the trigger and the output in one sentence, so neither needs
   a column of its own.
-- **The chain is declared beside the diagram, not in the row.** Who triggers
-  whom, and who supplies a process from outside, are rows of the
-  `## Relationships` table, rendered by the level-2 diagram — **one diagram
-  per macro process, in value order**, never invented for symmetry.
+- **The chain is declared in the relationship catalogue, not in the row.** Who
+  triggers whom, and who supplies a process from outside, are rows of
+  `architecture/relationships.md`, rendered by the level-2 diagram — **one
+  diagram per macro process, in value order**, never invented for symmetry.
 - **Every cell is one line.** A row that stops fitting is not asking for a
   wider table — it is asking whether prose is hiding in a cell that belongs
   under the diagram, or whether this process earned level 3.
@@ -124,6 +124,16 @@ become nine. Facts shared by the whole flow — participants, inputs, the
 outcome, the controls — are said once above the table, never repeated per
 row. And exceptions are one list at the end: an exception lane per exception
 is how a flow becomes a wall.
+
+**Where the flow is written as activity records** — one bolded lead-in per
+activity, the record form of `architecture-document-style` § A row must
+survive a page — each record carries what a row would: the trigger folded into
+its first sentence ("Starts when…"), the state, the inputs, a task table, the
+output, who is accountable, and a tool only where it adds a fact. No field
+paraphrases another: an "Agent" bullet restating the task table goes, a
+closing bold paragraph goes, and no summary table restates the records. A
+column holding one value down a task table is said once above the table and
+dropped.
 
 **Level 4 stays out of the model.** What presentation adds is the seam: the
 level-3 row links the operating instruction where one exists, in whatever

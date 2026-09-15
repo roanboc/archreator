@@ -269,7 +269,11 @@ alongside the scope document explaining why.
 
 A layer folder that does not exist yet is emitted from the plugin's assets
 at the moment the change first fills it — `assets/layers/2_business/`,
-`assets/layers/3_information/` — never created empty in advance.
+`assets/layers/3_information/` — never created empty in advance. The
+relationship catalogue, `architecture/relationships.md`, is emitted from
+`assets/layers/relationships.md` the first time a change declares a
+relationship no catalogue column carries
+(`architecture-document-style` § Relationships are declared, never only drawn).
 
 **← Needs** the verdicts from Step 1.
 

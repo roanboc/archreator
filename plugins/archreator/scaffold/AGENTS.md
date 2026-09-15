@@ -82,6 +82,11 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   and one whose legend shows its types without how they connect. **Each
   section opens with its own diagram and its own tables follow it** — never
   every diagram stacked at the top with the prose underneath.
+- `architecture/relationships.md` — the relationship catalogue: every
+  relationship a catalogue column does not carry, as rows of
+  `From | To | Relationship | Notes` grouped by the document that defines the
+  source element. Agents and validators read it; a human page draws and names
+  its relationships and never declares them.
 - [`scripts/`](./scripts/README.md) — the two validators, run before every
   push. Everything else the method can do runs from the plugin rather than
   from a copy in here.
@@ -131,3 +136,6 @@ Delete it and nothing is lost.
 - Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, …).
 - Documentation language: **English** (change during bootstrap; see
   `document-style`).
+- Inside the page that defines an element, cite its bare identifier; from any
+  other page, its type, identifier and name — the process [`BPROC#.#`]
+  <name> — with the identifier first only in a definition (`document-style`).

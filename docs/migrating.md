@@ -10,6 +10,32 @@ that introduced it.
 The plugin itself updates the ordinary way — see
 [keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
 
+## Relationships live in one catalogue (0.5)
+
+A model declares every relationship a catalogue column does not carry in one
+file, `architecture/relationships.md`, as rows of
+`From | To | Relationship | Notes`, grouped by the document that defines the
+source element. The `## Relationships` table beside each diagram, and any
+section addressed to agents, leave the human pages: a page draws its
+relationships and names them in prose, and a machine reads the catalogue. A
+project that wants its human tables free of bare identifiers moves the
+column-shaped relationships there too and says so in its `AGENTS.md`.
+
+A reference changes shape with it. Inside the page that defines an element,
+the bare identifier; from any other page, the type, the identifier and the
+name — ``the process [`BPROC3.1`] Market and generate demand`` — with the
+identifier in backticks inside the brackets. `Name [ID]` stays only on diagram
+nodes.
+
+Three things move in an existing project: each `## Relationships` table
+becomes rows of the catalogue under its document's heading, with the pending
+marker moved from the relationship cell to the notes; references outside the
+defining page take the new shape; and `scripts/model_graph.py` and
+`scripts/check_model.py` are copied again from the scaffold, because the
+parser now reads a relationship row by shape and keeps catalogue cells out of
+`trace`'s mentions. Nothing in the elements, their identifiers or their
+status glyphs moves.
+
 ## Fifteen skills are invoked by name (0.4)
 
 Three skills surface on their own — `align-change-through-layers`,
@@ -70,5 +96,6 @@ undefined state. Nothing already assigned moves.
 ## What an existing project keeps
 
 Every element, status glyph, prefix and skill name survives. The ○ / ◐ / ●
-discipline, the relationship tables, the two validators and all eighteen
-skills are unchanged, and nothing in a model's content needs to move.
+discipline, the two validators and all eighteen skills are unchanged; the
+relationship tables move once, into the catalogue the 0.5 section describes,
+and nothing else in a model's content needs to move.

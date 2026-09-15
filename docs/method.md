@@ -172,8 +172,11 @@ resolve, that every leveled ID has a parent, and that no identifier is reused.
 Beside the numbered layers sit the folders that are not layers:
 `architecture/scope/` (one document per initiative), `architecture/decisions/`
 (calls smaller than an initiative), `architecture/domains/` (Depth 3 only),
-`architecture/6_transition/` (where it is going) and `architecture/reference/`
-(the source material the model was built from, dated, indexed, never published).
+`architecture/6_transition/` (where it is going), `architecture/reference/`
+(the source material the model was built from, dated, indexed, never published)
+and `architecture/relationships.md`, the one catalogue of every relationship a
+catalogue column does not carry — a human page draws and names its
+relationships, and a machine reads them there.
 
 **Every document that defines an element says how far it has been validated**,
 with one of three glyphs in its preamble: `○` not started, `◐` a draft

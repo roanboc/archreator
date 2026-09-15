@@ -42,9 +42,9 @@ never a cap to conform to pre-emptively. When a table does scroll, slim it
 first, in this order:
 
 - **A fact that is a relationship is not a column of its own** — it is a
-  relationship column of bare identifiers, or a row of the `## Relationships`
-  table beside the diagram that renders it
-  ([`references/archimate-relationships.md`](./archimate-relationships.md)).
+  relationship column of bare identifiers, or a row of the relationship
+  catalogue, `architecture/relationships.md`, which the document's diagram
+  renders ([`references/archimate-relationships.md`](./archimate-relationships.md)).
 - **A fact the description already carries is not a second column.** A
   purpose formula shaped "turns X into Y" names the trigger and the output;
   columns restating them are width without information.
@@ -55,8 +55,8 @@ Only when a slimmed row still scrolls — an element whose contract is
 genuinely prose — **flip that catalogue to the record form**: each element
 defined as a bolded lead-in (`**BPROC1.2 — Build and validate.**`, the same
 shape goals and principles use), its attributes as prose or a narrow
-two-column field table beneath, its relationships in the `## Relationships`
-table. The record form is an exception with a named cause, never a style, and
+two-column field table beneath, its relationships in the relationship
+catalogue. The record form is an exception with a named cause, never a style, and
 never applied to a neighbouring table "for consistency".
 
 Never fix width in the export: a landscape page, a shrunken font or a
