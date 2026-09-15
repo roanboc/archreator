@@ -20,8 +20,9 @@ table columns and builds the edges, which a validator has no use for.
 
 **A relationship is read from where it was declared, never from a diagram.**
 Two surfaces declare one: a catalogue column whose cell is a list of
-identifiers, and a relationship table, recognised by its first and third
-columns holding an identifier on every row. Mermaid is not parsed at all —
+identifiers, and a relationship table, recognised by every row holding a bare
+identifier in its first cell and in its second (the compact form) or its third
+(the full form). Mermaid is not parsed at all —
 a diagram is a rendering of what the tables say, and a fact whose only home is
 a rendering is the one `P1` forbids. Initiative 6 transcribed the corpus onto
 the two surfaces and removed the reader.
@@ -475,11 +476,13 @@ def _table_blocks(text: str) -> list[tuple[int, int, list[str], list[list[str]]]
 
 
 def _is_relationship_table(headers: list[str], rows: list[list[str]]) -> bool:
-    """Columns 1 and 3 hold a bare identifier on every row, and it is no catalogue.
+    """Relationship tables hold bare identifiers at both ends of every row.
 
     Recognised by **position**, never by a header word: a model may be written
     in any language, and `architecture-document-style` fixes the column order
-    exactly as it fixes the name into a catalogue's second cell.
+    exactly as it fixes the name into a catalogue's second cell. Both the full
+    form (`Desde | Elemento desde | Hasta | Elemento hasta | Relación`) and the
+    compact form (`Desde | Hasta | Relación`) are supported.
 
     The catalogue test comes first and settles the only ambiguity that matters.
     A catalogue row's first cell is also a bare identifier, and a catalogue with
@@ -489,6 +492,11 @@ def _is_relationship_table(headers: list[str], rows: list[list[str]]) -> bool:
     """
     if not rows or ID_HEADER_RE.match("| " + (headers[0] if headers else "") + " |"):
         return False
+    if all(
+        len(row) >= 3 and CELL_ID_RE.match(row[0]) and CELL_ID_RE.match(row[1])
+        for row in rows
+    ):
+        return True
     return all(
         len(row) >= 5 and CELL_ID_RE.match(row[0]) and CELL_ID_RE.match(row[2])
         for row in rows
@@ -581,20 +589,41 @@ class Restatement:
 def relationship_rows(
     rows: list[list[str]],
 ) -> list[tuple[str, str, str, bool, Restatement, Restatement]]:
-    """(source, target, relationship, source restatement, target restatement)."""
+    """(source, target, relationship, pending, source restatement, target restatement).
+
+    Two forms, told apart by shape. The **compact** form holds the two
+    identifiers in cells 1 and 2 and the relationship in cell 3; the **full**
+    form holds the identifiers in cells 1 and 3, a `<glyph> «Archetype» <name>`
+    description in cells 2 and 4, and the relationship in cell 5. Whatever
+    follows the relationship cell is notes, and that is where a pending marker
+    is read from. A compact row restates no name, so there is nothing for
+    `check_model.py` to hold against the catalogue; the identifier alone is
+    the reference.
+    """
     found = []
     for row in rows:
         src = CELL_ID_RE.match(row[0]).group(1)
-        dst = CELL_ID_RE.match(row[2]).group(1)
-        rest = " ".join(row[4:]).lower()
+        # The form is read from the row's shape, never from its width: a
+        # compact row carries its second identifier in cell 2, a full row
+        # carries a description there and the identifier in cell 3. Either
+        # form may trail any number of note cells.
+        compact = CELL_ID_RE.match(row[1]) is not None
+        dst = CELL_ID_RE.match(row[1 if compact else 2]).group(1)
+        label_at = 2 if compact else 4
+        label = row[label_at] if label_at < len(row) else ""
+        # The pending marker lives in the notes, after the relationship cell
+        # (`architecture-document-style` § The relationship table). The label
+        # itself is never scanned, so a relationship *named* with the word
+        # keeps its meaning and only a note makes the edge pending.
+        rest = " ".join(row[label_at + 1:]).lower()
         found.append(
             (
                 src,
                 dst,
-                _plain(row[4]) or "relates to",
+                _plain(label) or "relates to",
                 any(marker in rest for marker in PENDING_MARKERS),
-                Restatement(src, node_name(row[1])),
-                Restatement(dst, node_name(row[3])),
+                Restatement(src, "" if compact else node_name(row[1])),
+                Restatement(dst, "" if compact else node_name(row[3])),
             )
         )
     return found
@@ -815,6 +844,10 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
     duplicates: list[str] = []
     retired: dict[str, Path] = {}
     references: list[tuple[str, Path]] = []
+    # The subset of `references` written in prose or in a catalogue cell —
+    # what `mentions` is built from. A relationship-table cell is a reference
+    # (it must resolve) and not a mention (it says nothing about the element).
+    spoken_references: list[tuple[str, Path]] = []
     foreign: list[tuple[str, str, str, Path]] = []
     legacy: list[tuple[str, Path]] = []
     domains: set[str] = set()
@@ -868,13 +901,17 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
 
         # A relationship table was blanked out of `text` above, so its
         # identifiers are added back here. They are references — the row points
-        # at two elements and defines neither.
-        cited = list(REFERENCE_RE.findall(text))
+        # at two elements and defines neither — but they are not *mentions*: a
+        # catalogue row declares a relationship, it does not talk about an
+        # element, and a model that keeps its relationships in one document
+        # would otherwise list that document beside every element it has.
+        prose_cited = list(REFERENCE_RE.findall(text))
+        table_cited: list[str] = []
         for rows in rel_tables:
-            cited.extend(REFERENCE_RE.findall(" ".join(" ".join(r) for r in rows)))
+            table_cited.extend(REFERENCE_RE.findall(" ".join(" ".join(r) for r in rows)))
 
         defined_here = definitions_in(text)
-        for reference in cited:
+        for reference, spoken in [(r, True) for r in prose_cited] + [(r, False) for r in table_cited]:
             alias, model, local = alias_split(reference)
             if alias:
                 foreign.append((alias, model, local, md_file))
@@ -882,6 +919,8 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
             if not qualifier_of(reference) and reference in defined_here:
                 continue
             references.append((reference, md_file))
+            if spoken:
+                spoken_references.append((reference, md_file))
 
         doc = str(md_file.relative_to(REPO_ROOT)).replace("\\", "/")
         named = table_definitions(live_text)
@@ -1017,7 +1056,7 @@ def parse_project(project: Path, *, detail: bool = False) -> ParsedProject:
                          doc=element.doc, origin="identifier")
                 )
         seen: set[tuple[str, str]] = set()
-        for reference, md_file in references:
+        for reference, md_file in spoken_references:
             scope = domain_of(md_file, project)
             doc = str(md_file.relative_to(REPO_ROOT)).replace("\\", "/")
             qualified = f"{scope}.{reference}" if scope else reference

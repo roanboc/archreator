@@ -26,15 +26,18 @@ Eight things are checked, per project:
 - **Orphan levels** — a leveled ID (`CAP1.2`, `BPROC7.2.1`) has the element
   one level up defined too. A hierarchical identifier that names a parent
   nobody wrote is the same defect as a dangling reference.
-- **A restated name that has drifted** — a relationship table writes each
-  end's archetype and name beside its identifier, so the person approving it
-  can read it without holding every catalogue open. The name is a copy of a
-  fact the defining catalogue owns, and this is what holds the two in step:
-  rename an element and every table naming it fails until it is updated. It is
-  `P1`'s escape clause used the way `element-prefixes.json` uses it — one
-  unavoidable copy, with a check on it. The **archetype** is deliberately not
-  checked: it cannot drift away from the prefix sitting in the cell beside it,
-  and the word for it is language-dependent where the prefix is not.
+- **A restated name that has drifted** — a relationship table in its full
+  form writes each end's archetype and name beside its identifier, so the
+  person approving it can read it without holding every catalogue open. The
+  name is a copy of a fact the defining catalogue owns, and this is what holds
+  the two in step: rename an element and every table naming it fails until it
+  is updated. It is `P1`'s escape clause used the way `element-prefixes.json`
+  uses it — one unavoidable copy, with a check on it. The compact form
+  (`From | To | Relationship`, notes after) restates nothing and is held
+  against nothing: the identifier is the whole reference. The **archetype** is
+  deliberately not checked: it cannot drift away from the prefix sitting in
+  the cell beside it, and the word for it is language-dependent where the
+  prefix is not.
 - **A section whose diagram trails its tables, or a document with no view at
   all** — every element document opens with its legend ("How to read this
   document") and **each section opens with its own diagram**, per
