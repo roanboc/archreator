@@ -6,8 +6,8 @@ _[← EA home](./README.md)_
 column does not carry is declared here, once and nowhere else. A human page
 draws its relationships in a diagram and names them in prose; it never
 declares them (`architecture-document-style` § Relationships are declared,
-never only drawn). This file defines no element, so it carries no status line,
-no legend and no diagram.
+never only drawn). This file defines no element, so it carries no status line
+and no diagram.
 
 A row is `From | To | Relationship | Notes`: bare identifiers in the first two
 cells, the relationship as the diagram labels it, and notes after it. The full

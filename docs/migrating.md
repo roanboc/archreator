@@ -27,13 +27,23 @@ name — ``the process [`BPROC3.1`] Market and generate demand`` — with the
 identifier in backticks inside the brackets. `Name [ID]` stays only on diagram
 nodes.
 
-Three things move in an existing project: each `## Relationships` table
+The "How to read this document" section goes too. A diagram explains itself:
+node labels carry glyph, name and identifier, the section heading names the
+type, and one sentence under a diagram says what a colour or a dashed border
+means where it matters. `check_model.py` still asks a defining document for a
+diagram before its first table and one per section; it no longer asks for a
+legend, and a stereotype on a node still fails outside a diagram marked
+`%% legend`.
+
+Four things move in an existing project: each `## Relationships` table
 becomes rows of the catalogue under its document's heading, with the pending
-marker moved from the relationship cell to the notes; references outside the
-defining page take the new shape; and `scripts/model_graph.py` and
-`scripts/check_model.py` are copied again from the scaffold, because the
-parser now reads a relationship row by shape and keeps catalogue cells out of
-`trace`'s mentions. Nothing in the elements, their identifiers or their
+marker moved from the relationship cell to the notes; each legend section is
+deleted, with any sentence about a colour or a dashed border moved under the
+diagram it explains; references outside the defining page take the new shape;
+and `scripts/model_graph.py` and `scripts/check_model.py` are copied again
+from the scaffold, because the parser now reads a relationship row by shape,
+keeps catalogue cells out of `trace`'s mentions and no longer asks for a
+legend. Nothing in the elements, their identifiers or their
 status glyphs moves.
 
 ## Fifteen skills are invoked by name (0.4)

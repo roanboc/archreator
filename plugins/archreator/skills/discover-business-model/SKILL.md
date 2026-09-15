@@ -140,8 +140,8 @@ and the `Source` column points there.
 
 Lead the Business Model Canvas with the products at a glance — one column per
 product: segments, channels, relationship, revenue, dominant cost, whether it
-scales — before any block catalogue, and open each canvas with the generic
-how-to-read legend rather than a nine-block overview
+scales — before any block catalogue, and open a canvas with neither a legend
+nor a nine-block overview
 (`architecture-document-style` § What is here, and what is one file away — the
 canvases reference).
 

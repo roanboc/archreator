@@ -24,8 +24,8 @@ the machine-readable copy, and `check_skills.py` holds the two in step.
 | Canvas (VPC) | `JOB` Job · `PAIN` Pain · `GAIN` Gain · `PREL` Pain Reliever · `GCRE` Gain Creator |
 | Canvas (BMC) | `KP` Key Partner · `KA` Key Activity · `KR` Key Resource · `VP` Value Proposition · `CR` Customer Relationship · `CH` Channel · `CS` Customer Segment · `RS` Revenue Stream · `COST` Cost |
 
-Every document's "How to read this document" legend carries the prefixes it
-uses on its nodes, expanded — `«Stakeholder» … [STK#]` —
+A prefix is expanded where its elements are defined — the section heading and
+the name column of the catalogue say the type in words —
 `architecture-document-style` § Element IDs carries that rule; this page
 holds the registry and, below it, what each element means.
 
@@ -118,9 +118,8 @@ outgrows the row.
 
 The canvas prefixes are not here because they are not ArchiMate: they are
 Strategyzer's blocks — the Value Proposition Canvas pairs and the Business
-Model Canvas nine — and the how-to-read legend of each canvas document
-carries how they read
-([`canvases.md`](./canvases.md)).
+Model Canvas nine — and each canvas document's block sections say how they
+read ([`canvases.md`](./canvases.md)).
 
 ## Levels number hierarchically
 

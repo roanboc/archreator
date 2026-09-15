@@ -61,7 +61,7 @@ document.
   business objects once known. Keep at least one actor's kind explicit
   (Human/AI/Hybrid) even if every actor in this project turns out to be
   human — an explicit "(Human)" beats a silent default. The kind is the one
-  type word a content node keeps; the stereotype belongs in the legend.
+  type word a content node keeps; no node carries a stereotype.
 -->
 
 ```mermaid

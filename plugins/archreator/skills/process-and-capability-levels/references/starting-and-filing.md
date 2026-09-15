@@ -78,9 +78,9 @@ Capabilities take the same shape under `1_strategy/`. The folder keeps the
 layer's own numbering intact: the slot number does not move, its neighbours do
 not renumber, and a second focused branch renumbers nothing outside the folder.
 
-Each level document is a full element document — legend, diagram per section,
-inventory table. The index README carries the focus table and links the levels;
-defining no elements of its own, it needs no legend.
+Each level document is a full element document — status line, diagram per
+section, inventory table. The index README carries the focus table and links
+the levels; defining no elements of its own, it needs no diagram.
 
 ## The identifier carries the level
 

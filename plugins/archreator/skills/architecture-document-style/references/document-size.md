@@ -22,8 +22,8 @@ Split when any of these becomes true, and not before:
 - **Two families are validated at different sittings of a gate.** What is
   approved together can live together.
 
-Each split document keeps the full skeleton — its own "How to read" legend,
-its own status line — and the layer README's analysis-order table is the
+Each split document keeps the full skeleton — its own status line, its own
+diagram per section — and the layer README's analysis-order table is the
 index. Split along family lines only: levels 1 and 2 of one catalogue stay in
 one document, with only a level-3 flow earning a file of its own
 (`process-and-capability-levels` § What is here, and what is one file away).

@@ -70,8 +70,8 @@ for a relationship between two peers in the same layer — which is most of
 them. Those are rows of one document per model, `architecture/relationships.md`
 at the model root, beside `federation.md` and `imports.md`. The name follows
 the project's language and nothing reads it. The file defines no element, so
-it carries no status line, no legend and no diagram, and `check_model.py` asks
-it for none. A project that wants its human tables free of bare identifiers
+it carries no status line and no diagram, and `check_model.py` asks it for
+none. A project that wants its human tables free of bare identifiers
 declares every relationship here, the column-shaped ones included, and says so
 in its `AGENTS.md`. A relationship has one home, never both.
 

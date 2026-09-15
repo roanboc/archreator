@@ -176,10 +176,10 @@ cell are one per line. A diagram node keeps the Mermaid form
 `<glyph> <name> [ID]` fixed by `references/archimate-on-mermaid.md`, and a
 definition keeps the identifier first.
 
-Each document's "How to read this document" legend carries, on its nodes,
-every prefix the document uses, expanded — `«Stakeholder» … [STK#]` — which is
-`document-style` § Write it out applied to identifiers; where one sentence
-replaces the legend (§ Document skeleton), that sentence names the prefix.
+A prefix is expanded where its elements are defined: the heading of the
+section that defines them and the name column of its catalogue say the type in
+words, which is `document-style` § Write it out applied to identifiers. No
+document opens with a legend that expands them (§ Document skeleton).
 Examples use `#` (and `#.#` for levels), never a plausible real identifier.
 
 **The prefix registry, hierarchical numbering, what happens to an identifier
@@ -251,13 +251,11 @@ may and may not go and what `check_model.py` holds against it — are in
 - Then the **status line**, where the document defines elements — § Document
   status. It sits in the preamble, before the first `##`, which is where a
   validator looks for it.
-- A **"How to read this document"** section next: the legend diagram, whose
-  nodes name the stereotypes and ID prefixes — and no table or paragraph
-  restating it. A document whose diagrams draw a single element type may
-  replace it with one sentence under its content diagram saying what each
-  colour and a dashed border mean
-  (`references/archimate-on-mermaid.md` § Every element document opens with
-  "How to read this document").
+- **No "How to read this document" section.** A diagram explains itself: its
+  node labels carry glyph, name and identifier, the section heading names the
+  type, and one sentence under the diagram says what a colour or a dashed
+  border means where it carries meaning. No node carries a stereotype
+  (`references/archimate-on-mermaid.md` § A diagram explains itself).
 - Then **one section per element family, headed by that family's name** — a
   catalogue table never rides under another family's heading. A leveled
   catalogue names the level in its heading (`### Level 1 — the areas`).

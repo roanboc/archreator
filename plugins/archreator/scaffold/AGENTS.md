@@ -79,7 +79,7 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing,
   one that carries no view or whose first view comes after its first table,
-  and one whose legend shows its types without how they connect. **Each
+  and one whose node labels carry a stereotype. **Each
   section opens with its own diagram and its own tables follow it** — never
   every diagram stacked at the top with the prose underneath.
 - `architecture/relationships.md` — the relationship catalogue: every

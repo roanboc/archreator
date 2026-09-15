@@ -248,6 +248,5 @@ between a diagram and the table it explains.
   type, the identifier and the name).
 - A section addressed to agents inside a human document — a `## Relationships`
   table, an "agents only" block. A machine reads the relationship catalogue.
-- A paragraph under a table, a diagram or a legend that says again what it
-  shows.
+- A paragraph under a table or a diagram that says again what it shows.
 

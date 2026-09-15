@@ -39,8 +39,8 @@ Eight things are checked, per project:
   the cell beside it, and the word for it is language-dependent where the
   prefix is not.
 - **A section whose diagram trails its tables, or a document with no view at
-  all** — every element document opens with its legend ("How to read this
-  document") and **each section opens with its own diagram**, per
+  all** — every element document opens with a view and **each section opens
+  with its own diagram**, per
   `architecture-document-style` § Document skeleton and
   `references/archimate-on-mermaid.md` § Diagrams come first, one per section.
   The check is the enforceable core of both: a defining document carries at
@@ -324,16 +324,14 @@ def check_project(project: Path, known: dict | None = None) -> tuple[list[str], 
         first_table = next((m.start() for m in re.finditer(r"^\|", text, re.M)), -1)
         if fence < 0:
             errors.append(
-                f"{doc}: defines elements and carries no view. Open it with the legend "
-                f"diagram (\"How to read this document\") and give each section its "
-                f"own diagram before that section's tables, in a ```mermaid fence"
+                f"{doc}: defines elements and carries no view. Give each section its own "
+                f"diagram before that section's tables, in a ```mermaid fence"
             )
             continue
         if first_table >= 0 and fence > first_table:
             errors.append(
                 f"{doc}: its first view comes after its first table. A document opens "
-                f"with the legend that lets the diagrams below it drop their "
-                f"stereotypes"
+                f"with a diagram and its tables follow it"
             )
         for heading, line_no, fence_line, table_line in _sections(text):
             if fence_line and table_line and fence_line > table_line:
@@ -365,9 +363,9 @@ def check_project(project: Path, known: dict | None = None) -> tuple[list[str], 
                     f"the fence"
                 )
 
-    # A legend shows the types and how they connect
-    # (`references/archimate-on-mermaid.md` § Every element document opens
-    # with "How to read this document"). Two or more types drawn with no edge,
+    # A legend, where a document still keeps one, shows the types and how they
+    # connect (`references/archimate-on-mermaid.md` § A diagram explains
+    # itself). Two or more types drawn with no edge,
     # above diagrams that draw one, is a key to the notation and not to the
     # layer. Read from the fences alone - the marker, the node openers and
     # the arrows - so it holds in any language.

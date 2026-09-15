@@ -7,14 +7,13 @@ Read this only when the model has a `0_business-design/` layer — Depth 2 and
 Depth 3 subjects. An application project never needs it.
 
 The canvases in `0_business-design/` are Strategyzer artifacts, not
-ArchiMate. Keep a **table as the detailed, diffable source for each canvas**,
-and open each canvas document with the same "How to read this document"
-legend every element document gets: the canvas blocks as legend nodes —
-`<glyph> «Key Partner» who is depended on [KP#]` — connected by the
-relationships the canvas itself defines (a partner and a resource enable an
-activity, an activity delivers through a channel, a channel establishes a
-relationship, a relationship produces revenue, an activity incurs cost). The
-block catalogues below it carry the content.
+ArchiMate. Keep a **table as the detailed, diffable source for each canvas**, one
+section per block, each opening with its own diagram where one earns its
+place. The relationships the canvas itself defines (a partner and a resource
+enable an activity, an activity delivers through a channel, a channel
+establishes a relationship, a relationship produces revenue, an activity
+incurs cost) are rows of the relationship catalogue, drawn where a section
+needs them. No canvas document opens with a legend.
 
 **The products lead the Business Model Canvas.** Before any block catalogue,
 a products-at-a-glance section — one column per product: its segments,
@@ -30,8 +29,8 @@ earns its place by saying what the table cannot
 first, one per section).
 
 Where a canvas *is* drawn — a layer view showing fit — the canvas block name
-is the element type: it goes in the legend (`«Pain»`, `«Gain Creator»`,
-`«Customer Segment»`) and not on the nodes, with the Motivation fill for the
+is the element type: the subgraph or section heading names it (`Customer
+profile`, `Value map`) and no node carries it, with the Motivation fill for the
 customer profile and the Strategy fill for the value map, as in
 `architecture/0_business-design/README.md` § Layer view.
 The canvas-block-to-ArchiMate-element mapping lives in that same README and

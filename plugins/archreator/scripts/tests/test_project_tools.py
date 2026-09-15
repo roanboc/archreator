@@ -411,7 +411,7 @@ class FederationTests(unittest.TestCase):
         return root / "scripts" / "check_model.py", prd
 
     def test_a_document_without_a_view_or_with_its_view_last_fails(self):
-        """Every element document opens with its legend; a picture stapled on last is not that."""
+        """Every element document opens with a view; a picture stapled on last is not that."""
         with tempfile.TemporaryDirectory() as tmp:
             script, prd = self._build(Path(tmp))
             business = prd / "2_business" / "README.md"
