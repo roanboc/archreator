@@ -536,3 +536,87 @@ class FederationTests(unittest.TestCase):
             result = run(check, cwd=tmp)
             self.assertEqual(result.returncode, 1, result.stdout)
             self.assertIn("federation ID", result.stdout)
+
+
+CATALOGUE_BUSINESS = BUSINESS + "| `BSVC2` | Deliver an answer | — |\n"
+
+# The application layer names `BSVC2` in prose, so the trace has a document to
+# list under "Named in" — and the catalogue must not be beside it.
+CATALOGUE_APPLICATION = APPLICATION + "\nThe inbox also feeds `BSVC2`.\n"
+
+# The compact form: bare identifiers in the first two cells, the relationship
+# in the third, and whatever follows is notes. The first row relates a pair no
+# catalogue column relates; the second is pending, said in the notes only.
+CATALOGUE = """\
+# Relationship catalogue
+
+_[← Architecture home](./README.md)_
+
+Agents and validators read this file; the pages draw and name what it declares.
+
+## Business
+
+### [Business layer](./2_business/README.md)
+
+| From | To | Relationship | Notes |
+| ---- | -- | ------------ | ----- |
+| `BSVC2` | `ACMP1` | served by | |
+| `BSVC2` | `BSVC1` | precedes | Pending — future initiative |
+"""
+
+
+class RelationshipCatalogueTests(unittest.TestCase):
+    """One document at the model root declares what no column can.
+
+    Its rows are read by shape — a bare identifier in cell 2 makes the row
+    compact — so a four-column `From | To | Relationship | Notes` table is a
+    relationship table and never a second definition of its source elements,
+    and a catalogue row is a reference the validator resolves but not a
+    mention the trace lists.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.probe = Path(cls._tmp.name) / "probe"
+        shutil.copytree(
+            SCAFFOLD, cls.probe,
+            ignore=shutil.ignore_patterns("__pycache__"),
+        )
+        architecture = cls.probe / "architecture"
+        for layer, body in (
+            ("2_business", CATALOGUE_BUSINESS),
+            ("4_application", CATALOGUE_APPLICATION),
+        ):
+            folder = architecture / layer
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / "README.md").write_text(body, encoding="utf-8")
+        (architecture / "relationships.md").write_text(CATALOGUE, encoding="utf-8")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tmp.cleanup()
+
+    def test_a_compact_catalogue_validates_without_redefining_its_sources(self):
+        result = run(self.probe / "scripts" / "check_model.py", cwd=self.probe)
+        output = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 0, output)
+        self.assertNotIn("duplicate definition", output)
+
+    def test_a_compact_row_is_traced_with_its_label_and_its_pending_note(self):
+        result = run(MODEL, "--project", self.probe, "trace", "BSVC2")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        edges = [line for line in result.stdout.splitlines() if "ACMP1" in line]
+        self.assertTrue(edges, result.stdout)
+        self.assertIn("served by", edges[0])
+        self.assertNotIn("(pending)", edges[0])
+        pending = [line for line in result.stdout.splitlines() if "BSVC1" in line]
+        self.assertTrue(pending, result.stdout)
+        self.assertIn("precedes (pending)", pending[0])
+
+    def test_the_catalogue_is_not_listed_as_a_document_naming_the_element(self):
+        result = run(MODEL, "--project", self.probe, "trace", "BSVC2")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Named in 1 other document(s):", result.stdout)
+        self.assertIn("4_application/README.md", result.stdout)
+        self.assertNotIn("relationships.md", result.stdout)
