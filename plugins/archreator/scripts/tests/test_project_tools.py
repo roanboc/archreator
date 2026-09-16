@@ -25,7 +25,7 @@ BUSINESS = """\
 
 _A probe, not a model._
 
-ArchiMate Business layer.
+**ArchiMate viewpoint:** Business layer.
 
 **Status:** ◐ Draft catalogue — a probe, not yet validated.
 
@@ -50,7 +50,7 @@ APPLICATION = """\
 
 _A probe, not a model._
 
-ArchiMate Application layer.
+**ArchiMate viewpoint:** Application layer.
 
 **Status:** ◐ Draft catalogue — a probe, not yet validated.
 
@@ -98,7 +98,7 @@ class ProjectToolTests(unittest.TestCase):
 
     def test_the_scaffold_validates_itself_with_no_plugin(self):
         """A project checks itself with nothing but Python — no network, no plugin."""
-        for validator in ("check_links.py", "check_model.py"):
+        for validator in ("check_links.py", "check_model.py", "check_prose.py"):
             result = run(self.probe / "scripts" / validator, cwd=self.probe)
             self.assertEqual(result.returncode, 0, f"{validator}: {result.stdout}{result.stderr}")
 
@@ -212,7 +212,7 @@ class ProjectToolTests(unittest.TestCase):
             '<a href="missing.html">gone</a>', encoding="utf-8"
         )
         try:
-            for validator in ("check_links.py", "check_model.py"):
+            for validator in ("check_links.py", "check_model.py", "check_prose.py"):
                 result = run(self.probe / "scripts" / validator, cwd=self.probe)
                 self.assertEqual(
                     result.returncode, 0,
@@ -622,3 +622,72 @@ class RelationshipCatalogueTests(unittest.TestCase):
         self.assertIn("Named in 1 other document(s):", result.stdout)
         self.assertIn("4_application/README.md", result.stdout)
         self.assertNotIn("relationships.md", result.stdout)
+
+
+GOVERNANCE_PAGE = """\
+# Business layer — Probe
+
+_A probe, not a model._
+
+**ArchiMate viewpoint:** Business layer.
+
+**Status:** ◐ Draft catalogue — a probe, not yet validated.
+
+The Requester approves this table at the first Direction session.
+
+## Metamodel
+
+ArchiMate colours are the method's, and this section may say so.
+
+## Business services
+
+| ID | Business service |
+| -- | ---------------- |
+| `BSVC1` | Answer an enquiry |
+"""
+
+
+class ProseTests(unittest.TestCase):
+    """A model page speaks about its subject; the vocabulary of governance and method fails it."""
+
+    def _build(self, root, body):
+        shutil.copytree(
+            SCAFFOLD / "scripts", root / "scripts",
+            ignore=shutil.ignore_patterns("__pycache__"),
+        )
+        layer = root / "architecture" / "2_business"
+        layer.mkdir(parents=True)
+        (layer / "README.md").write_text(body, encoding="utf-8")
+        return root / "scripts" / "check_prose.py"
+
+    def test_a_sentence_about_governance_fails_and_is_named(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = run(self._build(root, GOVERNANCE_PAGE), cwd=root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("[governance]", result.stdout)
+            self.assertIn("Requester", result.stdout)
+            # The viewpoint line, the status line and the Metamodel section say "ArchiMate" and are exempt.
+            self.assertEqual(result.stdout.count("2_business/README.md:"), 1, result.stdout)
+
+    def test_report_lists_the_hit_without_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = run(self._build(root, GOVERNANCE_PAGE), "--report", cwd=root)
+            self.assertEqual(result.returncode, 0, result.stdout)
+            self.assertIn("[governance]", result.stdout)
+
+    def test_the_front_door_and_a_layer_not_started_are_exempt(self):
+        page = GOVERNANCE_PAGE.replace(
+            "The Requester approves this table at the first Direction session.\n\n", "")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            check = self._build(root, page)
+            (root / "architecture" / "README.md").write_text(
+                "# Front door\n\nThe Requester approves at Direction; ArchiMate is the notation.\n", encoding="utf-8")
+            empty = root / "architecture" / "5_technology"
+            empty.mkdir()
+            (empty / "README.md").write_text(
+                "# Technology\n\n**Status:** ○ Not started.\n\nThe Requester opens this layer at Understanding.\n", encoding="utf-8")
+            result = run(check, cwd=root)
+            self.assertEqual(result.returncode, 0, result.stdout)

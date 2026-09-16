@@ -66,9 +66,9 @@ there resolves exactly as one naming a heading here.
   is derived from — it is not an ArchiMate layer, and application-only
   projects leave it empty.
 - Files inside a layer carry a numeric prefix giving the **logical analysis
-  order**, which each layer README explains in an "Analysis order" table.
-  A new file gets the next number, plus a row in that table; only renumber
-  when the analysis order genuinely changes.
+  order**, which the layer README's `## Documents` table lists in that order
+  (§ The layer README). A new file gets the next number, plus a row in that
+  table; only renumber when the analysis order genuinely changes.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
 - `architecture/6_transition/` is not a layer and carries no layer number. Its
@@ -276,3 +276,31 @@ may and may not go and what `check_model.py` holds against it — are in
 - Prefer tables for element inventories, Mermaid for relationships, and
   prose only for rationale (the "why", not the "what"), and only where the
   "why" is about the subject.
+
+### The layer README
+
+A layer's front page has one shape, and nothing else:
+
+1. Title (`# …`) and the nav line.
+2. One sentence saying what the layer holds, in the subject's words.
+3. The viewpoint line — `**ArchiMate viewpoint:** …` naming the element types
+   the layer uses, or `none` and what stands in for them on a canvas layer.
+4. `## Documents` — one row per document: its number, the document linked,
+   the elements it defines, the question it answers, and a `Source` column
+   where the layer is derived from canvases. A document not yet written keeps
+   its row unlinked, with its state in the question cell and, where one
+   exists, the initiative that opens it.
+5. `## Metamodel` — the layer's notation, written once
+   (`references/archimate-on-mermaid.md` § A diagram explains itself).
+6. `## Layer view` — the layer's main elements in that notation, with the
+   sentence or two that reads the picture.
+
+What is missing in a layer is read from the table and from each document's
+status line, never from a section of its own. The analysis order is the
+table's order; a fit rule lives in the page that verifies it; the mapping
+from canvas block to element is the method's
+(`references/canvases.md` § From canvas to ArchiMate); who approves the
+layer and when is `AGENTS.md`'s; how levels and identifiers work is the
+metamodel's. `scripts/check_prose.py` fails a front page that keeps any of
+them in prose (`document-style` § Write it plainly), and the templates under
+`assets/layers/*/README.md` ship this shape.

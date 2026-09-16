@@ -2,23 +2,23 @@
 
 _[← EA home](../README.md)_
 
-The runtimes, tooling, and infrastructure that the
-[application layer](../4_application/README.md) executes on.
+The runtimes, tooling and infrastructure the application layer executes on.
 
-## Analysis order
+**ArchiMate viewpoint:** Technology layer: Technology Service, Node, System
+Software, Artifact.
 
-Files are numbered in the order they are analyzed: first _which technology
-services exist and what provides them_, then _how the built artifacts reach
-their runtime nodes_.
+<!--
+  TEMPLATE — the author's note: with no stack chosen yet, `stack-selection`
+  holds the decision framework and the criteria; write
+  1_technology-services.md after it.
+-->
+
+## Documents
 
 | #   | Document                                               | Elements                                                          | Question it answers                       |
 | --- | --------------------------------------------------------| --------------------------------------------------------------------| --------------------------------------------- |
 | 1   | [1_technology-services.md](./1_technology-services.md) | Technology Services and the nodes/system software providing them | What infrastructure services are used?    |
 | 2   | [2_deployment.md](./2_deployment.md)                   | Nodes, Artifacts, and the CI/CD deployment pipeline               | How does the build get to where it runs?  |
-
-If no stack has been chosen yet, use the `stack-selection` skill for the
-decision framework and the criteria to judge current options against, before
-writing `1_technology-services.md`.
 
 ## Metamodel
 

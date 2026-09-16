@@ -121,11 +121,11 @@ host, all carried into every step below.
 
 ### 2 — Emit the scaffold, then make it this project
 
-Copy `scaffold/` from the plugin into the project root. **It is eleven files,
-and every one of them is used on the first commit** — `AGENTS.md`, `README.md`,
-`CLAUDE.md`, `GEMINI.md`, `.gitignore`, `architecture/README.md`, and
-`scripts/` with the two validators, the parse they share, its prefix data and
-their own README.
+Copy `scaffold/` from the plugin into the project root. **It is thirteen
+files, and every one of them is used on the first commit** — `AGENTS.md`,
+`README.md`, `CLAUDE.md`, `GEMINI.md`, `.gitignore`, `architecture/README.md`,
+and `scripts/` with the three validators, the parse two of them share, its
+prefix data, the word list of the third and their own README.
 
 **Copy the dotfiles too** — `.gitignore` keeps bytecode, machine-local
 settings and everything regenerated out of the history.
@@ -141,7 +141,7 @@ Then, in one pass, so the first commit is coherent:
 | `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `architecture/README.md` | The status table — one row per layer, each saying `Local`, `External`, `Out of scope` or a named `Gap`. On a fresh project most rows are `Gap — not yet started`, and layer 0 is `Out of scope` unless the subject is an organization |
-| Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md` |
+| Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md`, and `scripts/prose-denylist.json` is translated, patterns and skipped labels alike, so `check_prose.py` reads the project's own words |
 
 **⚖ Judgement.** Step 1 already made this call — its host table is the single
 home of the rule. Emit what it activated: for a GitHub repository,
@@ -244,5 +244,5 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
   `Gap`.
 - No empty layer folder exists.
 - Scope document `1_*.md` exists and is indexed.
-- `python3 scripts/check_links.py` and `python3 scripts/check_model.py` both
-  pass.
+- `python3 scripts/check_links.py`, `python3 scripts/check_model.py` and
+  `python3 scripts/check_prose.py` all pass.

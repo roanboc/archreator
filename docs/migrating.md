@@ -34,11 +34,24 @@ means where it matters. The notation moves up one level: each layer README
 gains `## Metamodel` before its `## Layer view` — one `%% legend` diagram of
 the layer's element types with glyph, shape, colour, stereotype and prefix —
 and the layer templates under `assets/layers/` ship it. `check_model.py`
-still asks a defining document for a diagram before its first table and one
-per section; it no longer asks for a legend, and a stereotype on a node still
-fails outside a diagram marked `%% legend`.
+still asks a defining document for some view and, in each section, for its
+diagram before that section's tables; it no longer asks for a legend, and a
+stereotype on a node still fails outside a diagram marked `%% legend`.
 
-Four things move in an existing project: each `## Relationships` table
+A page speaks about its subject and about nothing else. Who approves it and
+at which session, which gate is pending, how a canvas block becomes an
+element, how files are numbered: all of it leaves the model pages for
+`AGENTS.md`, the method and the status line. A third validator,
+`scripts/check_prose.py`, fails a page on the vocabulary that gives such a
+sentence away, from a word list in `scripts/prose-denylist.json` that a
+project translates with its documentation language. The layer README takes
+one shape — title, one sentence, the viewpoint line, `## Documents`,
+`## Metamodel`, `## Layer view` — and the sections a 0.4 README carried
+("Analysis order", "Fit is a rule", "From canvas to ArchiMate") go: the fit
+verdict lives in the value proposition canvas, the mapping in the method's
+canvases reference, and the order is the table's.
+
+Six things move in an existing project: each `## Relationships` table
 becomes rows of the catalogue under its document's heading, with the pending
 marker moved from the relationship cell to the notes; each legend section is
 deleted, with any sentence about a colour or a dashed border moved under the
@@ -46,8 +59,12 @@ diagram it explains; references outside the defining page take the new shape;
 and `scripts/model_graph.py` and `scripts/check_model.py` are copied again
 from the scaffold, because the parser now reads a relationship row by shape,
 keeps catalogue cells out of `trace`'s mentions and no longer asks for a
-legend. Nothing in the elements, their identifiers or their
-status glyphs moves.
+legend; `scripts/check_prose.py` and `scripts/prose-denylist.json` are copied
+from the scaffold, the list translated where the documentation language is
+not English, and the sentences it names are cut or moved to `AGENTS.md`; and
+each layer README is cut to its shape, its fit verdict moved into the canvas
+that verifies it and its canvas mapping deleted, because the method holds it.
+Nothing in the elements, their identifiers or their status glyphs moves.
 
 ## Fifteen skills are invoked by name (0.4)
 

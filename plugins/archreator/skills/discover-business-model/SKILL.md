@@ -153,7 +153,13 @@ Check, and fix or flag — never quietly present an unfit canvas:
 | ----- | ------ |
 | Pain relief | Pain has a Pain Reliever |
 | Gain creation | Gain has a Gain Creator |
+| Traceability | Pain Reliever and Gain Creator traces to a Capability |
 | Coverage | Product has its own Business Model Canvas |
+
+An unaddressed pain is a missing capability or a customer the business
+decided not to serve, and the verdict says which. It is written in the value
+proposition canvas under its own heading, never in the layer README
+(`architecture-document-style` § The layer README).
 
 **← Needs** the canvases.
 
@@ -244,4 +250,5 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
   **Direction** row for the strategy at the handoff, and holds no row for a
   gate that was not granted.
 - Every call the agent adopted is recorded on a canvas still marked `◐`.
-- `python3 scripts/check_links.py` and `python3 scripts/check_model.py` pass.
+- `python3 scripts/check_links.py`, `python3 scripts/check_model.py` and
+  `python3 scripts/check_prose.py` pass.

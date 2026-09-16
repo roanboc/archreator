@@ -2,57 +2,34 @@
 
 _[← EA home](../README.md)_
 
-Who interacts with the system, the services it offers them, the processes
-those services run through, the business objects they handle, and the domain
-vocabulary and rules that constrain all of it.
+Who does the work, what they are offered, how it is delivered, what the
+processes handle, and the vocabulary and rules that bind all of it.
 
-## Analysis order
+**ArchiMate viewpoint:** Business layer: Business Actor, Business Role,
+Business Collaboration, Contract, Product, Business Service, Business
+Interface, Business Process, Business Object, Business Rule.
 
-Files are numbered in the order they are analyzed: identify _who_ first,
-then _what they are offered_, then _how it is delivered_, then _what is
-handled_, and finally the domain vocabulary and rules.
+<!--
+  TEMPLATE — the author's notes, not the reader's. Processes stay in one
+  document at levels 1 and 2, with one activities document per detailed
+  process in `activities/` (`process-and-capability-levels`). The glossary and
+  the business rules table live in 5_domain-context-and-rules.md; a product
+  aggregates its services in 2_business-services.md. Each actor states its
+  kind — human, AI or hybrid — and an AI actor its autonomy level, decision
+  rights and escalation path (the actor notation in
+  `architecture-document-style`): its role in the business modelled, not in
+  how this repository is developed.
+-->
+
+## Documents
 
 | #   | Document                                                          | Elements                                           | Question it answers                              |
 | --- | -------------------------------------------------------------------| ---------------------------------------------------- | --------------------------------------------------- |
-| 1   | [1_business-actors-and-roles.md](./1_business-actors-and-roles.md) | Business Actors and Roles, organizational units, external partners (Contracts, Collaborations) | Who interacts with the system, and who do we depend on? |
+| 1   | [1_business-actors-and-roles.md](./1_business-actors-and-roles.md) | Business Actors and Roles, organizational units, external partners (Contracts, Collaborations) | Who does the work, and who do we depend on? |
 | 2   | [2_business-services.md](./2_business-services.md)                | Products, Business Services, Business Interfaces (channels) | What is offered to them, and through which channels? |
-| 3   | [3_business-processes.md](./3_business-processes.md) — or a folder of the same name, one document per level, once leveled | Business Processes | How are those services delivered, and at what level of detail? |
+| 3   | [3_business-processes.md](./3_business-processes.md)              | Process groups and processes; the activities of each detailed process in `activities/` | How are those services delivered, and at what level of detail? |
 | 4   | [4_business-objects.md](./4_business-objects.md)                  | Business Objects                                   | What things do the processes handle?              |
 | 5   | [5_domain-context-and-rules.md](./5_domain-context-and-rules.md)  | Problem statement, system context, glossary, rules | What vocabulary and constraints bind everything?  |
-
-`3_business-processes.md` is one document while the catalogue is small. **On
-an organization it becomes leveled**: level 1 is the macro process map,
-classified into strategic, operational, support and evaluation; level 2 is the
-end-to-end processes inside each; and level 3 exists only for the branches a
-named pain justifies detailing. Past roughly fifteen elements in a level the
-file becomes a folder of the same name with one document per level.
-**Identifiers carry the level**, so no table needs a parent column. The
-`process-and-capability-levels` skill holds the categories, the level
-definitions, and the focus table recording which branches were deliberately
-left at level 2.
-
-`5_domain-context-and-rules.md` carries the project's **glossary** (reuse its
-terms in code and commits) and its **business rules table** — every new rule
-gets a row there, with its rationale, before it gets a line of code. A role ×
-operation access matrix belongs there too.
-
-`2_business-services.md` is where a **«Product»** aggregates the services
-that make it up. A single-application project usually has one implicit product
-and can leave it out; an organization sells several, and the portfolio is what
-makes the rest of the model make sense. On the company track the products,
-channels, and customer relationships are derived from the business model
-canvases (see
-[0_business-design/](../0_business-design/README.md#from-canvas-to-archimate)),
-and Key Partners land in `1_business-actors-and-roles.md` as external actors,
-each with the «Contract» or «Business Collaboration» that binds them.
-
-`1_business-actors-and-roles.md` states each actor's **kind** — human, AI, or
-hybrid — and, for AI/hybrid actors, its autonomy level, decision rights, and
-escalation path (see the `architecture-document-style` skill's actor notation).
-This is an AI system's role **in the business being modeled**, not its role in
-how this repository is developed (see `CONTRIBUTING.md`). If an initiative
-changes one of those values, consider a `record-decision` alongside the scope
-document.
 
 ## Metamodel
 

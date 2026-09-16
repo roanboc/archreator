@@ -411,7 +411,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - Absorbing a divergence from what a gate approved instead of taking it back.
 - Deciding process decomposition depth per initiative rather than through
   `process-and-capability-levels`.
-- Skipping the cross-model check because both validators are green.
+- Skipping the cross-model check because the validators are green.
 - Asking the Requester something the model already settles, or something about
   a state that does not exist yet.
 - Writing a row for a gate that was never granted.

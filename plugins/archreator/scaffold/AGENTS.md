@@ -78,8 +78,8 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   said exist, or `●` validated at a named gate on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing,
-  one that carries no view or whose first view comes after its first table,
-  and one whose node labels carry a stereotype. **Each
+  one that carries no view or a section whose diagram follows its own first
+  table, and one whose node labels carry a stereotype. **Each
   section opens with its own diagram and its own tables follow it** — never
   every diagram stacked at the top with the prose underneath.
 - `architecture/relationships.md` — the relationship catalogue: every
@@ -87,7 +87,7 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   `From | To | Relationship | Notes` grouped by the document that defines the
   source element. Agents and validators read it; a human page draws and names
   its relationships and never declares them.
-- [`scripts/`](./scripts/README.md) — the two validators, run before every
+- [`scripts/`](./scripts/README.md) — the three validators, run before every
   push. Everything else the method can do runs from the plugin rather than
   from a copy in here.
 
@@ -105,9 +105,10 @@ All of them must be green before pushing; CI runs the same.
 ```bash
 python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
+python3 scripts/check_prose.py    # every model page speaks about its subject
 ```
 
-Both must be green before pushing. They need nothing but Python — no network,
+All three must be green before pushing. They need nothing but Python — no network,
 no plugin installed — so this project can check itself.
 
 Everything else the method can do runs from the plugin against this project,
@@ -139,3 +140,11 @@ Delete it and nothing is lost.
 - Inside the page that defines an element, cite its bare identifier; from any
   other page, its type, identifier and name — the process [`BPROC#.#`]
   <name> — with the identifier first only in a definition (`document-style`).
+- A model page speaks about its subject. Who approves what and when lives in
+  this file; how the method works, in the plugin and `CONTRIBUTING.md`; how far
+  a page is validated, in its status line. `scripts/check_prose.py` fails a
+  page on the vocabulary that gives a sentence about governance, the method or
+  the page itself away; its list, `scripts/prose-denylist.json`, follows the
+  documentation language.
+- A layer README has one shape: title, one sentence, the viewpoint line,
+  `## Documents`, `## Metamodel`, `## Layer view` (`architecture-document-style`).
