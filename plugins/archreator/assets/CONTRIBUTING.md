@@ -3,7 +3,7 @@
 <!--
   TEMPLATE — `establish-project` fills in § Development workflow once a
   stack exists. Keep § Actors: the skills reference it by name, and a project
-  whose roles are unwritten has gates nobody can grant.
+  whose roles are unwritten has nobody to merge anything.
 -->
 
 How changes are made in this project. The rule that governs them and the
@@ -18,14 +18,13 @@ same documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
-| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff. **Grants the gate approvals** before any code is written |
-| **Agent** | An AI agent (or a person) | Aligns the change through the architecture layers, stops at each gate for the Requester's approval, writes a scope document, implements, and opens a PR |
-| **Reviewer** | \<who reviews and merges> | Reviews and merges. Nothing ships without a human approving it |
+| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff, in plain words |
+| **Agent** | An AI agent (or a person) | Aligns the change through the architecture layers, writes a scope document, builds directly from the request, and opens a PR — stopping only for a contradiction, an ambiguity, or something needing authorization |
+| **Reviewer** | \<who reviews and merges> | Reviews and merges. The merge is the approval; nothing ships without it |
 
-Which gate applies when is defined once, in the `align-change-through-layers`
-skill — this page does not restate it. An approval that isn't recorded didn't
-happen: every gate is written into the scope document's Approvals table, with
-who approved, when, and what was shown.
+What stops the work, and how it's presented, is defined once, in the
+`align-change-through-layers` skill § Where this stops — this page does not
+restate it.
 
 ## Development workflow
 
@@ -53,7 +52,7 @@ rendering: the Markdown in this repository stays the model.
 If the published site carries comment threads, a thread is a conversation
 about a document and never the record of a change. Those questions are triaged
 like anything else a Requester says: one that turns out to be a change becomes
-an initiative and passes the gates like any other. **Answering in the thread
+an initiative and is built and merged like any other. **Answering in the thread
 and nowhere else leaves the model exactly as wrong as it was.**
 
 ## Pull requests

@@ -1,12 +1,11 @@
 ---
 name: discover-current-landscape
-description: Procedure — run this when the subject already exists and layers 2 to 5 are empty. Sweeps the estate — actors, services, processes, data, applications, runtimes — into a described baseline from evidence rather than a requirement, declares how far it went, and presents it once at Understanding.
+description: Procedure — run this when the subject already exists and layers 2 to 5 are empty. Sweeps the estate — actors, services, processes, data, applications, runtimes — into a described baseline from evidence rather than a requirement, declares how far it went, and opens it as one pull request.
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC1.5
-    gates: Understanding
 ---
 
 # ⚙ Discover the current landscape
@@ -39,9 +38,9 @@ described baseline, and the improvement is a separate initiative.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.5`, the last process of establishing a model. It reuses
-**Understanding** rather than inventing a gate of its own, and meets it once:
-the whole described baseline — layers 2 through 5 — is presented together.
+Realizes `BPROC1.5`, the last process of establishing a model. It builds the
+whole described baseline — layers 2 through 5 — directly from the evidence,
+and opens it together as one pull request; the merge is the approval.
 
 ```mermaid
 flowchart TD
@@ -50,23 +49,19 @@ flowchart TD
   s2["⚙ 2 — Gather evidence, not opinions"]
   s3["⚙ 3 — Describe business and information"]
   s4["⚙ 4 — Describe application and technology"]
-  s5["⚙ 5 — Write the scope document, present Understanding"]
-  g2{{"❖ Understanding — the described baseline"}}
+  s5["⚙ 5 — Write the scope document, check for a stop"]
   s6["⚙ 6 — Record what was left uncharted"]
   pcl(["⇄ process-and-capability-levels"])
   dom(["⇄ model-domains"])
+  merged(["Merged — the approval"])
   out(["A baseline a target can be measured from"])
 
-  trig --> s1 --> s2 --> s3 --> s4 --> s5 --> g2
+  trig --> s1 --> s2 --> s3 --> s4 --> s5 --> s6 --> merged --> out
   s1 -. several business lines .-> dom
   s3 -. the process catalogue .-> pcl
-  g2 -->|changes requested| s3
-  g2 -->|approved| s6 --> out
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class s1,s2,s3,s4,s5,s6,trig,out business
-  class g2 implementation
+  class s1,s2,s3,s4,s5,s6,trig,out,merged business
 ```
 
 ## ⚓ Invariants
@@ -78,8 +73,8 @@ flowchart TD
   has it — `architecture-document-style` § Grounding.
 - **What a sweep produces is a draft catalogue, and it says so on every
   document.** Each document opens `◐ Draft catalogue` and its tables carry
-  `Source` and `Notes` columns until the gate that validates them —
-  `architecture-document-style` § Document status.
+  `Source` and `Notes` columns until the pull request that validates them
+  merges — `architecture-document-style` § Document status.
 - **Describe what runs, not what should run.** The estate includes things
   nobody would design that way. They go in as they are, without commentary.
   Judgement about the gap between this and a sane target belongs to
@@ -185,35 +180,31 @@ three teams each run their own copy of is three nodes and one component.
 **→ Produces** `architecture/4_application/` and `architecture/5_technology/`,
 each document opening `◐ Draft catalogue`.
 
-### 5 — Write the scope document, present Understanding
+### 5 — Write the scope document, check for a stop
 
 The sweep is a full initiative. Create the scope document with
-`write-scope-document` before presenting anything, so the Requester approves
-against a document rather than a conversation.
+`write-scope-document` before opening anything, so what the pull request
+carries is written down first.
 
 The alignment table records layers 2 through 5 as described; layers 0 and 1
 get an explicit "no change" verdict.
 
-**❖ Understanding — the described baseline.** The Requester approves, once,
-for the whole of layers 2 through 5.
+**Check for a stop** before opening the pull request — `align-change-through-layers`
+§ Where this stops. A described baseline rarely contradicts anything, since it
+asserts nothing about what should be true, but Ambiguity is common: an
+element two sources describe differently, with nothing in the evidence
+settling which reading is right. Name it rather than guessing.
 
-Present a compact summary — the boundary; the actor and service catalogues;
-the process map at level 2; the data objects and where they live; the
-component and node catalogues and what each is grounded in; and, as its own
-list, everything marked Pending. Carry full branch links to every document
-behind it (`align-change-through-layers` § Show the Requester what they are
-approving). Name the counts, and name what was consolidated into what.
-
-Record the approval in the Approvals table, and promote every document it
-covered — `architecture-document-style` § Document status.
-
-If changes are requested, revise from Step 3 and present again — the documents
-stay `◐` until they are actually approved.
+The pull request itself carries a compact summary — the boundary; the actor
+and service catalogues; the process map at level 2; the data objects and
+where they live; the component and node catalogues and what each is grounded
+in; and, as its own list, everything marked Pending. Carry full branch links
+to every document behind it. Name the counts, and name what was consolidated
+into what.
 
 **← Needs** the layers from Steps 3 and 4.
 
-**→ Produces** `architecture/scope/<n>_*.md`, its row in the index, and the
-Approvals table's Understanding row.
+**→ Produces** `architecture/scope/<n>_*.md` and its row in the index.
 
 ### 6 — Record what was left uncharted
 
@@ -227,12 +218,15 @@ table `process-and-capability-levels` § The focus table turns a partial model
 into a deliberate one already prescribes, and the other layers get its
 equivalent in prose.
 
-Then name what comes next: offer `plan-the-transition`, and say plainly that
-the sweep found the estate, not the ambition.
+Open the pull request with `write-pr-description` — its merge is the
+approval, nothing before it. Then name what comes next: offer
+`plan-the-transition`, and say plainly that the sweep found the estate, not
+the ambition.
 
-**← Needs** the granted gate.
+**← Needs** the scope document from Step 5, with no stop outstanding.
 
-**→ Produces** a Coverage section in each swept layer's README.
+**→ Produces** a Coverage section in each swept layer's README, and a pull
+request a Reviewer can judge.
 
 ## ⇄ Hands off to
 
@@ -243,8 +237,9 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 | ----- | ---- | --------------- |
 | `model-domains` | Step 1 finds several business lines with separate owners | A domain split, after which each domain is swept on its own |
 | `process-and-capability-levels` | Step 3, always, for the process catalogue | Levelled processes in four categories, with a focus table saying what was left at level 2 |
-| `write-scope-document` | Step 5 | The initiative's record, and the Approvals table the gate is written in |
-| `plan-the-transition` | Step 6, once the baseline is approved | A target state, a gap register and a sequence — the thing the baseline exists to make possible |
+| `write-scope-document` | Step 5 | The initiative's record |
+| `write-pr-description` | Step 6 | The pull request that carries the whole sweep |
+| `plan-the-transition` | Step 6, once the pull request merges | A target state, a gap register and a sequence — the thing the baseline exists to make possible |
 | `align-change-through-layers` | Afterwards, for every ordinary change | The spine, which now finds the lower layers populated instead of empty |
 
 ## ✎ Worked example
@@ -255,8 +250,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 > written down rather than assumed. Step 2's licence list yields nineteen SaaS
 > applications; the identity provider yields twenty-three, and the difference
 > turns out to be three abandoned tools and one nobody in IT had heard of. One
-> Understanding presentation covers all four layers, and there the Requester
-> names the last tool's owner, turning a Pending row into a grounded element.
+> pull request covers all four layers, and in review the Requester names the
+> last tool's owner, turning a Pending row into a grounded element.
 > The sweep closes with a Coverage section saying the subsidiary is out.
 
 ## ⚠ Anti-patterns
@@ -280,7 +275,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - Sweeping until the questions run out, rather than to the boundary that was
   agreed.
 - Level 3 everywhere, because the evidence happened to be detailed there.
-- Presenting layers 2–3 and layers 4–5 as two approvals rather than one
+- Splitting layers 2–3 and layers 4–5 into two pull requests rather than one
   baseline.
 
 ## ☑ Done when
@@ -290,13 +285,14 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - Every element names what it was read from, or is marked Pending with what is
   missing, and every document handed over carries a source in
   `architecture/reference/` or names the conversation instead.
-- Every document opened `◐ Draft catalogue` and now says `●` with the gate and
-  the date it was granted, with `Notes` emptied and `Source` kept.
+- Every document opened `◐ Draft catalogue` and now says `● Validated`, with
+  the date the pull request merged, `Notes` emptied and `Source` kept.
 - The process catalogue is levelled, with a focus table.
 - AI actors found in the estate are modeled as actors holding roles, with
   autonomy levels and decision rights.
-- The scope document's alignment table covers every layer, and its Approvals
-  table records the one Understanding row, with what was shown.
+- The scope document's alignment table covers every layer, and the pull
+  request that carries it shows the boundary, the catalogues, and everything
+  still Pending.
 - Everything still Pending is listed in one place the Requester can work
   through.
 - `plan-the-transition` has been named and offered as the next initiative.

@@ -117,26 +117,19 @@ class ProjectToolTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("2 live element(s)", result.stdout)
 
-    def test_health_counts_grants_against_promotions(self):
-        """A granted gate is meant to move a status line; the report says
-        whether one ever did. A dated row in the Approvals table is the grant,
-        whatever language the heading above it is written in."""
+    def test_health_counts_initiatives_and_status(self):
+        """A scope document is an initiative; health counts them and reports
+        how much of the model carries each status glyph. A document moves to
+        `●` when the pull request that changed it merges, so there is no
+        separate grant to reconcile against it."""
         scope = self.probe / "architecture" / "scope"
         scope.mkdir(exist_ok=True)
         doc = scope / "1_probe.md"
-        doc.write_text(
-            "# Probe\n\n## Aprobaciones\n\n"
-            "| Compuerta | Aprobó | Fecha | Qué se mostró |\n"
-            "| --------- | ------ | ----- | ------------- |\n"
-            "| Entendimiento | The owner | 2026-09-07 | The probe |\n",
-            encoding="utf-8",
-        )
+        doc.write_text("# Probe\n\nWhat this initiative changed, and why.\n", encoding="utf-8")
         self.addCleanup(doc.unlink)
         result = run(MODEL, "--project", self.probe, "health")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("1 initiative(s), 2 live element(s)", result.stdout)
-        self.assertIn("1 dated approval row(s)", result.stdout)
-        self.assertIn("1 granted, 0 document(s) validated — the gap", result.stdout)
         self.assertIn("1 of 2 name what realizes them", result.stdout)
 
     def test_names_says_which_element_a_path_belongs_to(self):

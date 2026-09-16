@@ -1,12 +1,11 @@
 ---
 name: plan-the-transition
-description: Procedure — run this when the Requester asks where the architecture should go and in what order — target state, to-be, gap analysis, roadmap — rather than how to deliver one change. Turns an approved baseline into plateaus, a gap register and a sequence in 6_transition/, approved at Direction.
+description: Procedure — run this when the Requester asks where the architecture should go and in what order — target state, to-be, gap analysis, roadmap — rather than how to deliver one change. Turns a validated baseline into plateaus, a gap register and a sequence in 6_transition/, opened as a pull request.
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC5.1
-    gates: Direction
 ---
 
 # ⚙ Plan the transition
@@ -15,10 +14,10 @@ Every other skill in the method describes a present. This one describes an
 intent: where the architecture should be, what stands between here and there,
 and in what order the distance is closed.
 
-**A roadmap is a direction, not a permission.** What is approved here is that
-this is the right destination and the right order. Each initiative on it still
-enters the spine, still aligns through the layers, and still stops at its own
-gate before anything is built.
+**A roadmap is a direction, not a permission.** What its pull request's merge
+approves is that this is the right destination and the right order. Each
+initiative on it still enters the spine, still aligns through the layers, and
+still checks its own three stops before anything is built.
 
 ## ⊕ When to use this
 
@@ -45,8 +44,12 @@ gate before anything is built.
 Realizes `BPROC5.1`, and it is the only process in the method whose output
 describes a future rather than a present.
 
-It owns **Direction**, which `discover-strategy` also owns: a sequenced target
-is direction in the same sense a strategy layer is.
+It builds the plateaus, the gap register and the sequence directly, then
+checks the three stops in `align-change-through-layers` § Where this stops
+before opening the pull request. **A sequenced target routinely fires
+Authorization**: naming a destination and an order is exactly "a direction"
+the stop names — committing the Requester to something they have not yet
+agreed.
 
 ```mermaid
 flowchart TD
@@ -55,8 +58,9 @@ flowchart TD
   s2["⚙ 2 — Name the target plateaus"]
   s3["⚙ 3 — Derive the gap register"]
   s4["⚙ 4 — Sequence the initiatives"]
-  s5["⚙ 5 — Write the scope document, present Direction"]
-  g1{{"❖ Direction — the target and the sequence"}}
+  s5["⚙ 5 — Write the scope document, name the stop"]
+  stop(["Stop — surface it to the Requester"])
+  merged(["Merged — the approval"])
   s6["⚙ 6 — Bind the roadmap to the spine"]
   dcl(["⇄ discover-current-landscape"])
   acl(["⇄ align-change-through-layers"])
@@ -64,15 +68,13 @@ flowchart TD
 
   trig --> s1
   s1 -->|the baseline is missing| dcl
-  s1 -->|the baseline holds| s2 --> s3 --> s4 --> s5 --> g1
-  g1 -->|changes requested| s2
-  g1 -->|approved| s6 --> out
+  s1 -->|the baseline holds| s2 --> s3 --> s4 --> s5
+  s5 -->|stops| stop
+  s5 -->|opens the pull request, continues| merged --> s6 --> out
   s6 -.->|one initiative at a time| acl
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class s1,s2,s3,s4,s5,s6,trig,out business
-  class g1 implementation
+  class s1,s2,s3,s4,s5,s6,trig,merged,stop,out business
 ```
 
 ## ⚓ Invariants
@@ -92,11 +94,11 @@ flowchart TD
   the organization can absorb at once is the Requester's, and it is asked.
 - **The roadmap declares its own standing.** Its documents define elements, so
   they carry a status line like any others: `◐ Draft catalogue` while the
-  target is being drafted, `● Validated at Direction` once the Requester has
-  settled it (`architecture-document-style` § Document status).
-- **Nothing here is approved to build.** Direction approves the destination and
-  the order. Every initiative on the roadmap runs the spine, and no gate is
-  skipped because the roadmap already named it.
+  target is being drafted, `● Validated, <date>` once this initiative's pull
+  request has merged (`architecture-document-style` § Document status).
+- **Nothing here is approved to build.** The merge approves the destination and
+  the order. Every initiative on the roadmap still runs the spine, and none of
+  its three stops is skipped because the roadmap already named the work.
 - **Every plateau reached, abandoned or invalidated is written back.** A
   roadmap that is not revisited is worse than none, because it is trusted.
 
@@ -105,9 +107,9 @@ flowchart TD
 ### 1 — Confirm the baseline is worth planning from
 
 Read what the model says about today before proposing a tomorrow. Check three
-things and record the verdict: the strategy layer is filled and approved; the layers relevant to the question hold elements rather than
-placeholders; and the current-state documents have not obviously drifted from
-what shipped.
+things and record the verdict: the strategy layer is filled and validated; the
+layers relevant to the question hold elements rather than placeholders; and
+the current-state documents have not obviously drifted from what shipped.
 
 **⚖ Judgement.** Empty lower layers mean stopping and handing to
 `discover-current-landscape`. Drifted layers mean handing to
@@ -175,31 +177,33 @@ sequence survives a slipped quarter; a date does not.
 
 **→ Produces** the sequence in `architecture/6_transition/`.
 
-### 5 — Write the scope document, present Direction
+### 5 — Write the scope document, name the stop
 
 Planning is a full initiative. Create the scope document with
-`write-scope-document` before presenting, so the Requester approves against a
-document.
+`write-scope-document` before opening the pull request, so what merges is
+written down first.
 
 The alignment table gets a verdict for every numbered layer, and for most of
 them that verdict is an explicit "no change". The one exception is
 `1_strategy`, where naming a target routinely surfaces a course of action the
 layer did not carry — record that as a change.
 
-**❖ Direction — the target and the sequence.** The Requester approves.
+**Naming a destination and an order almost always fires Authorization**
+(`align-change-through-layers` § Where this stops): it commits the Requester
+to a direction they have not yet agreed. Name the stop rather than treating
+the roadmap as something that ships quietly with everything else.
 
 Present the plateaus, the gaps under each, and the order, with full branch
-links (`align-change-through-layers` § Show the Requester what they are
-approving). Say two things rather than leaving them in the document: that
-approving this approves the **destination and the order**, not the work; and
-what is deliberately not on it.
-
-Record the approval in the Approvals table, naming the roadmap documents shown.
+links (`align-change-through-layers` § Where this stops — the same link
+hygiene applies to anything put in front of the Requester, not only a stop).
+Say two things plainly in the pull request rather than leaving them only in
+the document: that merging this approves the **destination and the order**,
+not the work; and what is deliberately not on it.
 
 **← Needs** the plateaus, the gaps, the sequence.
 
-**→ Produces** `architecture/scope/<n>_*.md`, its row in the index, and the
-Approvals table's Direction row.
+**→ Produces** `architecture/scope/<n>_*.md`, its row in the index, and a
+pull request naming the stop.
 
 ### 6 — Bind the roadmap to the spine
 
@@ -214,7 +218,7 @@ are candidate rows in the register.
 plateau stays, marked reached, with the initiative that arrived at it. A
 plateau abandoned is marked abandoned, with why.
 
-**← Needs** Direction.
+**← Needs** this initiative's pull request, merged.
 
 **→ Produces** the roadmap's status column, kept current by later initiatives.
 
@@ -225,9 +229,9 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-current-landscape` | Step 1 finds the lower layers empty | A described, approved baseline — after which this skill restarts at Step 2 |
+| `discover-current-landscape` | Step 1 finds the lower layers empty | A described baseline, its own pull request merged — after which this skill restarts at Step 2 |
 | `restate-current-state` | Step 1 finds the current-state documents drifted | A model that describes today, which is what a gap has to be measured against |
-| `write-scope-document` | Step 5 | The initiative's record, and the Approvals table Direction is written in |
+| `write-scope-document` | Step 5 | The initiative's record, and where the named stop is written |
 | `align-change-through-layers` | Step 6, once per initiative on the sequence, as each is actually started | A delivered change, whose scope document cites the gaps it closed |
 | `record-decision` | A call inside the plan is consequential and smaller than the plan — which plateau a contested system lands in, and why | A numbered decision record the roadmap can point at instead of re-arguing |
 
@@ -238,10 +242,10 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 > authenticates against one identity provider". Step 3 subtracts and finds
 > eleven gaps, four of which are Pending rows left by the landscape sweep.
 > Step 4 groups them into five initiatives and finds that three cannot start
-> until the identity work lands, which settles most of the ordering. The
-> Requester, at Direction, moves one initiative later because a contract
+> until the identity work lands, which settles most of the ordering. In pull
+> request review, the Requester moves one initiative later because a contract
 > renewal makes next year cheaper — an ordering fact no architect had, recorded
-> beside the sequence.
+> beside the sequence before it merges.
 
 ## ⚠ Anti-patterns
 
@@ -252,7 +256,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - Sequencing every gap, until the roadmap is a backlog nobody reads.
 - Writing target elements into the numbered layers, which are the model's only
   description of today.
-- Treating Direction on the roadmap as approval to build the things on it.
+- Treating the roadmap's merged pull request as approval to build the things
+  on it.
 - Deleting a plateau when it is reached, leaving no record that it was ever
   the plan.
 
@@ -267,7 +272,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - The sequence orders initiatives by dependency, and the Requester's ordering
   choices are recorded with their reasons.
 - Nothing in `architecture/6_transition/` has leaked into the numbered layers.
-- The scope document records Direction as granted, naming the roadmap documents
-  shown, and the presentation said plainly that the work itself is not
-  approved.
+- The scope document and pull request name the roadmap documents shown, name
+  the Authorization stop where it fires, and say plainly that merging approves
+  the destination and the order, not the work itself.
 - The roadmap says how it is kept current, and who does it.

@@ -20,16 +20,20 @@ more: worked examples of the method applied to real organizations live in
 
 ## The rule that governs everything else
 
-**Strategy and business architecture are validated before any other layer,
-and the Requester approves at explicit gates before development.** A change
-to a project *using* archreator runs through `align-change-through-layers`;
-a change to *the method itself* is recorded in the sibling repository
+**A change to what the model claims is aligned through the numbered layers
+and built directly, and the Requester's approval is the pull request
+merging.** A change to a project *using* archreator runs through
+`align-change-through-layers`; a change to *the method itself* is recorded
+in the sibling repository
 [`architecture-archreator`](https://github.com/roanboc/architecture-archreator),
 whose `product-archreator/architecture/scope/` is where the method's own
 initiatives live.
 
-A change inside something the method already documents — a bug fix, a
-wording — skips the gates but still updates whatever it falsifies.
+The agent stops only when a change contradicts a Principle or a decision
+already written down, reads two ways, or would commit the Requester to
+something they have not agreed. A change inside something the method already
+documents — a bug fix, a wording — stops for nothing and documents nothing,
+but still updates whatever it falsifies.
 
 ## Portability
 
@@ -81,7 +85,7 @@ one parse of the document convention rather than one per project.
 model.py --project . trace CAP1     # what a change to one element would touch
 model.py --project . coverage       # what names no realizing artifact
 model.py --project . names src/x.py # which elements name this path — is a change here inside the model?
-model.py --project . health         # how much is validated, and whether a granted gate ever moved a status line
+model.py --project . health         # how much is validated, and whether a merged pull request ever moved a status line
 model.py --project . portal         # a stock MkDocs config in .archreator/work/portal/
 model.py --project . export         # .model/model.json, which nothing here reads back
 build_brief.py --project . --element CAP1 --focus impact

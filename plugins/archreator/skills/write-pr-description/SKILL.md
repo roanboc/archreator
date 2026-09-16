@@ -4,9 +4,8 @@ description: Procedure — run this when creating or updating a pull request in 
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC2.3
-    gates: none
 ---
 
 # ⚙ Write a PR description
@@ -26,13 +25,15 @@ describes the whole branch, not the commit that happened to be last.
 | The situation | Use instead |
 | ------------- | ----------- |
 | The work is not verified yet | `align-change-through-layers` Step 7 — verify, then hand over |
-| The scope document's Approvals table is empty | The gates have not been granted; the branch is not ready for review |
+| A stop raised during the work is still unresolved | Resolve it with the Requester first — `align-change-through-layers` § Where this stops; the branch is not ready for review |
 
 ## ⌖ Where this sits
 
-Realizes `BPROC2.3`, the last process before merge. It carries **no gate** —
-the gates were granted before code existed. What waits here is the Reviewer,
-whose approval is ordinary review, not a recorded gate.
+Realizes `BPROC2.3`, the last process before merge. It carries **no approval
+of its own** — the Requester's approval is the pull request merging, not
+anything granted before it (`align-change-through-layers` § Where this
+stops). What waits here is the Reviewer, whose review is what leads to that
+merge.
 
 ```mermaid
 flowchart LR
@@ -81,7 +82,7 @@ change fills the same body — a pure bug fix included.
 | Section | Holds |
 | ------- | ----- |
 | **Summary** | What the branch delivers, in two to four sentences |
-| **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Its Approvals table must already record the gates this change was granted — Understanding at minimum, per `align-change-through-layers` § The gates — and nothing for a gate it never met. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
+| **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Check that it names what changed and why, that every layer has a verdict, and that any stop the work raised — `align-change-through-layers` § Where this stops — was resolved with the Requester rather than left open. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
 | **EA layers touched** | The verdicts copied from the scope document's alignment table. Every layer gets one, including an explicit "no change" |
 | **Changes** | Grouped by work package or area, covering the full `main...HEAD` diff |
 | **Complexity** | What was removed, and what new recurring cost the change adds — a file in the scaffold, a check to keep green, a copy to hold together — with why it is justified. "Nothing removed, nothing recurring added" is a complete answer |
@@ -111,7 +112,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `write-scope-document` | The scope document's Approvals table or gap notes need correcting before review | A scope document the body can cite honestly |
+| `write-scope-document` | The scope document's alignment table or gap notes need correcting before review | A scope document the body can cite honestly |
 
 ## ✎ Worked example
 
@@ -125,7 +126,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 - Describing the latest commit rather than the branch.
 - Leaving the body as written at the first push after the branch has moved.
-- Opening a PR whose scope document has an empty Approvals table.
+- Opening a PR whose scope document leaves a stop unresolved.
 - Omitting a layer from EA layers touched instead of writing "no change".
 
 ## ☑ Done when

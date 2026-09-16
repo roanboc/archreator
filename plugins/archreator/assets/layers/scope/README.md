@@ -28,28 +28,26 @@ folders are numbered in:
    documents in the same change. If the strategy layer is still template
    placeholders, or the change adds/modifies a stakeholder, driver, goal,
    or principle, the initiative becomes **strategy discovery** first — a
-   docs-only, question-driven initiative ending at **Direction**
-   approval (see the `discover-strategy` skill); implementation
+   docs-only, question-driven initiative built directly and opened as its
+   own pull request (see the `discover-strategy` skill); implementation
    follows as a separate initiative. If the subject is an **organization**
    rather than an application, the walk starts one layer earlier, at
    [0_business-design](../0_business-design/README.md) — the value
-   proposition and business model canvases, approved at **Direction**
-   (see the `discover-business-model` skill) before layers 1–2 are derived
-   from them.
+   proposition and business model canvases (see the `discover-business-model`
+   skill) before layers 1–2 are derived from them.
 2. **Document the scope.** Add the next-numbered file to this folder
-   describing plateaus, work packages, in/out of scope, gaps, and gate
-   approvals — before implementation starts, refined as it proceeds.
-3. **Pass the gates.** There are two: **Direction**, where the change moves
-   why or for whom, and **Understanding**, where the Requester approves the
-   strategy, business, and information changes before any code. Each gate
-   granted is recorded in the scope document's Approvals table — who approved,
-   when, and what was shown; a gate that was not granted gets no row. Which
-   gate applies to which initiative is defined in exactly one place,
-   the `align-change-through-layers` skill § The gates, which also says **where**
-   an approval can be granted — the conversation, or a reply on the pull
-   request for a Requester who doesn't work in a terminal.
-4. **Implement.** Only then write the code, keeping the scope document and
-   EA docs in sync with what is actually delivered.
+   describing plateaus, work packages, in/out of scope and gaps — before
+   implementation starts, refined as it proceeds.
+3. **Check for a stop.** Before building, check whether the change
+   contradicts a Principle or a decision already written down, reads two
+   ways, or would commit the Requester to something they have not agreed —
+   see the `align-change-through-layers` skill § Where this stops, which also
+   says how a stop is named — in the conversation, or a reply on the pull
+   request for a Requester who doesn't work in a terminal. If none fire,
+   build directly.
+4. **Implement, and open the pull request.** The Requester's merge is the
+   approval; nothing before it is. Keep the scope document and EA docs in
+   sync with what is actually delivered.
 
 Agent guidance for this process lives in the `align-change-through-layers`,
 `discover-strategy`, and `write-scope-document` skills; PR descriptions follow
@@ -68,9 +66,9 @@ the `record-decision` skill.
 Scope documents accumulate, and after a run of initiatives the EA can be
 accurate line by line and still not read as a description of *today* —
 shipped work still marked "Pending", elements replaced but never retired. The
-`restate-current-state` skill compacts that, as its own initiative with its
-own Understanding. It changes the current-state documents only: **a merged
-scope document is never rewritten**.
+`restate-current-state` skill compacts that, as its own initiative. It
+changes the current-state documents only: **a merged scope document is never
+rewritten**.
 
 ## Initiatives
 

@@ -1,26 +1,25 @@
 ---
 name: write-scope-document
-description: Document — write one when creating or updating a scope document in architecture/scope/ — one per initiative, drafted before Understanding as step 3 of align-change-through-layers, and the durable record of the gates granted.
+description: Document — write one when creating or updating a scope document in architecture/scope/ — one per initiative, drafted before implementing as step 3 of align-change-through-layers, and the durable record of what changed.
 disable-model-invocation: true
 metadata:
   archreator:
     kind: document-template
     realizes_process: BPROC2.1
-    gates: none
 ---
 
 # ▤ Write a scope document
 
-One document per initiative, and the place its gate approvals are recorded.
-An **architecture definition** narrowed to a single change: what it alters,
-which layers it touches, who approved it, and what it deliberately left out.
+One document per initiative. An **architecture definition** narrowed to a
+single change: what it alters, which layers it touches, what it deliberately
+left out, and the pull request whose merge approved it.
 
 ## ⊕ When to use this
 
 | The situation | What it looks like |
 | ------------- | ------------------ |
-| An initiative starts | Step 3 of `align-change-through-layers`, before the gate that approves it |
-| Discovery starts | `discover-business-model` or `discover-strategy` needs somewhere to record Direction |
+| An initiative starts | Step 3 of `align-change-through-layers`, before implementing |
+| Discovery starts | `discover-business-model` or `discover-strategy` needs somewhere to record what it delivered |
 | An initiative moves | The work diverged from the plan, and the document has to stay true to what shipped |
 
 ## ⊖ When not to
@@ -33,26 +32,24 @@ which layers it touches, who approved it, and what it deliberately left out.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC2.1`. It carries no gate of its own: it is the artifact the
-gates are recorded *in*, and so it is created **before** the gate.
+Realizes `BPROC2.1`. It carries no approval of its own: it is the artifact
+the pull request cites, and so it is created **before** implementing, then
+refined as the work proceeds.
 
 ```mermaid
 flowchart LR
   init(["An initiative, or a discovery"])
   doc[/"architecture/scope/n_name.md"/]
   idx[/"scope/README.md — the index"/]
-  g{{"❖ The gate it records"}}
   pr(["The pull request that cites it"])
+  merged(["Merged — the approval"])
 
   init --> doc --> idx
-  doc --> g -->|approved| doc
-  doc --> pr
+  doc --> pr --> merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   classDef artifact fill:#eef2f7,stroke:#9fb0c4,color:#333
-  class init,pr business
-  class g implementation
+  class init,pr,merged business
   class doc,idx artifact
 ```
 
@@ -85,21 +82,6 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 | 4_application | <services, components, ports>                       |
 | 5_technology  | <runtimes, build, CI, hosting>                      |
 
-## Approvals
-
-| Gate | Approved by | Date | What was approved |
-| ---- | ----------- | ---- | ----------------- |
-| Understanding | <Requester> | <YYYY-MM-DD> | <the documents and sections presented> |
-
-<!--
-  One row per gate this initiative was granted, plus one row for any
-  unscheduled stop, with the reason in place of a gate name: `Authorization`
-  or `Material uncertainty`. A gate that was not granted gets no row.
-
-  Direction, where the subject is an organization, is two rows: the canvases,
-  then the strategy derived from them.
--->
-
 ## Plateaus
 
 | Plateau                | State                     |
@@ -130,28 +112,22 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 - **Every layer gets a verdict**, including an explicit "no change". Silence
   is not a decision.
-- **Every granted gate gets a row, and nothing else does.** An Approvals table
-  records what happened, never a census of what did not. Which gate applies is
-  defined in exactly one place — `align-change-through-layers` § The gates.
-  **An approval that isn't recorded didn't happen.**
-- **A granted gate promotes the documents it covered**
-  (`architecture-document-style` § Document status). Recording the approval is
-  half of it; a row without the status lines leaves the model claiming nothing
-  was approved.
+- **The pull request's merge is the approval, and nothing records one before
+  it.** No Approvals table, no row to write — `align-change-through-layers`
+  § Where this stops.
+- **A merged pull request promotes the documents it changed**
+  (`architecture-document-style` § Document status). The merge is what says
+  the model claims are stood behind, not a separate ceremony.
 - **An interpretation the agent adopted is recorded where it applies**, never
   in a register of pending questions: the affected row's `Source` cell reads
   `adopted — <the call>`, and the document stays `◐` —
   `align-change-through-layers` § Ask only what blocks the work now.
-- **"What was approved" names the documents put in front of the Requester**,
-  not the topic in the abstract. The gate presentation links them in full
-  (`align-change-through-layers` § Show the Requester what they are approving);
-  the row is what says which ones they were.
 - **Deliverables are concrete artifacts** — file paths, page or screen names —
   never "improved UX".
 - **The consolidation record lives here, not in the layer documents.** How
   many elements each catalogue ended up with, what was merged into what, and
-  why, is a modeling decision the Requester approves (`document-style` § What
-  the document contains).
+  why, is a modeling decision the document itself records (`document-style`
+  § What the document contains).
 - **Out of scope is as important as in scope** — it is where the next
   initiative's backlog lives. Pair each meaningful exclusion with a gap note.
 - **Where the project keeps a roadmap, gap notes have somewhere to go.** A gap
@@ -171,15 +147,14 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 ## ✎ Worked example
 
-> A docs-only discovery initiative records Direction as granted, with links to
-> the three strategy documents that were shown. Understanding never applied, so
-> there is no second row. One row, one approval, and the alignment table above
-> it carries the "no change" verdicts for the layers discovery never touched.
+> A docs-only discovery initiative records what it delivered — the strategy
+> documents it changed, and the "no change" verdicts for the layers it never
+> touched. The pull request that carries it links every changed document; its
+> merge is what approves them.
 
 ## ⚠ Anti-patterns
 
-- Writing a row for a gate that was not granted.
-- "What was approved" naming a topic rather than the documents shown.
+- Adding an Approvals table, or any row claiming an approval before the merge.
 - Leaving a layer out of the alignment table because nothing changed there.
 - Parking an adopted interpretation in a list of questions instead of writing
   it into the row it changed.
@@ -189,8 +164,7 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 ## ☑ Done when
 
 - The document is numbered, named and added to the index in the same change.
-- Every layer has a verdict, and every granted gate has a row.
-- Every document a granted gate covered says `●`, with that gate and that date.
+- Every layer has a verdict.
 - Anything the Requester provided is filed in `architecture/reference/` and
   indexed there, and the elements derived from it name it.
 - Deliverables name artifacts, not intentions.

@@ -15,16 +15,17 @@ replace.
 
 ## The rule that governs everything else
 
-**Strategy and business architecture are validated before any other layer,
-and the Requester approves at explicit gates before development.** A change
-to what the model claims — an element added, removed or re-related, a rule it
-states contradicted — is never coded directly: align it through the numbered
-EA layers (`architecture/1_strategy` → … → `5_technology`), stop at the gates
-for the Requester's approval, record it in a scope document
-(`architecture/scope/`), then implement. A change inside an element the model
-already names — a screen, a filter, a format, a defect — is coded directly and
-documents nothing; one that only keeps a row true edits the row in the same
-commit.
+**A change to what the model claims is aligned through the numbered EA
+layers before it is coded, and the Requester's approval is the pull request
+merging.** An element added, removed or re-related, a rule it states
+contradicted — align it through the layers (`architecture/1_strategy` → … →
+`5_technology`), record it in a scope document (`architecture/scope/`), and
+build it directly. The agent stops only when the change contradicts a
+Principle or a decision already written down, reads two ways, or would
+commit the Requester to something they have not agreed. A change inside an
+element the model already names — a screen, a filter, a format, a defect —
+is coded directly and documents nothing; one that only keeps a row true edits
+the row in the same commit.
 
 ## Who decides
 
@@ -34,22 +35,19 @@ documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
-| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff. **Grants the gate approvals** before any code is written |
-| **Agent** | An AI agent (or a person) | Works the change through the layers, stops at each gate for the Requester's approval, writes the scope document, implements, and opens a pull request |
-| **Reviewer** | \<who reviews and merges> | Reviews and merges. Nothing ships without a human approving it |
-
-An approval that isn't recorded didn't happen: every gate is written into the
-scope document's Approvals table, with who approved, when, and what was shown.
+| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff, in plain words |
+| **Agent** | An AI agent (or a person) | Works the change through the layers, writes the scope document, builds directly from the request, and opens a pull request — stopping only for a contradiction, an ambiguity, or something needing authorization |
+| **Reviewer** | \<who reviews and merges> | Reviews and merges. The merge is the approval; nothing ships without it |
 
 ## Modeling depth
 
 **Declared depth: _not yet declared_** — `establish-project` sets this.
 
 The six layers describe a weekend app and a twenty-business-line company
-alike; the depth says how much of them gets filled in and which gates apply —
-the ladder is in [`architecture/README.md`](./architecture/README.md) and is
-not restated here. It is a starting posture, never a ceiling: deepening or
-descoping is a normal initiative, decided by the Requester.
+alike; the depth says how much of them gets filled in — the ladder is in
+[`architecture/README.md`](./architecture/README.md) and is not restated
+here. It is a starting posture, never a ceiling: deepening or descoping is a
+normal initiative, decided by the Requester.
 
 ## The skills
 
@@ -75,7 +73,7 @@ The catalogue lives with the skills, in the plugin, and is not restated here.
   it, so an empty directory is never a substitute for saying what is missing.
 - **Every document that defines an element says how far it has been
   validated**, with `○` not started, `◐` a draft catalogue of things somebody
-  said exist, or `●` validated at a named gate on a named date. A draft
+  said exist, or `●` validated, on a named date. A draft
   catalogue is not an architecture draft and must never be read as one;
   `scripts/check_model.py` fails a defining document that declares nothing,
   one that carries no view or a section whose diagram follows its own first
@@ -118,7 +116,7 @@ so there is one copy of each tool rather than one per project:
 model.py --project . trace BSVC1     # what a change here would touch
 model.py --project . coverage        # what names no realizing artifact
 model.py --project . names src/x.py  # which elements name this path — is a change here inside the model?
-model.py --project . health          # how much is validated, and whether a granted gate moved a status line
+model.py --project . health          # how much is validated, and whether a merged pull request moved a status line
 model.py --project . portal          # the model as a website, for a reader outside the repo
 build_brief.py --project . --element BSVC1 --focus impact
 ```

@@ -84,9 +84,9 @@ Then follow the bootstrap checklist by hand, or install the skills and let
 
 ## Keeping a project in sync with the method
 
-A project on the 0.2 or 0.3 method has a crossing to make first — the Design
-gate is gone, so is the open-questions log, and fifteen skills are now invoked
-by name. That is [`docs/migrating.md`](./migrating.md), separate from the
+A project on an earlier method has a crossing to make first — the gates are
+gone, so is the open-questions log, and fifteen skills are now invoked by
+name. That is [`docs/migrating.md`](./migrating.md), separate from the
 routine sync below.
 
 Three things ship in this repo with different lifecycles, and only one of
@@ -107,7 +107,7 @@ them stays in sync automatically:
 
 If a scaffold change matters enough to backport (a rule that would
 retroactively affect an existing model), it becomes an initiative in your
-project like any other: assessed, approved at Understanding, and applied by hand.
+project like any other: assessed, applied by hand, and merged the same way.
 
 ## Reading order
 
@@ -121,8 +121,8 @@ project like any other: assessed, approved at Understanding, and applied by hand
 
 Improvements to the method (a new skill, a change to an existing one, a
 rule refinement) are welcome. See [`CONTRIBUTING.md`](../CONTRIBUTING.md)
-in the root — the method itself governs how it evolves, so a proposal runs
-through the same gates it makes you run through.
+in the root — the method itself governs how it evolves, so a proposal is
+built and merged the same way it makes you build and merge.
 
 ## Reaching a reader who will not open the repository
 

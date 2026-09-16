@@ -6,11 +6,13 @@ _[← Repository README](../README.md)_
 arrived with** — who it serves, what it has to do, and which of your
 assumptions turned out to disagree with each other.
 
-The one-paragraph version of how: **a change to what the model claims never
-becomes code directly.** It is worked through numbered architecture layers,
-stopped at the named gates you grant, captured in a scope document, and only
-then implemented. A change inside something the model already names — a
-screen, a filter, a file format — is just built, and the model stays true by
+The one-paragraph version of how: **a change to what the model claims is
+worked through numbered architecture layers, captured in a scope document,
+and built directly from your request.** Your approval is the pull request
+merging — nothing earlier claims to be one, and the agent stops before that
+only when something contradicts what you have already decided or reads two
+ways. A change inside something the model already names — a screen, a
+filter, a file format — is just built, and the model stays true by
 construction. You keep the strategy and business judgement; AI agents do the
 modeling and the building in between, and every actor's kind and autonomy is
 written down.
@@ -27,9 +29,9 @@ against the same documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
-| **Requester** | You | Says what should change — a requirement or a problem, not a diff. **Grants the gate approvals** before any code is written |
-| **Agent** | An AI agent (or a person) | Walks the architecture ladder, stops at each gate for the Requester's approval, writes a short scope document, implements, and opens a PR |
-| **Reviewer** | You | Reviews and merges. Nothing ships without a human approving it |
+| **Requester** | You | Says what should change — a requirement or a problem, not a diff, in plain words |
+| **Agent** | An AI agent (or a person) | Walks the architecture ladder, writes a short scope document, builds directly from the request, and opens a PR — stopping only when something contradicts what you have decided, reads two ways, or needs authorization |
+| **Reviewer** | You | Reviews and merges. The merge is the approval; nothing ships without it |
 
 ## The six layers
 
@@ -64,63 +66,53 @@ out from what was missed.
 permitted to describe a future: target plateaus, the gaps between them and
 today, and the order the gaps are closed in. The
 [`plan-the-transition` skill](../plugins/archreator/skills/plan-the-transition/SKILL.md)
-writes it, and the Requester approves it as **direction** — not as permission
-to build any of it. Intent lives in one folder so every numbered layer reads as
-a description of now.
+writes it, built directly and merged like any initiative — merging it
+approves the direction, not permission to build any of it. Intent lives in
+one folder so every numbered layer reads as a description of now.
 
 ## One method, three depths
 
 The same six layers describe a weekend app and a twenty-business-line
-company alike. What changes is **how much of them gets filled in and which
-gates apply.** Every project declares one depth in `AGENTS.md`, and **the
-agent tells you which depth it picked and why**.
+company alike. What changes is **how much of them gets filled in.** Every
+project declares one depth in `AGENTS.md`, and **the agent tells you which
+depth it picked and why**.
 
-| Depth | The subject is | You get | Gates |
-| ----- | -------------- | ------- | ----- |
-| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | Understanding on every change, before code; Direction once, when the strategy is first discovered |
-| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | two |
-| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | two, plus every affected domain's owner |
+| Depth | The subject is | You get | Approval |
+| ----- | -------------- | ------- | -------- |
+| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | Your merge of the pull request |
+| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | Your merge of the pull request |
+| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | Your merge, and every affected domain's Requester told at the same pull request |
 
 Depth is a starting posture, never a ceiling — deepening is a normal
 change, not a restart.
 
 ## When it stops and asks you
 
-**Two gates, named for what you approve**, and the names are the ones the
-[repository README](../README.md#how-it-works) already uses on its two
-pictures:
+**Nothing stops for approval before it is built.** The agent works from your
+request directly, through the layers, and opens the result as a pull
+request. **Your merge of that pull request is the approval** — nothing
+earlier claims to be one.
 
-| Gate | You approve | It applies when |
-| ---- | ----------- | --------------- |
-| **Direction** | Where this is going — the canvases where the subject is an organization, then the strategy derived from them, or a roadmap | The change moves *why* or *for whom* |
-| **Understanding** | Who does what, and with which information — before any code exists | Every change that will produce code |
+Three things stop the work before that point, and the agent says which:
 
-**An ordinary change to a single application meets one gate.** Direction
-belongs to discovery and planning, so a Depth 1 project meets it only when one
-of those runs: its first strategy discovery, or a roadmap.
+| Stop | It fires when |
+| ---- | ------------- |
+| **Contradiction** | The change conflicts with a principle, a decision already recorded, or a rule the model states |
+| **Ambiguity** | Two readings of the request build different things, and nothing in the model settles which |
+| **Authorization** | The work would commit you to spend, exposure, or publication you have not agreed to |
 
-Direction may be granted in two sittings where the subject is an organization —
-the canvases first, the strategy derived from them second — and it is still one
-gate.
+Naming the stop is what makes it answerable — "I need authorization before I
+publish this" tells you what kind of answer is wanted; "is this okay?" does
+not.
 
-Approval is granted by the Requester and recorded in the scope document's
-**Approvals** table — which gate, who approved, when, and what was shown. An
-approval that isn't recorded didn't happen, and a gate that was not granted
-gets no row: the table records what happened, never what did not.
-
-Between the gates, two things stop the work, and the agent says which:
-**material uncertainty** (two readings of the request build different things,
-and nothing in the model settles it) and **authorization** (the work would
-commit you to spend, exposure, or publication you have not agreed).
-
-Which gate applies to a given change, and what you are shown at each, is
-defined in exactly one place — the
+What a stop is checked against, and how it is presented, is defined in
+exactly one place — the
 [`align-change-through-layers` skill](../plugins/archreator/skills/align-change-through-layers/SKILL.md)
-§ The gates. This page names the gates; it does not restate the rule.
+§ Where this stops. This page names the reasons; it does not restate the rule.
 
-A bug fix, or a change inside an element the model already names, passes no
-gate and documents nothing; a change that only keeps a row true edits the row
-in the same commit.
+A bug fix, or a change inside an element the model already names, stops for
+nothing and documents nothing; a change that only keeps a row true edits the
+row in the same commit.
 
 ## Process flow
 
@@ -130,29 +122,26 @@ How a requirement gets from "someone wants a change" to "merged".
 flowchart LR
   req(["⚇ Requester presents a requirement"])
   align["⚙ Agent aligns it through the layers"]
-  gates{{"❖ the gates — the Requester approves"}}
   build["⚙ Agent implements, keeping the documents true"]
   rev(["⚇ Reviewer reads the whole branch"])
-  merged(["Merged"])
+  merged(["Merged — the approval"])
 
-  req --> align --> gates
-  gates -->|changes requested| align
-  gates -->|approved| build --> rev
+  req --> align --> build --> rev
   rev -->|changes requested| build
   rev -->|approved| merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class req,align,build,rev,merged business
-  class gates implementation
 ```
 
-Two loops, and neither can be skipped: the Requester's, which runs before any
-code exists, and the Reviewer's, which runs before any code merges.
+One loop, and it cannot be skipped: the Reviewer's, which runs before any
+code merges. Where the Requester and the Reviewer are the same person — the
+common case — that one review is the one approval there is.
 
 Inside the Agent boxes there is branching — a "no change" verdict on a layer,
-a "pure bug fix, no scope document" statement, a conflict with an approved
-Principle that stops the work, a call the agent took and recorded as draft.
+a "pure bug fix, no scope document" statement, a conflict with a Principle
+already written down that stops the work, a call the agent took and recorded
+as draft.
 **Every one of those is stated and recorded, never a silent skip.** Drawn out,
 that branching is the levelled process model in
 [`docs/process/`](./process/README.md); written out step by step it is the
@@ -182,7 +171,7 @@ relationships, and a machine reads them there.
 
 **Every document that defines an element says how far it has been validated**,
 with one of three glyphs in its preamble: `○` not started, `◐` a draft
-catalogue, `●` validated at a named gate on a named date. A draft catalogue is
+catalogue, `●` validated, since a named date. A draft catalogue is
 a list of things somebody said exist, written down with notes so they can be
 checked — it is *not* an architecture draft, and on the page the two are
 identical. The marker is what separates them, and `check_model.py` fails a

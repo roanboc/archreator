@@ -8,10 +8,9 @@ from.
 
     model.py --project . trace CAP3     # what would a change here touch?
     model.py --project . coverage       # what is not grounded, and what
-                                        # is not yet approved?
-    model.py --project . health         # how much is validated, how many
-                                        # gates were granted, and whether
-                                        # any of them moved a status line
+                                        # is not yet validated?
+    model.py --project . health         # how much of the model is
+                                        # validated, project by project
     model.py --project . names src/x.py # which elements name this path —
                                         # is a change here inside the model?
     model.py --project . inventory      # one line per element
@@ -388,7 +387,7 @@ def trace(parsed_all: list, wanted: str, depth: int, scope: str) -> int:
     print(label(element.id, element.name, element.type))
     print(f"  defined in {element.doc}")
     if element.status and element.status != "validated":
-        print(f"  {element.status.upper()} — not approved at a gate")
+        print(f"  {element.status.upper()} — not yet validated")
     if realized_by(element.attrs):
         print(f"  realized by {realized_by(element.attrs)}")
     if element.retired:
@@ -549,7 +548,7 @@ def coverage(projects: list[dict]) -> int:
             by_status: dict[str, set[str]] = defaultdict(set)
             for element in draft:
                 by_status[element["status"]].add(element["doc"])
-            print("  Not approved at any gate. Nothing here may be built on, and")
+            print("  Not yet validated. Nothing here may be built on, and")
             print("  every identifier in it can still be renumbered:")
             for status in sorted(by_status):
                 print(f"    {status}")
@@ -585,62 +584,28 @@ def coverage(projects: list[dict]) -> int:
                 print(f"    {doc}")
             print()
 
-    print("A report, not a gate. Nothing here fails a build.")
+    print("A report, not a blocker. Nothing here fails a build.")
     return 0
 
 
-# A granted gate is a row in a table of four or more columns under `scope/`
-# with a cell that opens with a date - the Approvals table's Date column, in
-# every shape the scope template has carried. A row without one records
-# nothing that happened; a row that says `N/A` records a gate that did not
-# apply, the shape an earlier method version wrote, dated or not; and a date
-# inside a sentence is a work package saying when it shipped, not a grant.
-# Language-independent on purpose: the heading above the table is in whatever
-# language the model is written in, and the date is not.
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\b")
-NOT_APPLICABLE = "N/A"
-
-
-def grants_in(scope_dir: Path) -> tuple[int, int]:
-    """(dated approval rows, scope documents), read from a project's scope/."""
+def scope_doc_count(scope_dir: Path) -> int:
+    """How many initiatives a project's `scope/` holds, excluding the index."""
     if not scope_dir.is_dir():
-        return 0, 0
-    docs = sorted(p for p in scope_dir.glob("*.md") if p.name.lower() != "readme.md")
-    dated = 0
-    for doc in docs:
-        in_table, width = False, 0
-        for line in doc.read_text(encoding="utf-8").splitlines():
-            row = line.strip()
-            if not row.startswith("|"):
-                in_table = False
-                continue
-            cells = row.strip("|").split("|")
-            if not in_table:
-                in_table, width = True, len(cells)
-                continue
-            if set(row.replace("|", "").strip()) <= set("-: "):
-                continue  # the separator under the header
-            if (
-                width >= 4
-                and NOT_APPLICABLE not in row
-                and any(DATE_RE.match(cell.strip()) for cell in cells)
-            ):
-                dated += 1
-    return dated, len(docs)
+        return 0
+    return len([p for p in scope_dir.glob("*.md") if p.name.lower() != "readme.md"])
 
 
 def health(projects: list[dict]) -> int:
-    """The numbers that say whether the method is doing what it claims.
+    """The numbers that say how much of the model is validated.
 
-    `coverage` says what is grounded. This says what is **approved**: how much
-    of the model has been validated, how many gates were granted, and - the
-    one number nothing else prints - whether a granted gate ever moved a
-    status line. A gate is granted so that a document can say `●`; a model
-    with grants and no `●` has a promotion gap, and this is where it shows.
+    `coverage` says what is grounded. This says what is **validated**: how
+    much of the model carries each status glyph, project by project. A
+    document moves to `●` the moment the pull request that changed it
+    merges, so there is nothing left to reconcile a grant against — the
+    status line and the merge are the same event.
 
     Read fresh every run, like everything else here, and language-independent
-    throughout: a status is a glyph, a grant is a dated row, an initiative is
-    a file.
+    throughout: a status is a glyph, an initiative is a file.
     """
     if not projects:
         print("No model found — nothing to report.")
@@ -653,7 +618,7 @@ def health(projects: list[dict]) -> int:
         live = [e for e in entry["elements"] if not e["retired"]]
         defining = {e["doc"] for e in live}
         docs = [d for d in entry["documents"] if d["doc"] in defining]
-        dated, scope_docs = grants_in(root / MODEL_DIR / "scope")
+        scope_docs = scope_doc_count(root / MODEL_DIR / "scope")
 
         def count(rows: list[dict], status: str) -> int:
             return sum(1 for r in rows if r["status"] == status)
@@ -662,18 +627,14 @@ def health(projects: list[dict]) -> int:
             return "   ".join(f"{glyph[s]} {count(rows, s):3d}" for s in glyph)
 
         grounded = [e for e in live if e["realized_by"] and not is_pending(e)]
-        validated_docs = count(docs, "validated")
 
         print(f"{project} — {scope_docs} initiative(s), {len(live)} live element(s)")
         print(f"  elements    {line(live)}")
         print(f"  documents   {line(docs)}   of {len(docs)} that define elements")
-        print(f"  grants      {dated} dated approval row(s) across {scope_docs} scope document(s)")
-        gap = " — the gap" if dated and not validated_docs else ""
-        print(f"  promotion   {dated} granted, {validated_docs} document(s) validated{gap}")
         print(f"  grounded    {len(grounded)} of {len(live)} name what realizes them")
         print()
 
-    print("A report, not a gate. Nothing here fails a build.")
+    print("A report, not a blocker. Nothing here fails a build.")
     return 0
 
 
@@ -816,10 +777,10 @@ def main() -> int:
     t.add_argument("--scope", default="",
                    help="narrow to one model, where the repository holds several")
 
-    sub.add_parser("coverage", help="what is grounded, and what is not yet approved")
+    sub.add_parser("coverage", help="what is grounded, and what is not yet validated")
     sub.add_parser(
         "health",
-        help="how much is validated, how many gates were granted, and whether any moved a status line",
+        help="how much of the model is validated, project by project",
     )
     n = sub.add_parser("names", help="which elements name a code path — is a change there inside the model?")
     n.add_argument("path", help="a file or directory, relative to the project")

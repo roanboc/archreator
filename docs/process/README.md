@@ -36,31 +36,27 @@ to use it.
 ```mermaid
 flowchart LR
   legend_proc["⚙ «Business Process» work with a trigger and an output"]
-  legend_gate{{"❖ «Approval gate» the Requester decides, and it is recorded"}}
   legend_dec{"«Decision» the agent reaches a verdict and states it"}
   legend_event(["«Event» what starts or ends the flow"])
 
-  legend_event --> legend_proc --> legend_dec --> legend_gate
+  legend_event --> legend_proc --> legend_dec
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class legend_proc,legend_event business
-  class legend_gate implementation
 ```
 
 | Glyph | Shape | Element | ID prefix |
 | ----- | ----- | ------- | --------- |
 | `⚙` | Rectangle | Business Process | `BPROC` |
-| `❖` | Hexagon, rose | Approval gate — a Requester decision, recorded in an Approvals table | — |
 | — | Rhombus | Decision — a verdict the agent reaches and states | — |
 | — | Stadium | Event — what starts or ends a flow | — |
 
 Glyph, shape and colour follow
 the `architecture-document-style` rulebook's
 [ArchiMate on Mermaid reference](../../plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md),
-which stays the single source. The **approval gate** has no ArchiMate element type, so
-it takes a shape of its own here: an agent decision continues the flow, a gate stops
-it until a person acts.
+which stays the single source. A process is built directly and merged; the agent
+names a stop rather than waiting at one drawn into the flow —
+`align-change-through-layers` § Where this stops.
 
 ## The macro process map
 
@@ -91,8 +87,8 @@ flowchart TD
 
 | ID | Band | Macro process | Purpose | Composed of |
 | -- | ---- | ------------- | ------- | ----------- |
-| `BPROC1` | Operational | Establish the architecture model | Turns a subject nobody has modeled into a populated, approved model the next change can be judged against | `BPROC1.1` · `BPROC1.2` · `BPROC1.3` · `BPROC1.4` · `BPROC1.5` |
-| `BPROC5` | Operational | Plan the transition | Turns an approved description of today into a destination, the distance to it, and the order that distance is closed in | `BPROC5.1` |
+| `BPROC1` | Operational | Establish the architecture model | Turns a subject nobody has modeled into a populated model the next change can be judged against | `BPROC1.1` · `BPROC1.2` · `BPROC1.3` · `BPROC1.4` · `BPROC1.5` |
+| `BPROC5` | Operational | Plan the transition | Turns a description of today into a destination, the distance to it, and the order that distance is closed in | `BPROC5.1` |
 | `BPROC2` | Operational | Deliver an architected change | Turns a Requester's requirement into merged code whose architecture documents are still true | `BPROC2.1` · `BPROC2.2` · `BPROC2.3` |
 | `BPROC3` | Support | Keep the model true and readable | Keeps the model truthful and turns one reader question into a bounded reading of it | `BPROC3.1` · `BPROC3.2` · `BPROC3.3` |
 | `BPROC4` | Evaluation | Learn from the engagement | Turns what the method failed to cover into proposals, before the memory of it evaporates | `BPROC4.1` |
@@ -119,8 +115,8 @@ Every level-2 process, and how far down it is detailed.
 | `BPROC1.3` | Discover the strategy | Level 2 | — | As above |
 | `BPROC1.4` | Split the model into domains | Level 2 | — | Depth 3 only. Revisit when an enterprise engagement raises one |
 | `BPROC1.5` | Discover the current landscape | Level 2 | — | The steps are a sweep order, not a branching flow. Revisit when a real estate engagement finds one |
-| `BPROC5.1` | Define the target and sequence the roadmap | Level 2 | — | Six steps and one gate. Revisit if sequencing an estate-sized backlog turns out to need its own procedure |
-| `BPROC2.1` | Align the change through the layers | **Level 3** | The method's own flow was unreadable | Understanding sits here, and so do three branches off the happy path — discovery, conflict, and a pure bug fix — which one diagram could not carry legibly |
+| `BPROC5.1` | Define the target and sequence the roadmap | Level 2 | — | Six steps. Revisit if sequencing an estate-sized backlog turns out to need its own procedure |
+| `BPROC2.1` | Align the change through the layers | **Level 3** | The method's own flow was unreadable | Three branches off the happy path — discovery, conflict, and a pure bug fix — which one diagram could not carry legibly |
 | `BPROC2.2` | Implement and verify | Level 2 | — | Sequence varies by stack; detailing it would model the code, not the method |
 | `BPROC2.3` | Hand over for review | Level 2 | — | One step and one template |
 | `BPROC3.1` | Restate the current state | Level 2 | — | No pain raised. Revisit when one is |

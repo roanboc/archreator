@@ -17,10 +17,9 @@
 
 ## Scope document
 
-<!-- Link the initiative's document in architecture/scope/. Its Approvals
-     table must already record every gate the change was granted —
-     Understanding at minimum for anything that changes documented behavior —
-     and no row for a gate it was not granted.
+<!-- Link the initiative's document in architecture/scope/. It names what
+     changed and why, with every layer's verdict; this pull request's merge
+     is what approves it.
 
      A change inside an element the model already names — a bug fix, a
      screen, a filter, a format — has no scope document. Write "No scope

@@ -6,7 +6,6 @@ metadata:
   archreator:
     kind: document-template
     realizes_process: BPROC2.2
-    gates: none
 ---
 
 # ▤ Shard stories
@@ -32,8 +31,9 @@ actionable from its own text plus the links it cites, and nothing else.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC2.2`, inside implementation. It carries no gate: a story
-inherits the gates granted against its scope document.
+Realizes `BPROC2.2`, inside implementation. It carries no approval of its
+own: a story inherits whatever the scope document's pull request approves
+when it merges.
 
 ```mermaid
 flowchart LR

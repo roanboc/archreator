@@ -20,9 +20,8 @@ to enforce. What that script checks is this page, expressed as code.
 | `description` | Yes | What the `/` menu shows — or, on the three skills that surface on their own, the trigger. One line, and **no unquoted colon**, which makes the frontmatter unparseable |
 | `disable-model-invocation` | On fifteen of the eighteen | `true` — the skill leaves the listing, costs no context, and is invoked by name as `/archreator:<skill>`. Absent on the three that surface on their own: `align-change-through-layers`, `architecture-document-style`, `document-style` |
 | `argument-hint` | Optional | What may follow the name — `[element] [focus]` |
-| `metadata.archreator.kind` | Yes | `gated-procedure`, `document-template` or `rulebook` |
+| `metadata.archreator.kind` | Yes | `procedure`, `document-template` or `rulebook` |
 | `metadata.archreator.realizes_process` | When one applies | The level-2 process IDs from [`docs/process/`](./process/README.md) |
-| `metadata.archreator.gates` | Yes | The gates this skill stops at, or `none` |
 
 **The description declares the kind, in its first two words.** `Procedure — run
 this when…`, `Document — write one when…`, `Rulebook — consult when…`. It is the
@@ -47,11 +46,11 @@ Headings open with a glyph. The glyph says what kind of section it is, the
 words are its identity — a reference names the words, and `check_skills.py`
 strips the glyph before matching.
 
-| Glyph | Section | Holds | `gated-procedure` | `document-template` | `rulebook` |
+| Glyph | Section | Holds | `procedure` | `document-template` | `rulebook` |
 | ----- | ------- | ----- | :---------------: | :-----------------: | :--------: |
 | `⊕` | When to use this | The observable conditions | required | required | required |
 | `⊖` | When not to | Where a different skill serves | required | required | required |
-| `⌖` | Where this sits | The process realized, the gates, the diagram | required | required | optional — to say it realizes none |
+| `⌖` | Where this sits | The process realized, the diagram | required | required | optional — to say it realizes none |
 | `⚓` | Invariants | Rules holding at every step | required | — | — |
 | `⚙` | Steps | The work, numbered | required | — | — |
 | `▤` | Template | The document's shape | — | required | — |
@@ -68,7 +67,7 @@ strips the glyph before matching.
 | `⚖` | Judgement | The criteria to weigh, where the step is a decision rather than a mechanism |
 | `←` | Needs | What the step consumes from an earlier one |
 | `→` | Produces | What it writes, by path |
-| `❖` | Gate | The approval that stops the step until a person acts. Every gate named in `metadata.archreator.gates` appears here, and `check_skills.py` checks it — matched on the glyph, because a skill routinely draws a gate it does not own to show where its own work ends |
+| `❖` | Stop | The condition that pauses the step for the Requester — a contradiction with something already decided, an ambiguity, or an authorization the work would commit them to. Not scheduled and owned by no single skill; any step may carry one |
 
 **Needs and Produces each get their own paragraph.** Consecutive lines are one
 paragraph in markdown, and the two arrows render on one line if they share it.
@@ -76,12 +75,12 @@ paragraph in markdown, and the two arrows render on one line if they share it.
 ## The diagram
 
 Every **Where this sits** carries one. It summarises the whole document:
-numbered steps in sequence, the decisions between them, the gates, and the
-skills handed off to — so a reader can see the sub-process end to end before
-reading a word of it.
+numbered steps in sequence, the decisions between them, and the skills handed
+off to — so a reader can see the sub-process end to end before reading a
+word of it.
 
 Filled boxes are this skill's steps. Unfilled ones are skills it reaches.
-Rose hexagons are gates. Glyph, shape and colour follow
+Glyph, shape and colour follow
 the `architecture-document-style` rulebook's
 [ArchiMate on Mermaid reference](../plugins/archreator/skills/architecture-document-style/references/archimate-on-mermaid.md),
 which stays the single source for the palette.

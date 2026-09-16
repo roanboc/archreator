@@ -64,8 +64,8 @@ Turning a requirement into merged code whose architecture documents are still tr
 
 | Skill | Kind | Reach for it when | Invoke |
 | ----- | ---- | ----------------- | ------ |
-| [`align-change-through-layers`](./align-change-through-layers/SKILL.md) | ⚙ Procedure | Any requirement change. **The spine** — defines the gates and the order | on its own |
-| [`write-scope-document`](./write-scope-document/SKILL.md) | ▤ Document | Writing the initiative's scope document; its Approvals table is the durable record of the gates | `/archreator:write-scope-document` |
+| [`align-change-through-layers`](./align-change-through-layers/SKILL.md) | ⚙ Procedure | Any requirement change. **The spine** — defines the stops and the order | on its own |
+| [`write-scope-document`](./write-scope-document/SKILL.md) | ▤ Document | Writing the initiative's scope document; the durable record of what changed and why | `/archreator:write-scope-document` |
 | [`shard-stories`](./shard-stories/SKILL.md) | ▤ Document | A work package is too large to finish in one sitting | `/archreator:shard-stories` |
 | [`write-pr-description`](./write-pr-description/SKILL.md) | ⚙ Procedure | Opening or updating a pull request — the body covers the whole branch, not the latest commit | `/archreator:write-pr-description` |
 
