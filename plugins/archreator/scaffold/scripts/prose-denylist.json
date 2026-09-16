@@ -6,9 +6,9 @@
   "governance": [
     "\\bRequester\\b",
     "\\bReviewer\\b(?! of record)",
-    "\\bDirection (?:session|gate)\\b",
-    "\\bUnderstanding (?:session|gate)\\b",
     "(?-i:\\bapproves? (?:this|these|the canvases|the catalogue|it) at\\b)",
+    "\\bmerged (?:this|the) pull request\\b",
+    "\\bstopped for (?:a contradiction|an ambiguity|authorization)\\b",
     "\\b(?:first|second|next) session\\b"
   ],
   "method": [

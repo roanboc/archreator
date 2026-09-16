@@ -1,7 +1,7 @@
 {
   "name": "archreator",
-  "version": "0.5.0",
-  "description": "Enterprise-architecture-first development with two named human gates: model an organization or an application through numbered ArchiMate layers, stop at Direction and Understanding before any code, and record every approval in a scope document.",
+  "version": "0.6.0",
+  "description": "Enterprise-architecture-first development: model an organization or an application through numbered ArchiMate layers, build directly from the request, and record it in a scope document. The agent stops only for a contradiction, an ambiguity, or something needing authorization; your merge of the pull request is the approval.",
   "author": {
     "name": "roanboc",
     "url": "https://github.com/roanboc"
@@ -20,6 +20,6 @@
   "interface": {
     "displayName": "archreator",
     "category": "Productivity",
-    "shortDescription": "Enterprise-architecture-first development with two named human gates"
+    "shortDescription": "Enterprise-architecture-first development, built directly and approved at merge"
   }
 }

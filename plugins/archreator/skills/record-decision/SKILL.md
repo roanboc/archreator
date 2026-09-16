@@ -7,7 +7,6 @@ metadata:
   archreator:
     kind: document-template
     realizes_process: BPROC3.2
-    gates: none
 ---
 
 # ▤ Record a decision
@@ -38,7 +37,8 @@ A decision record supplements a scope document; it never replaces one.
 ## ⌖ Where this sits
 
 Realizes `BPROC3.2`, in the band that keeps the model true. It carries no
-gate: it states a call already made, approved wherever the call was taken.
+approval step of its own: it states a call already made, approved wherever
+the call was taken.
 
 ```mermaid
 flowchart LR

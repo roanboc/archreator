@@ -5,7 +5,6 @@ disable-model-invocation: true
 metadata:
   archreator:
     kind: rulebook
-    gates: none
 ---
 
 # ※ Stack selection
@@ -89,7 +88,7 @@ technology decision with no date is one nobody can re-evaluate.
 ### The model is Markdown, and the default is to derive nothing
 
 The Markdown under `architecture/` is the **source of truth**: it is what the
-Requester approves at the gates and what review acts on.
+Requester's merge approves and what review acts on.
 
 **The default is to derive nothing from it.** The graph is already implicit in
 the documents, `grep` traverses it, and an agent reads Markdown natively. A

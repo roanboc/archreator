@@ -4,7 +4,6 @@ description: Rulebook — consult before writing or editing any Markdown documen
 metadata:
   archreator:
     kind: rulebook
-    gates: none
 ---
 
 # ※ Document style
@@ -48,10 +47,10 @@ cross-platform path and URL-encoding issues. If ArchiMate stereotypes are
 translated, keep a correspondence table to the standard English element
 names near the top of `architecture/README.md`.
 
-The method's own vocabulary translates the same way. The two gate names may
-be written in the project's language — «Dirección», «Entendimiento» — with the
-English originals in the same correspondence table. The validators read the
-status glyph, never the words beside it.
+The method's own vocabulary translates the same way. The status words may be
+written in the project's language — «Borrador», «Validado» — with the English
+originals in the same correspondence table. The validators read the status
+glyph, never the words beside it.
 
 #### Write it out
 
@@ -177,8 +176,8 @@ breaks the same rule.
 | "This diagram is the risk, drawn" | "The source material lists seven industries and eight customer types" |
 | "`BPROC1` uses no capability — Reach is the only stage the organization does nothing skilful in" | "Writing them as separate elements would have produced an unreadable catalogue" |
 | "`VAL1` is the only value every stakeholder receives" | "Twelve pains were consolidated into five" |
-| "The areas have no realizing artifact, and that is correct rather than a gap" | "Identifiers were renumbered once, here, before the gate" |
-| "An unaddressed pain is a missing capability or a customer we chose not to serve" | "The Requester approves the canvases at the first Direction session, before anything is derived from them" |
+| "The areas have no realizing artifact, and that is correct rather than a gap" | "Identifiers were renumbered once, here, before the pull request merged" |
+| "An unaddressed pain is a missing capability or a customer we chose not to serve" | "These canvases were approved before anything was derived from them" |
 | "The order of the four product lines is a position, not an inventory" | "Each canvas block becomes an ArchiMate element and lives in a layer 1 or 2 document" |
 
 Interpretation of the subject stays; what goes is the document narrating its
@@ -187,24 +186,24 @@ machine reads lives in the relationship catalogue
 (`architecture-document-style` § Relationships are declared, never only drawn).
 
 **Governance and method are the same failure in another voice.** Who approves
-a page and at which session, which gate is still pending, how a canvas block
-becomes an element, how files are numbered, where a level lives: none of it
-is about the subject. Governance lives in `AGENTS.md` and in the scope
-document's Approvals table; the method lives in the plugin and the
-contributing guide; validation state lives in the page's status line. A
+a page, whether it has merged yet, how a canvas block becomes an element, how
+files are numbered, where a level lives: none of it is about the subject.
+Governance lives in `AGENTS.md` and in the scope document; the method lives
+in the plugin and the contributing guide; validation state lives in the
+page's status line. A
 layer README that has something missing says so in its `## Documents` table
 and in each document's status line, never in a section of its own
 (`architecture-document-style` § The layer README). `scripts/check_prose.py`
 fails a model page on the vocabulary that gives these sentences away — the
-Requester, a session, a gate, the method's own words, "this table" — and its
+Requester, a session, the method's own words, "this table" — and its
 word list, `scripts/prose-denylist.json`, is translated with the project's
 documentation language.
 
 **The removed material moves to where it was already required.** A
 consolidation — what was merged into what, and how many elements each
-catalogue ended up with — is a modeling decision the Requester approves at a
-gate, so it belongs in the scope document and the gate presentation
-(`discover-business-model` § 5 — Present for approval already asks for it
+catalogue ended up with — is a modeling decision the Requester reviews before
+merging, so it belongs in the scope document and the pull-request description
+(`discover-business-model` § 6 — Open the pull request already asks for it
 there).
 
 #### Two carve-outs
@@ -230,7 +229,7 @@ hold why.
 or crosses a method version, the new documents never mention the corpus they
 replaced, the version they crossed, or the ref where the old text is
 preserved — the initiative's scope document says all of that once. A status
-line names the mark and the gate that covers the document, nothing else.
+line names the mark and the date, nothing else.
 
 #### Notes that survive go to the end
 
@@ -258,7 +257,7 @@ between a diagram and the table it explains.
 - A document narrating its own construction — what the source material held,
   what was consolidated into what, why identifiers moved.
 - A page narrating its governance or the method — who approves it and at
-  which session, which gate is pending, how a canvas block becomes an element,
+  which session, whether it has merged yet, how a canvas block becomes an element,
   how files are numbered. `scripts/check_prose.py` names the sentence.
 - "As of initiative N", or any other version commentary. Git holds how a
   document got here; the scope documents hold why.

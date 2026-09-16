@@ -21,18 +21,17 @@ where a method change's rationale belongs.
 
 ## The method governs itself
 
-Method changes run through the same gates the method makes downstream
-projects run through. In practice:
+Method changes are built and merged the same way the method makes downstream
+projects build and merge. In practice:
 
-- **Understanding** applies to every change that alters documented
-  behavior — every one that touches a skill body, a rule, or the scaffold.
-  It is granted in the sibling repository's scope document, then
-  implemented here.
-- **Direction** applies when the change adds or shifts a
-  Stakeholder, Driver, Goal, or Principle of the method itself — and when an
-  initiative sets a direction rather than building one.
+- **Any change that alters documented behavior** — a skill body, a rule, the
+  scaffold — needs a scope document in the sibling repository, written
+  alongside the change here rather than approved before it.
+- **A change that adds or shifts a Stakeholder, Driver, Goal, or Principle of
+  the method itself** — or an initiative that sets a direction rather than
+  building one — is recorded there too, same as any other.
 
-Pure bug fixes skip the gates, per the method's own rule.
+Pure bug fixes stop for nothing, per the method's own rule.
 
 ## Working locally
 

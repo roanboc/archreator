@@ -1,12 +1,11 @@
 ---
 name: discover-business-model
-description: Procedure — run this when the subject is an organization — a company, a department, a service line — whose operating model is the deliverable. Question-driven discovery with the Requester over a Value Proposition Canvas and a Business Model Canvas per product, approved at Direction.
+description: Procedure — run this when the subject is an organization — a company, a department, a service line — whose operating model is the deliverable. Question-driven discovery with the Requester over a Value Proposition Canvas and a Business Model Canvas per product, opened as a pull request.
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC1.2
-    gates: Direction
 ---
 
 # ⚙ Discover the business model
@@ -38,8 +37,10 @@ skill **runs first and hands off**.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.2`, and owns **Direction**. Nothing is derived until it is
-granted.
+Realizes `BPROC1.2`. It builds the canvases directly from the Requester's
+answers, checks for a stop, and opens them as a pull request — its merge is
+the approval. Nothing is derived from the business model until that pull
+request has merged.
 
 ```mermaid
 flowchart TD
@@ -48,29 +49,29 @@ flowchart TD
   s2["⚙ 2 — Write the canvases as you go"]
   s3["⚙ 3 — Verify fit before presenting"]
   s4["⚙ 4 — Write the scope document"]
-  s5["⚙ 5 — Present for approval"]
-  g0{{"❖ Direction — the business model"}}
-  s6["⚙ 6 — Hand off to strategy discovery"]
+  s5["⚙ 5 — Check for a stop"]
+  stop(["Stop — surface it to the Requester"])
+  s6["⚙ 6 — Open the pull request"]
+  merged(["Merged — the approval"])
+  s7["⚙ 7 — Hand off to strategy discovery"]
   ds(["⇄ discover-strategy"])
   pcl(["⇄ process-and-capability-levels"])
-  g1{{"❖ Direction — the strategy layer"}}
-  out(["An approved operating model"])
+  out(["An operating model a change can be judged against"])
 
-  req --> s1 --> s2 --> s3 --> s4 --> s5 --> g0
-  g0 -->|changes requested| s2
-  g0 -->|approved| s6 --> ds
+  req --> s1 --> s2 --> s3 --> s4 --> s5
+  s5 -->|stops| stop
+  s5 -->|continues| s6 --> merged --> s7 --> ds
   ds -. levels decided by .-> pcl
-  ds --> g1 --> out
+  ds --> out
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class s1,s2,s3,s4,s5,s6,req,out business
-  class g0,g1 implementation
+  class s1,s2,s3,s4,s5,s6,s7,req,merged,stop,out business
 ```
 
-Direction is one gate granted in two sittings: this skill owns the first, the
-business model, and `discover-strategy` the second. One scope document covers
-both — the same file gains its second Direction row at the handoff.
+This skill and `discover-strategy` are two separate initiatives, not two
+sittings of one: this one merges first, then `discover-strategy` runs as its
+own initiative — its own scope document, its own pull request — and derives
+from what merged here.
 
 ## ⚓ Invariants
 
@@ -134,9 +135,9 @@ from the plugin's `assets/layers/0_business-design/` before the first canvas,
 and the first filed source does the same with `assets/layers/reference/`.
 
 The canvases open `◐ Draft catalogue` and carry `Source` and `Notes` until
-Direction grants them — `architecture-document-style` § Document status.
-Anything the Requester provided is filed in `architecture/reference/` first,
-and the `Source` column points there.
+this initiative's pull request merges — `architecture-document-style` §
+Document status. Anything the Requester provided is filed in
+`architecture/reference/` first, and the `Source` column points there.
 
 Lead the Business Model Canvas with the products at a glance — one column per
 product: segments, channels, relationship, revenue, dominant cost, whether it
@@ -167,42 +168,53 @@ proposition canvas under its own heading, never in the layer README
 
 ### 4 — Write the scope document
 
-Create the scope document with `write-scope-document` **before** presenting
-Direction, so the Requester approves against a concrete document.
+Create the scope document with `write-scope-document` **before** opening the
+pull request, so what merges is written down first.
 
 **→ Produces** `architecture/scope/<n>_*.md`, and its row in the index.
 
-### 5 — Present for approval
+### 5 — Check for a stop
 
-**❖ Direction — the business model.** The Requester approves.
-
-Present one compact summary — segments, their jobs, the sharpest pains and
-gains, the products, and per product the blocks that distinguish it (revenue,
-channels, dominant cost) — with **full branch links to each canvas document**
-(`align-change-through-layers` § Show the Requester what they are approving).
-Then ask explicitly for approval of the business model.
-
-Name the consolidation in the summary: how many elements each catalogue holds,
-and what was merged to get there — a merge the Requester can overturn. It goes
-in the summary and the scope document, never in the canvas
-(`document-style` § What the document contains).
-
-Record the approval in the Approvals table — who, when, what was shown. If
-changes are requested, revise from Step 2 and present again.
+Before opening the pull request, check the three stops in
+`align-change-through-layers` § Where this stops: does anything here
+contradict a Principle or a decision already written down? Do two readings of
+the request lead to different work? Would this commit the Requester to spend,
+public exposure, publishing the model, or a direction they have not agreed?
+If none fire, continue directly — nothing here is presented for approval
+first.
 
 **← Needs** the canvases, the fit verdict, the scope document.
 
-**→ Produces** the Approvals table's Direction row.
+**→ Produces** a stated verdict: continue, or the named stop.
 
-### 6 — Hand off to strategy discovery
+### 6 — Open the pull request
 
-**Nothing is derived until Direction is granted.**
+Use `write-pr-description`. Present one compact summary — segments, their
+jobs, the sharpest pains and gains, the products, and per product the blocks
+that distinguish it (revenue, channels, dominant cost) — with **full branch
+links to each canvas document** (`align-change-through-layers` § Where this
+stops — the same link hygiene applies to anything put in front of the
+Requester, not only a stop).
 
-Then run `discover-strategy`, which finds the canvases filled and **derives
-rather than re-asks**. Its themes map onto the canvas blocks; the only theme
-with no canvas source is **Principles**, still discovered directly.
+Name the consolidation in the description: how many elements each catalogue
+holds, and what was merged to get there — a merge the Requester can overturn
+in review. It goes in the pull-request description and the scope document,
+never in the canvas (`document-style` § What the document contains).
 
-**← Needs** the granted Direction.
+**← Needs** the continue verdict from Step 5.
+
+**→ Produces** a pull request a Reviewer can judge.
+
+### 7 — Hand off to strategy discovery
+
+**Nothing is derived until this pull request has merged.**
+
+Then run `discover-strategy`, as its own initiative: it finds the canvases
+filled and **derives rather than re-asks**. Its themes map onto the canvas
+blocks; the only theme with no canvas source is **Principles**, still
+discovered directly.
+
+**← Needs** the merged pull request.
 
 ## ⇄ Hands off to
 
@@ -211,8 +223,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | Direction's first sitting is granted | The strategy and key business layers derived from the canvases, approved at **Direction's second sitting** — recorded in the same scope document |
-| `process-and-capability-levels` | While deriving, to decide how far down capabilities and processes go | Levels 1 and 2 complete, level 3 only where a Pain on the approved canvas justifies it |
+| `discover-strategy` | This initiative's pull request has merged | The strategy and key business layers derived from the canvases, built directly and opened as its own pull request — its own scope document, next-numbered |
+| `process-and-capability-levels` | While deriving, to decide how far down capabilities and processes go | Levels 1 and 2 complete, level 3 only where a Pain on the merged canvas justifies it |
 
 ## ✎ Worked example
 
@@ -220,22 +232,25 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 >
 > Depth 2, so this track rather than `discover-strategy`. Theme 3 yields twelve
 > pains; consolidation merges them to five with a per-segment severity column,
-> the Direction summary says so, and the Requester overturns one merge.
+> the pull-request description says so, and the Requester overturns one merge
+> in review.
 >
 > Two offerings turn out to have separate economics at theme 5, so theme 7
-> produces two Business Model Canvases rather than one. Direction is granted
-> against branch links to both canvas documents, and only then does
-> `discover-strategy` derive the capability map.
+> produces two Business Model Canvases rather than one. The pull request links
+> both canvas documents, and only once it merges does `discover-strategy` run,
+> as its own initiative, to derive the capability map.
 
 ## ⚠ Anti-patterns
 
 - Filling a canvas block from what a business of this kind usually looks like,
   rather than from an answer.
-- Deriving the strategy layer before Direction is granted.
+- Deriving the strategy layer before this pull request has merged.
 - Presenting a canvas whose pains have no relievers, without flagging it.
 - Consolidating at the end, which renumbers everything already read.
-- Writing the consolidation counts into the canvas rather than the summary.
-- Opening a second scope document at the handoff to `discover-strategy`.
+- Writing the consolidation counts into the canvas rather than the
+  pull-request description.
+- Folding the handoff to `discover-strategy` into this scope document instead
+  of giving it its own.
 
 ## ☑ Done when
 
@@ -246,9 +261,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
   marked "Pending — future initiative".
 - The scope document's EA-alignment table records the impact on layers 0–2 and
   an explicit "not started" verdict for the rest.
-- Its Approvals table records **Direction** for the canvases, gains a second
-  **Direction** row for the strategy at the handoff, and holds no row for a
-  gate that was not granted.
+- Every stop that fired was named in the pull request, and none was silently
+  absorbed.
 - Every call the agent adopted is recorded on a canvas still marked `◐`.
 - `python3 scripts/check_links.py`, `python3 scripts/check_model.py` and
   `python3 scripts/check_prose.py` pass.

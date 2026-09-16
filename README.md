@@ -3,8 +3,8 @@
 **Your AI can build anything. It still can't know what you meant.**
 
 ArChreator turns what you know about your business into an architecture an
-agent can build from — plain Markdown in your own repo, with you approving at
-explicit gates before a line of code exists.
+agent can build from — plain Markdown in your own repo, built directly from
+what you said and merged only when you approve it.
 
 [![Docs check](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml)
 [![Skills check](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml)
@@ -35,63 +35,43 @@ each piece — early, while disagreeing is still cheap.
 ## How it works
 
 A requirement never becomes code directly. It walks down six architecture
-layers — grouped into three questions — in two halves: the one you rule, and
-the one you can hand over.
-
-### First — what you are actually asking for
+layers — grouped into three questions — built directly from what you said,
+and comes back as one pull request.
 
 ```mermaid
 flowchart LR
   req(["A requirement"]):::human
   intention["<b>Intention</b><br/>why, and for whom"]:::ai
-  gA{{"❖ <b>Direction</b><br/>you approve where this is going"}}:::gate
   operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
-  gB{{"❖ <b>Understanding</b><br/>you approve, before any code exists"}}:::gate
-  out(["A sharper requirement —<br/>agreed, and written down"]):::done
-
-  req --> intention --> gA --> operation --> gB --> out
-  gA -.->|"changes"| intention
-  gB -.->|"changes"| operation
-  classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
-  classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
-  classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
-  classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
-```
-
-**This half pays for itself even if nothing gets built.** The agent drafts;
-you settle. What you end up holding is your own requirement, sharper than the
-one you arrived with — who it serves, what it has to do, and which of your
-assumptions turned out to disagree with each other. The dotted edges are the
-loops that can't be skipped, and neither gate here is about code.
-
-**Those names are the method's, not the diagram's.** Direction and
-Understanding are what the skills call them too, so nothing you read later
-renames what you just approved.
-
-### Then — what gets built from it
-
-```mermaid
-flowchart LR
-  inp(["What you agreed"]):::done
   realization["<b>Realization</b><br/>what builds it"]:::ai
-  build["Builds it"]:::ai
-  check{{"You check<br/>the delivery"}}:::gate
-  out(["The outcome you asked for,<br/>and the next requirement"]):::done
+  stop(["Stop — surfaced to you"]):::gate
+  merge{{"You merge it"}}:::gate
+  out(["The outcome you asked for,<br/>and a sharper requirement"]):::done
 
-  inp --> realization --> build --> check --> out
-  check -.->|"changes"| build
+  req --> intention --> operation --> realization --> merge --> out
+  intention -.->|"contradicts, reads two<br/>ways, or needs authorization"| stop
+  operation -.->|"contradicts, reads two<br/>ways, or needs authorization"| stop
+  merge -.->|"changes requested"| realization
   classDef human fill:#e6d6f5,stroke:#7e57c2,color:#333
   classDef ai fill:#c2f0ff,stroke:#0288d1,color:#333
   classDef gate fill:#ffd6d6,stroke:#c62828,color:#333
   classDef done fill:#c9e7b7,stroke:#558b2f,color:#333
 ```
+
+**Intention and Operation pay for themselves even when nothing gets built.**
+A strategy discovery or a landscape sweep is docs-only and still ends in a
+pull request of its own — what you end up holding is your own requirement,
+sharper than the one you arrived with, before a line of realization exists.
+The dotted edges are where a stop or a review sends the work back; **your
+merge is the only approval there is**, and nothing before it claims to be one.
+
+**Contradiction, Ambiguity and Authorization are the method's words, not the
+diagram's.** They're what the skills call them too, so nothing you read later
+renames what stopped the work.
 
 **Nobody asks you to read the code.** What comes back to you is the working
 thing, and the question is whether it does what you asked for. If you *are*
 technical, or someone on your side is, the pull request is right there.
-
-Each half is bounded, and each ends in something worth having: the first in
-understanding, the second in the outcome.
 
 Cyan is always an AI actor, here and in every model you'll build, so you never
 mistake one for a person.
@@ -110,10 +90,10 @@ is agreed is the mistake the whole method exists to prevent.
 | **Realization** | 4 | Application | Which software realizes each business service? |
 | **Realization** | 5 | Technology | What runs it all — runtimes, build, hosting? |
 
-The groups are a way to read the six, not a seventh thing to learn. The line
-between **Operation** and **Realization** is the one that matters: it is where
-the method stops and asks, and everything above it is agreed before any code
-exists.
+The groups are a way to read the six, not a seventh thing to learn. Intention
+and Operation still come first, in that order, but nothing pauses between
+them and Realization — the agent only stops if the change contradicts what
+you've already decided, reads two ways, or needs your authorization.
 
 You don't fill in all six for a weekend project. **One method, three depths** —
 an app, an organization, or an enterprise — and the agent tells you which one

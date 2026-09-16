@@ -23,35 +23,24 @@ flowchart TD
   p11["⚙ Establish the project [BPROC1.1]"]
   org{"Is the subject an organization?"}
   p12["⚙ Discover the business model [BPROC1.2]"]
-  g0{{"❖ Direction — the canvases"}}
   p13["⚙ Discover the strategy [BPROC1.3]"]
-  g1{{"❖ Direction — the strategy layer"}}
   deep{"Several business lines?"}
   p14["⚙ Split the model into domains [BPROC1.4]"]
   est{"Does an estate already run?"}
   p15["⚙ Discover the current landscape [BPROC1.5]"]
-  g2{{"❖ Understanding — the described baseline"}}
   done(["A model a change can be judged against"])
 
   req --> p11 --> org
-  org -->|yes, Depth 2 or 3| p12 --> g0
-  g0 -->|changes requested| p12
-  g0 -->|approved| p13
+  org -->|yes, Depth 2 or 3| p12 --> p13
   org -->|no, Depth 1| p13
-  p13 --> g1
-  g1 -->|changes requested| p13
-  g1 -->|approved| deep
+  p13 --> deep
   deep -->|yes, Depth 3| p14 --> est
   deep -->|no| est
-  est -->|yes| p15 --> g2
-  g2 -->|changes requested| p15
-  g2 -->|approved| done
+  est -->|yes| p15 --> done
   est -->|no, greenfield| done
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class p11,p12,p13,p14,p15,req,done business
-  class g0,g1,g2 implementation
 ```
 
 The depth question is asked once, at `BPROC1.1`, and it decides which of these
@@ -74,27 +63,22 @@ flowchart TD
   base{"Is there a baseline worth planning from?"}
   back(["⇄ BPROC1.5, or BPROC3.1"])
   p51["⚙ Define the target and sequence the roadmap [BPROC5.1]"]
-  g1{{"❖ Direction — the target and the sequence"}}
   road(["A direction each later change is judged against"])
 
   ask --> base
   base -->|no| back
-  base -->|yes| p51 --> g1
-  g1 -->|changes requested| p51
-  g1 -->|approved| road
+  base -->|yes| p51 --> road
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class p51,ask,back,road business
-  class g1 implementation
 ```
 
 The only process whose output describes a future. Everything else in the model is
 held to describing what is true now; the exemption is one folder,
 `architecture/6_transition/`, and it is the whole of `BPROC5`'s output.
 
-It reuses Direction rather than adding a gate of its own — see
-[`2_level-2-processes.md`](./2_level-2-processes.md).
+Built directly and merged like any initiative, rather than needing an approval
+of its own — see [`2_level-2-processes.md`](./2_level-2-processes.md).
 
 ## `BPROC2` — Deliver an architected change
 
@@ -105,23 +89,18 @@ still true.
 flowchart TD
   req(["A requirement, or a problem"])
   p21["⚙ Align the change through the layers [BPROC2.1]"]
-  g2{{"❖ Understanding — strategy, business, information"}}
   p22["⚙ Implement and verify [BPROC2.2]"]
   p23["⚙ Hand over for review [BPROC2.3]"]
-  merged(["Merged"])
+  merged(["Merged — the approval"])
 
-  req --> p21 --> g2
-  g2 -->|changes requested| p21
-  g2 -->|approved| p22 --> p23 --> merged
+  req --> p21 --> p22 --> p23 --> merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class p21,p22,p23,req,merged business
-  class g2 implementation
 ```
 
-`BPROC2.1` reaches Understanding, and its interior is the one branch detailed to
-level 3, in [`3_level-3-align-a-change.md`](./3_level-3-align-a-change.md).
+`BPROC2.1`'s interior is the one branch detailed to level 3, in
+[`3_level-3-align-a-change.md`](./3_level-3-align-a-change.md).
 
 ## `BPROC3` — Keep the model true
 
@@ -134,22 +113,18 @@ flowchart TD
   onecall(["One consequential call, smaller than an initiative"])
   question(["A reader has one architecture question"])
   p31["⚙ Restate the current state [BPROC3.1]"]
-  g2b{{"❖ Understanding — the restatement"}}
   p32["⚙ Record a decision [BPROC3.2]"]
   p33["⚙ Answer an architecture question [BPROC3.3]"]
   back(["A model that describes today"])
   rec(["A rationale a future reader can find"])
   brief(["A focused, disposable brief"])
 
-  drift --> p31 --> g2b -->|approved| back
-  g2b -->|changes requested| p31
+  drift --> p31 --> back
   onecall --> p32 --> rec
   question --> p33 --> brief
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class p31,p32,p33,drift,onecall,question,back,rec,brief business
-  class g2b implementation
 ```
 
 The three children share a band and nothing else: different triggers, run

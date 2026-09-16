@@ -4,7 +4,6 @@ description: Rulebook — consult before creating or editing any document under 
 metadata:
   archreator:
     kind: rulebook
-    gates: none
 ---
 
 # ※ Architecture document style
@@ -87,17 +86,17 @@ three glyphs:
 | ----- | ------ | ------------- |
 | `○` | **Not started** | The document exists so the gap is visible. It defines nothing yet, and a claim about this part of the subject is not in the model |
 | `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has approved them. Identifiers may still be renumbered, figures are unconfirmed, and nothing here may be built on |
-| `●` | **Validated** | Confirmed by whoever is accountable for it, on a named date |
+| `●` | **Validated** | The pull request that changed it has merged, on that date |
 
-The line names the gate too — **Direction** or **Understanding**, the two the
-method has (`align-change-through-layers` § The gates) — so a reader knows what
-would move it, or what already did:
+The line says what would move it, or what already did — the pull request that
+changes the document merging (`align-change-through-layers` § Where this
+stops):
 
 ```markdown
 **Status:** ◐ Draft catalogue — identified from the sources named below, not
-yet validated. **Understanding** covers this layer.
+yet validated.
 
-**Status:** ● Validated at **Understanding**, 2026-08-24.
+**Status:** ● Validated, 2026-08-24.
 ```
 
 `○` is the only one that is optional — the validator asks for no status on a
@@ -127,14 +126,15 @@ width:
 the document stays `◐`** so a later word from the Requester overrides it
 (`align-change-through-layers` § Ask only what blocks the work now).
 
-At the gate, `Source` stays — provenance does not expire. **`Notes` is
-emptied**, because a note that survives its own gate is either a fact, which
-belongs in the model, or something nobody cared about, which belongs nowhere.
+At the merge, `Source` stays — provenance does not expire. **`Notes` is
+emptied**, because a note that survives its own document's validation is
+either a fact, which belongs in the model, or something nobody cared about,
+which belongs nowhere.
 
 **Mixed documents are normal, and the status is the weakest part.** A
 validated layer that a new initiative adds elements to is `◐` until that
-initiative's gate — not `●` with an asterisk. A reader who trusts a `●`
-document must be able to trust all of it.
+initiative's pull request merges — not `●` with an asterisk. A reader who
+trusts a `●` document must be able to trust all of it.
 
 ### Element IDs
 

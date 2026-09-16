@@ -5,7 +5,6 @@ disable-model-invocation: true
 metadata:
   archreator:
     kind: rulebook
-    gates: none
 ---
 
 # ※ Process and capability levels

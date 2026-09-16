@@ -3,7 +3,7 @@
 _[← The process model](./README.md) · [Level 2](./2_level-2-processes.md)_
 
 The one process decomposed past level 2, and the
-[focus table](./README.md#the-focus-table) says why: the branching around its gate —
+[focus table](./README.md#the-focus-table) says why: the branching around its stops —
 discovery, conflict, a change inside an element — is more than one diagram can carry legibly.
 
 ```mermaid
@@ -12,11 +12,10 @@ flowchart TD
   depth["⚙ Confirm the depth; at Depth 3, locate the domain [BPROC2.1.1]"]
   assess["⚙ Assess the strategy layer against the change [BPROC2.1.2]"]
   verdict{"Which verdict?"}
-  stop(["Stop — surface the conflict to the Requester"])
+  stop(["Stop — surface it to the Requester"])
   bugfix{"Inside an element the model names?"}
   walk23["⚙ Align business and information [BPROC2.1.3]"]
   scope["⚙ Draft the scope document [BPROC2.1.4]"]
-  g2{{"❖ Understanding — strategy, business, information"}}
   walk45["⚙ Align application and technology [BPROC2.1.5]"]
   out(["Ready to implement — BPROC2.2"])
   disc(["Hand off to discovery — BPROC1.2 or BPROC1.3"])
@@ -26,14 +25,12 @@ flowchart TD
   verdict -->|conflicts with a Principle| stop
   verdict -->|aligned| bugfix
   bugfix -->|yes| out
-  bugfix -->|no| walk23 --> scope --> g2
-  g2 -->|changes requested| walk23
-  g2 -->|approved| walk45 --> out
+  bugfix -->|no| walk23 --> scope
+  scope -->|stops| stop
+  scope -->|continues| walk45 --> out
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class depth,assess,walk23,scope,walk45,req,out,disc business
-  class g2 implementation
 ```
 
 | ID | Sub-process | Trigger | Output |
@@ -42,16 +39,17 @@ flowchart TD
 | `BPROC2.1.2` | Assess the strategy layer against the change | The depth is stated | One of four verdicts, stated and recorded |
 | `BPROC2.1.3` | Align business and information | The verdict is "aligned" and the change reaches the model | Changed `2_business/` and `3_information/`, or explicit "no change" verdicts |
 | `BPROC2.1.4` | Draft the scope document | The layers are aligned | The next numbered document in `architecture/scope/`, indexed |
-| `BPROC2.1.5` | Align application and technology | Understanding is approved | Changed `4_application/` and `5_technology/` |
+| `BPROC2.1.5` | Align application and technology | The layers are aligned and no stop is open | Changed `4_application/` and `5_technology/` |
 
 Every edge leaving a rhombus is a verdict the agent **states and records** — a "no
 change" on a layer, an "inside an element, no scope document", a call the agent took and
 wrote into the document it affects as draft. None of them is a silent skip.
 
-Two edges leave the happy path. A **conflict** stops the process: the change
-contradicts a Principle already approved, and only the Requester can resolve that. A
-**discovery** verdict does not stop it — it hands off to `BPROC1.2` or `BPROC1.3` and
-comes back, which is why the arrow leaves rather than ends.
+Two edges leave the happy path. A **conflict or a stop** ends the process here: the
+change contradicts a Principle or a decision already written down, reads two ways, or
+would commit the Requester to something they have not agreed — only the Requester can
+resolve that. A **discovery** verdict does not stop it — it hands off to `BPROC1.2` or
+`BPROC1.3` and comes back, which is why the arrow leaves rather than ends.
 
 The step-by-step form of this diagram is the
 [`align-change-through-layers` skill](../../plugins/archreator/skills/align-change-through-layers/SKILL.md);

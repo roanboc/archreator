@@ -4,9 +4,8 @@ description: Procedure — run this when history obscures what is true now — s
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC3.1
-    gates: Understanding
 ---
 
 # ⚙ Restate the current state
@@ -26,19 +25,21 @@ today.
 | Before a whole-model review | A Requester is about to read it end to end, or someone is being onboarded |
 | After a run of initiatives | Each left a "Pending" behind |
 | On a cadence | Quarterly is plenty, where the project has one |
-| The method itself moved | The plugin crossed a breaking version, and the model still describes the previous method's machinery or gate vocabulary |
+| The method itself moved | The plugin crossed a breaking version, and the model still describes the previous method's machinery or retired vocabulary |
 
 ## ⊖ When not to
 
 | The situation | Use instead |
 | ------------- | ----------- |
 | As part of an ordinary initiative | Its own change, with its own scope document — so the diff reads as "what changed about our picture of today" and nothing else |
-| The model should assert something different | `align-change-through-layers`. That is the *next* initiative, with its own gates |
+| The model should assert something different | `align-change-through-layers`. That is the *next* initiative, with its own stops |
 
 ## ⌖ Where this sits
 
-Realizes `BPROC3.1`, and stops at **Understanding**: retiring an element the
-Requester still considers live is the mistake that gate catches.
+Realizes `BPROC3.1`. Retiring an element the Requester still considers live
+is the mistake Step 1's agreed findings list guards against — from there this
+skill restates directly and opens the result as a pull request, the way
+`align-change-through-layers` does.
 
 ```mermaid
 flowchart TD
@@ -48,17 +49,13 @@ flowchart TD
   s2["⚙ 2 — Restate"]
   s3["⚙ 3 — Record it as an initiative"]
   s4["⚙ 4 — Verify"]
-  g2{{"❖ Understanding — the restatement"}}
+  merged(["Merged — the approval"])
   out(["A model that describes today"])
 
-  drift --> s1 --> ask --> s2 --> s3 --> s4 --> g2
-  g2 -->|changes requested| s2
-  g2 -->|approved| out
+  drift --> s1 --> ask --> s2 --> s3 --> s4 --> merged --> out
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class s1,s2,s3,s4,drift,ask,out business
-  class g2 implementation
+  class s1,s2,s3,s4,drift,ask,out,merged business
 ```
 
 ## ⚓ Invariants
@@ -70,8 +67,8 @@ flowchart TD
 | Everything under `architecture/` | Merged scope documents in `architecture/scope/` |
 | `architecture/scope/README.md`'s index | The Approvals tables inside scope documents |
 | A decision record's **Status** line | A decision record's Context, Options, Decision, Consequences |
-| Layer README state tables | Anything a Requester approved at a gate |
-| Status lines that no longer match what was approved | The gate and date a status line records |
+| Layer README state tables | Anything a pull request has already merged |
+| Status lines that no longer match what merged | The pull request and date a status line records |
 | — | `architecture/6_transition/`, which describes an intent rather than a present |
 
 A merged scope document that has become wrong is never corrected — it is
@@ -86,10 +83,10 @@ saying Planned.
   file, repair the path and leave every word alone, link text included. A
   dangling link makes the record less usable without making it more truthful.
   See `write-scope-document` § Rules.
-- **An approved element's ID is never reused.** A retired ID stays retired, so
+- **A merged element's ID is never reused.** A retired ID stays retired, so
   that a stale reference fails loudly rather than resolving to something else.
-  The rule starts at the gate, not at first writing
-  (`architecture-document-style` § Never-reused starts at the gate).
+  The rule starts at merge, not at first writing
+  (`architecture-document-style` § Never-reused starts at merge).
 
 ## ⚙ Steps
 
@@ -102,7 +99,7 @@ Collect, without changing anything yet.
 | 1 | **Pendings that shipped** | The most common staleness and the most damaging — it makes the model look further behind than it is |
 | 2 | **Elements with nothing realizing them** | The inverse. If the module was deleted, the element is either retired or Pending again |
 | 3 | **Superseded elements** | Two elements describing the same thing at different times, where only one is live |
-| 4 | **Adopted calls the Requester has since settled** | A `Source` cell reading `adopted — …` where a gate conversation, a PR thread or events have since answered it (`align-change-through-layers` § Ask only what blocks the work now) |
+| 4 | **Adopted calls the Requester has since settled** | A `Source` cell reading `adopted — …` where a conversation, a pull-request thread or events have since answered it (`align-change-through-layers` § Ask only what blocks the work now) |
 | 5 | **Decision records that no longer bind** | Consequences that no longer describe the project, or one a later decision quietly replaced |
 | 6 | **Layer state tables that lie** | "not started" for a layer that now has three documents, or the reverse |
 | 7 | **A document narrating its own construction** | What the source held, what was consolidated, why identifiers moved, an empty Retired section. `document-style` § What the document contains has the test and the worked examples |
@@ -136,7 +133,7 @@ lines.
 
 #### The Retired section
 
-**It holds gate-approved elements only, and a document that has retired
+**It holds validated elements only, and a document that has retired
 nothing does not have one.** Not an empty table, not a "None" line — an absent
 section says "nothing retired here" more clearly than a sentence saying so,
 and such a sentence is the version commentary
@@ -165,13 +162,13 @@ above.
 
 - **Restate under the current method's rules, never the ones the documents
   were written to.** A restatement that reproduces retired conventions — the
-  old gate vocabulary, deleted tooling, empty layer folders standing in for
+  old process vocabulary, deleted tooling, empty layer folders standing in for
   a status row — has restated the drift. The mechanical crossing is the
   method's `docs/migrating.md`; walk it before correcting anything.
 - **Total drift earns the rebuild, not a restatement.** When the version
   change traverses every document, correcting in place rewrites the whole
   model twice. Instead: preserve the current corpus at an immutable ref,
-  re-run `establish-project`, and rebuild through the gates as one initiative.
+  re-run `establish-project`, and rebuild through the layers as one initiative.
   **Only the initiative's scope document cites the ref.** The rebuilt documents
   are written as if fresh — no mention of the rebuild, the version crossed, or
   the corpus replaced (`document-style` § No version commentary).
@@ -182,7 +179,6 @@ Restating is a change to the model, so it gets a scope document with
 `write-scope-document`:
 
 - an alignment table naming every layer touched, and "no change" for the rest;
-- **Understanding**, because the current-state documents changed;
 - an in-scope/out-of-scope table. A change to what the model *says about the
   world* is a different initiative from a change to *how accurately the model
   reports itself*.
@@ -201,6 +197,10 @@ Restating is a change to the model, so it gets a scope document with
   `architecture/scope/<n>_*.md` for any already-merged `<n>`.
 - Cross-links resolve.
 
+Check the three stops in `align-change-through-layers` § Where this stops
+before opening the pull request, then open it with `write-pr-description`.
+Its merge is the approval — nothing before that claims to be one.
+
 ## ⇄ Hands off to
 
 Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
@@ -208,8 +208,9 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `write-scope-document` | Step 3 | The document Understanding is recorded in |
-| `align-change-through-layers` | Restating revealed the architecture *should* be different | That as its own initiative, with its own gates |
+| `write-scope-document` | Step 3 | The document that records the restatement |
+| `write-pr-description` | Step 4 | The pull request whose merge is the approval |
+| `align-change-through-layers` | Restating revealed the architecture *should* be different | That as its own initiative, built and opened as its own pull request |
 
 ## ✎ Worked example
 
@@ -231,7 +232,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 ## ☑ Done when
 
 - Every finding from Step 1 has a move applied or a stated reason it did not.
-- Understanding is recorded in the scope document's Approvals table.
+- The restatement is opened as a pull request, and its merge is the only
+  approval recorded.
 - The verification checks pass, including the byte-identical one.
 - The model reads as a description of today.
 

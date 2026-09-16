@@ -43,11 +43,11 @@ silence, so a reader can tell what was decided from what was never looked at.
 
 **Declared depth: _not yet declared_.**
 
-| Depth | The subject is | You get | Gates |
-| ----- | -------------- | ------- | ----- |
-| **1 — Application** | one app or tool | a light strategy layer — goals and principles, enough to judge a change against | Understanding |
-| **2 — Organization** | a company, department, or service line | the canvases, and the operating model derived from them | Direction and Understanding |
-| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter | Both, plus each affected domain's owner on a contract change |
+| Depth | The subject is | You get | Approval |
+| ----- | -------------- | ------- | -------- |
+| **1 — Application** | one app or tool | a light strategy layer — goals and principles, enough to judge a change against | Your merge of the pull request |
+| **2 — Organization** | a company, department, or service line | the canvases, and the operating model derived from them | Your merge of the pull request |
+| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter | Your merge, plus each affected domain's owner told at the same pull request |
 
 Depth is about the subject, not the effort — a large application is still
 Depth 1. It is a starting posture, never a ceiling: deepening is an ordinary
@@ -62,7 +62,7 @@ three marks:
 | - | ------ | ----------------------- |
 | `○` | **Not started** | Nothing. It exists so the gap is visible |
 | `◐` | **Draft catalogue** | Read it as a list of things somebody said exist. Not approved, nothing here to build on |
-| `●` | **Validated** | Rely on it. Confirmed on a named date, at a named gate |
+| `●` | **Validated** | Rely on it. Confirmed on a named date, when the pull request that changed it merged |
 
 **A draft catalogue is not an architecture draft.** One is a proposal about how
 something should be structured; the other is a list of what somebody said is

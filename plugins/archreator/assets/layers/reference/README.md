@@ -22,7 +22,7 @@ from?**
 
 A figure a Requester queries eighteen months on is answerable from the deck it
 was read off, and an element in a draft catalogue names its source here — which
-is what lets the gate that validates it be a review rather than an act of
+is what lets the merge that validates it be a review rather than an act of
 faith.
 
 ## Naming

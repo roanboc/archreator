@@ -1,4 +1,4 @@
-# Crossing versions — for a project on 0.2 or 0.3
+# Crossing versions — for a project on 0.2 through 0.5
 
 _[← Repository README](../README.md) · [Adopting archreator](./adopting.md)_
 
@@ -9,6 +9,38 @@ that introduced it.
 
 The plugin itself updates the ordinary way — see
 [keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
+
+## The gates are gone (0.6)
+
+Direction and Understanding are retired. The agent builds directly from the
+Requester's request, through the layers, and opens the result as a pull
+request. **The Requester's merge is the approval** — nothing before that
+claims to be one. The agent still stops, but only for three named reasons,
+in place of the two gates and the two unscheduled stops that preceded them:
+**Contradiction** (the change conflicts with a Principle, a decision already
+recorded, or a rule the model states), **Ambiguity** (two readings of the
+request build different things), and **Authorization** (the work would
+commit the Requester to spend, exposure or publication they have not
+agreed). See `align-change-through-layers` § Where this stops.
+
+- **No scope document carries an Approvals table any more.** What changed
+  and why is the document; the pull request whose merge approved it is the
+  record. A merged document that still shows one keeps it — history, not
+  drift.
+- **A document moves from `◐` to `●` when the pull request that changed it
+  merges**, not when a gate is granted. The glyph and the discipline are
+  unchanged; what moves it is.
+- **`metadata.archreator.gates` is gone from every skill's frontmatter**, and
+  `gated-procedure` is renamed `procedure` — a purely internal kind value,
+  invisible in what a skill's description or title show. Neither rename
+  needs anything in an existing project.
+- **Living documents sweep once** — `AGENTS.md`, `CONTRIBUTING.md`, the
+  architecture front door, the layer READMEs, `architecture/scope/README.md`
+  — in one ordinary change. The rule paragraph now says the owner's merge is
+  the approval, and cites the three stops in place of the two gates.
+- **Merged scope documents are never rewritten.** An Approvals table
+  recording a granted Direction or Understanding keeps recording it. A
+  frozen document quoting a retired gate is history, not drift.
 
 ## Relationships live in one catalogue (0.5)
 

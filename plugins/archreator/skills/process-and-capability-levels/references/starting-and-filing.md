@@ -54,7 +54,7 @@ A branch stopping at level 2 with a dash in the justification column is a
 decision a reader can disagree with; the same branch with nothing written is a
 gap they cannot tell from an oversight.
 
-**Present this table at the gate.** It is where the engagement's scope lives.
+**Present this table in the pull request.** It is where the engagement's scope lives.
 
 ## Where the documents live
 

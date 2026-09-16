@@ -45,15 +45,15 @@ which are the exceptions.
 | **Gap** | ArchiMate **Gap**; TOGAF **gap analysis** | Adopted | yes | Also standard. What archreator adds is that a gap must name the baseline element it is measured from, which makes a gap register checkable rather than a wish list |
 | **The sequence** — initiatives ordered by dependency, without dates | TOGAF Phase E and F — Opportunities and Solutions, Migration Planning; the **Architecture Roadmap** | Cite | — | Approximate. TOGAF's roadmap carries work packages and timing; this one carries order and preconditions, and refuses dates on the grounds that a stale date stops a document being read |
 | **`architecture/6_transition/` as the only folder describing a future** | Adjacent only: TOGAF's Transition Architectures | **Ours** | — | The partition is archreator's. Confining intent to one folder so that every other document reads as present tense without qualification has no standard equivalent |
-| **A roadmap approves direction, not work** | Adjacent only: the distinction between an approved roadmap and an approved project in most stage-gate governance | **Ours** | yes | Stated as a rule rather than left to practice, because an agent handed a roadmap will otherwise treat it as a backlog it has been told to build |
+| **Merging a roadmap doesn't authorize any of its initiatives** | Adjacent only: the distinction between an approved roadmap and an approved project in most stage-gate governance | **Ours** | yes | Stated as a rule rather than left to practice, because an agent handed a roadmap will otherwise treat it as a backlog it has been told to build |
 
 ## Provenance and standing
 
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
-| **Document status** — `○` not started, `◐` draft catalogue, `●` validated at a gate | Adjacent only: document control and revision status in records management; ISO/IEC/IEEE 42010's *architecture description* has no equivalent | **Ours** | yes | The distinction marked is not maturity but *authority*: whether a person with the standing to say so has agreed the document is true |
+| **Document status** — `○` not started, `◐` draft catalogue, `●` validated | Adjacent only: document control and revision status in records management; ISO/IEC/IEEE 42010's *architecture description* has no equivalent | **Ours** | yes | The distinction marked is not maturity but *authority*: whether a person with the standing to say so has agreed the document is true |
 | **Draft catalogue** — elements identified with notes, not an architecture draft | Adjacent only: an inventory, a discovery log, TOGAF's Baseline Architecture *before* it is validated | **Ours** | yes | "Draft architecture" invites a reader to critique the structure; "draft catalogue" tells them the structure is not the claim — the existence of the items is, and it has not been checked |
-| **`Source` and `Notes` columns, and emptying `Notes` at the gate** | Adjacent only: issue logs, RAID logs | **Ours** | yes | A note cannot survive its gate: every open thread becomes a fact, a recorded call, or an admission that nobody cared |
+| **`Source` and `Notes` columns, and emptying `Notes` at merge** | Adjacent only: issue logs, RAID logs | **Ours** | yes | A note cannot survive the merge that validates its document: every open thread becomes a fact, a recorded call, or an admission that nobody cared |
 | **`architecture/reference/`** — provided source material, dated and indexed | TOGAF **Architecture Repository**, loosely; ISO/IEC/IEEE 42010 *architecture rationale* | Cite | yes | Approximate. TOGAF's repository is a governed store of reference models and standards; this is narrower and more mundane — the actual documents a client handed over, kept so a claim can be taken back to them |
 | **Date precedence** — the meeting, else the sharing, else the filing | Adjacent only: archival description practice, which distinguishes creation from accession date | Cite | yes | The archival distinction is the same one, and the ordering here is the practical form of it: prefer the date the content is *about* over the date it arrived |
 
@@ -61,8 +61,6 @@ which are the exceptions.
 
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
-| **the gates** | Architecture board review; Stage-Gate (Cooper) | Cite | — | The named-gate-before-proceeding shape is Stage-Gate's; the subject matter is TOGAF's architecture governance |
-| **The Approvals table** | TOGAF Architecture Contract | Cite | — | Approximate. A Contract is a fuller artifact; this is the record of who approved what, when, and against which document |
 | **Scope document** | TOGAF Architecture Definition Document, narrowed to one initiative | Cite | — | Approximate |
 | **Requester / Agent / Reviewer** | RACI, narrowed to three fixed roles | Cite | — | Approximate. What archreator adds is that the middle role is not assumed human |
 
@@ -75,7 +73,7 @@ which are the exceptions.
 | **What a gap in the identifiers means** | The never-reuse rule, stated in `architecture-document-style` § Element IDs | Adopted | — | Same reason |
 | **"Consolidate before you enumerate" / "well-done less is more"** | KISS; YAGNI; parsimony in modeling | Cite | — | The archreator phrasing is an instruction where the standards are slogans, so it earns its keep |
 | **"The document describes the subject, not its own construction"** | Living documentation (Martraire); present-tense technical writing | Cite | — | Approximate. The specific ban on version commentary inside a document is archreator's own sharpening |
-| **`restate-current-state`** | Adjacent only: documentation debt, model refactoring | **Ours** | — | Making "the model has drifted" its own gated initiative, with its own skill, has no standard name |
+| **`restate-current-state`** | Adjacent only: documentation debt, model refactoring | **Ours** | — | Making "the model has drifted" its own initiative, with its own skill, has no standard name |
 
 ## AI actors
 

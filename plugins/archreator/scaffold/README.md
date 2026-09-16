@@ -21,14 +21,15 @@ row on that page, not an empty directory.
 
 ## How changes are made
 
-A requirement is not built directly. It is worked through the model and
-approved at two named gates — **Direction** and **Understanding** — before
-anything is built. [`AGENTS.md`](./AGENTS.md) states the rule and the declared
+A requirement is worked through the model and built directly from it, layer
+by layer. The Requester's approval is the pull request merging — the agent
+stops earlier only for a contradiction, an ambiguity, or something needing
+authorization. [`AGENTS.md`](./AGENTS.md) states the rule and the declared
 modeling depth; the `align-change-through-layers` skill runs the process.
 
 ## Built with
 
 [archreator](https://github.com/roanboc/archreator) — an enterprise
 architecture method that lives in git as markdown, with humans owning the
-strategy and approving at gates, and AI agents doing the modeling and the
+strategy and approving at merge, and AI agents doing the modeling and the
 building in between.

@@ -6,7 +6,6 @@ metadata:
   archreator:
     kind: document-template
     realizes_process: BPROC4.1
-    gates: none
 ---
 
 # ▤ Run the engagement retrospective
@@ -34,8 +33,9 @@ Run it after the work, never during.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC4.1`, the whole of the Evaluation band. It carries no gate: it
-**proposes**, and each proposal becomes its own change through the gates.
+Realizes `BPROC4.1`, the whole of the Evaluation band. It carries no approval
+of its own: it **proposes**, and each proposal becomes its own change, built
+and merged like any other.
 
 ```mermaid
 flowchart LR
@@ -140,7 +140,7 @@ look worthwhile.**
 ### Proposals become initiatives, not edits
 
 This skill never edits a skill, a layer document or a rule. Each proposal is
-picked up as its own change, with the gates that implies.
+picked up as its own change, with what that implies.
 
 ### Two notes make a pattern
 
@@ -155,7 +155,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `align-change-through-layers` | A proposal is raised as an initiative | The method change, through the gates like any other |
+| `align-change-through-layers` | A proposal is raised as an initiative | The method change, built and merged like any other |
 | `write-scope-document` | That initiative needs its scope recorded | A scope document the proposal row can point at |
 
 ## ⚠ Anti-patterns

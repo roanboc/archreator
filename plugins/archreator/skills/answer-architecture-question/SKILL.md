@@ -5,9 +5,8 @@ disable-model-invocation: true
 argument-hint: "[element] [focus]"
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC3.3
-    gates: none
 ---
 
 # ⚙ Answer an architecture question
@@ -36,8 +35,9 @@ one disposable brief. The Markdown model stays authoritative.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC3.3`. It carries **no gate**: the brief asserts nothing new,
-holding only declared relationships, catalogue facts and verbatim model prose.
+Realizes `BPROC3.3`. It carries **no approval of its own**: the brief asserts
+nothing new, holding only declared relationships, catalogue facts and verbatim
+model prose.
 It is generated under `.archreator/work/briefs/` and never committed.
 
 ## ◈ Invariants

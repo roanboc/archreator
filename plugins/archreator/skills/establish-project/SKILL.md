@@ -4,9 +4,8 @@ description: Procedure — run this to set up a project that has the method but 
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC1.1
-    gates: none
 ---
 
 # ⚙ Establish a project
@@ -34,9 +33,9 @@ after that is the ordinary `align-change-through-layers` process.
 
 ## ⌖ Where this sits
 
-Realizes `BPROC1.1`. It carries **no gate of its own** — bootstrapping writes
-into a project where nothing was ever approved, so there is nothing to approve
-against. The first approval belongs to the discovery this hands off to.
+Realizes `BPROC1.1`. It carries **no approval of its own** — bootstrapping
+writes into a project where nothing has been built yet, so there is nothing to
+approve against. The first approval belongs to the discovery this hands off to.
 
 ```mermaid
 flowchart TD
@@ -51,25 +50,21 @@ flowchart TD
   dbm(["⇄ discover-business-model"])
   ds(["⇄ discover-strategy"])
   md(["⇄ model-domains"])
-  g0{{"❖ Direction — the canvases"}}
-  g1{{"❖ Direction — the strategy layer"}}
   out(["A model a change can be judged against"])
 
   req --> s1 --> s2 --> s3 --> s4 --> s5 --> d
   s3 -. no stack chosen .-> ss
   d -->|Depth 1| ds
-  d -->|Depth 2 or 3| dbm --> g0 --> ds
-  ds --> g1 --> out
+  d -->|Depth 2 or 3| dbm --> ds
+  ds --> out
   d -->|Depth 3, after the enterprise level| md --> out
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
   class s1,s2,s3,s4,s5,req,out business
-  class g0,g1 implementation
 ```
 
 The numbered boxes are this skill's steps, and the unfilled ones are the other
-skills it reaches. Both gates belong to those, not to this.
+skills it reaches. Neither stop belongs to this one.
 
 ## ⚓ Invariants
 
@@ -184,9 +179,10 @@ Discovery is a full initiative, and this is the project's first.
 
 ### 5 — Hand off to discovery
 
-Bootstrap does not write the strategy; discovery does, with the Requester,
-against gates. Then close the loop: the request that started all this — "build
-me X" — is still unbuilt. Say so, and offer to open it as the next initiative.
+Bootstrap does not write the strategy; discovery does, building directly from
+the Requester's request and opening it as its own pull request. Then close the
+loop: the request that started all this — "build me X" — is still unbuilt. Say
+so, and offer to open it as the next initiative.
 
 **← Needs** the declared depth, the first scope document.
 
@@ -197,10 +193,10 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles that gate every later change, approved at **Direction** |
-| `discover-business-model` | Depth 2 or 3 | The canvases, approved at **Direction** before anything is derived from them; `discover-strategy` then derives the strategy layer |
+| `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles every later change is checked against, merged by the Requester |
+| `discover-business-model` | Depth 2 or 3 | The canvases, merged by the Requester before anything is derived from them; `discover-strategy` then derives the strategy layer |
 | `model-domains` | Depth 3, after the enterprise level | One charter per business line, with its exposed and consumed services |
-| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, approved at **Understanding** |
+| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, merged by the Requester |
 | `stack-selection` | No stack chosen, small application | A recorded choice in `5_technology/` |
 
 ## ✎ Worked example
@@ -220,8 +216,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
   project will live.
 - Emitting `assets/github/` onto a project that is not on GitHub.
 - Writing a workflow from scratch instead of emitting the one in `assets/`.
-- Writing the strategy here. Bootstrap hands off to discovery, which does it
-  with the Requester against gates.
+- Writing the strategy here. Bootstrap hands off to discovery, which builds it
+  directly from the Requester's request and opens it as a pull request.
 - Creating a layer folder before it has anything to hold.
 - Leaving the Requester's original request unmentioned once discovery
   finishes, so a docs-only PR reads as the process having failed to build

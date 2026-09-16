@@ -19,8 +19,8 @@ Split when any of these becomes true, and not before:
 - **One family carries a leveled catalogue of its own** — a process map with
   its level-2 contracts, a capability decomposition — big enough to be the
   document a reader opens on purpose.
-- **Two families are validated at different sittings of a gate.** What is
-  approved together can live together.
+- **Two families are built and merged as separate pull requests, in
+  sequence.** What merges together can live together.
 
 Each split document keeps the full skeleton — its own status line, its own
 diagram per section — and the layer README's analysis-order table is the

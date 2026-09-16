@@ -4,9 +4,8 @@ description: Procedure — run this when an organization's model is large enough
 disable-model-invocation: true
 metadata:
   archreator:
-    kind: gated-procedure
+    kind: procedure
     realizes_process: BPROC1.4
-    gates: Understanding
 ---
 
 # ⚙ Model domains
@@ -36,8 +35,10 @@ understood on its own terms.
 ## ⌖ Where this sits
 
 Realizes `BPROC1.4`, and only at Depth 3. Splitting is a business-layer
-change, so it goes through the ordinary process: a scope document, and
-**Understanding** before any folder moves.
+change, so it goes through the ordinary process: a scope document, built
+directly from the request and checked against the three stops in
+`align-change-through-layers` § Where this stops before any folder moves,
+then opened as a pull request whose merge is the approval.
 
 ```mermaid
 flowchart TD
@@ -46,23 +47,19 @@ flowchart TD
   v{"Two or more tests hold?"}
   stop(["Leave it whole, and say why"])
   s2["⚙ 2 — Write the charter"]
-  g2{{"❖ Understanding — before the folders move"}}
   s3["⚙ 3 — Fill in the domain's layers"]
   s4["⚙ 4 — Namespace the identifiers"]
   ds(["⇄ discover-strategy"])
+  merged(["Merged — the approval"])
   out(["A domain with a contract other domains can build on"])
 
   trig --> s1 --> v
   v -->|no| stop
-  v -->|yes| s2 --> g2
-  g2 -->|changes requested| s2
-  g2 -->|approved| s3 --> s4 --> out
+  v -->|yes| s2 --> s3 --> s4 --> merged --> out
   s3 -. its own goals .-> ds
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  classDef implementation fill:#ffd6d6,stroke:#d99b9b,color:#333
-  class s1,s2,s3,s4,trig,out,stop business
-  class g2 implementation
+  class s1,s2,s3,s4,trig,out,stop,merged business
 ```
 
 ## ⚓ Invariants
@@ -145,6 +142,12 @@ path, per the actor considerations in `architecture-document-style` § What
 each element represents — applied to the domain as a whole.>
 ```
 
+**Check for a stop before filling in any layer** —
+`align-change-through-layers` § Where this stops. A charter that lists a
+service contradicting an existing contract, or draws a boundary two readings
+of the request would draw differently, stops here rather than after the
+folders move.
+
 **← Needs** the split verdict.
 
 **→ Produces** `architecture/domains/<name>/README.md`.
@@ -187,7 +190,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
 | `discover-strategy` | The domain has goals distinct from the enterprise's | Its own `1_strategy/`, approved at Direction |
-| `align-change-through-layers` | The split itself, and every later change | A scope document and Understanding before the folders move |
+| `align-change-through-layers` | The split itself, and every later change | A scope document, the three stops checked, and a pull request before the folders move |
 | `write-scope-document` | The split needs recording | One document naming every domain touched |
 
 ## ✎ Worked example
@@ -219,8 +222,8 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - Identifiers are namespaced, and every cross-domain reference points at a
   service the owning charter actually exposes.
 - Where the change altered or removed an exposed service, the scope document
-  names every consuming domain and its Approvals table carries an Understanding row
-  per Requester.
+  names every consuming domain, and the pull request tells each consuming
+  Requester before it merges.
 
 ## Cross-domain changes
 
@@ -228,9 +231,10 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 | --------- | ---------------- |
 | A change inside a domain touching nothing exposed | The owning domain's Requester only. Most changes |
 | Adding a new exposed service | The owning domain's Requester. Nobody depends on it yet |
-| Changing or removing an exposed service | **The consuming domains' Requesters at Understanding too.** Name every consumer in the scope document |
+| Changing or removing an exposed service | **Every consuming domain's Requester is told at the pull request.** Name every consumer in the scope document |
 | Referencing another domain's internal element | A modeling error. Either it belongs in that domain's charter, or the dependency should not exist |
 
 A change spanning domains is still **one** initiative with one scope document
-— its alignment table names each domain touched, and its Approvals table
-carries an Understanding row per Requester.
+— its alignment table names each domain touched, and the pull request that
+carries it is what every consuming domain's Requester reviews before it
+merges.

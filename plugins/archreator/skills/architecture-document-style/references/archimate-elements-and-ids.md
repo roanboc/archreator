@@ -173,7 +173,7 @@ identifier anyone outside the branch has seen.
 So a gap in a sequence means something real was retired, never a draft that
 lived for one afternoon.
 
-**A gate presentation on a renumbered draft says so in one line.** The
+**A pull request touching a renumbered draft says so in one line.** The
 validators only check that references resolve, so renumbering passes silently;
 a Requester who reviewed the previous draft will otherwise see identifiers
 shift under them without explanation.
