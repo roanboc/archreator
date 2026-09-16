@@ -66,9 +66,9 @@ there resolves exactly as one naming a heading here.
   is derived from — it is not an ArchiMate layer, and application-only
   projects leave it empty.
 - Files inside a layer carry a numeric prefix giving the **logical analysis
-  order**, which each layer README explains in an "Analysis order" table.
-  A new file gets the next number, plus a row in that table; only renumber
-  when the analysis order genuinely changes.
+  order**, which the layer README's `## Documents` table lists in that order
+  (§ The layer README). A new file gets the next number, plus a row in that
+  table; only renumber when the analysis order genuinely changes.
 - Scope documents (`architecture/scope/`) are numbered **chronologically** per
   initiative.
 - `architecture/6_transition/` is not a layer and carries no layer number. Its
@@ -161,17 +161,26 @@ unmerged, and **frozen and never reused** once that change merges
 ([`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md)
 § Never-reused starts at merge); numbering is per prefix, not global — and
 per parent inside a leveled catalogue; and an element's ID never changes when
-it is renamed. Referencing an element in prose or an ordinary table cell means
-writing its name with the stable ID riding along — `relieves Faster approval
-[GAIN2]` — without repeating its full description; the name leads, per
-`document-style` § The name leads, and the identifier rides along.
-Cross-document references link that visible pair to the element definition;
-multiple references are one per line.
+it is renamed.
 
-Each document's "How to read this document" legend carries, on its nodes,
-every prefix the document uses, expanded — `«Stakeholder» … [STK#]` — which is
-`document-style` § Write it out applied to identifiers. Examples use `#` (and
-`#.#` for levels), never a plausible real identifier.
+**A reference takes one of two shapes, by where it sits.** Inside the document
+that defines the element, the bare identifier in backticks — `` `BPROC4.3` `` —
+because the definition is on the same page. Anywhere else, the type, the
+identifier and the name — ``the process [`BPROC3.1`] Market and generate
+demand``, ``actor [`ROLE1`] Solution architect`` — with the identifier kept in
+backticks inside the brackets, which is what lets `check_model.py` validate it
+(`document-style` § A reference names the type, the identifier and the name).
+The type word is dropped where a column header already names it; the first
+mention on a page links to the defining document; several references in one
+cell are one per line. A diagram node keeps the Mermaid form
+`<glyph> <name> [ID]` fixed by `references/archimate-on-mermaid.md`, and a
+definition keeps the identifier first.
+
+A prefix is expanded where its elements are defined: the heading of the
+section that defines them and the name column of its catalogue say the type in
+words, which is `document-style` § Write it out applied to identifiers. No
+document opens with a legend that expands them (§ Document skeleton).
+Examples use `#` (and `#.#` for levels), never a plausible real identifier.
 
 **The prefix registry, hierarchical numbering, what happens to an identifier
 when the element is retired, and how a reference crosses a domain or a model
@@ -194,20 +203,43 @@ block is invisible to every tool.
 
 - **A catalogue column**, when its cell is a list of identifiers and nothing
   else. The header is the relationship's name, carried verbatim into the
-  projection. **This is the one place a reference is a bare identifier**, and
-  a name written into such a cell silently deletes the relationship.
-- **A `## Relationships` table**, beside the diagram it explains, for anything
-  a single row cannot carry — above all a relationship between two peers in
-  one layer, which a catalogue has no column shape for. Its columns are fixed
-  **by position, never by header word**: 1 and 3 hold the identifiers, 2 and 4
-  describe them as `<glyph> «Archetype» <name>`, 5 is the relationship.
+  projection. It is how an element is grounded (`Realized by`, § Grounding
+  rule), how a domain charter refines what it consumes from its parent
+  (`Serves`, in the charter `model-domains` writes), and how a level names what
+  it is composed of (`process-and-capability-levels` § The minimum
+  description). **This is the one place a reference is a bare identifier**,
+  and a name written into such a cell silently deletes the relationship.
+- **The relationship catalogue** — one document per model,
+  `architecture/relationships.md` at the model root, its name translated with
+  the project (`relaciones.md`), because the parser reads its rows and never
+  its name. It holds everything a column cannot carry — above all a
+  relationship between two peers in one layer — as rows of
+  `From | To | Relationship | Notes`, bare identifiers in the first two cells.
+  The full form, with each end's `<glyph> «Archetype» <name>` between the
+  identifiers, stays valid; the parser tells the two apart by shape.
+
+**Never both homes for one relationship.** A project that wants its human
+tables free of bare identifiers declares every relationship in the catalogue
+and says so in its `AGENTS.md`. Decomposition is never declared: the dotted
+identifier says it. Nothing relates an element to itself.
+
+**A human-facing element document carries no `## Relationships` section and no
+section addressed to agents.** It draws its relationships in its diagrams and
+names them in prose with the reference notation (§ Element IDs); the catalogue
+is where a machine reads them.
 
 **A relationship that is not true yet says so in words** — the same
-`Pending — future initiative` marker the grounding rule uses — never with a
-dashed arrow, because a diagram is not read.
+`Pending — future initiative` marker the grounding rule uses, opening the
+notes cell — never with a dashed arrow alone, because a diagram is not read.
 
-The full rules, including where the marker may and may not go and what
-`check_model.py` holds against the catalogue, are in
+**A domain writes qualified identifiers in the catalogue** — `SALES.CAP1` —
+because the file sits outside `domains/`, and a bare identifier resolves
+against the folder it is read from
+([`references/archimate-elements-and-ids.md`](./references/archimate-elements-and-ids.md)
+§ Namespacing across domains).
+
+The full rules — both row forms, how the catalogue is grouped, where the marker
+may and may not go and what `check_model.py` holds against it — are in
 [`references/archimate-relationships.md`](./references/archimate-relationships.md).
 
 ### Document skeleton
@@ -219,10 +251,13 @@ The full rules, including where the marker may and may not go and what
 - Then the **status line**, where the document defines elements — § Document
   status. It sits in the preamble, before the first `##`, which is where a
   validator looks for it.
-- A **"How to read this document"** section next: the legend diagram, whose
-  nodes name the stereotypes and ID prefixes — and no table restating it
-  (`references/archimate-on-mermaid.md` § Every element document opens with
-  "How to read this document").
+- **No "How to read this document" section.** A diagram explains itself: its
+  node labels carry glyph, name and identifier, the section heading names the
+  type, and one sentence under the diagram says what a colour or a dashed
+  border means where it carries meaning. No node carries a stereotype. The
+  layer's notation is written once, in the layer README's `## Metamodel`,
+  before its `## Layer view`
+  (`references/archimate-on-mermaid.md` § A diagram explains itself).
 - Then **one section per element family, headed by that family's name** — a
   catalogue table never rides under another family's heading. A leveled
   catalogue names the level in its heading (`### Level 1 — the areas`).
@@ -230,6 +265,10 @@ The full rules, including where the marker may and may not go and what
   that section's tables and prose below it
   (`references/archimate-on-mermaid.md` § Diagrams come first, one per
   section).
+- **No `## Relationships` section.** What a section's diagram draws is
+  declared in `architecture/relationships.md` or in a catalogue column
+  (§ Relationships are declared, never only drawn), and the prose names it
+  with the reference notation.
 - A **Retired** section, only if something approved has been retired
   (`restate-current-state`).
 - **Additional notes**, last, and only if there is one — see § What the
@@ -237,3 +276,31 @@ The full rules, including where the marker may and may not go and what
 - Prefer tables for element inventories, Mermaid for relationships, and
   prose only for rationale (the "why", not the "what"), and only where the
   "why" is about the subject.
+
+### The layer README
+
+A layer's front page has one shape, and nothing else:
+
+1. Title (`# …`) and the nav line.
+2. One sentence saying what the layer holds, in the subject's words.
+3. The viewpoint line — `**ArchiMate viewpoint:** …` naming the element types
+   the layer uses, or `none` and what stands in for them on a canvas layer.
+4. `## Documents` — one row per document: its number, the document linked,
+   the elements it defines, the question it answers, and a `Source` column
+   where the layer is derived from canvases. A document not yet written keeps
+   its row unlinked, with its state in the question cell and, where one
+   exists, the initiative that opens it.
+5. `## Metamodel` — the layer's notation, written once
+   (`references/archimate-on-mermaid.md` § A diagram explains itself).
+6. `## Layer view` — the layer's main elements in that notation, with the
+   sentence or two that reads the picture.
+
+What is missing in a layer is read from the table and from each document's
+status line, never from a section of its own. The analysis order is the
+table's order; a fit rule lives in the page that verifies it; the mapping
+from canvas block to element is the method's
+(`references/canvases.md` § From canvas to ArchiMate); who approves the
+layer and when is `AGENTS.md`'s; how levels and identifiers work is the
+metamodel's. `scripts/check_prose.py` fails a front page that keeps any of
+them in prose (`document-style` § Write it plainly), and the templates under
+`assets/layers/*/README.md` ship this shape.

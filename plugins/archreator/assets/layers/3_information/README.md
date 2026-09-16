@@ -3,16 +3,21 @@
 _[← EA home](../README.md)_
 
 The passive structure of the architecture: the data domains that own the
-information, the data objects inside them that represent the
-[business objects](../2_business/4_business-objects.md), and how
-information flows, is represented, and persists.
+information, the data objects inside them that represent the business objects,
+and how information flows, is represented and persists.
 
-## Analysis order
+**ArchiMate viewpoint:** Information: Data Object, with the domain as its
+level 1 and the object as its level 2, and Representation; the Business Object
+each one stands for and the Artifact it lands in visit from their own layers.
 
-Files are numbered in the order they are analyzed: first _who owns which
-information_ — the data domains — then _what exists inside each_, then _how
-it moves and is represented_, and finally _where it is physically stored,
-classified, and retained_.
+<!--
+  TEMPLATE — the author's notes: every data object belongs to a domain and the
+  identifier carries it (`DOBJ1` the domain, with an owner; `DOBJ1.2` an
+  object in it); a subdomain earns a level only where a domain genuinely
+  splits. Classification and retention live in 4_data-architecture.md.
+-->
+
+## Documents
 
 | #   | Document                                           | Elements                                              | Question it answers                                 |
 | --- | ---------------------------------------------------| -------------------------------------------------------| ------------------------------------------------------ |
@@ -21,16 +26,35 @@ classified, and retained_.
 | 3   | [3_data-flows.md](./3_data-flows.md)               | Representations, persistence and flow relationships   | How does it move between representations?            |
 | 4   | [4_data-architecture.md](./4_data-architecture.md) | Schema, classification, retention                     | Where does it live, how sensitive is it, how long?   |
 
-**Every data object belongs to a domain, and the identifier carries it.** A
-domain is the level-1 row of the same catalogue — `DOBJ1`, Customer data, with
-an owner — and its objects extend it: `DOBJ1.2`. A subdomain earns a level only
-where a domain genuinely splits; a small model's domain map is a handful of
-boxes and is finished.
+## Metamodel
 
-`3_data-architecture.md` is where **data classification** (public,
-internal, sensitive, regulated, …) and **retention** live — reference it
-whenever a business rule or technology decision depends on how sensitive a
-piece of data is.
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
+
+```mermaid
+flowchart LR
+  %% legend
+  domain["▦ «Data Object» a domain, who owns this information [DOBJ#]"]:::application1
+  obj["▦ «Data Object» what information exists [DOBJ#.#]"]:::application
+  bobj["▧ «Business Object» what the business calls it [BOBJ#]"]:::business
+  store[/"⎔ «Artifact» where it is persisted [ART#]"/]:::technology
+
+  domain -->|aggregates| obj
+  obj -->|realizes| bobj
+  store -->|realizes| obj
+
+  classDef application fill:#c2f0ff,stroke:#0288d1,color:#333
+  classDef application1 fill:#9adcf0,stroke:#0288d1,color:#333
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333
+```
+
+The business object and the artifact are visitors from their own layers and
+keep their own colour; the darker cyan marks a data domain.
 
 ## Layer view
 

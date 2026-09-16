@@ -2,97 +2,92 @@
 
 _[← EA home](../README.md)_
 
-The business model itself, in the language the business uses: who the
-customers are, what they are trying to get done, what hurts today, and which
-product or service relieves it — plus, for each product, how it is delivered
-and paid for.
+The business model in the language the business uses: who the customers are,
+what they are trying to get done, what hurts today, and which product or
+service relieves it. For each product, how it is delivered and paid for.
 
-This folder is **not an ArchiMate layer**. Its two documents are
+**ArchiMate viewpoint:** none. Two Strategyzer canvases: a
 [Value Proposition Canvas](https://www.strategyzer.com/library/the-value-proposition-canvas)
-and [Business Model Canvas](https://www.strategyzer.com/library/the-business-model-canvas)
-artifacts — business design tools that sit *upstream* of the architecture.
-They are the input the [strategy layer](../1_strategy/README.md) is derived
-from, which is why they carry the number `0`: everything in layers 1–5
-should be traceable back to a block on one of these canvases.
+per customer segment and a
+[Business Model Canvas](https://www.strategyzer.com/library/the-business-model-canvas)
+per product or service. Layers 1 to 5 are derived from their blocks.
 
-**This folder is filled only when the initiative is modeling an
-organization** — a company, a department, a service line. A project that is
-building a single application skips it entirely and starts at the
-[strategy layer](../1_strategy/README.md), driven by the
-`discover-strategy` skill. The company track is driven by the
-`discover-business-model` skill instead, and ends at the **Direction**
-gate, where the Requester approves these canvases before anything is
-derived from them.
+<!--
+  TEMPLATE — emitted by `discover-business-model` on an organization only; an
+  application project never has this folder. The block-by-block mapping to
+  ArchiMate and the fit rule are the method's (`architecture-document-style`,
+  the canvases reference); the fit verdict is written in the value proposition
+  canvas. Keep this page in the layer README shape and nothing else.
+-->
 
-## Analysis order
-
-Files are numbered in the order they are analyzed: first _who we serve and
-what they need_, then _how each offering is delivered and paid for_. The value
-proposition comes first — the business model is built per product, and the
-products are named by the value proposition.
+## Documents
 
 | #   | Document                                                             | Elements                                                                          | Question it answers                                     |
 | --- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | 1   | [1_value-proposition-canvas.md](./1_value-proposition-canvas.md)     | Customer Segments, Jobs, Pains, Gains, Products & Services, Pain Relievers, Gain Creators | Who do we serve, what do they need, and what do we offer? |
 | 2   | [2_business-model-canvas.md](./2_business-model-canvas.md)           | The nine BMC blocks, one canvas per product or service                            | How is each offering delivered, and how does it pay?     |
 
-`1_value-proposition-canvas.md` carries one canvas **per customer segment**;
-`2_business-model-canvas.md` carries one canvas **per product or service**.
-A company with two product lines serving two different segments therefore
-has two of each, and the interesting architecture is usually in what they
-_share_ versus what they don't.
+## Metamodel
 
-### Fit is a rule, not a comment
+<!--
+  The notation of this layer, written once: every element type the layer's
+  documents draw, with its glyph, shape, colour, stereotype and prefix, and
+  how the types typically connect. Keep it in step with the documents below;
+  they carry no legend of their own.
+-->
 
-A value proposition canvas only means something if it *fits*. Checked at
-Direction, and re-checked whenever either canvas changes:
+```mermaid
+flowchart LR
+  %% legend
+  subgraph VPC["Value Proposition Canvas"]
+    cs(["◍ «Customer Segment» who we serve [CS#]"]):::motivation
+    job{{"⚙ «Job» what they are trying to do [JOB#]"}}:::motivation
+    pain>"✖ «Pain» what hurts today [PAIN#]"]:::motivation
+    gain[["✔ «Gain» what they would call a win [GAIN#]"]]:::motivation
+    prod["▣ «Product» what they get [PROD#]"]:::strategy
+    prel[/"⊖ «Pain Reliever» how the pain is removed [PREL#]"\]:::strategy
+    gcre[/"⊕ «Gain Creator» how the gain is produced [GCRE#]"\]:::strategy
+  end
+  subgraph BMC["Business Model Canvas"]
+    kp{{"⧉ «Key Partner» who we depend on [KP#]"}}:::business
+    kr[("▤ «Key Resource» what we have [KR#]")]:::strategy
+    ka{{"⚙ «Key Activity» what we do with it [KA#]"}}:::strategy
+    vp["◈ «Value Proposition» what the product promises [VP#]"]:::strategy
+    ch["⊸ «Channel» how it reaches them [CH#]"]:::business
+    cr["⇄ «Customer Relationship» how we treat them [CR#]"]:::business
+    rs[/"▲ «Revenue Stream» what comes in [RS#]"\]:::technology
+    cost[\"▼ «Cost» what it costs [COST#]"/]:::implementation
+  end
 
-- every **Pain** is addressed by at least one **Pain Reliever**;
-- every **Gain** is produced by at least one **Gain Creator**;
-- every Pain Reliever and Gain Creator traces to a **Capability** in
-  [2_capabilities-and-resources.md](../1_strategy/2_capabilities-and-resources.md);
-- every **Product & Service** has its own business model canvas.
+  cs -->|performs| job
+  job -->|frustrated by| pain
+  job -->|rewarded by| gain
+  prod -->|aggregates| prel
+  prod -->|aggregates| gcre
+  prel -->|addresses| pain
+  gcre -->|produces| gain
+  kp -->|enables| ka
+  kr -->|enables| ka
+  ka -->|produces| prod
+  prod -->|promises| vp
+  prod -->|reaches through| ch
+  ch -->|reaches| cs
+  cr -->|keeps| cs
+  cs -->|pays| rs
+  ka -->|incurs| cost
 
-An unaddressed Pain is not a documentation gap — it is either a missing
-capability or a customer you have decided not to serve. Say which.
+  classDef motivation fill:#e6d6f5,stroke:#7e57c2,color:#333
+  classDef strategy fill:#f5deaa,stroke:#c8a24a,color:#333
+  classDef business fill:#fffbb5,stroke:#b8a200,color:#333
+  classDef technology fill:#c9e7b7,stroke:#558b2f,color:#333
+  classDef implementation fill:#ffd6d6,stroke:#b06060,color:#333
+```
 
-## From canvas to ArchiMate
-
-The canvases are only worth filling in if the architecture is *derived* from
-them. Each block below has a defined destination, and the receiving document
-records where the element came from. This table is the **single source** for
-the mapping; other documents and skills link here rather than restating it.
-
-### Value Proposition Canvas
-
-| Canvas block         | ArchiMate element                                         | Derived into                                                                                                          |
-| -------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Customer Segment     | «Stakeholder», and a «Business Actor» / «Business Role»   | [1_motivation.md](../1_strategy/1_motivation.md), [1_business-actors-and-roles.md](../2_business/1_business-actors-and-roles.md) |
-| Customer Job         | «Goal» of that Stakeholder (a «Business Process» they perform) | [1_motivation.md](../1_strategy/1_motivation.md)                                                                   |
-| Pain                 | «Assessment», attached to the «Driver» it assesses        | [1_motivation.md](../1_strategy/1_motivation.md)                                                                       |
-| Gain                 | «Outcome»                                                 | [1_motivation.md](../1_strategy/1_motivation.md)                                                                       |
-| Products & Services  | «Product», aggregating «Business Service»s                | [2_business-services.md](../2_business/2_business-services.md)                                                         |
-| Pain Reliever        | «Capability», with a «Course of Action» where a choice was made | [2_capabilities-and-resources.md](../1_strategy/2_capabilities-and-resources.md)                                  |
-| Gain Creator         | «Capability» delivering a «Value»                         | [2_capabilities-and-resources.md](../1_strategy/2_capabilities-and-resources.md)                                       |
-
-### Business Model Canvas
-
-| Canvas block           | ArchiMate element                                            | Derived into                                                                          |
-| ---------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| Customer Segments      | «Stakeholder» / «Business Actor»                             | [1_motivation.md](../1_strategy/1_motivation.md), [1_business-actors-and-roles.md](../2_business/1_business-actors-and-roles.md) |
-| Value Propositions     | «Value», attached to the «Product»                           | [2_business-services.md](../2_business/2_business-services.md)                           |
-| Channels               | «Business Interface», plus the «Business Service» delivering through it | [2_business-services.md](../2_business/2_business-services.md)                 |
-| Customer Relationships | «Business Service» (onboarding, support, account management) | [2_business-services.md](../2_business/2_business-services.md)                           |
-| Key Activities         | «Business Process», realizing a «Capability»                 | [3_business-processes.md](../2_business/3_business-processes.md)                         |
-| Key Resources          | «Resource»                                                   | [2_capabilities-and-resources.md](../1_strategy/2_capabilities-and-resources.md)         |
-| Key Partners           | external «Business Actor», with a «Contract» or «Business Collaboration» | [1_business-actors-and-roles.md](../2_business/1_business-actors-and-roles.md) |
-| Revenue Streams        | **no native element** — «Value» in the monetary sense        | stays a table here, keyed to the `PROD` it belongs to                                    |
-| Cost Structure         | **no native element**                                        | stays a table here, keyed to the `RES` or `CAP` that incurs it                           |
-
-Revenue and cost have no first-class ArchiMate element, and inventing a
-stereotype for them would put the model out of step with the standard. They
-stay as tables in `2_business-model-canvas.md`, keyed by element ID to the
-Product, Resource, or Capability they attach to.
+The customer profile takes the Motivation fill and the value map the Strategy
+fill, because that is where each block lands once derived; the segment and the
+product are the same elements on both canvases. Revenue borrows the Technology
+green and cost the Implementation rose, because no ArchiMate element lends
+them a colour.
 
 ## Layer view
 

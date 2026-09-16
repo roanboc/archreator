@@ -57,7 +57,10 @@ class AssetDiagramTests(unittest.TestCase):
     def test_a_stereotype_on_a_content_node_fails(self):
         """Glyph, shape and colour carry the type; the stereotype is the widest
         thing on the node and the least informative."""
-        node = re.search(r'^\s+\w+\[.*\[DOBJ#\].*$', self.original, re.M)
+        # The layer view, not the metamodel above it: a legend node is the one
+        # place a stereotype is allowed, so the probe has to hit a content node.
+        view = self.original.split("## Layer view", 1)[1]
+        node = re.search(r'^\s+\w+\[.*\[DOBJ#\].*$', view, re.M)
         self.assertIsNotNone(node, "the probe asset no longer draws a DOBJ node")
         mutated = self.original.replace(
             node.group(0), '  obj["«Data Object» <Domain type>"]', 1
@@ -67,8 +70,9 @@ class AssetDiagramTests(unittest.TestCase):
     def test_a_plausible_real_identifier_in_a_template_fails(self):
         """`[DOBJ1]` in a template lands in a project as a reference to an
         element nobody defined."""
+        head, view = self.original.split("## Layer view", 1)
         self._fails_with(
-            self.original.replace("[DOBJ#]", "[DOBJ1]", 1),
+            head + "## Layer view" + view.replace("[DOBJ#]", "[DOBJ1]", 1),
             "a plausible real identifier",
         )
 

@@ -25,7 +25,7 @@ BUSINESS = """\
 
 _A probe, not a model._
 
-ArchiMate Business layer.
+**ArchiMate viewpoint:** Business layer.
 
 **Status:** ◐ Draft catalogue — a probe, not yet validated.
 
@@ -50,7 +50,7 @@ APPLICATION = """\
 
 _A probe, not a model._
 
-ArchiMate Application layer.
+**ArchiMate viewpoint:** Application layer.
 
 **Status:** ◐ Draft catalogue — a probe, not yet validated.
 
@@ -98,7 +98,7 @@ class ProjectToolTests(unittest.TestCase):
 
     def test_the_scaffold_validates_itself_with_no_plugin(self):
         """A project checks itself with nothing but Python — no network, no plugin."""
-        for validator in ("check_links.py", "check_model.py"):
+        for validator in ("check_links.py", "check_model.py", "check_prose.py"):
             result = run(self.probe / "scripts" / validator, cwd=self.probe)
             self.assertEqual(result.returncode, 0, f"{validator}: {result.stdout}{result.stderr}")
 
@@ -212,7 +212,7 @@ class ProjectToolTests(unittest.TestCase):
             '<a href="missing.html">gone</a>', encoding="utf-8"
         )
         try:
-            for validator in ("check_links.py", "check_model.py"):
+            for validator in ("check_links.py", "check_model.py", "check_prose.py"):
                 result = run(self.probe / "scripts" / validator, cwd=self.probe)
                 self.assertEqual(
                     result.returncode, 0,
@@ -411,7 +411,7 @@ class FederationTests(unittest.TestCase):
         return root / "scripts" / "check_model.py", prd
 
     def test_a_document_without_a_view_or_with_its_view_last_fails(self):
-        """Every element document opens with its legend; a picture stapled on last is not that."""
+        """Every element document carries a view, and a picture stapled on after a section's table is not that section's view."""
         with tempfile.TemporaryDirectory() as tmp:
             script, prd = self._build(Path(tmp))
             business = prd / "2_business" / "README.md"
@@ -420,11 +420,13 @@ class FederationTests(unittest.TestCase):
             result = run(script)
             self.assertNotEqual(result.returncode, 0, "a catalogue with no view passed")
             self.assertIn("carries no view", result.stdout + result.stderr)
-            view_last = no_view + "\n" + LEGEND
+            # the same picture stapled on after the Services table, inside that
+            # section: the section's own view has to come before its table
+            view_last = no_view + "\n" + LEGEND.split("\n\n", 1)[1]
             business.write_text(view_last, encoding="utf-8")
             result = run(script)
             self.assertNotEqual(result.returncode, 0, "a view after the tables passed")
-            self.assertIn("after its first table", result.stdout + result.stderr)
+            self.assertIn("that section's first table", result.stdout + result.stderr)
             business.write_text(PRD_BUSINESS, encoding="utf-8")
             result = run(script)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
@@ -536,3 +538,156 @@ class FederationTests(unittest.TestCase):
             result = run(check, cwd=tmp)
             self.assertEqual(result.returncode, 1, result.stdout)
             self.assertIn("federation ID", result.stdout)
+
+
+CATALOGUE_BUSINESS = BUSINESS + "| `BSVC2` | Deliver an answer | — |\n"
+
+# The application layer names `BSVC2` in prose, so the trace has a document to
+# list under "Named in" — and the catalogue must not be beside it.
+CATALOGUE_APPLICATION = APPLICATION + "\nThe inbox also feeds `BSVC2`.\n"
+
+# The compact form: bare identifiers in the first two cells, the relationship
+# in the third, and whatever follows is notes. The first row relates a pair no
+# catalogue column relates; the second is pending, said in the notes only.
+CATALOGUE = """\
+# Relationship catalogue
+
+_[← Architecture home](./README.md)_
+
+Agents and validators read this file; the pages draw and name what it declares.
+
+## Business
+
+### [Business layer](./2_business/README.md)
+
+| From | To | Relationship | Notes |
+| ---- | -- | ------------ | ----- |
+| `BSVC2` | `ACMP1` | served by | |
+| `BSVC2` | `BSVC1` | precedes | Pending — future initiative |
+"""
+
+
+class RelationshipCatalogueTests(unittest.TestCase):
+    """One document at the model root declares what no column can.
+
+    Its rows are read by shape — a bare identifier in cell 2 makes the row
+    compact — so a four-column `From | To | Relationship | Notes` table is a
+    relationship table and never a second definition of its source elements,
+    and a catalogue row is a reference the validator resolves but not a
+    mention the trace lists.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.probe = Path(cls._tmp.name) / "probe"
+        shutil.copytree(
+            SCAFFOLD, cls.probe,
+            ignore=shutil.ignore_patterns("__pycache__"),
+        )
+        architecture = cls.probe / "architecture"
+        for layer, body in (
+            ("2_business", CATALOGUE_BUSINESS),
+            ("4_application", CATALOGUE_APPLICATION),
+        ):
+            folder = architecture / layer
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / "README.md").write_text(body, encoding="utf-8")
+        (architecture / "relationships.md").write_text(CATALOGUE, encoding="utf-8")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tmp.cleanup()
+
+    def test_a_compact_catalogue_validates_without_redefining_its_sources(self):
+        result = run(self.probe / "scripts" / "check_model.py", cwd=self.probe)
+        output = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 0, output)
+        self.assertNotIn("duplicate definition", output)
+
+    def test_a_compact_row_is_traced_with_its_label_and_its_pending_note(self):
+        result = run(MODEL, "--project", self.probe, "trace", "BSVC2")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        edges = [line for line in result.stdout.splitlines() if "ACMP1" in line]
+        self.assertTrue(edges, result.stdout)
+        self.assertIn("served by", edges[0])
+        self.assertNotIn("(pending)", edges[0])
+        pending = [line for line in result.stdout.splitlines() if "BSVC1" in line]
+        self.assertTrue(pending, result.stdout)
+        self.assertIn("precedes (pending)", pending[0])
+
+    def test_the_catalogue_is_not_listed_as_a_document_naming_the_element(self):
+        result = run(MODEL, "--project", self.probe, "trace", "BSVC2")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Named in 1 other document(s):", result.stdout)
+        self.assertIn("4_application/README.md", result.stdout)
+        self.assertNotIn("relationships.md", result.stdout)
+
+
+GOVERNANCE_PAGE = """\
+# Business layer — Probe
+
+_A probe, not a model._
+
+**ArchiMate viewpoint:** Business layer.
+
+**Status:** ◐ Draft catalogue — a probe, not yet validated.
+
+The Requester approves this table at the first Direction session.
+
+## Metamodel
+
+ArchiMate colours are the method's, and this section may say so.
+
+## Business services
+
+| ID | Business service |
+| -- | ---------------- |
+| `BSVC1` | Answer an enquiry |
+"""
+
+
+class ProseTests(unittest.TestCase):
+    """A model page speaks about its subject; the vocabulary of governance and method fails it."""
+
+    def _build(self, root, body):
+        shutil.copytree(
+            SCAFFOLD / "scripts", root / "scripts",
+            ignore=shutil.ignore_patterns("__pycache__"),
+        )
+        layer = root / "architecture" / "2_business"
+        layer.mkdir(parents=True)
+        (layer / "README.md").write_text(body, encoding="utf-8")
+        return root / "scripts" / "check_prose.py"
+
+    def test_a_sentence_about_governance_fails_and_is_named(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = run(self._build(root, GOVERNANCE_PAGE), cwd=root)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn("[governance]", result.stdout)
+            self.assertIn("Requester", result.stdout)
+            # The viewpoint line, the status line and the Metamodel section say "ArchiMate" and are exempt.
+            self.assertEqual(result.stdout.count("2_business/README.md:"), 1, result.stdout)
+
+    def test_report_lists_the_hit_without_failing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = run(self._build(root, GOVERNANCE_PAGE), "--report", cwd=root)
+            self.assertEqual(result.returncode, 0, result.stdout)
+            self.assertIn("[governance]", result.stdout)
+
+    def test_the_front_door_and_a_layer_not_started_are_exempt(self):
+        page = GOVERNANCE_PAGE.replace(
+            "The Requester approves this table at the first Direction session.\n\n", "")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            check = self._build(root, page)
+            (root / "architecture" / "README.md").write_text(
+                "# Front door\n\nThe Requester approves at Direction; ArchiMate is the notation.\n", encoding="utf-8")
+            empty = root / "architecture" / "5_technology"
+            empty.mkdir()
+            (empty / "README.md").write_text(
+                "# Technology\n\n**Status:** ○ Not started.\n\nThe Requester opens this layer at Understanding.\n", encoding="utf-8")
+            result = run(check, cwd=root)
+            self.assertEqual(result.returncode, 0, result.stdout)

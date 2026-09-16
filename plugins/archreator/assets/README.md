@@ -20,6 +20,7 @@ fact; an empty README never was one.
 | [`layers/domains/`](./layers/domains/README.md) | `model-domains` | The model splits into business lines — Depth 3 |
 | [`layers/reference/`](./layers/reference/README.md) | `discover-strategy`, `discover-current-landscape`, `discover-business-model` | Source material is first filed |
 | [`layers/federation.md`](./layers/federation.md) · [`layers/imports.md`](./layers/imports.md) | `model-domains` | This model first names another one |
+| [`layers/relationships.md`](./layers/relationships.md) | `align-change-through-layers` | The model first declares a relationship no catalogue column carries |
 | [`github/workflows/`](./github/workflows/README.md) | `establish-project` | The project is on GitHub and asks for CI |
 | [`github/pull_request_template.md`](./github/pull_request_template.md) | `establish-project` | The project takes pull requests |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | `establish-project` | The project will take contributions from more than its owner |

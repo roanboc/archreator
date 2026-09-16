@@ -64,28 +64,39 @@ tree without a `Level` column or a parent column to maintain. That is the
 fifteen-element threshold in `architecture-document-style` § Diagrams come
 first, applied to the file rather than to the diagram.
 
-**Above it, the catalogue becomes a folder** named for the file it replaces,
-with one document per level:
+**Processes keep levels 1 and 2 in that one document whatever their size**:
+the map, the catalogue of macro processes with purpose and owner, and under
+each macro process a table of its processes with purpose, owner and state. A
+document per macro process restated the map and the table and said nothing
+of its own, so it is not written.
+
+**Level 3 is the activities of one process, one file per detailed process**,
+in a flat folder beside the document, named by the process identifier and its
+name:
 
 ```
-2_business/3_business-processes/README.md                     the map, and the focus table
-2_business/3_business-processes/1_level-1-macro-processes.md
-2_business/3_business-processes/2_level-2-processes.md
-2_business/3_business-processes/3_level-3-<macro-process>.md  one per focused branch
+2_business/3_business-processes.md                            levels 1 and 2, the focus table
+2_business/activities/bproc4.2-develop-agents-and-applications.md   one per focused branch
 ```
 
-Capabilities take the same shape under `1_strategy/`. The folder keeps the
-layer's own numbering intact: the slot number does not move, its neighbours do
-not renumber, and a second focused branch renumbers nothing outside the folder.
+No folder per category or per macro process: the identifier already carries
+the tree. The document opens with the process's inputs-and-outputs diagram,
+then the flow of its activities, then each activity with its tasks
+([`presentation-patterns.md`](./presentation-patterns.md) § Level 3 — the
+flow).
 
-Each level document is a full element document — legend, diagram per section,
-inventory table. The index README carries the focus table and links the levels;
-defining no elements of its own, it needs no legend.
+**Capabilities split by level when they pass the threshold**, into a folder
+named for the file it replaces — `1_strategy/2_capabilities/` with one
+document per level and an index README that carries the focus table and links
+the levels. The folder keeps the layer's own numbering intact: the slot number
+does not move and its neighbours do not renumber. Each level document is a
+full element document — status line, diagram per section, inventory table;
+the index defines no elements and needs no diagram.
 
 ## The identifier carries the level
 
 A level-2 process under macro process `BPROC7` is `BPROC7.2`, and a level-3
-sub-process under that is `BPROC7.2.1` — `architecture-document-style` § Levels
+activity under that is `BPROC7.2.1` — `architecture-document-style` § Levels
 number hierarchically holds the rule, including what re-parenting an approved
 element costs. Splitting the catalogue into a folder changes none of it.
 

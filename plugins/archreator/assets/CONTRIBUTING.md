@@ -35,12 +35,13 @@ who approved, when, and what was shown.
   than inventing them now.
 -->
 
-**\<placeholder> — no stack chosen yet.** The two validators already apply,
+**\<placeholder> — no stack chosen yet.** The three validators already apply,
 and must be green before pushing; CI runs the same:
 
 ```bash
 python3 scripts/check_links.py    # relative links and HTML anchors resolve
 python3 scripts/check_model.py    # element-ID references resolve
+python3 scripts/check_prose.py    # every model page speaks about its subject
 ```
 
 ## Questions from outside the repository

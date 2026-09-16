@@ -23,10 +23,11 @@ tables below the diagram carry the full context.
 
 **The stereotype does not appear on the node.** `«Business Service»` is written
 in exactly one kind of diagram: one whose **subject is the notation** — the
-legend under "How to read this document", and the examples in this section.
-Everywhere else glyph, shape and colour carry the type already, with the legend
-one screen above. A legend node reads
-`<glyph> «Stereotype» <what the type is> [<PREFIX>#]`.
+examples in this section, and a page a method keeps about its own conventions.
+A model's documents draw no such diagram: glyph, shape and colour carry the
+type, the section heading names it, and the identifier's prefix resolves in the
+registry. A notation node reads `<glyph> «Stereotype» <what the type is>
+[<PREFIX>#]`, and its diagram marks itself with `%% legend`.
 
 **One carve-out: an actor's kind rides on the node.** `(Human)`, `(AI)` or
 `(Hybrid)` stays in the label — `⚇ Requester (Human) [ACT1]` — because nothing
@@ -39,8 +40,8 @@ each element represents).
 
 A glyph identifies the element type at a glance, which matters most in a
 **single-layer view** where the layer colour distinguishes nothing. Some
-depict the ArchiMate icon; the rest only distinguish, and a document's
-legend says which is which.
+depict the ArchiMate icon; the rest only distinguish, and this table
+says which is which.
 
 | Layer | Glyphs |
 | ----- | ------ |
@@ -63,8 +64,8 @@ same in both.
 
 Within one document each element type takes a distinct Mermaid shape. Shapes
 are scoped **per document**, not globally — Mermaid has about a dozen usable
-ones and ArchiMate has fifty elements — so each document's legend declares its
-own. The assignments below are the defaults.
+ones and ArchiMate has fifty elements — so a document keeps one shape per type
+and uses it in every diagram it draws. The assignments below are the defaults.
 
 | Shape | Mermaid | Default element |
 | ----- | ------- | --------------- |
@@ -127,26 +128,28 @@ layer's colour, shape and glyph, so it reads as a visitor.
 ## 5. Relationships are declared in tables; a diagram renders them
 
 **A diagram is a rendering.** Nothing reads one — the projection builds the
-graph from catalogue columns and relationship tables, so a relationship drawn
-in Mermaid and written nowhere else is invisible to every tool. Two places
-declare one: a **catalogue column** whose cell is a list of identifiers and
-nothing else, and a **`## Relationships` table** beside the diagram it
-explains, whose columns are fixed by position — 1 and 3 the identifiers, 2 and
-4 `<glyph> «Archetype» <name>`, 5 the relationship, anything after notes. No
-header word is read, so the table works in a model written in any language,
-and `scripts/check_model.py` holds each end's name against the catalogue that
-owns it. The worked example and the full rule are in
+graph from catalogue columns and the relationship catalogue, so a relationship
+drawn in Mermaid and written nowhere else is invisible to every tool. Two
+places declare one: a **catalogue column** whose cell is a list of identifiers
+and nothing else, and the **relationship catalogue**,
+`architecture/relationships.md` at the model root, whose rows are read by
+shape — `From | To | Relationship | Notes`, or the full form with
+`<glyph> «Archetype» <name>` between the identifiers. No header word is read,
+so the catalogue works in a model written in any language, and
+`scripts/check_model.py` holds a full row's names against the catalogue that
+owns them. A content document draws and declares nothing. The worked example
+and the full rule are in
 [`archimate-relationships.md`](./archimate-relationships.md).
 
 ## Drawing rules
 
 Two of them hold their own sections below — § Diagrams come first, one per
-section, and § Every element document opens with "How to read this document".
+section, and § A diagram explains itself.
 What remains here is the rest:
 
-**Dashed edges mean Pending; solid is true today.** The fact lives in a table
-either way — a dashed arrow renders a Pending row, and is never the
-declaration itself.
+**Dashed edges mean Pending; solid is true today.** The fact lives in the
+relationship catalogue either way — a dashed arrow renders a Pending row, and
+is never the declaration itself.
 
 Relationships are labeled with the standard's role name for the drawn
 direction — *serves*, *realized by*, *triggers* — the set and both
@@ -211,17 +214,37 @@ element has the most edges, which has none, where every path converges,
 which side of a boundary is thin. If a diagram only restates the rows
 beneath it, cut it — that is DRY applied to pictures.
 
-## Every element document opens with "How to read this document"
+## A diagram explains itself
 
-A legend diagram showing this document's element types and how they typically
-connect — including any element borrowed from another layer for context. Each
-legend node carries everything a reader needs to decode the diagrams below —
-`<glyph> «Stereotype» <what the type is> [<PREFIX>#]` — drawn in the
-element's own shape and colour. **This is the one diagram that names the
-stereotypes**, which is what lets every diagram below it drop them.
+No element document opens with a legend. A reader decodes a diagram from what
+is on it: each node carries `<glyph> <name> [ID]`, the section heading names
+the type the diagram draws, and the identifier's prefix resolves in the
+layer's metamodel and in
+[`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md). A legend
+drawn once per document drifted from the diagrams below it and was read
+instead of them, so it is gone; what `check_model.py` still asks of a defining
+document is a diagram before its first table and one per section (§ Diagrams
+come first, one per section).
 
-**The legend marks itself with `%% legend` as the first line of its Mermaid
-body**, on the line after `flowchart …`:
+**The notation lives once per layer, in the layer README.** Its diagrams open
+with `## Metamodel`: one `%% legend` diagram of the layer's element types, each
+node `<glyph> «Stereotype» <what the type is> [<PREFIX>#]` in the type's own
+shape and colour, connected as the layer's diagrams typically connect them,
+with any type the layer borrows for context. `## Layer view` follows it and
+shows the layer's main elements in that notation. A reader who needs the key
+to any document of the layer has it one click up, in one place, and the
+assets under `assets/layers/*/README.md` ship each layer's metamodel.
+
+**One sentence carries what the picture cannot.** Where a colour or a dashed
+border means something — a process of another group, a step an agent runs, an
+element that does not exist yet — one sentence under that diagram says so, in
+the document's own words. It is never a paragraph restating the diagram, and
+never a table of the notation.
+
+**The `%% legend` marker stays for a notation diagram**, the one kind whose
+subject is the notation itself: the examples in this reference, or a page a
+method keeps about its own conventions. It is the first line of the Mermaid
+body, after `flowchart …`:
 
 ```
 flowchart LR
@@ -229,20 +252,11 @@ flowchart LR
   stk([" ◍ «Stakeholder» whose interests the model serves [STK#] "])
 ```
 
-The validator reads that marker, not the heading above it, so a stereotype
-label is permitted in this diagram and nowhere else whatever language the
-document's headings are written in.
+`check_model.py` reads the marker, not the heading above it, so a stereotype
+label is permitted inside that diagram and nowhere else, whatever language the
+document is written in. A marked diagram of two or more types that draws no
+edge while the document's diagrams do still fails: a key to the notation is not
+a key to the layer.
 
-**The legend diagram is the whole section — no table restates it.** Its nodes
-already name the glyph, the stereotype and the ID prefix, and the diagram
-renders each type's shape and colour. **Its edges are the document's own**:
-one per pair of types the diagrams below connect, labelled with the
-relationship they draw. `check_model.py` fails a legend of two or more types
-that draws no edge while the document's diagrams do.
-
-**A layer README that only indexes other documents is exempt**: it has no
-elements to legend.
-
-Each layer is then self-documenting: a reader arriving from a deep link has the
-notation in front of them and needs no second file open.
-
+**A layer README that only indexes other documents** defines nothing and needs
+no diagram at all.

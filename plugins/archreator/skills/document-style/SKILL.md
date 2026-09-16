@@ -60,17 +60,17 @@ Spell things out:
 - **Expand every acronym on its first use in each document**, then use the
   short form freely. Per document, not per project: a deep link is an
   arrival.
-- **Element IDs are acronyms too.** First mention in a document names the
-  element the ordinary way — **business and solution designers [CS1]** — and
-  expands the prefix beside it (`CS` = Customer Segment), or sits in a table
-  whose adjacent column gives the name. Never a bare `CS1` in prose the first
-  time.
-- **A cross-reference shows identity and meaning.** Write the element's name
-  with the ID riding along — `[Business and solution designers [CS1]](...)` —
-  rather than linking a bare ID. When one field references several elements,
-  put one linked `Name [ID]` on each line. A portal tooltip may repeat the
-  name as a convenience, but never carries information absent from the
-  Markdown.
+- **Element IDs are acronyms too.** First mention in a document that does not
+  define the element names its type, identifier and name —
+  ``customer segment [`CS1`] business and solution designers`` — so the type
+  word expands the prefix; or it sits in a table whose adjacent column gives
+  the name. Never a bare `CS1` in prose the first time.
+- **A cross-reference shows identity and meaning.** Write the type, the
+  identifier and the name, linked — ``[customer segment [`CS1`] business and
+  solution designers](...)`` — rather than linking a bare ID. When one field
+  references several elements, put one on each line. A portal tooltip may
+  repeat the name as a convenience, but never carries information absent from
+  the Markdown.
 - **An abbreviation worth using is worth defining.** If the organization has
   its own jargon, it belongs in the glossary in
   `2_business/5_domain-context-and-rules.md`, not only in the head of
@@ -79,24 +79,65 @@ Spell things out:
   better than "CS" in a sentence; the short form earns its place in tables,
   diagrams, and cross-references where space is genuinely tight.
 
-#### The name leads, and the identifier rides along
+#### Write it plainly
 
-`CAP3` is a key, not a name. In a sentence, a heading, a diagram label or a
-brief, write the name and let the identifier ride along — `Name [ID]`:
+These rules govern the documents a reader of the model opens — everything
+under `architecture/`, the entry pages and the guides. A skill is exempt: it
+states behaviour for an agent. Nothing checks rules 1–6 and 8; rule 7 has a
+validator, `scripts/check_prose.py`, which reads every model page and fails on
+the vocabulary that gives such a sentence away.
 
-> …which is why **the Supervised build service [BSVC3]** was split from…
+1. One idea per sentence, up to 25 words. No aside between em-dashes: what
+   sits between them is another sentence, or goes.
+2. Active voice with a named subject — "The architect reviews the request",
+   not "A review is performed".
+3. Everyday words. A technical term or an acronym is explained on first use in
+   each document and lives in the glossary. One name per thing.
+4. Affirm before you negate; what is forbidden is a second sentence. An
+   element's name never changes for this.
+5. Bold marks a name, a state or a definition, never a sentence. A heading
+   names the topic or asks a question.
+6. Every fact is written once: a table is not repeated in prose, a diagram is
+   not repeated in a table, what every row shares is said once above the
+   table, and what another document says is linked.
+7. The document speaks about its subject, never about its own writing, its
+   governance or the method (§ What the document contains). Who approves it
+   and at which session lives in `AGENTS.md`; how the method derives one layer
+   from another lives in the plugin and the contributing guide; how far the
+   page has been validated lives in its status line and nowhere else. What
+   awaits validation stays inline, as a marker on the row it concerns.
+8. The reading test: a newcomer finds where to start, who is accountable,
+   what comes next and how to know it is done.
 
-Not "which is why `BSVC3` was split from".
+#### A reference names the type, the identifier and the name
 
-**Two places keep the identifier first.** A catalogue's own definition row
-opens with the ID — and the bolded lead-in `**G1 — Legible guidance.**` is the
-same defining shape in prose — because the leading identifier exposes the
-sequence and the hierarchy at a glance. And a **relationship column** holds
-bare identifiers and nothing else, because a parser reads it before a person
-does and a name written there silently deletes the relationship —
-`architecture-document-style` § Relationships are declared, never only drawn.
+`CAP3` is a key, not a name. A reference to an element takes one of two
+shapes, by where it sits:
 
-Everywhere else the name leads.
+- **Inside the document that defines the element**, the bare identifier in
+  backticks — `` `BPROC4.3` `` — because the definition is on the same page.
+- **Anywhere else**, the type, the identifier and the name —
+  ``the process [`BPROC3.1`] Market and generate demand``,
+  ``actor [`ROLE1`] Solution architect``. The identifier stays in backticks
+  inside the brackets, so the validator still reads it. The type word is
+  dropped where a column header already names it — under `Performed by
+  (actor)`, ``[`ROLE2`] Story owner``. The first mention on a page links to
+  the defining document; several references in one cell are one per line.
+
+> …which is why **the business service [`BSVC3`] Supervised build** was split
+> from…
+
+Not "which is why `BSVC3` was split from", outside the page that defines it.
+
+**Three places keep another shape.** A catalogue's own definition row opens
+with the ID — and the bolded lead-in `**G1 — Legible guidance.**` is the same
+defining shape in prose — because the leading identifier exposes the sequence
+and the hierarchy at a glance. A **relationship column**, and a row of the
+relationship catalogue, hold bare identifiers and nothing else, because a
+parser reads them before a person does and a name written there silently
+deletes the relationship — `architecture-document-style` § Relationships are
+declared, never only drawn. And a **diagram node** keeps `<glyph> <name> [ID]`,
+the Mermaid form the notation reference fixes.
 
 #### Consolidate before you enumerate
 
@@ -115,6 +156,9 @@ nobody can hold in their head. Three rules follow:
   Offer a consolidated recommendation, not an exhaustive menu. A Requester
   reading five overlapping options has been handed the analysis the agent was
   supposed to do.
+- **One fact, once — in prose as well as in elements.** A paragraph that
+  says again what the table beneath it says, or a table that restates the
+  diagram above it, is the same duplication in words (§ Write it plainly).
 
 ### What the document contains: the subject, not its own construction
 
@@ -134,9 +178,27 @@ breaks the same rule.
 | "`BPROC1` uses no capability — Reach is the only stage the organization does nothing skilful in" | "Writing them as separate elements would have produced an unreadable catalogue" |
 | "`VAL1` is the only value every stakeholder receives" | "Twelve pains were consolidated into five" |
 | "The areas have no realizing artifact, and that is correct rather than a gap" | "Identifiers were renumbered once, here, before the gate" |
+| "An unaddressed pain is a missing capability or a customer we chose not to serve" | "The Requester approves the canvases at the first Direction session, before anything is derived from them" |
+| "The order of the four product lines is a position, not an inventory" | "Each canvas block becomes an ArchiMate element and lives in a layer 1 or 2 document" |
 
 Interpretation of the subject stays; what goes is the document narrating its
-own drafting.
+own drafting. Nothing in a human document is addressed to agents; what a
+machine reads lives in the relationship catalogue
+(`architecture-document-style` § Relationships are declared, never only drawn).
+
+**Governance and method are the same failure in another voice.** Who approves
+a page and at which session, which gate is still pending, how a canvas block
+becomes an element, how files are numbered, where a level lives: none of it
+is about the subject. Governance lives in `AGENTS.md` and in the scope
+document's Approvals table; the method lives in the plugin and the
+contributing guide; validation state lives in the page's status line. A
+layer README that has something missing says so in its `## Documents` table
+and in each document's status line, never in a section of its own
+(`architecture-document-style` § The layer README). `scripts/check_prose.py`
+fails a model page on the vocabulary that gives these sentences away — the
+Requester, a session, a gate, the method's own words, "this table" — and its
+word list, `scripts/prose-denylist.json`, is translated with the project's
+documentation language.
 
 **The removed material moves to where it was already required.** A
 consolidation — what was merged into what, and how many elements each
@@ -195,6 +257,9 @@ between a diagram and the table it explains.
 
 - A document narrating its own construction — what the source material held,
   what was consolidated into what, why identifiers moved.
+- A page narrating its governance or the method — who approves it and at
+  which session, which gate is pending, how a canvas block becomes an element,
+  how files are numbered. `scripts/check_prose.py` names the sentence.
 - "As of initiative N", or any other version commentary. Git holds how a
   document got here; the scope documents hold why.
 - A rebuilt document narrating the rebuild — what the old corpus held, where
@@ -203,6 +268,10 @@ between a diagram and the table it explains.
 - Restating a table or diagram that another document owns, rather than
   linking it.
 - A skill linking outside the plugin's own `skills/` directory.
-- A bare identifier in prose — `CAP3` where **the name [CAP3]** should lead
-  (§ The name leads, and the identifier rides along).
+- A bare identifier outside the document that defines the element — `CAP3`
+  where ``the capability [`CAP3`] <name>`` is owed (§ A reference names the
+  type, the identifier and the name).
+- A section addressed to agents inside a human document — a `## Relationships`
+  table, an "agents only" block. A machine reads the relationship catalogue.
+- A paragraph under a table or a diagram that says again what it shows.
 

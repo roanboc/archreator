@@ -4,7 +4,8 @@ _Reference for [`architecture-document-style`](../SKILL.md) § Relationships
 are declared, never only drawn._
 
 Read this when writing a catalogue column that points at other elements, a
-`## Relationships` section beside a diagram, or an edge label — and before
+row of the relationship catalogue (`architecture/relationships.md`), or an
+edge label — and before
 choosing the shape of a view, which the relationship decides
 ([`archimate-on-mermaid.md`](./archimate-on-mermaid.md) § The relationship
 decides the shape of a view).
@@ -58,42 +59,79 @@ from an attribute column — `Maturity` holds the word "Established" and
 
 **This is the one place a reference is a bare identifier**, against
 `architecture-document-style` § Element IDs, which asks a reference elsewhere
-to carry the name with the identifier riding along. A name written into a
+to carry the type and the name with the identifier. A name written into a
 relationship cell turns it into prose the parse stops seeing — silently, since
 a column that declares nothing looks exactly like a column with nothing to
-declare. The name belongs in the row's own name column, and in cells 2 and 4
-of the relationship table below.
+declare. The name belongs in the row's own name column.
 
-**A relationship table declares everything a row cannot.** A catalogue has one
-row per element, so it has no shape for a relationship between two peers in the
-same layer — which is most of them. Give the document a `## Relationships`
-section beside the diagram that renders it:
+**The relationship catalogue declares everything a column cannot.** A catalogue
+has one row per element and one header per relationship, so it has no shape
+for a relationship between two peers in the same layer — which is most of
+them. Those are rows of one document per model, `architecture/relationships.md`
+at the model root, beside `federation.md` and `imports.md`. The name follows
+the project's language and nothing reads it. The file defines no element, so
+it carries no status line and no diagram, and `check_model.py` asks it for
+none. A project that wants its human tables free of bare identifiers
+declares every relationship here, the column-shaped ones included, and says so
+in its `AGENTS.md`. A relationship has one home, never both.
+
+**Two row forms, told apart by shape.** The compact form carries the two
+identifiers and the relationship, with notes after it:
+
+| From | To | Relationship | Notes |
+| ---- | -- | ------------ | ----- |
+| `CAP5` | `CAP1` | precedes | |
+
+The full form describes each end between the identifiers:
 
 | From | From element | To | To element | Relationship |
 | ---- | ------------ | -- | ---------- | ------------ |
 | `CAP5` | ✦ «Capability» Learn from an engagement | `CAP1` | ✦ «Capability» Discover a subject from nothing | precedes |
 
-**Read by position, never by header word.** Columns 1 and 3 hold the
-identifiers; 2 and 4 describe them; 5 is the relationship; anything after is
-notes. A table whose first header is `ID` is a catalogue and is never read as
-this, which keeps a catalogue with a `Realizes` column from being mistaken for
-one. Headers are prose in whatever language the model is written in, and
-nothing here reads them.
+**Read by position, never by header word.** A bare identifier in cell 2 makes
+the row compact: the relationship is then cell 3, otherwise cell 5, and
+whatever follows the relationship cell is notes. A table whose first header is
+`ID` is a catalogue and is never read as either, which keeps a catalogue with a
+`Realizes` column from being mistaken for one. Headers are prose in whatever
+language the model is written in, and nothing here reads them.
 
-**Each end names its archetype and its name**, because a table cell has none of
-the glyph, shape and colour a node carries, and `CAP5` alone tells a reader
-nothing. Both are copies of facts owned elsewhere, so `check_model.py` holds
-the **name** against the catalogue that defines the element and fails on a
-mismatch.
+**A full row names each end's archetype and its name**, because a table cell
+has none of the glyph, shape and colour a node carries. Both are copies of
+facts owned elsewhere, so `check_model.py` holds the **name** against the
+catalogue that defines the element and fails on a mismatch. A compact row
+restates nothing and is held against nothing: the identifier is the whole
+reference. The **archetype is deliberately not checked**, and the glyph is
+optional: the word for an archetype is language-dependent where the prefix
+beside it is not.
 
-The **archetype is deliberately not checked**, and the glyph is optional: the
-word for an archetype is language-dependent where the prefix beside it is not
-— `«Capability»` in one model is `«Capacidad»` in another.
+**The catalogue holds headings and tables only.** A `##` per layer; under it a
+`###` per document that defines the source element, linked; under that, one
+table ordered by source identifier. A row is unique by from, to and
+relationship, so a pair drawn in two diagrams appears once, under the source's
+document. The opening lines name no identifier: a paragraph naming one becomes
+an excerpt in every brief built on that element. A cell of the table is a
+reference — it must resolve — and not a mention: a row declares, it does not
+talk about the element, so `trace` never lists the catalogue as a document
+naming one.
+
+**Some relationships are never written.** Decomposition — `CAP3` composed of
+`CAP3.2` — is derived from the dotted identifier. A loop from a step back to
+itself is a device of the flow diagram, not a relationship between two
+elements, and stays a sentence under that diagram.
+
+**A domain writes qualified identifiers** — `SALES.CAP1` — because the
+catalogue sits outside `domains/` and a bare identifier resolves against the
+folder it is read from
+([`archimate-elements-and-ids.md`](./archimate-elements-and-ids.md)
+§ Namespacing across domains).
 
 **A relationship that is not true yet says so in words** — the same
-`Pending — future initiative` marker the grounding rule uses — in the notes
-column. Never with a dashed arrow: that is a diagram device, and diagrams are
-not read.
+`Pending — future initiative` marker the grounding rule uses — opening the
+notes cell, in either form. Never with a dashed arrow alone: that is a diagram
+device, and diagrams are not read. The relationship cell is never scanned for
+the marker, so a relationship named with the word keeps its meaning; the notes
+are scanned for it as a substring, so the word appears in no note that is not
+pending.
 
 **A catalogue row says it once, for the whole row, and the marker leads a
 cell.** An element that does not exist yet points at nothing that is true yet,
@@ -108,4 +146,3 @@ the parse reads it. Two rules make that safe:
   data, and a sentence *about* pending work is not a pending row. Anchored to
   the start, "**Pending** — no contributor base exists yet" marks the row and
   "stops depending on their availability" does not.
-

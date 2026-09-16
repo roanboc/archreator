@@ -88,10 +88,12 @@ facts are all on the page, laid out to fit it:
   formula, the owner, what realizes it. The purpose formula is shaped "turns X
   into Y", naming the trigger and the output in one sentence, so neither needs
   a column of its own.
-- **The chain is declared beside the diagram, not in the row.** Who triggers
-  whom, and who supplies a process from outside, are rows of the
-  `## Relationships` table, rendered by the level-2 diagram — **one diagram
-  per macro process, in value order**, never invented for symmetry.
+- **The chain is declared in the relationship catalogue, not in the row.** Who
+  triggers whom, and who supplies a process from outside, are rows of
+  `architecture/relationships.md`, drawn where they are needed: the level-1
+  map draws the chain between macro processes, and each detailed process's
+  inputs-and-outputs diagram draws what it receives and delivers.
+  **No diagram per macro process**: it restated the map and the table.
 - **Every cell is one line.** A row that stops fitting is not asking for a
   wider table — it is asking whether prose is hiding in a cell that belongs
   under the diagram, or whether this process earned level 3.
@@ -106,16 +108,20 @@ Only where the focus table justifies it, and the one level whose page is built
 around a diagram: sequence is the first thing a list cannot say.
 
 **The document names its whole branch before anything else** — an H1 like
-`# Validate an order [BPROC2.2] — the level-3 flow`, and a nav line linking up
-to the level-2 document.
+`# Validate an order [BPROC2.2] — activities`, and a nav line linking up to the
+process document that defines the process.
 
-**The flow diagram opens the document.** Sub-processes in standard notation;
+**An inputs-and-outputs diagram opens the document.** The process in the
+middle, the processes that feed it on one side and the processes that receive
+its output on the other, every edge a relationship the catalogue declares;
+one sentence under it says which colour is this process and which is
+context. Then **the flow diagram**: activities in standard notation;
 decision diamonds are flow notation and get no IDs; a stop that needs a
 person is the rose conditional-human-decision hexagon, and it gets no ID
 either. Then the ordered-flow table, when responsibility and artifacts matter
 as much as sequence:
 
-| Sub-process | Performed by | Uses | Produces | Control or handoff |
+| Activity | Performed by | Uses | Produces | Control or handoff |
 | ----------- | ------------ | ---- | -------- | ------------------ |
 
 `Uses` and `Produces` name the data objects and application services by
@@ -124,6 +130,18 @@ become nine. Facts shared by the whole flow — participants, inputs, the
 outcome, the controls — are said once above the table, never repeated per
 row. And exceptions are one list at the end: an exception lane per exception
 is how a flow becomes a wall.
+
+**Where the flow is written as activity records** — one bolded lead-in per
+activity, the record form of `architecture-document-style` § A row must
+survive a page — each record carries what a row would: the trigger folded into
+its first sentence ("Starts when…"), the state, the inputs, a task table, the
+output, who is accountable, and a tool only where it adds a fact. No field
+paraphrases another: an "Agent" bullet restating the task table goes, a
+closing bold paragraph goes, and no summary table restates the records. A
+column holding one value down a task table is said once above the table and
+dropped. Where agents work, the task table says which tasks they run: an agent
+covers tasks, never a whole activity, because a person stays accountable for
+the activity, so a flow never colours an activity as the agent's.
 
 **Level 4 stays out of the model.** What presentation adds is the seam: the
 level-3 row links the operating instruction where one exists, in whatever

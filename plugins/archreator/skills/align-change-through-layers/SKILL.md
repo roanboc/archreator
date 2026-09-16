@@ -269,7 +269,11 @@ alongside the scope document explaining why.
 
 A layer folder that does not exist yet is emitted from the plugin's assets
 at the moment the change first fills it — `assets/layers/2_business/`,
-`assets/layers/3_information/` — never created empty in advance.
+`assets/layers/3_information/` — never created empty in advance. The
+relationship catalogue, `architecture/relationships.md`, is emitted from
+`assets/layers/relationships.md` the first time a change declares a
+relationship no catalogue column carries
+(`architecture-document-style` § Relationships are declared, never only drawn).
 
 **← Needs** the verdicts from Step 1.
 
@@ -407,7 +411,7 @@ Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
 - Absorbing a divergence from what a gate approved instead of taking it back.
 - Deciding process decomposition depth per initiative rather than through
   `process-and-capability-levels`.
-- Skipping the cross-model check because both validators are green.
+- Skipping the cross-model check because the validators are green.
 - Asking the Requester something the model already settles, or something about
   a state that does not exist yet.
 - Writing a row for a gate that was never granted.
