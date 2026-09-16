@@ -39,15 +39,16 @@ Eight things are checked, per project:
   the cell beside it, and the word for it is language-dependent where the
   prefix is not.
 - **A section whose diagram trails its tables, or a document with no view at
-  all** — every element document opens with a view and **each section opens
-  with its own diagram**, per
-  `architecture-document-style` § Document skeleton and
+  all** — every element document carries a view and **each section opens with
+  its own diagram**, per `architecture-document-style` § Document skeleton and
   `references/archimate-on-mermaid.md` § Diagrams come first, one per section.
   The check is the enforceable core of both: a defining document carries at
   least one ```mermaid fence, and inside any section that has both a fence and
   a table the fence comes first. Per section, not per document — a document
   that stacks every diagram at the top and then runs all its prose and tables
-  underneath satisfies a document-wide test and defeats the rule.
+  underneath satisfies a document-wide test and defeats the rule, and a
+  document whose first section is a summary table is not asked for a picture
+  it has nothing to draw.
 - **A stereotype on a content node** — a Mermaid node label carries
   «Guillemets» only in a notation diagram, per
   `references/archimate-on-mermaid.md` § 1. Node labels. A notation diagram
@@ -321,18 +322,12 @@ def check_project(project: Path, known: dict | None = None) -> tuple[list[str], 
         except OSError:
             continue
         fence = text.find("```mermaid")
-        first_table = next((m.start() for m in re.finditer(r"^\|", text, re.M)), -1)
         if fence < 0:
             errors.append(
                 f"{doc}: defines elements and carries no view. Give each section its own "
                 f"diagram before that section's tables, in a ```mermaid fence"
             )
             continue
-        if first_table >= 0 and fence > first_table:
-            errors.append(
-                f"{doc}: its first view comes after its first table. A document opens "
-                f"with a diagram and its tables follow it"
-            )
         for heading, line_no, fence_line, table_line in _sections(text):
             if fence_line and table_line and fence_line > table_line:
                 where = f"under \"{heading}\"" if heading else "in the preamble"

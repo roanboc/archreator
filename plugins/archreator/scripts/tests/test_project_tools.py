@@ -411,7 +411,7 @@ class FederationTests(unittest.TestCase):
         return root / "scripts" / "check_model.py", prd
 
     def test_a_document_without_a_view_or_with_its_view_last_fails(self):
-        """Every element document opens with a view; a picture stapled on last is not that."""
+        """Every element document carries a view, and a picture stapled on after a section's table is not that section's view."""
         with tempfile.TemporaryDirectory() as tmp:
             script, prd = self._build(Path(tmp))
             business = prd / "2_business" / "README.md"
@@ -420,11 +420,13 @@ class FederationTests(unittest.TestCase):
             result = run(script)
             self.assertNotEqual(result.returncode, 0, "a catalogue with no view passed")
             self.assertIn("carries no view", result.stdout + result.stderr)
-            view_last = no_view + "\n" + LEGEND
+            # the same picture stapled on after the Services table, inside that
+            # section: the section's own view has to come before its table
+            view_last = no_view + "\n" + LEGEND.split("\n\n", 1)[1]
             business.write_text(view_last, encoding="utf-8")
             result = run(script)
             self.assertNotEqual(result.returncode, 0, "a view after the tables passed")
-            self.assertIn("after its first table", result.stdout + result.stderr)
+            self.assertIn("that section's first table", result.stdout + result.stderr)
             business.write_text(PRD_BUSINESS, encoding="utf-8")
             result = run(script)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
