@@ -4,7 +4,7 @@
 # dependencies = [
 #     "markdown>=3.6",
 #     "pyyaml>=6.0",
-#     "playwright>=1.40",
+#     "playwright>=1.42",  # page.pdf(outline=...) needs 1.42+
 # ]
 # ///
 """Write one .pdf from an explicit, ordered list of model documents.
@@ -373,6 +373,13 @@ def render_pdf(html_doc: str, out_path: Path, footer_text: str, wait_for_mermaid
             page.pdf(
                 path=str(out_path),
                 print_background=True,
+                # Verified directly: `outline` alone writes no outline tree at
+                # all on this Chromium build — it only takes effect together
+                # with `tagged`. `tagged` also marks the PDF as accessible
+                # (adds a structure tree for screen readers), a reasonable
+                # bonus rather than a cost.
+                outline=True,
+                tagged=True,
                 display_header_footer=True,
                 header_template="<span></span>",
                 footer_template=(
