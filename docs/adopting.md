@@ -148,15 +148,16 @@ say. Hand that to somebody, or convert it to whatever format they asked for.
 build_brief.py --project . --element BSVC1 --focus business
 ```
 
-**A PDF is a conversion, not an export.** The method ships no PDF exporter. A
-business reader who asks for a PDF gets one brief or scope converted by the
-agent, landing under gitignored `.archreator/work/` beside its Markdown source
-— never the whole model.
+**One question is still a conversion, not an export.** A reader who asks for
+a PDF of a single brief or scope gets one converted by the agent, landing
+under gitignored `.archreator/work/` beside its Markdown source — never the
+whole model, and no dedicated exporter for this case.
 
-**A Word document, for feedback.** A reader who will mark up prose in a tool
-everyone already has gets one `.docx` built from a named audience — an
-explicit, ordered list of paths a human wrote down, globs allowed, nothing
-included by default:
+**An audience gets a PDF, built from an explicit allow-list.** A reader
+outside the repository who needs more than one question answered — a board
+pack, a customer-facing summary — gets one `.pdf` built from a named
+audience: an explicit, ordered list of paths a human wrote down, globs
+allowed, nothing included by default:
 
     # architecture/export/board.yml
     title: BigView — Board pack
@@ -167,20 +168,24 @@ included by default:
       - architecture/2_negocio/README.md
       - architecture/2_negocio/*.md
 
-    export_word.py --project . --config architecture/export/board.yml
+    export_pdf.py --project . --config architecture/export/board.yml
 
-Every diagram travels — rendered where a Mermaid renderer happens to be on
-`PATH`, kept as clearly labeled source otherwise — or the run refuses to
-write a document that silently dropped one. Track Changes is on; nothing
-else about editing is locked down yet, pending how that actually reads for
-whoever gets the document. The footer names the project, the audience, when
-it was built and the revision it came from, so a copy that comes back edited
-can still be placed. This is an explicit allow-list one audience needs, not
-the whole model minus some excludes — the shape a prior version of this
-method tried for PDF and reversed, because it produced the artifact most
-likely to be mailed around and quoted long after it stopped being true. What
-comes back is read by the agent like any other input; nothing here writes it
-back into the model automatically.
+Rendered with a real Markdown library and a real browser, not a hand-written
+converter — the first version of this tool wrote its own, and it silently
+mishandled links, which is exactly the kind of gap a real renderer does not
+have. Every diagram is resolved to a picture or a labeled source block, never
+a gap: `mermaid.js` is fetched once via `npm` and rendered per-diagram, so
+one diagram's syntax error becomes its own labeled fallback instead of
+sinking the rest of the document; no `npm` on `PATH` falls back to labeled
+source throughout. The footer names the project, the audience, when it was
+built and the revision it came from. This is an explicit allow-list one
+audience needs, not the whole model minus some excludes — the shape a prior
+version of this method tried for PDF and reversed, because it produced the
+artifact most likely to be mailed around and quoted long after it stopped
+being true. A PDF carries no track-changes equivalent — a reader comments
+with whatever their viewer already offers, and what comes back is read by
+the agent like any other input; nothing here writes it back into the model
+automatically.
 
 Everything generated lands under `.archreator/`, which is gitignored. Delete it
 and nothing is lost.
