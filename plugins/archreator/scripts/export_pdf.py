@@ -373,7 +373,6 @@ def render_pdf(html_doc: str, out_path: Path, footer_text: str, wait_for_mermaid
             page.pdf(
                 path=str(out_path),
                 print_background=True,
-                landscape=True,
                 display_header_footer=True,
                 header_template="<span></span>",
                 footer_template=(
