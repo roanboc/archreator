@@ -142,8 +142,9 @@ code { background: #f2f2f2; padding: 1px 4px; border-radius: 3px;
        font-family: Consolas, monospace; font-size: 0.9em; }
 pre { background: #f7f7f7; padding: 8px; border-radius: 4px; overflow-x: auto;
       font-family: Consolas, monospace; font-size: 9pt; white-space: pre-wrap; }
-pre.mermaid, .mermaid-fallback { text-align: center; margin: 1em 0; }
+pre.mermaid, .mermaid-fallback, .mermaid-rendered { text-align: center; margin: 1em 0; }
 .mermaid-fallback pre { text-align: left; }
+.mermaid-rendered svg, img { max-width: 100%; height: auto; }
 .source-caption { color: #888; font-style: italic; font-size: 9pt; margin-top: 2em;
                    border-top: 1px dashed #ccc; padding-top: 8px; }
 .source-file:first-child .source-caption { border-top: none; margin-top: 0; }
@@ -372,6 +373,7 @@ def render_pdf(html_doc: str, out_path: Path, footer_text: str, wait_for_mermaid
             page.pdf(
                 path=str(out_path),
                 print_background=True,
+                landscape=True,
                 display_header_footer=True,
                 header_template="<span></span>",
                 footer_template=(
@@ -379,7 +381,7 @@ def render_pdf(html_doc: str, out_path: Path, footer_text: str, wait_for_mermaid
                     f"{html.escape(footer_text)} · page "
                     '<span class="pageNumber"></span></div>'
                 ),
-                margin={"top": "1.5cm", "bottom": "1.5cm", "left": "1.5cm", "right": "1.5cm"},
+                margin={"top": "1cm", "bottom": "1cm", "left": "1cm", "right": "1cm"},
             )
         finally:
             browser.close()
