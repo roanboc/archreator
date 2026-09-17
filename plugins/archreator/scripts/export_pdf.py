@@ -4,7 +4,7 @@
 # dependencies = [
 #     "markdown>=3.6",
 #     "pyyaml>=6.0",
-#     "playwright>=1.40",
+#     "playwright>=1.42",  # page.pdf(outline=...) needs 1.42+
 # ]
 # ///
 """Write one .pdf from an explicit, ordered list of model documents.
@@ -285,12 +285,42 @@ def extract_diagrams(text: str) -> tuple[str, list[str]]:
     return MERMAID_FENCE.sub(replace, text), diagrams
 
 
+def heading_shift(project: Path, source: Path) -> int:
+    """How many levels to push this file's headings down.
+
+    A source file's own `# Title` always comes out `<h1>`, which is correct
+    for exactly one file per document — every other file's `<h1>` landing at
+    the same level is why the PDF's bookmark panel came out flat instead of
+    matching the repository's own folder hierarchy (front door, then a layer,
+    then that layer's documents). Depth is read from the path itself: a
+    `README.md` sits at its folder's own depth (a layer's front door), and
+    any other file in that folder is one level deeper (that layer's own
+    documents) — so `2_negocio/actividades/*.md`, one folder deeper still,
+    naturally nests under whichever `2_negocio/*.md` document precedes it in
+    the audience config's declared order.
+    """
+    rel = source.relative_to(project)
+    depth = len(rel.parent.parts) + (0 if source.name.lower() == "readme.md" else 1)
+    return max(depth - 1, 0)
+
+
+def shift_headings(html_fragment: str, shift: int) -> str:
+    if shift <= 0:
+        return html_fragment
+    return re.sub(
+        r"(</?h)([1-6])(?=[ >])",
+        lambda m: f"{m.group(1)}{min(int(m.group(2)) + shift, 6)}",
+        html_fragment,
+    )
+
+
 def render_source(project: Path, source: Path, live_diagrams: bool) -> tuple[str, int]:
     import markdown
 
     text = source.read_text(encoding="utf-8")
     stripped, diagrams = extract_diagrams(text)
     body = markdown.markdown(stripped, extensions=["tables", "fenced_code"])
+    body = shift_headings(body, heading_shift(project, source))
     for index, diagram in enumerate(diagrams):
         marker = f"\x00MERMAID_{index}\x00"
         if live_diagrams:
@@ -373,6 +403,13 @@ def render_pdf(html_doc: str, out_path: Path, footer_text: str, wait_for_mermaid
             page.pdf(
                 path=str(out_path),
                 print_background=True,
+                # Verified directly: `outline` alone writes no outline tree at
+                # all on this Chromium build — it only takes effect together
+                # with `tagged`. `tagged` also marks the PDF as accessible
+                # (adds a structure tree for screen readers), a reasonable
+                # bonus rather than a cost.
+                outline=True,
+                tagged=True,
                 display_header_footer=True,
                 header_template="<span></span>",
                 footer_template=(

@@ -168,6 +168,64 @@ class RenderSourceTests(unittest.TestCase):
         self.assertIn("flowchart LR", html_body)
 
 
+class HeadingShiftTests(unittest.TestCase):
+    """The bug this fixes: every source file's own `<h1>` landed at the same
+    level regardless of where it sits in the folder tree, so a layer's
+    README and its own documents came out as siblings in the PDF's bookmark
+    panel instead of parent and child — reported directly against the real
+    output. `heading_shift` reads the intended nesting from the path itself:
+    a `README.md` sits at its folder's depth, anything else in that folder
+    is one level deeper.
+    """
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.project = Path(self._tmp.name)
+
+    def _shift(self, relative: str) -> int:
+        path = self.project / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("# t\n", encoding="utf-8")
+        return export_pdf.heading_shift(self.project, path)
+
+    def test_the_front_door_is_not_shifted(self):
+        self.assertEqual(self._shift("architecture/README.md"), 0)
+
+    def test_a_layer_readme_nests_under_the_front_door(self):
+        self.assertEqual(self._shift("architecture/0_layer/README.md"), 1)
+
+    def test_a_layer_document_nests_under_that_layer_readme(self):
+        self.assertEqual(self._shift("architecture/0_layer/1_topic.md"), 2)
+
+    def test_a_subfolder_document_nests_one_level_deeper_still(self):
+        self.assertEqual(self._shift("architecture/0_layer/detail/1_x.md"), 3)
+
+    def test_readme_is_matched_case_insensitively(self):
+        self.assertEqual(self._shift("architecture/0_layer/Readme.md"), 1)
+
+    def test_shift_headings_moves_every_level_and_clamps_at_h6(self):
+        html_in = "<h1>a</h1><h2 class='x'>b</h2></h1>"
+        self.assertEqual(
+            export_pdf.shift_headings(html_in, 2),
+            "<h3>a</h3><h4 class='x'>b</h4></h3>",
+        )
+        self.assertEqual(export_pdf.shift_headings("<h5>a</h5>", 3), "<h6>a</h6>")
+
+    def test_zero_shift_is_a_no_op(self):
+        html_in = "<h1>a</h1>"
+        self.assertEqual(export_pdf.shift_headings(html_in, 0), html_in)
+
+    @unittest.skipUnless(HAS_MARKDOWN, "requires markdown")
+    def test_render_source_applies_the_shift_for_a_nested_file(self):
+        path = self.project / "architecture" / "0_layer" / "1_topic.md"
+        path.parent.mkdir(parents=True)
+        path.write_text("# Título\n\n## Sub\n", encoding="utf-8")
+        html_body, _ = export_pdf.render_source(self.project, path, True)
+        self.assertIn("<h3>Título</h3>", html_body)
+        self.assertIn("<h4>Sub</h4>", html_body)
+
+
 class FindChromiumTests(unittest.TestCase):
     """Verified against a real environment during implementation: the
     installed `playwright` pip package can expect a browser revision that
