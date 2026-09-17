@@ -126,7 +126,7 @@ built and merged the same way it makes you build and merge.
 
 ## Reaching a reader who will not open the repository
 
-Two ways, and neither of them is a second copy of the model.
+Three ways, and none of them is a second copy of the model.
 
 **A portal.** One command writes a stock MkDocs Material config into
 `.archreator/work/portal/` and tells you how to build or serve it:
@@ -152,6 +152,35 @@ build_brief.py --project . --element BSVC1 --focus business
 business reader who asks for a PDF gets one brief or scope converted by the
 agent, landing under gitignored `.archreator/work/` beside its Markdown source
 — never the whole model.
+
+**A Word document, for feedback.** A reader who will mark up prose in a tool
+everyone already has gets one `.docx` built from a named audience — an
+explicit, ordered list of paths a human wrote down, globs allowed, nothing
+included by default:
+
+    # architecture/export/board.yml
+    title: BigView — Board pack
+    files:
+      - architecture/README.md
+      - architecture/1_estrategia/README.md
+      - architecture/1_estrategia/*.md
+      - architecture/2_negocio/README.md
+      - architecture/2_negocio/*.md
+
+    export_word.py --project . --config architecture/export/board.yml
+
+Every diagram travels — rendered where a Mermaid renderer happens to be on
+`PATH`, kept as clearly labeled source otherwise — or the run refuses to
+write a document that silently dropped one. Track Changes is on; nothing
+else about editing is locked down yet, pending how that actually reads for
+whoever gets the document. The footer names the project, the audience, when
+it was built and the revision it came from, so a copy that comes back edited
+can still be placed. This is an explicit allow-list one audience needs, not
+the whole model minus some excludes — the shape a prior version of this
+method tried for PDF and reversed, because it produced the artifact most
+likely to be mailed around and quoted long after it stopped being true. What
+comes back is read by the agent like any other input; nothing here writes it
+back into the model automatically.
 
 Everything generated lands under `.archreator/`, which is gitignored. Delete it
 and nothing is lost.
