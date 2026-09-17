@@ -89,12 +89,22 @@ model.py --project . health         # how much is validated, and whether a merge
 model.py --project . portal         # a stock MkDocs config in .archreator/work/portal/
 model.py --project . export         # .model/model.json, which nothing here reads back
 build_brief.py --project . --element CAP1 --focus impact
+export_word.py --project . --config architecture/export/board.yml
 ```
 
 `build_brief.py` names a scope and writes one Markdown brief into
 `.archreator/work/briefs/` — the elements that matter, generated ArchiMate
 views of how they depend on each other, and the paragraphs the documents
 already write. Disposable, never committed, stamped with its revision.
+
+`export_word.py` names an audience — an explicit, ordered list of paths
+(globs allowed) a human wrote down — and writes one `.docx` into
+`.archreator/work/exports/`, with every diagram carried across, Track
+Changes on, and a footer naming the project, the audience, when it was built
+and the revision it came from. See `docs/adopting.md` § A Word document, for
+feedback. Its own tests need `python-docx`, not part of the bare test
+command: `uv run --with pytest --with python-docx --with pyyaml pytest
+plugins/archreator/scripts/tests/`.
 
 **Nothing is cached.** Every tool parses the Markdown fresh, which takes well
 under a second on the largest model built on this method.
