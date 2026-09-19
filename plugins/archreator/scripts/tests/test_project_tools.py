@@ -102,6 +102,32 @@ class ProjectToolTests(unittest.TestCase):
             result = run(self.probe / "scripts" / validator, cwd=self.probe)
             self.assertEqual(result.returncode, 0, f"{validator}: {result.stdout}{result.stderr}")
 
+    def test_a_filled_layer_cannot_retain_its_scaffold_template(self):
+        """A syntactically valid placeholder layer view is still not a model."""
+        with tempfile.TemporaryDirectory() as tmp:
+            probe = Path(tmp) / "probe"
+            shutil.copytree(
+                SCAFFOLD, probe,
+                ignore=shutil.ignore_patterns("__pycache__"),
+            )
+            strategy = probe / "architecture" / "1_strategy"
+            strategy.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(
+                PLUGIN / "assets" / "layers" / "1_strategy" / "README.md",
+                strategy / "README.md",
+            )
+            (strategy / "1_motivation.md").write_text(
+                "# Motivation\n\n"
+                "**Status:** ◐ Draft catalogue.\n\n"
+                "## Goals\n\n"
+                "```mermaid\nflowchart LR\n  g(\"◎ A real goal [G1]\")\n```\n\n"
+                "| ID | Goal |\n| -- | ---- |\n| `G1` | A real goal |\n",
+                encoding="utf-8",
+            )
+            result = run(probe / "scripts" / "check_model.py", cwd=probe)
+            self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("retains a `TEMPLATE` marker", result.stdout + result.stderr)
+
     def test_the_scaffold_is_small(self):
         """The first commit is about the project, not about archreator.
 

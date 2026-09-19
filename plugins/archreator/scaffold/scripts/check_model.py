@@ -15,7 +15,7 @@ this one silently. What stayed here is the judgement — the checks below
 and the exit code. Nothing is persisted: validation needs a parse, not a
 store, so this script still builds the graph, checks it and exits.
 
-Eight things are checked, per project:
+Nine things are checked, per project:
 
 - **Dangling references** — every referenced ID resolves to a definition.
   A qualified reference (`SALES.BSVC3`) resolves inside that domain's
@@ -61,7 +61,10 @@ Eight things are checked, per project:
   somebody mentioned in a meeting and a layer a Requester approved look
   identical on the page, and an agent that cannot tell them apart will build
   on the wrong one. This is checked on the glyph, never on the word beside
-  it, so it holds in a model written in any language.
+  it, so it holds in a model written in   any language.
+- **Unreplaced layer templates** — once a layer defines an element, its README
+  is no longer a scaffold. A `TEMPLATE` marker means its notation or layer
+  view still describes a hypothetical subject instead of the model's subject.
 
 An ID can carry two dot-separated qualifiers and they mean different things,
 so the parser reads outwards from the type prefix: upper-case segments
@@ -308,6 +311,25 @@ def check_project(project: Path, known: dict | None = None) -> tuple[list[str], 
             )
         elif not status:  # pragma: no cover - unreachable while count == 1
             errors.append(f"{doc}: unrecognised status glyph")
+
+    # A filled layer's README is part of the model's front door: its metamodel
+    # and layer view must describe this subject, not retain the scaffold's
+    # hypothetical labels. Unfilled layers remain templates until discovery
+    # reaches them.
+    for layer in sorted({(REPO_ROOT / doc).parent for doc in defining}):
+        readme = layer / "README.md"
+        if not readme.is_file():
+            continue
+        try:
+            text = readme.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        if re.search(r"<!--\s*TEMPLATE\b", text, re.I):
+            errors.append(
+                f"{readme.relative_to(REPO_ROOT)}: defines a filled layer but "
+                f"retains a `TEMPLATE` marker. Replace the scaffold notation "
+                f"and layer view with this model's elements and relationships"
+            )
 
     # Every element document opens with its views, and every section with its
     # own (`architecture-document-style` § Document skeleton;
