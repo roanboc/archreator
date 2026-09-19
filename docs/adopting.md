@@ -103,7 +103,11 @@ them stays in sync automatically:
   approved.
 - **The scaffold's own scripts** in `plugins/archreator/scaffold/scripts/` land in your
   project's `scripts/`. They are the same on both sides; if the method's
-  validators change, copy the updated files across.
+  validators change, copy the complete tool bundle across:
+  `check_links.py`, `check_model.py`, `check_prose.py`, `model_graph.py`,
+  `element-prefixes.json`, and `prose-denylist.json`. `check_model.py` and
+  `check_prose.py` depend on the parser and their data files, so copying only
+  the visible validator can leave an older project without the new check.
 
 If a scaffold change matters enough to backport (a rule that would
 retroactively affect an existing model), it becomes an initiative in your

@@ -136,6 +136,25 @@ Each document opens `◐ Draft catalogue` and its tables carry `Source` and
 anything to work from, it is filed in `architecture/reference/` and the
 `Source` column points there.
 
+**Render the relationships as each theme settles.** A catalogue records the
+whole inventory; a diagram selects the relationships that explain the
+strategy. Declare each relationship in a catalogue column or
+`architecture/relationships.md`, then draw its projection in the section that
+defines its source. At minimum, assess these views:
+
+| Theme | View that commonly earns its place |
+| ----- | ---------------------------------- |
+| Stakeholders, drivers, goals, outcomes | A selected influence chain showing why the strategy exists |
+| Capabilities and resources | The capability or resource chain that explains how a goal is achieved, especially a boundary or dependency a table hides |
+| Value stream | The end-to-end stage flow, including any feedback loop |
+| Key business elements | Actors assigned to roles, services serving external roles, or the contract/product boundary |
+
+Do not draw a catalogue as a picture. A view earns its place only when it
+shows convergence, a boundary, a sequence, or another relationship the table
+cannot make as clear. `architecture-document-style` § Document skeleton and
+[the Mermaid notation reference](../architecture-document-style/references/archimate-on-mermaid.md)
+govern placement and notation.
+
 **→ Produces** `architecture/1_strategy/`, and the key elements in
 `architecture/2_business/`.
 
