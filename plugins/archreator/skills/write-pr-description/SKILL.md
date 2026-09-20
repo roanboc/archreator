@@ -108,7 +108,12 @@ body against them.
 ## ⇄ Hands off to
 
 Each is a file beside this one — `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`
-— read when it applies, never assumed loaded.
+— read when it applies, never assumed loaded. Where that variable arrives
+unexpanded, no plugin was loaded and the corpus is elsewhere: look for
+`.agents/skills/` in the project, then `~/.agents/skills/`, and read
+`<corpus>/<skill>/SKILL.md` from whichever holds it. Where neither does,
+say the skill is unreachable and stop — never improvise it, and never
+reconstruct it from a repository nothing named.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |

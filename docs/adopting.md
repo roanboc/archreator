@@ -40,6 +40,28 @@ until you ask them to — and the scaffold under
 [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md), which `establish-project`
 copies into your project. Nothing else lands.
 
+### When the plugin does not load
+
+A host that cannot reach the marketplace — a sandboxed or offline session, a
+cloud runner that never fetches one — starts with **no archreator skills at
+all**. Nothing announces this: the agent simply never mentions the method,
+because fifteen of the eighteen skills are invisible to it by design and the
+other three were never loaded either. Two symptoms give it away: the agent
+plans a change without running `align-change-through-layers`, or it quotes a
+skill it reconstructed from somewhere rather than read.
+
+Check it before blaming the method:
+
+```shell
+/plugin
+```
+
+An empty list means the plugin is not installed in that session, whatever
+`.claude/settings.json` declares — a project that enables a plugin through
+`extraKnownMarketplaces` still needs the host to fetch it. Take **Option B**
+for those sessions: `.agents/skills/` is checked into nothing, read by every
+host, and needs no marketplace.
+
 ## Option B — install the skills on their own
 
 Gemini CLI installs an extension from a repository root rather than a

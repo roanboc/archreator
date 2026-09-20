@@ -53,9 +53,18 @@ normal initiative, decided by the Requester.
 
 Three archreator skills surface on their own — `align-change-through-layers`
 when a requirement arrives, `architecture-document-style` and `document-style`
-when a document is edited. Every other skill is invoked by name,
-`/archreator:<skill>`, and typing `/archreator:` lists them. Three kinds: `⚙`
-a procedure it runs, `▤` a document it writes, `※` a rulebook it consults.
+when a document is edited. The other fifteen are out of the agent's listing:
+a person invokes one by name, `/archreator:<skill>`, and typing `/archreator:`
+lists them, while the agent reaches one by reading its file — never by
+selecting it, because it cannot see one. Three kinds: `⚙` a procedure it runs,
+`▤` a document it writes, `※` a rulebook it consults.
+
+**Where no plugin loaded, the skills are not there.** The agent says so rather
+than improvising one from memory or reconstructing it from a repository
+nothing named. `.agents/skills/` is the path every host reads: fill it by
+running the method's `install_skills.py --repo` from a checkout, then read
+`.agents/skills/<skill>/SKILL.md`. It is gitignored — a local installation,
+not a copy of the method kept in this project.
 
 The catalogue lives with the skills, in the plugin, and is not restated here.
 

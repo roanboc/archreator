@@ -16,7 +16,6 @@
     "method",
     "governance"
   ],
-  "skills": "./skills/",
   "interface": {
     "displayName": "archreator",
     "category": "Productivity",

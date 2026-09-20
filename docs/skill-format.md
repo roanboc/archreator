@@ -18,7 +18,7 @@ to enforce. What that script checks is this page, expressed as code.
 | ----- | -------- | ----- |
 | `name` | Yes | Matches the folder. Lowercase, hyphens, no leading or trailing hyphen |
 | `description` | Yes | What the `/` menu shows — or, on the three skills that surface on their own, the trigger. One line, and **no unquoted colon**, which makes the frontmatter unparseable |
-| `disable-model-invocation` | On fifteen of the eighteen | `true` — the skill leaves the listing, costs no context, and is invoked by name as `/archreator:<skill>`. Absent on the three that surface on their own: `align-change-through-layers`, `architecture-document-style`, `document-style` |
+| `disable-model-invocation` | On fifteen of the eighteen | `true` — the skill leaves the listing and costs no context. A **person** invokes it as `/archreator:<skill>`; the **agent** cannot select it and cannot see its description, so it reaches one only by reading the file. Absent on the three that surface on their own: `align-change-through-layers`, `architecture-document-style`, `document-style` |
 | `argument-hint` | Optional | What may follow the name — `[element] [focus]` |
 | `metadata.archreator.kind` | Yes | `procedure`, `document-template` or `rulebook` |
 | `metadata.archreator.realizes_process` | When one applies | The level-2 process IDs from [`docs/process/`](./process/README.md) |
@@ -32,6 +32,15 @@ can change what the agent reaches for. The title repeats it as a glyph — `# �
 
 **Values are strings.** Agent Skills types `metadata.*` as string to string, so
 a list is one comma-separated string rather than a YAML sequence.
+
+**A by-name skill is reached as a file, never as a choice.** The fifteen are
+invisible to the agent by design, so every skill that hands off to one names
+the path rather than the skill: `${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`,
+and, where that variable arrives unexpanded because no plugin was loaded,
+`.agents/skills/<skill>/SKILL.md` in the project or under the home directory.
+Where neither holds it, the skill is unreachable and the agent says so — the
+one failure the corpus must not paper over, because a skill improvised from
+memory reads exactly like one that was loaded.
 
 **Two lengths.** A listed description is at most 140 characters, because the
 three listed together are all that spends the host's skill-listing budget. A
