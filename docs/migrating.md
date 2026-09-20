@@ -103,8 +103,8 @@ Nothing in the elements, their identifiers or their status glyphs moves.
 Three skills surface on their own — `align-change-through-layers`,
 `architecture-document-style` and `document-style`. Every other skill is
 `/archreator:<skill>`, out of context until called, and a skill that hands
-off to one reads it from disk. On a host that ignores the key, nothing
-changes.
+off to one reads it from disk — the agent never selects one, because it
+cannot see one. On a host that ignores the key, nothing changes.
 
 A project changes two things in its `AGENTS.md`: the skills section, which
 said the agent surfaces every skill from its description, and the rule

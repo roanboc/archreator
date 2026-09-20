@@ -29,6 +29,12 @@ identifiers, notation, tiers, actors — and obeys these three as well.
 | The question is about identifiers, notation, tiers or actors | `architecture-document-style` |
 | The question is how far to decompose a catalogue | `process-and-capability-levels` |
 
+A skill named here is a file, not something the agent selects: read
+`${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`. Where that variable arrives
+unexpanded, no plugin was loaded — look for `.agents/skills/` in the
+project, then `~/.agents/skills/`. Where neither holds it, say the skill is
+unreachable rather than working from memory.
+
 ## ⌖ Where this sits
 
 **Realizes no process.** It is the rule every document in the repository

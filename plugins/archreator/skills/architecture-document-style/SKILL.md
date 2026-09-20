@@ -31,6 +31,12 @@ language, what a document may contain, and how it links — are in
 | The question is how far to decompose | `process-and-capability-levels` — that governs shape, this governs form |
 | The question is what the document is for | The skill that produces it — `write-scope-document`, `record-decision` |
 
+A skill named here is a file, not something the agent selects: read
+`${CLAUDE_SKILL_DIR}/../<skill>/SKILL.md`. Where that variable arrives
+unexpanded, no plugin was loaded — look for `.agents/skills/` in the
+project, then `~/.agents/skills/`. Where neither holds it, say the skill is
+unreachable rather than working from memory.
+
 ## ⌖ Where this sits
 
 **Realizes no process.** It is the rulebook every process complies with, and
