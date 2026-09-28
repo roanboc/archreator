@@ -26,6 +26,8 @@ jobs:
         run: python3 plugins/archreator/scaffold/scripts/check_links.py
       - name: Check element-ID references
         run: python3 plugins/archreator/scaffold/scripts/check_model.py
+      - name: Check that every model page speaks about its subject
+        run: python3 plugins/archreator/scaffold/scripts/check_prose.py
 
   # What proves the reading tools still work is running them on a project.
   # test_project_tools.py builds one from the shipped scaffold, so a change

@@ -94,8 +94,9 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
   `Local`, `External`, `Out of scope` or a named `Gap`. Layer folders appear
   when a skill first has something to put in them, from the plugin's
   `assets/`
-- `scripts/` — the two validators, run before every push, the parse they
-  share, its prefix data and their own README. The reading tools stay in the
+- `scripts/` — the three validators, run before every push, the parse two
+  of them share, its prefix data, the word list of the third and their own
+  README. The reading tools stay in the
   plugin and reach a project with `--project` — see
   [§ Reaching a reader who will not open the repository](#reaching-a-reader-who-will-not-open-the-repository)
 - `.gitignore` — keeps bytecode, machine-local settings and everything
