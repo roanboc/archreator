@@ -21,7 +21,8 @@
 <!-- Link the initiative's scope document in the sibling repository,
      https://github.com/roanboc/architecture-archreator — usually under
      product-archreator/architecture/scope/. It names what changed and why;
-     this pull request's merge is what approves it. A change with no
+     the Requester confirmed it in the conversation, and this pull request's
+     merge lands it. A change with no
      documented behavior change — a bug fix, a packaging or CI change —
      states "no scope document" here with the reason. -->
 

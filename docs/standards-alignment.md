@@ -19,8 +19,8 @@ Each row carries one of three verdicts.
 Mappings that hold only loosely are marked **approximate** in the Note column.
 
 **A skill names its standard only where the name helps the reader of that
-skill.** `record-decision` says ADR; `stack-selection` does not say "TOGAF
-architecture partitioning by level of detail". So most of the correspondences
+skill.** `record-decision` says ADR; `architecture-document-style` does not
+say "TOGAF architecture partitioning by level of detail". So most of the correspondences
 below live **here and only here**, and the `Named in the skill` column says
 which are the exceptions.
 
@@ -63,6 +63,8 @@ which are the exceptions.
 | ---------- | ----------- | ------- | ----------------- | ---- |
 | **Scope document** | TOGAF Architecture Definition Document, narrowed to one initiative | Cite | — | Approximate |
 | **Requester / Agent / Reviewer** | RACI, narrowed to three fixed roles | Cite | — | Approximate. What archreator adds is that the middle role is not assumed human |
+| **Confirmation in a preview** — the Requester confirms what a change claims, in the conversation or at a session, and that confirmation validates the document | Adjacent only: sign-off on a requirements baseline; human oversight under the EU AI Act's Article 14 | **Ours** | yes | The difference from a sign-off is the object: not a document read in full, but a one-screen preview of what changed and of every call the agent took on the Requester's behalf. A merge alone validates nothing |
+| **Realization register** — layers 4 and 5 as one row per component or platform, linked to the delivery framework's specification | ArchiMate application usage and technology usage viewpoints; ISO/IEC/IEEE 42010 correspondences | Cite | — | Approximate. The register is the correspondence between the business layers and a specification kept elsewhere, not a design of its own |
 
 ## Documentation practice
 
@@ -88,9 +90,6 @@ which are the exceptions.
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
 | **`record-decision`** | **ADR** — Architecture Decision Record (Nygard); MADR | Cite | yes | Its sections parallel MADR's. Not naming the pattern costs it every reader who already knows it |
-| **`shard-stories`** | Vertical slicing; INVEST (Wake) | Cite | partly | The skill names vertical slicing and cites BMAD-METHOD for the context-engineering half. INVEST names the sizing criteria and is not in the skill |
 | **`run-retrospective`** | Retrospective; blameless post-mortem | Cite | yes | |
-| **`stack-selection`** | SPADE — Setting, People, Alternatives, Decide, Explain (Rajaram) | Cite | — | SPADE belongs with `record-decision` rather than here: this skill is a decision *aid* carrying criteria, not a decision *record* |
 | **The canvases** | Osterwalder — Business Model Canvas, Value Proposition Canvas | Adopted | yes | |
 | **The skill format** | [AIP](https://github.com/zach-blumenfeld/aip) — the Agent Instruction Protocol | Cite | — | The section vocabulary and the kind-decides-structure idea are AIP's. The fenced-YAML body is not adopted: these skills have no script-backed steps and no graph edges, which is what that format exists to carry. [`docs/skill-format.md`](./skill-format.md) says what was taken and what was left |
-| **`shard-stories`' context packing** | [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD) — context-engineered development | Cite | yes | Already cited in the skill itself |

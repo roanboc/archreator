@@ -35,15 +35,16 @@ Pure bug fixes stop for nothing, per the method's own rule.
 
 ## Working locally
 
-All three validators must be green before pushing; CI runs the same:
+All four validators must be green before pushing; CI runs the same:
 
 ```bash
 python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve
+python3 plugins/archreator/scaffold/scripts/check_prose.py    # every model page speaks about its subject
 python3 plugins/archreator/scripts/check_skills.py             # the skill corpus against the process model
 ```
 
-The first two live under `plugins/archreator/scaffold/` because the same
+The first three live under `plugins/archreator/scaffold/` because the same
 scripts land in every project the method emits. Run from this repository's
 root they are a smoke test: there is no `architecture/` folder here, so
 `check_model.py` passes trivially while `check_links.py` checks the docs, the

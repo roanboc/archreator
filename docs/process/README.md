@@ -117,7 +117,7 @@ Every level-2 process, and how far down it is detailed.
 | `BPROC1.5` | Discover the current landscape | Level 2 | — | The steps are a sweep order, not a branching flow. Revisit when a real estate engagement finds one |
 | `BPROC5.1` | Define the target and sequence the roadmap | Level 2 | — | Six steps. Revisit if sequencing an estate-sized backlog turns out to need its own procedure |
 | `BPROC2.1` | Align the change through the layers | **Level 3** | The method's own flow was unreadable | Three branches off the happy path — discovery, conflict, and a pure bug fix — which one diagram could not carry legibly |
-| `BPROC2.2` | Implement and verify | Level 2 | — | Sequence varies by stack; detailing it would model the code, not the method |
+| `BPROC2.2` | Implement and verify | Level 2 | — | The delivery framework owns the sequence; detailing it here would model the code, not the method |
 | `BPROC2.3` | Hand over for review | Level 2 | — | One step and one template |
 | `BPROC3.1` | Restate the current state | Level 2 | — | No pain raised. Revisit when one is |
 | `BPROC3.2` | Record a decision | Level 2 | — | One document, one template |

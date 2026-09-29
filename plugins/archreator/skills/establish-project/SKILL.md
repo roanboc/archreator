@@ -35,7 +35,7 @@ after that is the ordinary `align-change-through-layers` process.
 
 Realizes `BPROC1.1`. It carries **no approval of its own** — bootstrapping
 writes into a project where nothing has been built yet, so there is nothing to
-approve against. The first approval belongs to the discovery this hands off to.
+approve against. The first confirmation belongs to the discovery this hands off to.
 
 ```mermaid
 flowchart TD
@@ -46,14 +46,12 @@ flowchart TD
   s4["⚙ 4 — Open the first initiative"]
   s5["⚙ 5 — Hand off to discovery"]
   d{"Which depth?"}
-  ss(["⇄ stack-selection"])
   dbm(["⇄ discover-business-model"])
   ds(["⇄ discover-strategy"])
   md(["⇄ model-domains"])
   out(["A model a change can be judged against"])
 
   req --> s1 --> s2 --> s3 --> s4 --> s5 --> d
-  s3 -. no stack chosen .-> ss
   d -->|Depth 1| ds
   d -->|Depth 2 or 3| dbm --> ds
   ds --> out
@@ -97,7 +95,7 @@ live?** — which repository host, and is it public or private?
 
 Depth is about the subject, not the effort — a large application is still
 Depth 1. *When in doubt, go shallower:* deepening is a normal initiative,
-while unwinding an over-modeled project throws away approved documents.
+while unwinding an over-modeled project throws away confirmed documents.
 
 **⚖ Judgement.** The third answer decides what the scaffold's GitHub-shaped
 files are for, and nothing else:
@@ -134,6 +132,7 @@ Then, in one pass, so the first commit is coherent:
 | File | Fill in |
 | ---- | ------- |
 | `AGENTS.md` | The real name and description, the layout, the commands, and the **declared depth** — `align-change-through-layers` Step 1a reads it on every later change. This is the agent entry point, whichever host is running |
+| `AGENTS.md` § Delivery | The delivery framework the project builds with and the standing file that carries the model's principles into it, where the Requester named one; `none yet` otherwise. It is not asked for: a project on none builds from its scope documents |
 | `README.md` | The project's own front door, not archreator's with names swapped |
 | `architecture/README.md` | The status table — one row per layer, each saying `Local`, `External`, `Out of scope` or a named `Gap`. On a fresh project most rows are `Gap — not yet started`, and layer 0 is `Out of scope` unless the subject is an organization |
 | Documentation language | Decide once, record it in `AGENTS.md`. If it is not English, `document-style` sets the rule and `architecture-document-style` requires a stereotype-correspondence table in `architecture/README.md`, and `scripts/prose-denylist.json` is translated, patterns and skipped labels alike, so `check_prose.py` reads the project's own words |
@@ -159,9 +158,9 @@ owns the layer, another model does, it is out of scope, or it is a gap.
 | **2 — Organization** | `Gap` until `discover-business-model` fills it | Not mentioned |
 | **3 — Enterprise** | `Gap` until `discover-business-model` fills it | A row per business line, added by `model-domains` |
 
-If no stack is chosen yet and this is a small application, use
-`stack-selection` rather than deciding from memory, and record the choice —
-with its date — when `5_technology/` is first emitted.
+A technology stack is not chosen here. It belongs to the delivery framework;
+where the Requester arrives with one, record it with `record-decision` when
+the first initiative reaches it.
 
 **← Needs** the declared depth.
 
@@ -198,11 +197,10 @@ reconstruct it from a repository nothing named.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles every later change is checked against, merged by the Requester |
-| `discover-business-model` | Depth 2 or 3 | The canvases, merged by the Requester before anything is derived from them; `discover-strategy` then derives the strategy layer |
+| `discover-strategy` | Depth 1 | Stakeholders, drivers, goals and the Principles every later change is checked against, confirmed by the Requester |
+| `discover-business-model` | Depth 2 or 3 | The canvases, confirmed by the Requester before anything is derived from them; `discover-strategy` then derives the strategy layer |
 | `model-domains` | Depth 3, after the enterprise level | One charter per business line, with its exposed and consumed services |
-| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, merged by the Requester |
-| `stack-selection` | No stack chosen, small application | A recorded choice in `5_technology/` |
+| `discover-current-landscape` | The subject was already running before it was modeled | The lower layers described from evidence, with a declared coverage, confirmed by the Requester |
 
 ## ✎ Worked example
 
@@ -235,7 +233,7 @@ reconstruct it from a repository nothing named.
 - `CLAUDE.md` and `GEMINI.md` sit beside it, each still nothing but
   `@AGENTS.md`.
 - The documentation language is decided and recorded.
-- The scaffold has been copied out of the plugin's `scaffold/` — all eleven
+- The scaffold has been copied out of the plugin's `scaffold/` — all thirteen
   files, and nothing was deleted afterwards, because nothing arrived that the
   project does not use.
 - Where the project lives is recorded in `AGENTS.md`, and anything emitted from

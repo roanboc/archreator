@@ -30,10 +30,10 @@ describes the whole branch, not the commit that happened to be last.
 ## ⌖ Where this sits
 
 Realizes `BPROC2.3`, the last process before merge. It carries **no approval
-of its own** — the Requester's approval is the pull request merging, not
-anything granted before it (`align-change-through-layers` § Where this
-stops). What waits here is the Reviewer, whose review is what leads to that
-merge.
+of its own** — the Requester confirmed what the change claims in the preview
+before this body was written (`conversation-previews`), and the merge lands
+it. What waits here is the Reviewer, whose review of the work is what leads
+to that merge.
 
 ```mermaid
 flowchart LR
@@ -84,6 +84,7 @@ change fills the same body — a pure bug fix included.
 | **Summary** | What the branch delivers, in two to four sentences |
 | **Scope document** | The `architecture/scope/N_*.md` file(s) this branch adds or updates. Check that it names what changed and why, that every layer has a verdict, and that any stop the work raised — `align-change-through-layers` § Where this stops — was resolved with the Requester rather than left open. A pure bug fix states "no scope document" with what broke, the root cause and the fix |
 | **EA layers touched** | The verdicts copied from the scope document's alignment table. Every layer gets one, including an explicit "no change" |
+| **Confirmed** | Which documents the Requester confirmed in a preview — who, when, in the conversation or at a session — and which stay `◐` because nobody has yet. "Nothing to confirm" for a change inside an element |
 | **Changes** | Grouped by work package or area, covering the full `main...HEAD` diff |
 | **Complexity** | What was removed, and what new recurring cost the change adds — a file in the scaffold, a check to keep green, a copy to hold together — with why it is justified. "Nothing removed, nothing recurring added" is a complete answer |
 | **Verification** | The commands run — lint, typecheck, tests, build — and their results, plus manual and end-to-end checks |

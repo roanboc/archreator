@@ -45,8 +45,8 @@ copies into your project. Nothing else lands.
 A host that cannot reach the marketplace — a sandboxed or offline session, a
 cloud runner that never fetches one — starts with **no archreator skills at
 all**. Nothing announces this: the agent simply never mentions the method,
-because fifteen of the eighteen skills are invisible to it by design and the
-other three were never loaded either. Two symptoms give it away: the agent
+because fourteen of the seventeen skills are invisible to it by design and
+the other three were never loaded either. Two symptoms give it away: the agent
 plans a change without running `align-change-through-layers`, or it quotes a
 skill it reconstructed from somewhere rather than read.
 
@@ -84,7 +84,7 @@ Option C and copy it yourself.
 
 ## Option C — clone the scaffold directly
 
-Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It is eleven files:
+Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architecture/README.md) into a new repository. It is thirteen files:
 
 - `AGENTS.md` and `README.md` — placeholders you'll fill in when the
   bootstrap skill runs
@@ -105,11 +105,29 @@ Copy [`plugins/archreator/scaffold/`](../plugins/archreator/scaffold/architectur
 Then follow the bootstrap checklist by hand, or install the skills and let
 `establish-project` do it.
 
+## Pairing it with a delivery framework
+
+archreator models why the subject exists, who does what and which information
+it holds, and registers which software realizes it. It does not design or
+build the software: that is the job of the delivery framework the project
+already uses — a spec-driven tool such as GitHub Spec Kit, Kiro or OpenSpec,
+or a team's own design documents.
+
+`AGENTS.md` § Delivery names the framework and its **standing file** — Spec
+Kit's constitution, Kiro's steering files, or whichever file that framework
+reads on every task. When a change touches a principle or a business rule,
+the agent carries it into that file in its own words with a link back to the
+model, so the framework builds against the intent the Requester confirmed.
+The realization register in `4_application/` links each component to its
+specification there. With no framework named, the scope documents are the
+specification.
+
 ## Keeping a project in sync with the method
 
-A project on an earlier method has a crossing to make first — the gates are
-gone, so is the open-questions log, and fifteen skills are now invoked by
-name. That is [`docs/migrating.md`](./migrating.md), separate from the
+A project on an earlier method has a crossing to make first — a confirmation
+now validates a document rather than the merge alone, layers 4 and 5 are a
+register handed over to the delivery framework, the gates and the
+open-questions log are gone, and fourteen skills are invoked by name. That is [`docs/migrating.md`](./migrating.md), separate from the
 routine sync below.
 
 Three things ship in this repo with different lifecycles, and only one of
@@ -123,7 +141,7 @@ them stays in sync automatically:
 - **The scaffold**, at `plugins/archreator/scaffold/`, is copied *once* into your project by
   `establish-project`. It does not update afterwards; a scaffold that
   changed under a project would rewrite documents the Requester already
-  approved.
+  confirmed.
 - **The scaffold's own scripts** in `plugins/archreator/scaffold/scripts/` land in your
   project's `scripts/`. They are the same on both sides; if the method's
   validators change, copy the complete tool bundle across:

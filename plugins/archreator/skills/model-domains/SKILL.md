@@ -38,7 +38,9 @@ Realizes `BPROC1.4`, and only at Depth 3. Splitting is a business-layer
 change, so it goes through the ordinary process: a scope document, built
 directly from the request and checked against the three stops in
 `align-change-through-layers` § Where this stops before any folder moves,
-then opened as a pull request whose merge is the approval.
+then previewed for every Requester whose domain it touches
+(`conversation-previews`) and opened as a pull request whose merge lands what
+they confirmed.
 
 ```mermaid
 flowchart TD
@@ -50,7 +52,7 @@ flowchart TD
   s3["⚙ 3 — Fill in the domain's layers"]
   s4["⚙ 4 — Namespace the identifiers"]
   ds(["⇄ discover-strategy"])
-  merged(["Merged — the approval"])
+  merged(["Confirmed, then merged"])
   out(["A domain with a contract other domains can build on"])
 
   trig --> s1 --> v
@@ -194,7 +196,7 @@ reconstruct it from a repository nothing named.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | The domain has goals distinct from the enterprise's | Its own `1_strategy/`, approved at Direction |
+| `discover-strategy` | The domain has goals distinct from the enterprise's | Its own `1_strategy/`, confirmed by that domain's Requester |
 | `align-change-through-layers` | The split itself, and every later change | A scope document, the three stops checked, and a pull request before the folders move |
 | `write-scope-document` | The split needs recording | One document naming every domain touched |
 
@@ -227,8 +229,8 @@ reconstruct it from a repository nothing named.
 - Identifiers are namespaced, and every cross-domain reference points at a
   service the owning charter actually exposes.
 - Where the change altered or removed an exposed service, the scope document
-  names every consuming domain, and the pull request tells each consuming
-  Requester before it merges.
+  names every consuming domain, and each consuming Requester was shown the
+  preview before the pull request merged.
 
 ## Cross-domain changes
 
@@ -236,10 +238,10 @@ reconstruct it from a repository nothing named.
 | --------- | ---------------- |
 | A change inside a domain touching nothing exposed | The owning domain's Requester only. Most changes |
 | Adding a new exposed service | The owning domain's Requester. Nobody depends on it yet |
-| Changing or removing an exposed service | **Every consuming domain's Requester is told at the pull request.** Name every consumer in the scope document |
+| Changing or removing an exposed service | **Every consuming domain's Requester is shown the preview before the pull request merges.** Name every consumer in the scope document |
 | Referencing another domain's internal element | A modeling error. Either it belongs in that domain's charter, or the dependency should not exist |
 
 A change spanning domains is still **one** initiative with one scope document
-— its alignment table names each domain touched, and the pull request that
-carries it is what every consuming domain's Requester reviews before it
-merges.
+— its alignment table names each domain touched, and its preview is what
+every consuming domain's Requester is shown before the pull request that
+carries it merges.

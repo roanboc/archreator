@@ -12,7 +12,7 @@ metadata:
 
 One document per initiative. An **architecture definition** narrowed to a
 single change: what it alters, which layers it touches, what it deliberately
-left out, and the pull request whose merge approved it.
+left out, who confirmed what it claims, and the pull request that landed it.
 
 ## ⊕ When to use this
 
@@ -42,7 +42,7 @@ flowchart LR
   doc[/"architecture/scope/n_name.md"/]
   idx[/"scope/README.md — the index"/]
   pr(["The pull request that cites it"])
-  merged(["Merged — the approval"])
+  merged(["Confirmed, then merged"])
 
   init --> doc --> idx
   doc --> pr --> merged
@@ -73,14 +73,14 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 ## EA alignment (assessed top-down before implementing)
 
-| Layer         | Impact                                              |
-| ------------- | ---------------------------------------------------- |
-| 0_business-design | <canvases added/changed — or "not used" for an application project> |
-| 1_strategy    | <new/changed goals, drivers — or "no change" + why> |
-| 2_business    | <services, processes, rules, glossary>              |
-| 3_information | <data objects, flows, storage, classification>      |
-| 4_application | <services, components, ports>                       |
-| 5_technology  | <runtimes, build, CI, hosting>                      |
+| Layer         | Impact                                              | Confirmed |
+| ------------- | ---------------------------------------------------- | --------- |
+| 0_business-design | <canvases added/changed — or "not used" for an application project> | <who, when, where — or "not yet"> |
+| 1_strategy    | <new/changed goals, drivers — or "no change" + why> | |
+| 2_business    | <services, processes, rules, glossary>              | |
+| 3_information | <data objects, flows, storage, classification>      | |
+| 4_application | <realization register rows: the components, what they serve, where their specification lives> | |
+| 5_technology  | <platform rows a business fact depends on — or "no change"> | |
 
 ## Plateaus
 
@@ -112,12 +112,15 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 - **Every layer gets a verdict**, including an explicit "no change". Silence
   is not a decision.
-- **The pull request's merge is the approval, and nothing records one before
-  it.** No Approvals table, no row to write — `align-change-through-layers`
-  § Where this stops.
-- **A merged pull request promotes the documents it changed**
-  (`architecture-document-style` § Document status). The merge is what says
-  the model claims are stood behind, not a separate ceremony.
+- **The Requester's confirmation validates, and the merge lands it.** No
+  Approvals table: the `Confirmed` column says, per layer, who confirmed the
+  preview of it, when, and whether in the conversation or at a session —
+  `conversation-previews` § A confirmation validates, and the merge records
+  it. A layer nobody confirmed says "not yet", and its documents stay `◐`
+  after the merge.
+- **A confirmation promotes the documents it covers**
+  (`architecture-document-style` § Document status), on the branch, before
+  the pull request opens. A merge alone promotes nothing.
 - **An interpretation the agent adopted is recorded where it applies**, never
   in a register of pending questions: the affected row's `Source` cell reads
   `adopted — <the call>`, and the document stays `◐` —
@@ -149,12 +152,14 @@ _[← Scope index](./README.md) · [Model home](../README.md)_
 
 > A docs-only discovery initiative records what it delivered — the strategy
 > documents it changed, and the "no change" verdicts for the layers it never
-> touched. The pull request that carries it links every changed document; its
-> merge is what approves them.
+> touched. The Requester confirmed the strategy preview in the conversation,
+> and the `Confirmed` column says so; the pull request that carries it links
+> every changed document, and its merge lands them.
 
 ## ⚠ Anti-patterns
 
-- Adding an Approvals table, or any row claiming an approval before the merge.
+- Adding an Approvals table, or a `Confirmed` cell nobody's confirmation stands
+  behind.
 - Leaving a layer out of the alignment table because nothing changed there.
 - Parking an adopted interpretation in a list of questions instead of writing
   it into the row it changed.

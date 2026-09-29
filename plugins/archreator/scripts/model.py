@@ -292,10 +292,9 @@ def label_census(projects: list[dict]) -> list[str]:
     """How many distinct words the model uses for a relationship, and how thinly.
 
     The projection carries a relationship label verbatim and maps it onto
-    nothing — see the module docstring, and `stack-selection` on why a guess at
-    ArchiMate's vocabulary is worse than an honest string. That decision is
-    right and it has a cost: nothing stops one model calling the same
-    relationship four things.
+    nothing, because a guess at ArchiMate's vocabulary is worse than an honest
+    string. That decision is right and it has a cost: nothing stops one model
+    calling the same relationship four things.
 
     So this **reports** and never enforces. A controlled list would have to be
     translated into every language a model can be written in, which is the one

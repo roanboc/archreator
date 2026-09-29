@@ -38,9 +38,9 @@ skill **runs first and hands off**.
 ## ⌖ Where this sits
 
 Realizes `BPROC1.2`. It builds the canvases directly from the Requester's
-answers, checks for a stop, and opens them as a pull request — its merge is
-the approval. Nothing is derived from the business model until that pull
-request has merged.
+answers, checks for a stop, previews them for the Requester's confirmation,
+and opens them as a pull request whose merge lands them. Nothing is derived
+from the business model until the Requester has confirmed it.
 
 ```mermaid
 flowchart TD
@@ -51,8 +51,8 @@ flowchart TD
   s4["⚙ 4 — Write the scope document"]
   s5["⚙ 5 — Check for a stop"]
   stop(["Stop — surface it to the Requester"])
-  s6["⚙ 6 — Open the pull request"]
-  merged(["Merged — the approval"])
+  s6["⚙ 6 — Preview, then open the pull request"]
+  merged(["Confirmed, then merged"])
   s7["⚙ 7 — Hand off to strategy discovery"]
   ds(["⇄ discover-strategy"])
   pcl(["⇄ process-and-capability-levels"])
@@ -69,9 +69,9 @@ flowchart TD
 ```
 
 This skill and `discover-strategy` are two separate initiatives, not two
-sittings of one: this one merges first, then `discover-strategy` runs as its
-own initiative — its own scope document, its own pull request — and derives
-from what merged here.
+sittings of one: this one is confirmed and merged first, then
+`discover-strategy` runs as its own initiative — its own scope document, its
+own pull request — and derives from what was confirmed here.
 
 ## ⚓ Invariants
 
@@ -135,7 +135,7 @@ from the plugin's `assets/layers/0_business-design/` before the first canvas,
 and the first filed source does the same with `assets/layers/reference/`.
 
 The canvases open `◐ Draft catalogue` and carry `Source` and `Notes` until
-this initiative's pull request merges — `architecture-document-style` §
+the Requester confirms them — `architecture-document-style` §
 Document status. Anything the Requester provided is filed in
 `architecture/reference/` first, and the `Source` column points there.
 
@@ -187,34 +187,40 @@ first.
 
 **→ Produces** a stated verdict: continue, or the named stop.
 
-### 6 — Open the pull request
+### 6 — Preview, then open the pull request
 
-Use `write-pr-description`. Present one compact summary — segments, their
-jobs, the sharpest pains and gains, the products, and per product the blocks
-that distinguish it (revenue, channels, dominant cost) — with **full branch
-links to each canvas document** (`align-change-through-layers` § Where this
-stops — the same link hygiene applies to anything put in front of the
-Requester, not only a stop).
+Show the Requester the preview `conversation-previews` defines, in the
+conversation or at a session: segments, their jobs, the sharpest pains and
+gains, the products, and per product the blocks that distinguish it (revenue,
+channels, dominant cost), with every call the agent took on its own line and
+**full branch links to each canvas document** (`align-change-through-layers` §
+Where this stops).
 
-Name the consolidation in the description: how many elements each catalogue
-holds, and what was merged to get there — a merge the Requester can overturn
-in review. It goes in the pull-request description and the scope document,
-never in the canvas (`document-style` § What the document contains).
+Name the consolidation in the preview: how many elements each catalogue
+holds, and what was combined to get there — something the Requester can
+overturn in their answer. It goes in the preview, the pull-request
+description and the scope document, never in the canvas (`document-style` §
+What the document contains).
+
+Their confirmation, written into the canvases, promotes them
+(`architecture-document-style` § Document status). Then open the pull request
+with `write-pr-description`; its merge lands what was confirmed.
 
 **← Needs** the continue verdict from Step 5.
 
-**→ Produces** a pull request a Reviewer can judge.
+**→ Produces** confirmed canvases, and a pull request a Reviewer can judge.
 
 ### 7 — Hand off to strategy discovery
 
-**Nothing is derived until this pull request has merged.**
+**Nothing is derived until the Requester has confirmed the canvases and the
+pull request has merged.**
 
 Then run `discover-strategy`, as its own initiative: it finds the canvases
 filled and **derives rather than re-asks**. Its themes map onto the canvas
 blocks; the only theme with no canvas source is **Principles**, still
 discovered directly.
 
-**← Needs** the merged pull request.
+**← Needs** the confirmed canvases, merged.
 
 ## ⇄ Hands off to
 
@@ -228,32 +234,33 @@ reconstruct it from a repository nothing named.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-strategy` | This initiative's pull request has merged | The strategy and key business layers derived from the canvases, built directly and opened as its own pull request — its own scope document, next-numbered |
-| `process-and-capability-levels` | While deriving, to decide how far down capabilities and processes go | Levels 1 and 2 complete, level 3 only where a Pain on the merged canvas justifies it |
+| `discover-strategy` | This initiative's canvases are confirmed and merged | The strategy and key business layers derived from the canvases, built directly and opened as its own pull request — its own scope document, next-numbered |
+| `process-and-capability-levels` | While deriving, to decide how far down capabilities and processes go | Levels 1 and 2 complete, level 3 only where a Pain on the confirmed canvas justifies it |
 
 ## ✎ Worked example
 
 > **"We're a three-person consultancy and I want to document how we work."**
 >
 > Depth 2, so this track rather than `discover-strategy`. Theme 3 yields twelve
-> pains; consolidation merges them to five with a per-segment severity column,
-> the pull-request description says so, and the Requester overturns one merge
-> in review.
+> pains; consolidation combines them into five with a per-segment severity
+> column, the preview says so, and the Requester splits one of them back out
+> in their answer.
 >
 > Two offerings turn out to have separate economics at theme 5, so theme 7
-> produces two Business Model Canvases rather than one. The pull request links
-> both canvas documents, and only once it merges does `discover-strategy` run,
+> produces two Business Model Canvases rather than one. The Requester confirms
+> both, the pull request links both canvas documents, and only once it merges
+> does `discover-strategy` run,
 > as its own initiative, to derive the capability map.
 
 ## ⚠ Anti-patterns
 
 - Filling a canvas block from what a business of this kind usually looks like,
   rather than from an answer.
-- Deriving the strategy layer before this pull request has merged.
+- Deriving the strategy layer before the canvases are confirmed.
 - Presenting a canvas whose pains have no relievers, without flagging it.
 - Consolidating at the end, which renumbers everything already read.
-- Writing the consolidation counts into the canvas rather than the
-  pull-request description.
+- Writing the consolidation counts into the canvas rather than the preview
+  and the pull-request description.
 - Folding the handoff to `discover-strategy` into this scope document instead
   of giving it its own.
 

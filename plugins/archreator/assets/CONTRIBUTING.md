@@ -18,13 +18,13 @@ same documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
-| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff, in plain words |
+| **Requester** | \<who owns the product> | Says what should change — a requirement or a problem, not a diff, in plain words — and confirms what the change claims when the agent previews it |
 | **Agent** | An AI agent (or a person) | Aligns the change through the architecture layers, writes a scope document, builds directly from the request, and opens a PR — stopping only for a contradiction, an ambiguity, or something needing authorization |
-| **Reviewer** | \<who reviews and merges> | Reviews and merges. The merge is the approval; nothing ships without it |
+| **Reviewer** | \<who reviews and merges> | Reviews the work and merges it. The merge lands what the Requester confirmed; nothing ships without it |
 
-What stops the work, and how it's presented, is defined once, in the
-`align-change-through-layers` skill § Where this stops — this page does not
-restate it.
+What stops the work is defined once, in the `align-change-through-layers`
+skill § Where this stops, and how the Requester is shown it and confirms it,
+in the `conversation-previews` skill — this page restates neither.
 
 ## Development workflow
 
@@ -34,7 +34,8 @@ restate it.
   than inventing them now.
 -->
 
-**\<placeholder> — no stack chosen yet.** The three validators already apply,
+**\<placeholder> — no stack chosen yet; it belongs to the delivery framework
+`AGENTS.md` § Delivery names.** The three validators already apply,
 and must be green before pushing; CI runs the same:
 
 ```bash

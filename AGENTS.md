@@ -9,7 +9,7 @@ more: worked examples of the method applied to real organizations live in
 
 | Path | What it holds |
 | ---- | ------------- |
-| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The eighteen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
+| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The seventeen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/plugin.json`](./plugins/archreator/plugin.json) · [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests. The two plugin manifests are the same fact in the two places hosts look for it, and `check_skills.py` holds them together |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model, and [`install_skills.py`](./plugins/archreator/scripts/install_skills.py), which copies the skills into `.agents/skills/` for a host that installs no plugin. Both stay out of `scaffold/` because a downstream project has no skills |
 | [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the per-layer status table), and `scripts/` with the three validators, the parse two of them share and their data files |
@@ -21,8 +21,8 @@ more: worked examples of the method applied to real organizations live in
 ## The rule that governs everything else
 
 **A change to what the model claims is aligned through the numbered layers
-and built directly, and the Requester's approval is the pull request
-merging.** A change to a project *using* archreator runs through
+and built directly, the Requester confirms what it claims in a preview in the
+conversation, and the pull request merging lands what they confirmed.** A change to a project *using* archreator runs through
 `align-change-through-layers`; a change to *the method itself* is recorded
 in the sibling repository
 [`architecture-archreator`](https://github.com/roanboc/architecture-archreator),
