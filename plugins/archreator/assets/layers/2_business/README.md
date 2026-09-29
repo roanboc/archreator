@@ -122,5 +122,5 @@ The AI actor takes the Application cyan inside a business diagram — one of the
 two colour overrides in the `architecture-document-style` rulebook § ArchiMate
 on Mermaid — so a reader never mistakes it for a person.
 
-Every business service is realized by application services — the mapping is
-in [4_application/1_application-services.md](../4_application/1_application-services.md).
+Every business service names the application components that serve it — the
+register is in [4_application/1_realization-register.md](../4_application/1_realization-register.md).

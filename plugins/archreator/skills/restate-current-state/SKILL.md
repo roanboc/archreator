@@ -49,7 +49,7 @@ flowchart TD
   s2["⚙ 2 — Restate"]
   s3["⚙ 3 — Record it as an initiative"]
   s4["⚙ 4 — Verify"]
-  merged(["Merged — the approval"])
+  merged(["Confirmed, then merged"])
   out(["A model that describes today"])
 
   drift --> s1 --> ask --> s2 --> s3 --> s4 --> merged --> out
@@ -198,8 +198,10 @@ Restating is a change to the model, so it gets a scope document with
 - Cross-links resolve.
 
 Check the three stops in `align-change-through-layers` § Where this stops
-before opening the pull request, then open it with `write-pr-description`.
-Its merge is the approval — nothing before that claims to be one.
+before opening the pull request. Show the Requester the preview of what moved
+(`conversation-previews`) — the Pending items settled, what retired, the
+decisions no longer binding — write their confirmation in, then open the pull
+request with `write-pr-description`; its merge lands what was confirmed.
 
 ## ⇄ Hands off to
 
@@ -214,7 +216,7 @@ reconstruct it from a repository nothing named.
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
 | `write-scope-document` | Step 3 | The document that records the restatement |
-| `write-pr-description` | Step 4 | The pull request whose merge is the approval |
+| `write-pr-description` | Step 4 | The pull request whose merge lands what was confirmed |
 | `align-change-through-layers` | Restating revealed the architecture *should* be different | That as its own initiative, built and opened as its own pull request |
 
 ## ✎ Worked example
@@ -237,8 +239,8 @@ reconstruct it from a repository nothing named.
 ## ☑ Done when
 
 - Every finding from Step 1 has a move applied or a stated reason it did not.
-- The restatement is opened as a pull request, and its merge is the only
-  approval recorded.
+- The Requester confirmed the restatement's preview, and it is opened as a
+  pull request whose merge lands it.
 - The verification checks pass, including the byte-identical one.
 - The model reads as a description of today.
 

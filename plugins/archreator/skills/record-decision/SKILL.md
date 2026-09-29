@@ -37,7 +37,7 @@ A decision record supplements a scope document; it never replaces one.
 ## ⌖ Where this sits
 
 Realizes `BPROC3.2`, in the band that keeps the model true. It carries no
-approval step of its own: it states a call already made, approved wherever
+approval step of its own: it states a call already made, confirmed wherever
 the call was taken.
 
 ```mermaid

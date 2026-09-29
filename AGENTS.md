@@ -9,10 +9,10 @@ more: worked examples of the method applied to real organizations live in
 
 | Path | What it holds |
 | ---- | ------------- |
-| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The eighteen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
+| [`plugins/archreator/skills/`](./plugins/archreator/skills/README.md) | The seventeen skills that are the method, ordered by the process each realizes, with the four rulebooks last. A verb-and-object name is a skill you run; a noun phrase is one you consult |
 | [`plugins/archreator/plugin.json`](./plugins/archreator/plugin.json) · [`plugins/archreator/.claude-plugin/plugin.json`](./plugins/archreator/.claude-plugin/plugin.json) · [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) | The plugin and marketplace manifests. The two plugin manifests are the same fact in the two places hosts look for it, and `check_skills.py` holds them together |
 | [`plugins/archreator/scripts/`](./plugins/archreator/scripts/check_skills.py) | `check_skills.py`, which checks the corpus against [the skill format](./docs/skill-format.md) and the process model, and [`install_skills.py`](./plugins/archreator/scripts/install_skills.py), which copies the skills into `.agents/skills/` for a host that installs no plugin. Both stay out of `scaffold/` because a downstream project has no skills |
-| [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the per-layer status table), and `scripts/` with the two validators and the parse they share |
+| [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the per-layer status table), and `scripts/` with the three validators, the parse two of them share and their data files |
 | [`plugins/archreator/assets/`](./plugins/archreator/assets/README.md) | The templates a skill emits **when the project has something to put in them** — the layer READMEs, the non-layer folders, the GitHub-shaped files, `CONTRIBUTING.md`. Their relative links resolve where they land, so `check_links.py` skips the tree and `check_skills.py` proves instead that every asset is reachable from a skill |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, [how to adopt it and how a model is published](./docs/adopting.md), [how an existing project crosses a breaking version](./docs/migrating.md), and [the format every skill follows](./docs/skill-format.md). The method's own initiative records and retrospectives live in the sibling repository [architecture-archreator](https://github.com/roanboc/architecture-archreator), never here. The skill catalogue is not here; it lives beside the skills |
 | [`site/`](./site/index.html) | The public site, deployed to <https://roanboc.github.io/archreator/> — a landing page, [a get-started page](./site/start.html) with the install recipe per host, and the stylesheet both share |
@@ -21,8 +21,8 @@ more: worked examples of the method applied to real organizations live in
 ## The rule that governs everything else
 
 **A change to what the model claims is aligned through the numbered layers
-and built directly, and the Requester's approval is the pull request
-merging.** A change to a project *using* archreator runs through
+and built directly, the Requester confirms what it claims in a preview in the
+conversation, and the pull request merging lands what they confirmed.** A change to a project *using* archreator runs through
 `align-change-through-layers`; a change to *the method itself* is recorded
 in the sibling repository
 [`architecture-archreator`](https://github.com/roanboc/architecture-archreator),
@@ -64,19 +64,21 @@ host.
 ```bash
 python3 plugins/archreator/scaffold/scripts/check_links.py    # relative links and HTML anchors resolve
 python3 plugins/archreator/scaffold/scripts/check_model.py    # element-ID references resolve, per project
+python3 plugins/archreator/scaffold/scripts/check_prose.py    # every model page speaks about its subject
 uv run    plugins/archreator/scripts/check_skills.py           # the skill corpus against the process model
 uv run    plugins/archreator/scripts/check_skills.py --report  # per-skill sizes, and what the listing spends
 uv run    --with pytest pytest plugins/archreator/scripts/tests/
 ```
 
-All must be green before pushing. The first two run on the scaffold here
-exactly as a downstream project runs them on its own model; the third has no
+All must be green before pushing. The first three run on the scaffold here
+exactly as a downstream project runs them on its own model; the rest have no
 downstream counterpart.
 
-**The scaffold ships two validators and the parse they share, and nothing
-else.** A project has to be able to check itself with no plugin installed and
-no network, so `check_links.py`, `check_model.py`, `model_graph.py` and
-`element-prefixes.json` are copied into it. The reading tools are not:
+**The scaffold ships three validators, the parse two of them share and their
+data files, and nothing else.** A project has to be able to check itself with
+no plugin installed and no network, so `check_links.py`, `check_model.py`,
+`check_prose.py`, `model_graph.py`, `element-prefixes.json` and
+`prose-denylist.json` are copied into it. The reading tools are not:
 `plugins/archreator/scripts/model.py` and `build_brief.py` run from here and
 take `--project <path>`, importing that project's `model_graph.py` so there is
 one parse of the document convention rather than one per project.

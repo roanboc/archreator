@@ -14,8 +14,9 @@ Every other skill in the method describes a present. This one describes an
 intent: where the architecture should be, what stands between here and there,
 and in what order the distance is closed.
 
-**A roadmap is a direction, not a permission.** What its pull request's merge
-approves is that this is the right destination and the right order. Each
+**A roadmap is a direction, not a permission.** What the Requester confirms
+when it is previewed is that this is the right destination and the right
+order. Each
 initiative on it still enters the spine, still aligns through the layers, and
 still checks its own three stops before anything is built.
 
@@ -60,7 +61,7 @@ flowchart TD
   s4["⚙ 4 — Sequence the initiatives"]
   s5["⚙ 5 — Write the scope document, name the stop"]
   stop(["Stop — surface it to the Requester"])
-  merged(["Merged — the approval"])
+  merged(["Confirmed, then merged"])
   s6["⚙ 6 — Bind the roadmap to the spine"]
   dcl(["⇄ discover-current-landscape"])
   acl(["⇄ align-change-through-layers"])
@@ -94,10 +95,10 @@ flowchart TD
   the organization can absorb at once is the Requester's, and it is asked.
 - **The roadmap declares its own standing.** Its documents define elements, so
   they carry a status line like any others: `◐ Draft catalogue` while the
-  target is being drafted, `● Validated, <date>` once this initiative's pull
-  request has merged (`architecture-document-style` § Document status).
-- **Nothing here is approved to build.** The merge approves the destination and
-  the order. Every initiative on the roadmap still runs the spine, and none of
+  target is being drafted, `● Validated, <date> — confirmed by <who>` once the
+  Requester has confirmed it (`architecture-document-style` § Document status).
+- **Nothing here is confirmed for building.** The confirmation covers the
+  destination and the order. Every initiative on the roadmap still runs the spine, and none of
   its three stops is skipped because the roadmap already named the work.
 - **Every plateau reached, abandoned or invalidated is written back.** A
   roadmap that is not revisited is worse than none, because it is trusted.
@@ -193,11 +194,11 @@ layer did not carry — record that as a change.
 to a direction they have not yet agreed. Name the stop rather than treating
 the roadmap as something that ships quietly with everything else.
 
-Present the plateaus, the gaps under each, and the order, with full branch
-links (`align-change-through-layers` § Where this stops — the same link
-hygiene applies to anything put in front of the Requester, not only a stop).
-Say two things plainly in the pull request rather than leaving them only in
-the document: that merging this approves the **destination and the order**,
+Preview the plateaus, the gaps under each, and the order
+(`conversation-previews`), with full branch links
+(`align-change-through-layers` § Where this stops). Say two things plainly in
+the preview and the pull request rather than leaving them only in the
+document: that confirming this approves the **destination and the order**,
 not the work; and what is deliberately not on it.
 
 **← Needs** the plateaus, the gaps, the sequence.
@@ -261,8 +262,7 @@ reconstruct it from a repository nothing named.
 - Sequencing every gap, until the roadmap is a backlog nobody reads.
 - Writing target elements into the numbered layers, which are the model's only
   description of today.
-- Treating the roadmap's merged pull request as approval to build the things
-  on it.
+- Treating the confirmed roadmap as approval to build the things on it.
 - Deleting a plateau when it is reached, leaving no record that it was ever
   the plan.
 
@@ -278,6 +278,6 @@ reconstruct it from a repository nothing named.
   choices are recorded with their reasons.
 - Nothing in `architecture/6_transition/` has leaked into the numbered layers.
 - The scope document and pull request name the roadmap documents shown, name
-  the Authorization stop where it fires, and say plainly that merging approves
-  the destination and the order, not the work itself.
+  the Authorization stop where it fires, and say plainly that confirming it
+  approves the destination and the order, not the work itself.
 - The roadmap says how it is kept current, and who does it.

@@ -1,4 +1,4 @@
-# Crossing versions — for a project on 0.2 through 0.5
+# Crossing versions — for a project on 0.2 through 0.6
 
 _[← Repository README](../README.md) · [Adopting archreator](./adopting.md)_
 
@@ -9,6 +9,50 @@ that introduced it.
 
 The plugin itself updates the ordinary way — see
 [keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
+
+## A confirmation validates, and layers 4 and 5 are a register (0.7)
+
+Two changes, and neither moves an element.
+
+**The Requester confirms; the merge lands it.** Before a change's pull request
+opens, and at the end of each discovery group, the agent shows the Requester a
+preview — what changes about the subject, every call it took for them, and
+one question or none — in the conversation, or as a one-page pack for a
+meeting. Their confirmation is written into the documents it covers, and that
+is what moves a document to `●`. A merge nobody confirmed validates nothing.
+See the `conversation-previews` skill.
+
+- **A status line names who confirmed it**: `● Validated, <date> — confirmed
+  by <who>`. A document already `●` keeps its line — it was validated under
+  the rule of its day. The next change that touches it adds the name.
+- **The scope document's alignment table gains a `Confirmed` column**, and
+  the pull-request template a **Confirmed** section. Copy the template from
+  the plugin's `assets/github/pull_request_template.md`, and add the column
+  to the next scope document; merged ones are never rewritten.
+- **Living documents sweep once** — `AGENTS.md`, `CONTRIBUTING.md`, the front
+  door's depth table: the rule says the Requester confirms what a change
+  claims and the merge lands it.
+
+**Layers 4 and 5 are a register handed over to delivery.** The model keeps a
+row per application component — what it serves, where it is specified, which
+code realizes it — and a platform only where a business fact depends on
+where it runs. The design, the interfaces, the stack and the deployment belong
+to the delivery framework, named in a new `AGENTS.md` § Delivery with its
+standing file; the principles reach it through that file.
+
+- **Add § Delivery to `AGENTS.md`** — copy it from the scaffold, naming the
+  framework and its standing file, or `none yet`.
+- **Existing layer 4 and 5 documents may stay** while they are true. When one
+  goes stale, `restate-current-state` collapses it into the register rather
+  than repairing the design: the design moves to the framework's documents,
+  and the register links there. Identifiers and prefixes survive; a
+  component keeps its ID when its row moves.
+- **`stack-selection` and `shard-stories` are retired.** A stack chosen for
+  the first time is recorded with `record-decision`; a work package too large
+  for one sitting is broken down by the delivery framework. Story files a
+  project already holds stay as history.
+- **`conversation-previews` joins the corpus**, invoked by name like the other
+  thirteen.
 
 ## The gates are gone (0.6)
 
@@ -158,6 +202,7 @@ undefined state. Nothing already assigned moves.
 ## What an existing project keeps
 
 Every element, status glyph, prefix and skill name survives. The ○ / ◐ / ●
-discipline, the two validators and all eighteen skills are unchanged; the
-relationship tables move once, into the catalogue the 0.5 section describes,
-and nothing else in a model's content needs to move.
+discipline and the validators are unchanged, and every skill name survives
+except the two 0.7 retires; the relationship tables move once, into the
+catalogue the 0.5 section describes, and nothing else in a model's content
+needs to move.

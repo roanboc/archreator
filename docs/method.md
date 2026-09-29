@@ -8,10 +8,11 @@ assumptions turned out to disagree with each other.
 
 The one-paragraph version of how: **a change to what the model claims is
 worked through numbered architecture layers, captured in a scope document,
-and built directly from your request.** Your approval is the pull request
-merging — nothing earlier claims to be one, and the agent stops before that
-only when something contradicts what you have already decided or reads two
-ways. A change inside something the model already names — a screen, a
+and built directly from your request.** The agent shows you what the change
+claims, in the conversation you are already having, and your confirmation is
+what makes it true; the pull request merging lands it. The agent stops before
+that only when something contradicts what you have already decided, reads two
+ways, or would commit you to something you have not agreed. A change inside something the model already names — a screen, a
 filter, a file format — is just built, and the model stays true by
 construction. You keep the strategy and business judgement; AI agents do the
 modeling and the building in between, and every actor's kind and autonomy is
@@ -29,9 +30,9 @@ against the same documents.
 
 | Role | Who | Does |
 | ---- | --- | ---- |
-| **Requester** | You | Says what should change — a requirement or a problem, not a diff, in plain words |
+| **Requester** | You | Says what should change — a requirement or a problem, not a diff, in plain words — and confirms what the change claims when the agent previews it |
 | **Agent** | An AI agent (or a person) | Walks the architecture ladder, writes a short scope document, builds directly from the request, and opens a PR — stopping only when something contradicts what you have decided, reads two ways, or needs authorization |
-| **Reviewer** | You | Reviews and merges. The merge is the approval; nothing ships without it |
+| **Reviewer** | You | Reviews the work and merges it. The merge lands what the Requester confirmed; nothing ships without it |
 
 ## The six layers
 
@@ -45,8 +46,19 @@ exists to prevent.
 | 1 | Strategy | Why does this exist? Who cares? What capabilities and value stream? |
 | 2 | Business | Who does what? Which services are offered, through which processes? |
 | 3 | Information | What information exists, where does it live, how does it flow? |
-| 4 | Application | Which software services and components realize the business services? |
-| 5 | Technology | What runs it all — runtimes, tooling, build, hosting, deployment? |
+| 4 | Application | Which software realizes each business service, and where is it specified? |
+| 5 | Technology | Where does something have to run, and why does the business care? |
+
+**Layers 0 to 3 are the model; layers 4 and 5 are a register.** The model
+owns why the subject exists, who does what and which information it holds.
+For the software it keeps one row per application component — what it
+serves, where it is specified, which code realizes it — and a platform only
+where a business fact depends on where something runs. How the software is
+designed, its interfaces and its deployment belong to the delivery framework
+the project uses, such as a spec-driven tool, and `AGENTS.md` names it. The
+principles reach it through that framework's standing file — its
+constitution or steering file — carried in their own words with a link back,
+never as a second copy of the model.
 
 Layer 0 is the odd one out — it holds no ArchiMate elements, only the
 Value Proposition and Business Model canvases the architecture is derived
@@ -66,8 +78,8 @@ out from what was missed.
 permitted to describe a future: target plateaus, the gaps between them and
 today, and the order the gaps are closed in. The
 [`plan-the-transition` skill](../plugins/archreator/skills/plan-the-transition/SKILL.md)
-writes it, built directly and merged like any initiative — merging it
-approves the direction, not permission to build any of it. Intent lives in
+writes it, built directly, confirmed and merged like any initiative —
+confirming it approves the direction, not permission to build any of it. Intent lives in
 one folder so every numbered layer reads as a description of now.
 
 ## One method, three depths
@@ -77,11 +89,11 @@ company alike. What changes is **how much of them gets filled in.** Every
 project declares one depth in `AGENTS.md`, and **the agent tells you which
 depth it picked and why**.
 
-| Depth | The subject is | You get | Approval |
+| Depth | The subject is | You get | Who confirms |
 | ----- | -------------- | ------- | -------- |
-| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | Your merge of the pull request |
-| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | Your merge of the pull request |
-| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | Your merge, and every affected domain's Requester told at the same pull request |
+| **1 — Application** | one app or tool | a light strategy layer: goals and principles, enough to judge a change against | You, in the conversation |
+| **2 — Organization** | a company, department, or service line | value proposition and business model canvases, and the operating model derived from them | You, in the conversation or at a session |
+| **3 — Enterprise** | several business lines | the above, plus each line modeled as a domain with its own charter and service contracts | You, and every affected domain's Requester for its own part, before the same pull request |
 
 Depth is a starting posture, never a ceiling — deepening is a normal
 change, not a restart.
@@ -89,9 +101,12 @@ change, not a restart.
 ## When it stops and asks you
 
 **Nothing stops for approval before it is built.** The agent works from your
-request directly, through the layers, and opens the result as a pull
-request. **Your merge of that pull request is the approval** — nothing
-earlier claims to be one.
+request directly, through the layers, then **shows you a preview** — what
+changes about your business, every call it took on your behalf, and one
+question if it has one — where you are: in the conversation, or as a one-page
+pack for a meeting. **Your confirmation is what validates the model**, and
+the pull request merging lands it. A merge nobody confirmed validates
+nothing.
 
 Three things stop the work before that point, and the agent says which:
 
@@ -122,21 +137,25 @@ How a requirement gets from "someone wants a change" to "merged".
 flowchart LR
   req(["⚇ Requester presents a requirement"])
   align["⚙ Agent aligns it through the layers"]
-  build["⚙ Agent implements, keeping the documents true"]
+  build["⚙ Agent hands the realization over and implements"]
+  prev(["⚇ Requester confirms the preview"])
   rev(["⚇ Reviewer reads the whole branch"])
-  merged(["Merged — the approval"])
+  merged(["Merged"])
 
-  req --> align --> build --> rev
+  req --> align --> build --> prev --> rev
+  prev -->|changes asked for| build
   rev -->|changes requested| build
   rev -->|approved| merged
 
   classDef business fill:#fffbb5,stroke:#c8c04a,color:#333
-  class req,align,build,rev,merged business
+  class req,align,build,prev,rev,merged business
 ```
 
-One loop, and it cannot be skipped: the Reviewer's, which runs before any
-code merges. Where the Requester and the Reviewer are the same person — the
-common case — that one review is the one approval there is.
+Two loops, and neither can be skipped. The Requester's confirms what the
+change **claims**, where they are; the Reviewer's reads the **work** before
+any code merges. Where the Requester and the Reviewer are the same person —
+the common case — both happen in one conversation, and the preview is what
+keeps the review from being a merge nobody read.
 
 Inside the Agent boxes there is branching — a "no change" verdict on a layer,
 a "pure bug fix, no scope document" statement, a conflict with a Principle
@@ -171,7 +190,7 @@ relationships, and a machine reads them there.
 
 **Every document that defines an element says how far it has been validated**,
 with one of three glyphs in its preamble: `○` not started, `◐` a draft
-catalogue, `●` validated, since a named date. A draft catalogue is
+catalogue, `●` validated — confirmed by a named person, on a named date. A draft catalogue is
 a list of things somebody said exist, written down with notes so they can be
 checked — it is *not* an architecture draft, and on the page the two are
 identical. The marker is what separates them, and `check_model.py` fails a

@@ -13,7 +13,8 @@ metadata:
 When this skill applies, **the entire initiative is discovery**: no code, no
 application design, no stack decisions. The deliverables are the strategy
 layer, the key business elements it implies, and a scope document — built
-directly and opened as a pull request whose merge is the approval. The
+directly, confirmed by the Requester in a preview, and opened as a pull
+request whose merge lands it. The
 request that triggered it follows as a separate initiative through
 `align-change-through-layers`.
 
@@ -23,7 +24,7 @@ request that triggered it follows as a separate initiative through
 | ------------- | ------------------ |
 | Missing or placeholder | `architecture/1_strategy/` does not exist yet, or still holds template text — the project's first real initiative |
 | The change shifts strategy | It adds or modifies a Stakeholder, Driver, Goal or Principle, or reshapes the value stream |
-| Handed over from the canvases | `discover-business-model`'s pull request has merged, and the strategy is derived from what it merged |
+| Handed over from the canvases | The Requester has confirmed `discover-business-model`'s canvases, and the strategy is derived from what they confirmed |
 
 ## ⊖ When not to
 
@@ -35,19 +36,19 @@ request that triggered it follows as a separate initiative through
 ## ⌖ Where this sits
 
 Realizes `BPROC1.3`. It builds the strategy layer directly from the
-Requester's answers, checks for a stop, and opens it as a pull request — its
-merge is the approval.
+Requester's answers, checks for a stop, previews it for the Requester's
+confirmation, and opens it as a pull request whose merge lands it.
 
 ```mermaid
 flowchart TD
-  trig(["Placeholders, a strategy shift, or a merged canvas"])
+  trig(["Placeholders, a strategy shift, or a confirmed canvas"])
   s1["⚙ 1 — Run the conversation, theme by theme"]
   s2["⚙ 2 — Write the layer as you go"]
   s3["⚙ 3 — Write the scope document"]
   s4["⚙ 4 — Check for a stop"]
   stop(["Stop — surface it to the Requester"])
-  s5["⚙ 5 — Open the pull request"]
-  merged(["Merged — the approval"])
+  s5["⚙ 5 — Preview, then open the pull request"]
+  merged(["Confirmed, then merged"])
   pcl(["⇄ process-and-capability-levels"])
   out(["A strategy a change can be judged against"])
 
@@ -77,8 +78,8 @@ flowchart TD
   from it: confirm what still holds, and focus on what the new requirement
   bends.
 - **Derive, don't re-ask.** Where the canvases are filled, the Requester has
-  already answered most of themes 1, 2, 4 and 5 and had them approved when
-  `discover-business-model`'s pull request merged. Start each theme from the
+  already answered most of themes 1, 2, 4 and 5 and confirmed them when
+  `discover-business-model`'s canvases were previewed. Start each theme from the
   blocks it derives from, draft the elements, and ask only what the canvases
   leave genuinely open. Note the source block on each derived element.
 
@@ -131,7 +132,7 @@ elements `assets/layers/2_business/`, the first filed source
 `assets/layers/reference/`.
 
 Each document opens `◐ Draft catalogue` and its tables carry `Source` and
-`Notes` until this initiative's pull request merges —
+`Notes` until the Requester confirms it —
 `architecture-document-style` § Document status. Where the Requester provided
 anything to work from, it is filed in `architecture/reference/` and the
 `Source` column points there.
@@ -183,17 +184,23 @@ first.
 
 **→ Produces** a stated verdict: continue, or the named stop.
 
-### 5 — Open the pull request
+### 5 — Preview, then open the pull request
 
-Use `write-pr-description`. Present one compact summary — stakeholders,
-drivers, goals, principles, value stream, key business elements — with **full
-branch links to each document behind it** (`align-change-through-layers` §
-Where this stops — the same link hygiene applies to anything put in front of
-the Requester, not only a stop).
+Show the Requester the preview `conversation-previews` defines, in the
+conversation or at a session: the why in one sentence, the goals and
+principles as plain sentences, the value stream as one small picture, and
+every call the agent took for them on its own line — with **full branch links
+to each document behind it** (`align-change-through-layers` § Where this
+stops). Ask the one question that most changes what gets built, if any.
 
-Its merge is what promotes every document it covers
-(`architecture-document-style` § Document status). Only after this pull
-request has merged may an implementation initiative build on this strategy.
+The strategy goes first and the key business elements after it, as their own
+preview: business elements derived from a strategy nobody has confirmed are
+built on an assumption.
+
+Their confirmation, written into the documents it covers, is what promotes
+them (`architecture-document-style` § Document status). Then open the pull
+request with `write-pr-description`; its merge lands what was confirmed. Only
+a confirmed and merged strategy may an implementation initiative build on.
 
 **← Needs** the continue verdict from Step 4.
 
@@ -219,9 +226,10 @@ reconstruct it from a repository nothing named.
 
 > A project created from the scaffold gets its first feature request. Step 1c of
 > the spine finds placeholders, so the initiative becomes discovery. Theme 2
-> yields eleven goals; consolidation leaves six, and the pull-request
-> description says so. It merges against branch links to three documents, and
-> the feature that triggered it is opened as its own initiative.
+> yields eleven goals; consolidation leaves six, and the preview says so. The
+> Requester confirms five and rewords the sixth, the documents move to `●`, the
+> pull request merges against branch links to three documents, and the feature
+> that triggered it is opened as its own initiative.
 
 ## ⚠ Anti-patterns
 
@@ -230,11 +238,13 @@ reconstruct it from a repository nothing named.
   (`architecture-document-style` § A summary of a meeting records facts, not
   judgements).
 - Filling an element from what a project like this usually wants.
-- Re-asking a question the Requester already answered on a merged canvas.
+- Re-asking a question the Requester already answered on a confirmed canvas.
 - Twenty goals, because nobody checks a change against twenty.
 - Writing principles that cannot be tested — "be secure" rather than "role
   determines access".
-- Building an implementation on a strategy whose pull request has not merged.
+- Building an implementation on a strategy the Requester has not confirmed, or
+  whose pull request has not merged.
+- Drafting the key business elements before the strategy is confirmed.
 
 ## ☑ Done when
 

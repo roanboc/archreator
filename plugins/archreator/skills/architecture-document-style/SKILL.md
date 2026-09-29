@@ -91,18 +91,20 @@ three glyphs:
 | Glyph | Status | What it means |
 | ----- | ------ | ------------- |
 | `○` | **Not started** | The document exists so the gap is visible. It defines nothing yet, and a claim about this part of the subject is not in the model |
-| `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has approved them. Identifiers may still be renumbered, figures are unconfirmed, and nothing here may be built on |
-| `●` | **Validated** | The pull request that changed it has merged, on that date |
+| `◐` | **Draft catalogue** | Elements have been *identified* — from a conversation, a reference document, a sweep of a running estate — and written down with notes. Nobody has confirmed them. Identifiers may still be renumbered, figures are unconfirmed, and nothing here may be built on |
+| `●` | **Validated** | A person with standing over the subject confirmed it, on that date, and the pull request carrying it has merged |
 
-The line says what would move it, or what already did — the pull request that
-changes the document merging (`align-change-through-layers` § Where this
-stops):
+The line says what would move it, or what already did — the Requester's
+confirmation of a preview of it, given in the conversation or at a session
+(`conversation-previews` § A confirmation validates, and the merge records
+it). **A merge alone moves nothing**: a document nobody confirmed stays `◐`
+after its pull request merges.
 
 ```markdown
 **Status:** ◐ Draft catalogue — identified from the sources named below, not
-yet validated.
+yet confirmed.
 
-**Status:** ● Validated, 2026-08-24.
+**Status:** ● Validated, 2026-08-24 — confirmed by the product owner.
 ```
 
 `○` is the only one that is optional — the validator asks for no status on a
@@ -132,14 +134,15 @@ width:
 the document stays `◐`** so a later word from the Requester overrides it
 (`align-change-through-layers` § Ask only what blocks the work now).
 
-At the merge, `Source` stays — provenance does not expire. **`Notes` is
-emptied**, because a note that survives its own document's validation is
+At the confirmation, `Source` stays and gains who confirmed it — provenance
+does not expire. **`Notes` is emptied**, because a note that survives its own
+document's validation is
 either a fact, which belongs in the model, or something nobody cared about,
 which belongs nowhere.
 
 **Mixed documents are normal, and the status is the weakest part.** A
-validated layer that a new initiative adds elements to is `◐` until that
-initiative's pull request merges — not `●` with an asterisk. A reader who
+validated layer that a new initiative adds elements to is `◐` until the
+Requester confirms the additions — not `●` with an asterisk. A reader who
 trusts a `●` document must be able to trust all of it.
 
 ### Element IDs
@@ -200,6 +203,14 @@ module path, a pipeline file. If you cannot point at the realizing
 artifact, either the element doesn't belong in the docs, or the code is
 missing and the element should be marked explicitly **"Pending — future
 initiative"** (ideally linked to the initiative that will deliver it).
+
+**Layers 4 and 5 are a register, not a design.** `4_application/` holds a row
+per application component: the business services and processes it serves,
+where its specification lives, and the code that realizes it.
+`5_technology/` holds a platform only where a business fact depends on where
+something runs. How the software is designed, its interfaces and its
+deployment belong to the delivery framework `AGENTS.md` § Delivery names,
+and a register row links to them rather than restating them.
 
 ### Relationships are declared, never only drawn
 

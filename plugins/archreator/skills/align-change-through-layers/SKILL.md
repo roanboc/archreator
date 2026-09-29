@@ -11,12 +11,16 @@ metadata:
 
 **The spine.** A change to what the model claims is walked through the
 layers before it is built — strategy and business architecture first — so
-nothing is coded against a business fact nobody checked. The Requester's
-approval is the pull request merging; nothing earlier claims to be one.
+nothing is coded against a business fact nobody checked. The Requester
+confirms what the change claims in a preview, in the conversation they are
+already having; the pull request merging lands what they confirmed.
 
 A change to what the model claims is aligned through the documents in
 `architecture/`, captured in a scope document, and built directly from the
-request. The folder numbers give the assessment order. A change inside an
+request. The model owns the intention and the operation — strategy, business,
+information — and a register of what realizes them; how the software is
+designed and built belongs to the delivery framework the project uses. The
+folder numbers give the assessment order. A change inside an
 element the model already names is coded directly — § When not to.
 
 ## ⊕ When to use this
@@ -32,7 +36,7 @@ element the model already names is coded directly — § When not to.
 | The situation | Use instead |
 | ------------- | ----------- |
 | A change inside an element the model already names — a screen, a filter, a validation, an import format for an ingestion service that exists, a defect | Implement. Nothing is documented; the element's realizing artifact is where a reader looks |
-| A change that only keeps the model true — a row's wording or realizing path, nothing added, removed or re-related, no rule contradicted | Implement, and edit the row in the same commit. No scope document; a `●` document stays `●`, because what was approved was the element, not its label |
+| A change that only keeps the model true — a row's wording or realizing path, nothing added, removed or re-related, no rule contradicted | Implement, and edit the row in the same commit. No scope document; a `●` document stays `●`, because what was confirmed was the element, not its label |
 | The project was never bootstrapped | `establish-project` first. `AGENTS.md` declaring no depth is the signal |
 | The model has drifted rather than the requirement | `restate-current-state` — its own initiative, with its own diff |
 | The question is where to go rather than what to build | `plan-the-transition` — a target state, a gap register and a sequence |
@@ -64,11 +68,11 @@ flowchart TD
   s2["⚙ 2 — Align business and information"]
   s3["⚙ 3 — Draft the scope document"]
   s4["⚙ 4 — Check for a stop"]
-  s5["⚙ 5 — Align application and technology"]
+  s5["⚙ 5 — Hand the realization over"]
   s6["⚙ 6 — Implement"]
   s7["⚙ 7 — Verify alignment"]
-  s8["⚙ 8 — Open the pull request"]
-  merged(["Merged — the approval"])
+  s8["⚙ 8 — Preview, then open the pull request"]
+  merged(["Confirmed, then merged"])
 
   req --> s1 --> v
   v -->|discovery needed| disc
@@ -112,12 +116,14 @@ from an unaffected one.
 
 ### Ask only what blocks the work now
 
+**Every question, preview and confirmation follows `conversation-previews`.**
+
 **Decide what you can decide.** A question reaches the Requester only when
 both are true: the answer changes what gets built now, and nothing in the
 model or the request settles it. Everything else is the agent's call — taken,
 applied, and written into the document it affects with its `Source` cell
 reading `adopted — <the call>`. That document stays `◐`, so a later word from
-the Requester overrides it where a merged fact would not.
+the Requester overrides it where a confirmed fact would not.
 
 **Never ask about a state that does not exist yet.** A question about what
 will be true after work nobody has scheduled is not a question; it is the
@@ -129,10 +135,13 @@ asked to choose between the method's options.
 
 ## Where this stops
 
-**The Requester's approval is the pull request merging.** Nothing before that
-claims to be one, and nothing needs to: this skill builds directly from the
-request, through the layers, and opens the result as a pull request for
-review.
+**The Requester confirms what the change claims; the merge records it.**
+Nothing is presented for approval before it is built: this skill builds
+directly from the request, through the layers, and shows the Requester a
+preview before the pull request opens (`conversation-previews`). Their
+confirmation, written into the documents it covers, is what moves them to
+`●`; the pull request merging lands it. A merge with no confirmation behind it
+validates nothing.
 
 Three things stop the walk before that, and the agent **names which one**
 rather than just asking a question:
@@ -145,14 +154,15 @@ rather than just asking a question:
 
 Naming the stop is what makes it answerable: "I need authorization before I
 publish this" tells a Requester what kind of answer is wanted; "is this okay?"
-does not. When a stop fires, name it in the conversation or a pull-request
-comment, with a full link to the content under review — resolving to the
-branch the work is on, never the default branch.
+does not. When a stop fires, name it where the Requester is — in the
+conversation, or in the session pack of `conversation-previews` § Where the
+preview goes — shown as a preview, with a full link to the content under
+review resolving to the branch the work is on, never the default branch.
 
-**A merged pull request moves a status line.** An element added or changed by
-this initiative sits in a document marked `◐ Draft catalogue` until the
-initiative's pull request merges; the moment it does, the document says
-`● Validated, <date>` and its `Notes` column is emptied —
+**A confirmation moves a status line.** An element added or changed by this
+initiative sits in a document marked `◐ Draft catalogue` until the Requester
+confirms it; then the document says `● Validated, <date> — confirmed by <who>`
+and its `Notes` column is emptied, on the branch, and the merge lands it —
 `architecture-document-style` § Document status.
 
 **This is the whole of it.** `AGENTS.md`, `architecture/scope/README.md` and
@@ -252,7 +262,7 @@ request builds is written down first; refine it as implementation proceeds.
 
 ### 4 — Check for a stop
 
-Before touching application or technology, check the three stops in § Where
+Before handing anything to the delivery framework, check the three stops in § Where
 this stops: does anything here contradict a Principle or a decision already
 written down? Do two readings of the request lead to different work? Would
 this commit the Requester to spend, public exposure, publishing the model, or
@@ -263,27 +273,38 @@ here is presented for approval first.
 
 **→ Produces** a stated verdict: continue, or the named stop.
 
-### 5 — Align application and technology
+### 5 — Hand the realization over
 
-| Layer | The question |
+The model says *what* realizes the business, not *how* it is built. Two things
+change here, and nothing else:
+
+| Where | What changes |
 | ----- | ------------ |
-| `architecture/4_application/` | Which application services or components change? New ports and interfaces follow `5_interface-contracts.md`; new platforms and adapters follow `4_solution-design.md` |
-| `architecture/5_technology/` | Any impact on runtimes, build, CI or hosting? Where no stack has been chosen, use `stack-selection` rather than deciding from memory |
+| `architecture/4_application/` and `architecture/5_technology/` | The realization register: a row per application component the change adds or re-relates — the business services and processes it serves, where its specification lives, and the code that realizes it — and a platform row only where a business fact depends on where something runs. No design, no interface contract, no deployment pipeline |
+| The delivery framework's standing file | The principles and business rules this change touches, carried in their own words with a link back to the model — the file `AGENTS.md` § Delivery names: a constitution, a steering file, a principles section. It holds the model's intent; it never becomes a second copy of the model |
+
+The design, the stack, the interface contracts and the build sequence are the
+delivery framework's documents, and the scope document links to them rather
+than restating them. A stack chosen for the first time is a consequential call:
+record it with `record-decision`.
+
+Where `AGENTS.md` names no delivery framework, the scope document's work
+packages are the specification, and the register's specification cell names
+them.
 
 As in Step 2, a layer filled for the first time gets its README from the
 plugin's assets — `assets/layers/4_application/`, `assets/layers/5_technology/`.
 
 **← Needs** the continue verdict from Step 4.
 
-**→ Produces** changed `4_application/` and `5_technology/`.
+**→ Produces** the realization register updated, and the standing file
+carrying the principles this change touches.
 
 ### 6 — Implement
 
-**First, size the work.** If any work package is too large or long-running to
-finish in one sitting — more than a handful of files, or spanning a break, a
-session boundary, or a handoff — shard it with `shard-stories` before writing
-code. A small work package needs no stories; an inline task list in the scope
-document is the default.
+**First, size the work.** A work package too large to finish in one sitting
+is broken down by the delivery framework's own planning, not by the model; a
+small one needs nothing beyond the inline task list in the scope document.
 
 Only now write code. Keep the architecture and scope documents true to what is
 actually delivered. If implementation diverges from the plan, update them in
@@ -322,12 +343,21 @@ who asked for a feature and received a merged docs-only PR will reasonably
 think the process failed to build anything. Name the request that triggered
 discovery and offer to open it as the next initiative.
 
-### 8 — Open the pull request
+### 8 — Preview, then open the pull request
 
-Use `write-pr-description`: it fills the one template and covers the whole
-branch (`main...HEAD`), not just the latest commit.
+**Show the Requester the preview** `conversation-previews` defines — what
+changes about the subject, every call the agent took for them, and one
+question or none — where they are. Write their confirmation into the
+documents it covers, with the documents it completes moved to `●`; a change
+they ask for is made on the branch and previewed again.
 
-**→ Produces** a pull request a Reviewer can judge.
+Then use `write-pr-description`: it fills the one template and covers the
+whole branch (`main...HEAD`), not just the latest commit, and says which
+documents were confirmed and which stay `◐`.
+
+**← Needs** the verified branch.
+
+**→ Produces** confirmed documents, and a pull request a Reviewer can judge.
 
 ## ⇄ Hands off to
 
@@ -341,13 +371,13 @@ reconstruct it from a repository nothing named.
 
 | Skill | When | What comes back |
 | ----- | ---- | --------------- |
-| `discover-business-model` | Step 1c returns operating-model discovery | Canvases, merged by the Requester, then the strategy derived from them |
-| `discover-strategy` | Step 1c returns strategy discovery | A filled strategy layer, merged by the Requester. Implementation re-enters here as its own initiative |
+| `discover-business-model` | Step 1c returns operating-model discovery | Canvases, confirmed by the Requester, then the strategy derived from them |
+| `discover-strategy` | Step 1c returns strategy discovery | A filled strategy layer, confirmed by the Requester. Implementation re-enters here as its own initiative |
 | `model-domains` | Depth 3, and the change crosses a domain boundary | The contract change, with every consuming Requester told at the pull request |
 | `write-scope-document` | Step 3 | The document that records what changed and why |
 | `process-and-capability-levels` | Step 2 at Depth 2 or above | Levelled processes, shaped rather than decided per initiative |
-| `stack-selection` | Step 5, and no stack chosen | A recorded choice in `5_technology/` |
-| `shard-stories` | Step 6, and a work package is too large | Self-contained stories in build order |
+| `record-decision` | Step 5, and a stack is chosen for the first time | The choice and its reasons, recorded once |
+| `conversation-previews` | A stop fires, and Step 8 | The preview, the question, and the confirmation written into the documents |
 | `write-pr-description` | Step 8 | The pull-request body |
 | `run-retrospective` | The pull request merged and judgement was exercised — the method was silent somewhere and someone improvised | A pattern note in the organization's own records; each proposal becomes its own initiative |
 
@@ -357,10 +387,13 @@ reconstruct it from a repository nothing named.
 > the strategy filled and the change serving an existing goal — **aligned** —
 > and records which goal. Step 2 adds one business service and one data object,
 > and gives `1_strategy` an explicit "no change". Step 4 finds nothing that
-> contradicts, is ambiguous, or needs authorization, so Steps 5–8 implement,
-> verify and open the PR, and Step 7 catches that a renamed directory falsified
-> two rows in a second model — which is the check nothing automated would have
-> found.
+> contradicts, is ambiguous, or needs authorization, so Step 5 adds one row to
+> the realization register and carries the goal's principle into the delivery
+> framework's standing file, Steps 6 and 7 implement and verify, and Step 7
+> catches that a renamed directory falsified two rows in a second model — the
+> check nothing automated would have found. Step 8 shows the Requester the new
+> service and the one call the agent took; they confirm it, and the pull
+> request opens with both documents `●`.
 
 ## ⚠ Anti-patterns
 
@@ -376,6 +409,10 @@ reconstruct it from a repository nothing named.
 - Skipping the cross-model check because the validators are green.
 - Asking the Requester something the model already settles, or something about
   a state that does not exist yet.
+- Designing the software in `4_application/` or `5_technology/` instead of
+  registering what realizes the business and handing the design over.
+- Opening the pull request without a preview, or treating its merge as the
+  confirmation.
 
 ## ☑ Done when
 
@@ -383,6 +420,8 @@ reconstruct it from a repository nothing named.
 - Step 1c's verdict is recorded, whichever of the four it was.
 - Every layer has a verdict in the scope document's alignment table.
 - No stop was silently absorbed; each one that fired was named.
+- The Requester was shown the preview, and every document `●` in the change
+  names who confirmed it.
 - Every element added names what realizes it, or is marked Pending.
 - Every other model this change falsifies has been corrected in the same change.
 - The pull request covers the whole branch.

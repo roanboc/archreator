@@ -207,10 +207,10 @@ documentation language.
 
 **The removed material moves to where it was already required.** A
 consolidation — what was merged into what, and how many elements each
-catalogue ended up with — is a modeling decision the Requester reviews before
-merging, so it belongs in the scope document and the pull-request description
-(`discover-business-model` § 6 — Open the pull request already asks for it
-there).
+catalogue ended up with — is a modeling decision the Requester confirms in
+the preview, so it belongs in the preview, the scope document and the
+pull-request description (`discover-business-model` § 6 — Preview, then open
+the pull request already asks for it there).
 
 #### Two carve-outs
 

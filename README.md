@@ -4,12 +4,13 @@
 
 ArChreator turns what you know about your business into an architecture an
 agent can build from — plain Markdown in your own repo, built directly from
-what you said and merged only when you approve it.
+what you said, shown back to you in the conversation, and valid only once you
+confirm it.
 
 [![Docs check](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/docs-check.yml)
 [![Skills check](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml/badge.svg)](https://github.com/roanboc/archreator/actions/workflows/skills-check.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Skills](https://img.shields.io/badge/skills-18-7e57c2)](./plugins/archreator/skills/README.md)
+[![Skills](https://img.shields.io/badge/skills-17-7e57c2)](./plugins/archreator/skills/README.md)
 
 ---
 
@@ -34,9 +35,10 @@ each piece — early, while disagreeing is still cheap.
 
 ## How it works
 
-A requirement never becomes code directly. It walks down six architecture
-layers — grouped into three questions — built directly from what you said,
-and comes back as one pull request.
+A requirement never becomes code directly. It walks down the architecture
+layers — grouped into three questions — built directly from what you said. You
+see what it changes, in the conversation you are already having, and it lands
+as one pull request.
 
 ```mermaid
 flowchart LR
@@ -45,7 +47,7 @@ flowchart LR
   operation["<b>Operation</b><br/>who does what, and<br/>with which information"]:::ai
   realization["<b>Realization</b><br/>what builds it"]:::ai
   stop(["Stop — surfaced to you"]):::gate
-  merge{{"You merge it"}}:::gate
+  merge{{"You confirm it, and it merges"}}:::gate
   out(["The outcome you asked for,<br/>and a sharper requirement"]):::done
 
   req --> intention --> operation --> realization --> merge --> out
@@ -62,8 +64,11 @@ flowchart LR
 A strategy discovery or a landscape sweep is docs-only and still ends in a
 pull request of its own — what you end up holding is your own requirement,
 sharper than the one you arrived with, before a line of realization exists.
-The dotted edges are where a stop or a review sends the work back; **your
-merge is the only approval there is**, and nothing before it claims to be one.
+The dotted edges are where a stop or your answer sends the work back. **Your
+confirmation is what makes the model true**: the agent shows you what changed
+and every call it took for you, you confirm it where you are — in the chat, or
+at a meeting — and the merge lands what you confirmed. A merge nobody
+confirmed validates nothing.
 
 **Contradiction, Ambiguity and Authorization are the method's words, not the
 diagram's.** They're what the skills call them too, so nothing you read later
@@ -87,12 +92,15 @@ is agreed is the mistake the whole method exists to prevent.
 | **Intention** | 1 | Strategy | Why does this exist, and what must it be able to do? |
 | **Operation** | 2 | Business | Who does what, and which services are offered? |
 | **Operation** | 3 | Information | What information exists, and where does it live? |
-| **Realization** | 4 | Application | Which software realizes each business service? |
-| **Realization** | 5 | Technology | What runs it all — runtimes, build, hosting? |
+| **Realization** | 4 | Application | Which software realizes each business service, and where is it specified? |
+| **Realization** | 5 | Technology | Where does something have to run, and why does the business care? |
 
-The groups are a way to read the six, not a seventh thing to learn. Intention
-and Operation still come first, in that order, but nothing pauses between
-them and Realization — the agent only stops if the change contradicts what
+The groups are a way to read the six, not a seventh thing to learn.
+**Intention and Operation are the model; Realization is a register.** Layers 4
+and 5 say which software realizes each business service and where it is
+specified — how it is designed and built belongs to the delivery framework you
+already use, such as a spec-driven tool, and your principles are carried into
+it rather than restated. The agent only stops if the change contradicts what
 you've already decided, reads two ways, or needs your authorization.
 
 You don't fill in all six for a weekend project. **One method, three depths** —
@@ -141,8 +149,8 @@ says exactly what lands in your project either way.
 
 | | |
 | --- | --- |
-| **18 agent skills** | The method itself. Three surface from what you said — the spine that aligns a change, and the two rulebooks every edit obeys. The rest are invoked by name, `/archreator:<skill>`, and cost nothing until called. [Catalogue](./plugins/archreator/skills/README.md) |
-| **Eleven files on your first commit** | And every one of them is used. Your model's front page says, per layer, whether it is here, somewhere else, out of scope, or a gap — a folder appears when it has something to hold. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
+| **17 agent skills** | The method itself. Three surface from what you said — the spine that aligns a change, and the two rulebooks every edit obeys. The rest are invoked by name, `/archreator:<skill>`, and cost nothing until called. [Catalogue](./plugins/archreator/skills/README.md) |
+| **Thirteen files on your first commit** | And every one of them is used. Your model's front page says, per layer, whether it is here, somewhere else, out of scope, or a gap — a folder appears when it has something to hold. [What's in it](./plugins/archreator/scaffold/architecture/README.md) |
 | **Validators that run in CI** | Every element reference resolves, no identifier is reused, every link points at something real. A stale model fails loudly instead of misleading an agent |
 | **A portal, on request** | The same documents as a searchable website, for the people who will never open a repository. Stock MkDocs, one command, gitignored output. [How it works](./docs/adopting.md#reaching-a-reader-who-will-not-open-the-repository) |
 | **Nothing to operate, and nothing cached** | No database, no server, no account, nothing to export before an agent can read it, and no projection that can answer from a revision the model has moved past. Markdown in git is the model, and every tool reads it fresh |

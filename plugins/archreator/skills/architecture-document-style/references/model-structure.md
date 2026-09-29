@@ -46,12 +46,15 @@ it there first, and refine it below once the parent owns it.
 | 1 strategy | Owned | Only goals and principles specific to this product and absent above | Cites its parent; adds nothing |
 | 2 business | Owned | Product-specific services and rules | Cites its parent, and details only what the implementation requires |
 | 3 information | Owned | Product-specific objects | Cites its parent; representations and implementation-specific objects only |
-| 4 application | Key components and dependencies | Decomposes its enterprise component | Full component, port and interface design |
-| 5 technology | Key nodes and dependencies | Product-specific services | Full runtime, deployment and CI design |
+| 4 application | Register: key components, what they serve, who runs them | Register: the components realizing this product's services | Register: this implementation's components, each linked to its specification |
+| 5 technology | Platforms a business fact depends on | Platforms specific to this product | Platforms specific to this implementation |
 
-The enterprise layer 4 names **that** an application exists, what it offers,
-and who runs it. The tier below says **how** it is built, and the link between
-them is a column in the enterprise table naming which model carries the detail.
+At every tier, layer 4 names **that** an application exists, what it serves,
+and where its specification lives. **How** it is built — its components' inner
+design, its ports and interfaces, its runtime and deployment — belongs to the
+delivery framework, and the register row links to it. Between tiers, the link
+is a column in the parent's register naming which model carries the child's
+rows.
 
 **An implementation does own business and information elements** — an AI actor
 with an autonomy level and decision rights belongs where the delivery happens.

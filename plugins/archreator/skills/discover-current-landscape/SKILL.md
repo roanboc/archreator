@@ -1,6 +1,6 @@
 ---
 name: discover-current-landscape
-description: Procedure — run this when the subject already exists and layers 2 to 5 are empty. Sweeps the estate — actors, services, processes, data, applications, runtimes — into a described baseline from evidence rather than a requirement, declares how far it went, and opens it as one pull request.
+description: Procedure — run this when the subject already exists and layers 2 and 3 are empty. Sweeps the estate — actors, services, processes, data, and the software realizing them — into a described baseline from evidence, declares how far it went, and opens it as one pull request.
 disable-model-invocation: true
 metadata:
   archreator:
@@ -11,8 +11,8 @@ metadata:
 # ⚙ Discover the current landscape
 
 **Discovery, not change.** The estate already runs. This skill describes it —
-who does what, which information moves, what software and infrastructure it
-runs on — so that later changes have something to be judged against. Nothing
+who does what, which information moves, and which software realizes it — so
+that later changes have something to be judged against. Nothing
 here designs, improves or rationalizes anything: the deliverable is a
 described baseline, and the improvement is a separate initiative.
 
@@ -20,7 +20,7 @@ described baseline, and the improvement is a separate initiative.
 
 | The situation | What it looks like |
 | ------------- | ------------------ |
-| The lower layers are empty | `1_strategy/` is filled and approved; `2_business/` through `5_technology/` hold their READMEs and no elements |
+| The lower layers are empty | `1_strategy/` is filled and confirmed; `2_business/` and `3_information/` hold their READMEs and no elements |
 | An inherited landscape | The subject has processes, applications and infrastructure nobody wrote down, and the architect is new to it |
 | A baseline is needed | The Requester wants a target state or a roadmap, and there is nothing to measure the distance from |
 | A depth change exposed the gap | `establish-project` or a deepening initiative moved the subject from one application to an organization, and the estate around it was never described |
@@ -39,21 +39,22 @@ described baseline, and the improvement is a separate initiative.
 ## ⌖ Where this sits
 
 Realizes `BPROC1.5`, the last process of establishing a model. It builds the
-whole described baseline — layers 2 through 5 — directly from the evidence,
-and opens it together as one pull request; the merge is the approval.
+whole described baseline — layers 2 and 3, and the realization register of
+layers 4 and 5 — directly from the evidence, previews it for the Requester's
+confirmation, and opens it together as one pull request whose merge lands it.
 
 ```mermaid
 flowchart TD
-  trig(["An estate that runs, and layers 2–5 that are empty"])
+  trig(["An estate that runs, and layers 2 and 3 that are empty"])
   s1["⚙ 1 — Bound the sweep"]
   s2["⚙ 2 — Gather evidence, not opinions"]
   s3["⚙ 3 — Describe business and information"]
-  s4["⚙ 4 — Describe application and technology"]
+  s4["⚙ 4 — Register what realizes it"]
   s5["⚙ 5 — Write the scope document, check for a stop"]
   s6["⚙ 6 — Record what was left uncharted"]
   pcl(["⇄ process-and-capability-levels"])
   dom(["⇄ model-domains"])
-  merged(["Merged — the approval"])
+  merged(["Confirmed, then merged"])
   out(["A baseline a target can be measured from"])
 
   trig --> s1 --> s2 --> s3 --> s4 --> s5 --> s6 --> merged --> out
@@ -73,8 +74,8 @@ flowchart TD
   has it — `architecture-document-style` § Grounding.
 - **What a sweep produces is a draft catalogue, and it says so on every
   document.** Each document opens `◐ Draft catalogue` and its tables carry
-  `Source` and `Notes` columns until the pull request that validates them
-  merges — `architecture-document-style` § Document status.
+  `Source` and `Notes` columns until the Requester confirms them —
+  `architecture-document-style` § Document status.
 - **Describe what runs, not what should run.** The estate includes things
   nobody would design that way. They go in as they are, without commentary.
   Judgement about the gap between this and a sane target belongs to
@@ -116,7 +117,7 @@ Collect what already exists before asking anyone to remember anything.
 
 | Where to look | What it yields |
 | ------------- | -------------- |
-| Repositories, their READMEs and their deploy configuration | Application components, artifacts, runtimes, and what talks to what |
+| Repositories, their READMEs and their deploy configuration | Application components, what each serves, and where it runs when a business fact depends on that |
 | The invoice and licence list | Every SaaS application in the estate, including the ones IT does not know about |
 | Identity provider and single sign-on entries | The same list again, from a different angle — the two rarely agree, and the disagreement is a finding |
 | Runbooks, on-call rotas and incident history | Which components are load-bearing, and who owns them |
@@ -164,21 +165,27 @@ nobody could stand behind, a process nobody could describe the same way twice.
 **→ Produces** `architecture/2_business/` and `architecture/3_information/`,
 each document opening `◐ Draft catalogue`.
 
-### 4 — Describe application and technology
+### 4 — Register what realizes it
 
-Fill `architecture/4_application/` and `architecture/5_technology/`, grounding
-every component in the repository, tenant or server it actually is. A
-component whose grounding cell cannot be filled is the finding, not the
+Fill the realization register in `architecture/4_application/`: one row per
+application component, the business services and processes it serves, where
+its specification or documentation lives, and the repository, tenant or
+server it actually is. Add a platform row to `architecture/5_technology/`
+only where a business fact depends on where something runs — a data
+residency, a hosting contract, a cost owner. The software's design, its
+interfaces and its deployment are not swept; they stay in the documents the
+teams that run it keep.
+
+A component whose grounding cell cannot be filled is the finding, not the
 failure: record it as **"Pending — not located"** and it becomes a row in the
-gap register the next skill builds.
-
-Keep the two layers honest about what they are describing. A component that
-three teams each run their own copy of is three nodes and one component.
+gap register the next skill builds. A component that three teams each run
+their own copy of is one component, and the three copies are a note, not
+three rows.
 
 **← Needs** the evidence from Step 2.
 
-**→ Produces** `architecture/4_application/` and `architecture/5_technology/`,
-each document opening `◐ Draft catalogue`.
+**→ Produces** the realization register in `architecture/4_application/` and
+`architecture/5_technology/`, each document opening `◐ Draft catalogue`.
 
 ### 5 — Write the scope document, check for a stop
 
@@ -186,8 +193,8 @@ The sweep is a full initiative. Create the scope document with
 `write-scope-document` before opening anything, so what the pull request
 carries is written down first.
 
-The alignment table records layers 2 through 5 as described; layers 0 and 1
-get an explicit "no change" verdict.
+The alignment table records layers 2 and 3 as described and layers 4 and 5 as
+registered; layers 0 and 1 get an explicit "no change" verdict.
 
 **Check for a stop** before opening the pull request — `align-change-through-layers`
 § Where this stops. A described baseline rarely contradicts anything, since it
@@ -195,10 +202,11 @@ asserts nothing about what should be true, but Ambiguity is common: an
 element two sources describe differently, with nothing in the evidence
 settling which reading is right. Name it rather than guessing.
 
-The pull request itself carries a compact summary — the boundary; the actor
-and service catalogues; the process map at level 2; the data objects and
-where they live; the component and node catalogues and what each is grounded
-in; and, as its own list, everything marked Pending. Carry full branch links
+The preview (`conversation-previews`) and the pull request carry the same
+compact summary — the boundary; the actor and service catalogues; the process
+map at level 2; the data objects and where they live; the realization
+register and what each row is grounded in; and, as their own list,
+everything marked Pending and every call the agent took. Carry full branch links
 to every document behind it. Name the counts, and name what was consolidated
 into what.
 
@@ -218,8 +226,9 @@ table `process-and-capability-levels` § The focus table turns a partial model
 into a deliberate one already prescribes, and the other layers get its
 equivalent in prose.
 
-Open the pull request with `write-pr-description` — its merge is the
-approval, nothing before it. Then name what comes next: offer
+Show the Requester the preview, write their confirmation into the documents
+it covers, then open the pull request with `write-pr-description`; its merge
+lands what was confirmed. Then name what comes next: offer
 `plan-the-transition`, and say plainly that the sweep found the estate, not
 the ambition.
 
@@ -249,14 +258,15 @@ reconstruct it from a repository nothing named.
 
 ## ✎ Worked example
 
-> A company approved its strategy layer a quarter ago and never filled
+> A company confirmed its strategy layer a quarter ago and never filled
 > anything below it. Step 1 bounds the sweep to the operating company and
 > excludes a recently acquired subsidiary still on its own contracts, which is
 > written down rather than assumed. Step 2's licence list yields nineteen SaaS
 > applications; the identity provider yields twenty-three, and the difference
 > turns out to be three abandoned tools and one nobody in IT had heard of. One
-> pull request covers all four layers, and in review the Requester names the
-> last tool's owner, turning a Pending row into a grounded element.
+> preview covers all four layers, and in answer the Requester names the last
+> tool's owner, turning a Pending row into a grounded element before the pull
+> request opens.
 > The sweep closes with a Coverage section saying the subsidiary is out.
 
 ## ⚠ Anti-patterns
@@ -280,8 +290,10 @@ reconstruct it from a repository nothing named.
 - Sweeping until the questions run out, rather than to the boundary that was
   agreed.
 - Level 3 everywhere, because the evidence happened to be detailed there.
-- Splitting layers 2–3 and layers 4–5 into two pull requests rather than one
-  baseline.
+- Splitting the description and the register into two pull requests rather
+  than one baseline.
+- Sweeping the software's design, interfaces and deployment into the model
+  instead of registering what realizes the business.
 
 ## ☑ Done when
 
@@ -291,7 +303,8 @@ reconstruct it from a repository nothing named.
   missing, and every document handed over carries a source in
   `architecture/reference/` or names the conversation instead.
 - Every document opened `◐ Draft catalogue` and now says `● Validated`, with
-  the date the pull request merged, `Notes` emptied and `Source` kept.
+  who confirmed it and when, `Notes` emptied and `Source` kept — or stays `◐`
+  and the pull request says why.
 - The process catalogue is levelled, with a focus table.
 - AI actors found in the estate are modeled as actors holding roles, with
   autonomy levels and decision rights.
