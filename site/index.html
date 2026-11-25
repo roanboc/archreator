@@ -27,6 +27,7 @@
     </a>
     <nav class="site-nav" aria-label="On this page">
       <a href="#how">How it works</a>
+      <a href="#film">The film</a>
       <a href="#see">An example</a>
       <a href="#where">The repository</a>
       <a class="btn btn-primary" href="./start.html">Get started</a>
@@ -47,8 +48,8 @@
           You see what it changes. You confirm it. Then it gets built.
         </p>
         <div class="actions">
-          <a class="btn btn-primary" href="#how">See how it works</a>
-          <a class="btn btn-ghost" href="./start.html">Get started</a>
+          <a class="btn btn-primary" href="#film">Watch it in two minutes</a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
         </div>
       </div>
 
@@ -140,6 +141,31 @@
           <p>Checks prove the definition still describes what was built. You review once and merge.</p>
         </button></li>
       </ol>
+    </div>
+  </section>
+
+  <section class="turn" id="film">
+    <div class="wrap film">
+      <div class="q"><span class="who">You ask</span><h2>Can I just watch it?</h2></div>
+      <p class="a">
+        Two minutes: the same drawing, one step at a time, and then where
+        everything is kept in your repository.
+      </p>
+      <video controls preload="metadata" playsinline poster="./assets/film/poster.jpg" width="1920" height="1080">
+        <source src="./assets/film/archreator.mp4" type="video/mp4" />
+        <track kind="captions" srclang="en" label="English" src="./assets/film/archreator.en.vtt" default />
+      </video>
+      <details>
+        <summary>Read it instead</summary>
+        <div class="words">
+          <p>An AI agent can build almost anything you ask for. But it only knows what you told it. Where you left a gap, it fills it with a guess, and keeps going. So you get a working version of the wrong thing.</p>
+          <p>ArChreator closes that gap first. It turns your idea into a picture of your business that you can check, before anything is built.</p>
+          <p>Here is how it goes. You say the idea, in your own words. ArChreator works out what it means for your business: why you want it, who does what, and what you need to know. Then it shows you a picture of what changes, and asks one question at a time. You answer, or you correct it. Round and round, until it reads true. Then you confirm. Your confirmation is what makes it true. Now it hands over: a short note of the change, the software that is needed, and your rules. Your own delivery framework designs the software. A coding agent builds it, and tests it. If the design, or a test, shows that you meant something else, that comes back to you. It is not settled in the code. Checks confirm the picture still matches what was built. You review once, and merge. You end up with two things: the software, and a description of your business that you confirmed. That second one lasts.</p>
+          <p>All of it lives in your repository, as plain text. One file is the front door. Every agent reads it first. The architecture folder holds the picture, in numbered folders, in the order the questions are asked. One: why the business exists. Two: who does what. Three: what it needs to know. Four: what software does it. Five: where it runs. Beside them, one short note for every change: what changed, why, and who confirmed it. Three small checks keep it honest. Previews and briefs are made when you ask, and thrown away.</p>
+          <p>ArChreator is free and open source. Install it in your coding agent, and say your first idea.</p>
+        </div>
+      </details>
+      <p class="note">The narration is a synthetic voice: Kokoro-82M, under the Apache 2.0 licence. The captions are the same words.</p>
     </div>
   </section>
 

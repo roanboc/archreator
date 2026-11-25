@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <title>ArChreator in two minutes</title>
+  <link rel="stylesheet" href="../site/style.css" />
+  <link rel="stylesheet" href="./film.css" />
+</head>
+<body class="film-stage">
+
+<div class="brandmark" id="brandmark">
+  <svg width="36" height="36" viewBox="0 0 32 32" aria-hidden="true">
+    <rect x="6" y="6"  width="20" height="4" rx="1.5" fill="#7e57c2" />
+    <rect x="6" y="12" width="20" height="4" rx="1.5" fill="#c8a24a" />
+    <rect x="6" y="18" width="20" height="4" rx="1.5" fill="#0288d1" />
+    <rect x="6" y="24" width="20" height="4" rx="1.5" fill="#558b2f" />
+  </svg>
+  ArChreator
+</div>
+
+<section class="scene" id="s-gap">
+  <div class="said" id="g-said"><span class="who">You</span><p>Let customers book a repair online, and text them when their bike is ready.</p></div>
+  <div class="roads">
+    <div class="road without" id="road-a">
+      <div class="name" id="ga-0">Straight to code</div>
+      <div class="stop" id="ga-1">An idea, half said</div>
+      <div class="stop" id="ga-2">The agent guesses the rest</div>
+      <div class="stop" id="ga-3">Built in an afternoon</div>
+      <div class="stop end" id="ga-4">The wrong thing, working</div>
+    </div>
+    <div class="road with" id="road-b">
+      <div class="name" id="gb-0">With ArChreator</div>
+      <div class="stop" id="gb-1">The same idea</div>
+      <div class="stop" id="gb-2">A picture of what it changes, which you correct</div>
+      <div class="stop" id="gb-3">You confirm it</div>
+      <div class="stop end" id="gb-4">What you meant, built</div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s-loop">
+  <p class="scene-title step" id="loop-step">1 · You say the idea</p>
+  <div id="loop"></div>
+  <ul class="legend">
+    <li class="you">You</li><li class="arc">ArChreator</li><li class="dlv">Your delivery framework</li><li class="cod">A coding agent</li>
+  </ul>
+</section>
+
+<section class="scene" id="s-repo">
+  <p class="scene-title">Where it lives</p>
+  <ul class="tree">
+    <li class="root" id="r-root">your-project/</li>
+    <li><ul>
+      <li><div class="row" id="r-agents"><span class="dot you"></span>AGENTS.md</div></li>
+      <li><div class="row" id="r-arch"><span class="dot"></span>architecture/</div>
+        <ul>
+          <li><div class="row" id="r-0"><span class="dot none"></span>0_business-design/</div></li>
+          <li><div class="row" id="r-1"><span class="dot why"></span>1_strategy/</div></li>
+          <li><div class="row" id="r-2"><span class="dot does"></span>2_business/</div></li>
+          <li><div class="row" id="r-3"><span class="dot knows"></span>3_information/</div></li>
+          <li><div class="row" id="r-4"><span class="dot soft"></span>4_application/</div></li>
+          <li><div class="row" id="r-5"><span class="dot runs"></span>5_technology/</div></li>
+          <li><div class="row" id="r-scope"><span class="dot"></span>scope/</div></li>
+        </ul>
+      </li>
+      <li><div class="row" id="r-scripts"><span class="dot"></span>scripts/</div></li>
+      <li><div class="row" id="r-work"><span class="dot none"></span>.archreator/work/</div></li>
+    </ul></li>
+  </ul>
+
+  <div class="card" id="c-all"><p class="path">your-project/</p><h3>Plain text, in your own repository</h3><p>Readable by people, and by any agent.</p></div>
+  <div class="card" id="c-agents"><span class="swatch" style="background:var(--you)"></span><p class="path">AGENTS.md</p><h3>The front door</h3><p>Every agent reads it first: who decides, and how the software gets built.</p></div>
+  <div class="card" id="c-arch"><p class="path">architecture/</p><h3>The picture of your business</h3><p>Numbered folders, in the order the questions are asked.</p></div>
+  <div class="card" id="c-1"><span class="swatch" style="background:var(--why)"></span><p class="path">1_strategy/</p><h3>Why it exists</h3><p>Goals, pressures, the principles you will not break.</p></div>
+  <div class="card" id="c-2"><span class="swatch" style="background:var(--does)"></span><p class="path">2_business/</p><h3>Who does what</h3><p>What you offer, the roles, the steps, the rules.</p></div>
+  <div class="card" id="c-3"><span class="swatch" style="background:var(--knows)"></span><p class="path">3_information/</p><h3>What it needs to know</h3><p>The information, and who uses it.</p></div>
+  <div class="card" id="c-4"><span class="swatch" style="background:var(--soft)"></span><p class="path">4_application/</p><h3>What software does it</h3><p>A list. The design belongs to your delivery framework.</p></div>
+  <div class="card" id="c-5"><span class="swatch" style="background:var(--runs)"></span><p class="path">5_technology/</p><h3>Where it runs</h3><p>Only where the business cares.</p></div>
+  <div class="card" id="c-scope"><p class="path">architecture/scope/</p><h3>One short note per change</h3><p>What changed, why, and who confirmed it.</p><ul><li class="plain">1. Book a repair online</li></ul></div>
+  <div class="card" id="c-scripts"><p class="path">scripts/</p><h3>Three small checks</h3><ul><li>Every link leads somewhere</li><li>Every reference names something real</li><li>Every page talks about your business</li></ul></div>
+  <div class="card" id="c-work"><p class="path">.archreator/work/</p><h3>Made when you ask</h3><p>Previews of a change, a brief for one question, a PDF for somebody outside. Never saved: delete the folder and nothing is lost.</p></div>
+</section>
+
+<section class="scene" id="s-end">
+  <div class="mark">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="6" y="6"  width="20" height="4" rx="1.5" fill="#7e57c2" />
+      <rect x="6" y="12" width="20" height="4" rx="1.5" fill="#c8a24a" />
+      <rect x="6" y="18" width="20" height="4" rx="1.5" fill="#0288d1" />
+      <rect x="6" y="24" width="20" height="4" rx="1.5" fill="#558b2f" />
+    </svg>
+    <h1>ArChreator</h1>
+  </div>
+  <p class="line" id="e-line">Free and open source. Install it in your coding agent, and say your first idea.</p>
+  <pre id="e-cmd"><code>/plugin marketplace add roanboc/archreator
+/plugin install archreator@archreator</code></pre>
+  <p class="url" id="e-url">roanboc.github.io/archreator</p>
+  <p class="voice" id="e-voice">Narrated by a synthetic voice: Kokoro-82M, Apache-2.0</p>
+</section>
+
+<script src="../site/loop.js"></script>
+<script src="./timeline.js"></script>
+<script src="./film.js"></script>
+</body>
+</html>
