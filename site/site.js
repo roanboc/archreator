@@ -94,10 +94,9 @@
     });
   });
 
-  /* ---- the example page takes the height it needs, so it never scrolls
+  /* ---- an example page takes the height it needs, so it never scrolls
           inside its own frame ---- */
-  var example = document.getElementById('example');
-  if (example) {
+  [].slice.call(document.querySelectorAll('.window iframe')).forEach(function (example) {
     var fit = function () {
       try {
         var doc = example.contentDocument;
@@ -109,5 +108,6 @@
       try { example.contentDocument.addEventListener('click', function () { setTimeout(fit, 60); }); } catch (e) {}
     });
     window.addEventListener('resize', fit);
-  }
+    fit();
+  });
 })();

@@ -249,7 +249,7 @@ anybody else is publishing, and the agent asks before it does.
 
 ## Reaching a reader who will not open the repository
 
-Three ways, and none of them is a second copy of the model.
+Four ways, and none of them is a second copy of the model.
 
 **A portal.** One command writes a stock MkDocs Material config into
 `.archreator/work/portal/` and tells you how to build or serve it:
@@ -261,6 +261,23 @@ uvx --with mkdocs-material mkdocs build -f .archreator/work/portal/mkdocs.yml
 
 That is the whole of it — a theme, Mermaid, and search. No custom template, no
 viewer, no cover page: the documents render fine without them.
+
+**One page.** `build_overview.py` writes the whole model into a single
+self-contained file, `.archreator/work/overview/index.html`:
+
+```bash
+build_overview.py --project .
+```
+
+A tab for each question the model answers, each one drawn and then listed in
+its documents' own words, with no identifier and no notation. Selecting
+anything says what it is and what it touches, and follows a connection into
+another tab. An element whose document nobody has confirmed says so. The
+file needs no server: open it from a disk, attach it to a message, or let a
+host that shows pages beside the conversation show it there, private to
+whoever asked. That is how a project on a private repository shows its
+model to its own people without publishing a site. Showing it to anybody
+else is publishing, and the agent asks first.
 
 **A brief.** For one question rather than the whole model, `build_brief.py`
 writes a single Markdown document about a named scope — the elements in it,

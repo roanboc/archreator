@@ -15,7 +15,7 @@ more: worked examples of the method applied to real organizations live in
 | [`plugins/archreator/scaffold/`](./plugins/archreator/scaffold/architecture/README.md) | What lands in a new project on its first commit, and nothing more — `AGENTS.md` with the roles and the declared depth, `README.md`, the two host pointers, `.gitignore`, `architecture/README.md` (the per-layer status table), and `scripts/` with the three validators, the parse two of them share and their data files |
 | [`plugins/archreator/assets/`](./plugins/archreator/assets/README.md) | The templates a skill emits **when the project has something to put in them** — the layer READMEs, the non-layer folders, the GitHub-shaped files, `CONTRIBUTING.md`. Their relative links resolve where they land, so `check_links.py` skips the tree and `check_skills.py` proves instead that every asset is reachable from a skill |
 | [`docs/`](./docs/method.md) | The method explained in plain English — how the process works, [how to adopt it and how a model is published](./docs/adopting.md), [how an existing project crosses a breaking version](./docs/migrating.md), and [the format every skill follows](./docs/skill-format.md). The method's own initiative records and retrospectives live in the sibling repository [architecture-archreator](https://github.com/roanboc/architecture-archreator), never here. The skill catalogue is not here; it lives beside the skills |
-| [`site/`](./site/index.html) | The public site, deployed to <https://roanboc.github.io/archreator/> — a landing page for somebody who has never heard of the method, [a get-started page](./site/start.html) with the install recipe per host, the stylesheet both share, the loop drawn once in `loop.js`, the fonts it serves itself, and under `demo/` the example preview, which is the tool's own output and held to it by a test |
+| [`site/`](./site/index.html) | The public site, deployed to <https://roanboc.github.io/archreator/> — a landing page for somebody who has never heard of the method, [a get-started page](./site/start.html) with the install recipe per host, the stylesheet both share, the loop drawn once in `loop.js`, the fonts it serves itself, and under `demo/` the example preview and the example of a whole model on one page, both the tools' own output and held to it by a test |
 | [`film/`](./film/README.md) | The two-minute film on the public site, as source: the words in `script.json`, the picture as a function of time, and the two tools that voice and render it. The film itself, its captions and its poster are written into `site/assets/film/`. A test holds the captions, the timeline and the page's transcript to the script |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to contribute changes to this repository |
 
@@ -94,6 +94,7 @@ model.py --project . export         # .model/model.json, which nothing here read
 build_brief.py --project . --element CAP1 --focus impact
 build_brief.py --project . --focus end-to-end   # one line per component, from its goal to where it runs
 build_preview.py --project .        # what this branch changes, as a page, a picture and Markdown for the Requester
+build_overview.py --project .       # the whole model on one self-contained page, in its own words
 export_pdf.py --project . --config architecture/export/board.yml
 ```
 
@@ -106,6 +107,8 @@ already write. Disposable, never committed, stamped with its revision.
 branch at and writes what changed into `.archreator/work/previews/`, in the
 subject's own words: no identifier, no glyph, no layer number. It draws with
 `plain_view.py`, which reads no model and so is tested with none.
+`build_overview.py` draws a whole model the same way, a tab per question,
+into one file under `.archreator/work/overview/`.
 [`tests/example_project.py`](./plugins/archreator/scripts/tests/example_project.py)
 holds the made-up shop the tests read; it is an illustration, not a worked
 model.

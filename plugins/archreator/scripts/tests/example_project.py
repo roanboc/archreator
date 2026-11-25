@@ -26,6 +26,7 @@ from pathlib import Path
 PLUGIN = Path(__file__).resolve().parents[2]
 SCAFFOLD = PLUGIN / "scaffold"
 PREVIEW = PLUGIN / "scripts" / "build_preview.py"
+OVERVIEW = PLUGIN / "scripts" / "build_overview.py"
 
 STAMP = "An example · Corner Bikes is a made-up bicycle repair shop"
 QUESTION = "Can a customer cancel a booking online, or only by phone?"
@@ -246,6 +247,13 @@ def preview(repo: Path, *extra: str) -> subprocess.CompletedProcess:
     )
 
 
+def overview(repo: Path, *extra: str) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, str(OVERVIEW), "--project", str(repo), "--stamp", STAMP, *extra],
+        capture_output=True, text=True,
+    )
+
+
 def main() -> int:
     if len(sys.argv) != 3 or sys.argv[1] != "--write":
         print(__doc__)
@@ -258,9 +266,13 @@ def main() -> int:
         if made.returncode != 0:
             print(made.stdout + made.stderr)
             return 1
-        for name in ("preview.html", "preview.svg"):
+        whole = overview(repo, "--name", "overview", "--to", str(Path(tmp) / "out"))
+        if whole.returncode != 0:
+            print(whole.stdout + whole.stderr)
+            return 1
+        for name in ("preview.html", "preview.svg", "overview.html"):
             shutil.copyfile(Path(tmp) / "out" / name, target / name)
-    print(f"Wrote the example preview to {target}")
+    print(f"Wrote the example preview and overview to {target}")
     return 0
 
 

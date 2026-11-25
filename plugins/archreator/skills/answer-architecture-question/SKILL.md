@@ -30,6 +30,7 @@ one disposable brief. The Markdown model stays authoritative.
 | ------------- | ----------- |
 | The model is being changed | `align-change-through-layers`; a brief never edits the model |
 | The whole model must be published | `model.py portal` — a brief answers one question, a portal carries the model |
+| The reader wants the whole model in their own words, with none of its notation | The plugin's `build_overview.py` — one self-contained page, a tab per question |
 | The user asks a precise graph query | `model.py trace` or `model.py coverage` |
 | The model is empty or known to be stale | Establish, discover or restate it before presenting a derived answer |
 
