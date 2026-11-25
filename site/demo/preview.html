@@ -1,0 +1,227 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book a repair online</title>
+<style>
+:root{
+  --ground:#fbfafc; --sheet:#ffffff; --ink:#1d1a24; --ink-2:#4d475b; --ink-3:#756e86; --rule:#dcd7e6;
+  --accent:#6a45b5; --wire:#8b8499; --band:#f6f4f9;
+  --new:#2f7a1f; --new-bg:#e2f3da; --changed:#8f5b00; --changed-bg:#fdefc9;
+  --removed:#b3261e; --removed-bg:#fbe1e1; --same-bg:#f1eff5; --same-line:#b0aabd; --on-tag:#ffffff;
+  --q0:#ece4d8; --q0l:#a8946f; --q1:#ece4d8; --q1l:#a8946f; --q2:#e6d6f5; --q2l:#7e57c2;
+  --q3:#f5deaa; --q3l:#b08a2e; --q4:#fffbb5; --q4l:#a89400; --q5:#c2f0ff; --q5l:#0288d1;
+  --q6:#9adcf0; --q6l:#0277bd; --q7:#c9e7b7; --q7l:#558b2f; --q8:#ffd6d6; --q8l:#c47f7f;
+  --display:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#15121b; --sheet:#1c1824; --ink:#f1edf8; --ink-2:#c5bdd6; --ink-3:#9a92ad; --rule:#342d43;
+    --accent:#b497f0; --wire:#8f87a3; --band:#1a1622;
+    --new:#8fd07a; --new-bg:#1f3318; --changed:#f0c05a; --changed-bg:#3a2c0c;
+    --removed:#ff9d94; --removed-bg:#3c1a18; --same-bg:#262130; --same-line:#5a5270; --on-tag:#15121b;
+    --q0:#3a3327; --q0l:#b7a27a; --q1:#3a3327; --q1l:#b7a27a; --q2:#33274a; --q2l:#b497f0;
+    --q3:#40351a; --q3l:#dcb65c; --q4:#3d3a10; --q4l:#d6c84a; --q5:#12384a; --q5l:#5cc0f2;
+    --q6:#0f3344; --q6l:#4fb3e6; --q7:#22381a; --q7l:#93cf6a; --q8:#44201f; --q8l:#e79a9a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#15121b; --sheet:#1c1824; --ink:#f1edf8; --ink-2:#c5bdd6; --ink-3:#9a92ad; --rule:#342d43;
+  --accent:#b497f0; --wire:#8f87a3; --band:#1a1622;
+  --new:#8fd07a; --new-bg:#1f3318; --changed:#f0c05a; --changed-bg:#3a2c0c;
+  --removed:#ff9d94; --removed-bg:#3c1a18; --same-bg:#262130; --same-line:#5a5270; --on-tag:#15121b;
+  --q0:#3a3327; --q0l:#b7a27a; --q1:#3a3327; --q1l:#b7a27a; --q2:#33274a; --q2l:#b497f0;
+  --q3:#40351a; --q3l:#dcb65c; --q4:#3d3a10; --q4l:#d6c84a; --q5:#12384a; --q5l:#5cc0f2;
+  --q6:#0f3344; --q6l:#4fb3e6; --q7:#22381a; --q7l:#93cf6a; --q8:#44201f; --q8l:#e79a9a;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+table{font:inherit;color:inherit}
+.sheet{max-width:1240px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stamp{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.02em;margin:0 0 10px;overflow-wrap:anywhere}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,1.2rem + 1.6vw,2.3rem);line-height:1.15;letter-spacing:-.01em;margin:0 0 12px;text-wrap:balance}
+h2{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+.why{max-width:68ch;color:var(--ink-2);font-size:1.02rem;margin:0 0 22px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start;margin-bottom:26px}
+.stage.solo{grid-template-columns:minmax(0,1fr)}
+figure{margin:0;min-width:0}
+.drawing{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;overflow-x:auto}
+.drawing svg{display:block;width:100%;height:auto;min-width:var(--min,560px)}
+figcaption{font-size:.86rem;color:var(--ink-3);margin-top:8px;max-width:72ch}
+.view + .view{margin-top:22px}
+.reading{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;position:sticky;top:16px;min-width:0}
+.reading .kind{font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 4px}
+.reading h3{font-family:var(--display);font-weight:600;font-size:1.25rem;line-height:1.2;margin:0 0 8px;overflow-wrap:anywhere}
+.reading .state{font-size:.9rem;margin:0 0 12px;color:var(--ink-2)}
+.reading dl{margin:0 0 12px}
+.reading dt{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-top:10px}
+.reading dd{margin:2px 0 0;color:var(--ink-2);overflow-wrap:anywhere}
+.reading ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.reading button{font:inherit;color:var(--ink);background:none;border:0;border-bottom:1px solid var(--rule);padding:6px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:8px;align-items:baseline}
+.reading button:hover,.reading button:focus-visible{color:var(--accent);border-bottom-color:var(--accent);outline:none}
+.reading button .word{font-size:.8rem;color:var(--ink-3);flex:0 0 auto}
+.pill{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:var(--on-tag);vertical-align:.12em;margin-right:6px}
+.pill.new{background:var(--new)}.pill.changed{background:var(--changed)}.pill.removed{background:var(--removed)}
+.lists{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px 28px;margin-bottom:26px}
+.lists section{min-width:0}
+.lists ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.lists li{border-top:1px solid var(--rule);padding-top:8px;overflow-wrap:anywhere}
+.lists li strong{font-weight:650}
+.lists li .kind{color:var(--ink-3);font-size:.85rem}
+.lists li p{margin:3px 0 0;color:var(--ink-2);font-size:.93rem}
+.was{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
+.calls,.ask{background:var(--sheet);border:1px solid var(--rule);border-radius:6px;padding:16px 18px;margin-bottom:18px}
+.calls ul{margin:0;padding-left:1.1rem;display:grid;gap:6px}
+.calls li{overflow-wrap:anywhere}
+.ask{border-color:var(--accent)}
+.ask h2{color:var(--accent)}
+.ask p{margin:0 0 8px;font-size:1.05rem;max-width:68ch}
+.ask ol{margin:0 0 8px;padding-left:1.3rem;display:grid;gap:4px}
+.ask .mine{font-size:.8rem;color:var(--ink-3)}
+.ask .how{font-size:.86rem;color:var(--ink-3);margin:8px 0 0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.tabs button{font:inherit;font-size:.9rem;font-weight:600;color:var(--ink-2);background:var(--sheet);border:1px solid var(--rule);border-radius:999px;padding:6px 13px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--sheet);background:var(--ink);border-color:var(--ink)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs .n{font-weight:500;opacity:.7;margin-left:4px;font-variant-numeric:tabular-nums}
+footer{font-size:.84rem;color:var(--ink-3);border-top:1px solid var(--rule);padding-top:14px;max-width:80ch}
+.pv-bg{fill:transparent}
+.pv-band{fill:var(--band)}
+.pv-heading{fill:var(--ink-2)}
+.pv-kind{fill:var(--ink-3)}
+.pv-name{fill:var(--ink)}
+.pv-label{fill:var(--ink-2)}
+.pv-label-bg{fill:var(--sheet)}
+.pv-edge path{stroke:var(--wire)}
+.pv-head{fill:var(--wire)}
+.pv-change .pv-node .pv-box{fill:var(--same-bg);stroke:var(--same-line)}
+.pv-change .pv-node.pv-new .pv-box{fill:var(--new-bg);stroke:var(--new)}
+.pv-change .pv-node.pv-changed .pv-box{fill:var(--changed-bg);stroke:var(--changed)}
+.pv-change .pv-node.pv-removed .pv-box{fill:var(--removed-bg);stroke:var(--removed)}
+.pv-change .pv-node.pv-removed .pv-name{fill:var(--ink-3)}
+.pv-node.pv-new .pv-tag-bg{fill:var(--new)}.pv-node.pv-changed .pv-tag-bg{fill:var(--changed)}.pv-node.pv-removed .pv-tag-bg{fill:var(--removed)}
+.pv-tag{fill:var(--on-tag)}
+.pv-edge.pv-new path{stroke:var(--new)}.pv-edge.pv-new .pv-label{fill:var(--new)}.pv-head.pv-new{fill:var(--new)}
+.pv-edge.pv-removed path{stroke:var(--removed)}.pv-edge.pv-removed .pv-label{fill:var(--removed)}.pv-head.pv-removed{fill:var(--removed)}
+.pv-model .pv-q0 .pv-box{fill:var(--q0);stroke:var(--q0l)}.pv-model .pv-q1 .pv-box{fill:var(--q1);stroke:var(--q1l)}
+.pv-model .pv-q2 .pv-box{fill:var(--q2);stroke:var(--q2l)}.pv-model .pv-q3 .pv-box{fill:var(--q3);stroke:var(--q3l)}
+.pv-model .pv-q4 .pv-box{fill:var(--q4);stroke:var(--q4l)}.pv-model .pv-q5 .pv-box{fill:var(--q5);stroke:var(--q5l)}
+.pv-model .pv-q6 .pv-box{fill:var(--q6);stroke:var(--q6l)}.pv-model .pv-q7 .pv-box{fill:var(--q7);stroke:var(--q7l)}
+.pv-model .pv-q8 .pv-box{fill:var(--q8);stroke:var(--q8l)}
+.pv-node{cursor:pointer;outline:none}
+.pv-node:focus-visible .pv-box,.pv-node.on .pv-box{stroke:var(--accent);stroke-width:2.6}
+.pv.picked .pv-node:not(.on):not(.near){opacity:.38}
+.pv.picked .pv-edge:not(.on){opacity:.16}
+.pv.picked .pv-edge.on path{stroke-width:2.2}
+@media (max-width:900px){.stage{grid-template-columns:minmax(0,1fr)}.reading{position:static}}
+@media (prefers-reduced-motion:no-preference){.pv-node,.pv-edge{transition:opacity .15s}}
+</style>
+<div class="sheet" lang="en">
+<p class="stamp">An example · Corner Bikes is a made-up bicycle repair shop</p>
+<h1>Book a repair online</h1>
+<p class="why">Customers can book a repair online at any hour and get a text message when the bike is ready, so nobody has to phone the shop to ask.</p>
+<div class="stage"><div>
+<figure class="view">
+<div class="drawing" style="--min:637px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 862 738" width="862" height="738" role="group" aria-label="What changes" class="pv pv-change" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"><title>What changes</title><defs><marker id="v0-new" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f7a1f" class="pv-head pv-new"/></marker><marker id="v0-changed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8f5b00" class="pv-head pv-changed"/></marker><marker id="v0-removed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b3261e" class="pv-head pv-removed"/></marker><marker id="v0-same" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b8499" class="pv-head pv-same"/></marker></defs><rect class="pv-bg" width="862" height="738" fill="#ffffff"/><rect class="pv-band" x="6" y="10" width="850" height="110" rx="6" fill="#f6f4f9"/><text class="pv-heading" x="16" y="29" font-size="11" font-weight="700" letter-spacing="0.9" fill="#4d475b">WHY IT EXISTS</text><rect class="pv-band" x="6" y="166" width="850" height="110" rx="6" fill="#f6f4f9"/><text class="pv-heading" x="16" y="185" font-size="11" font-weight="700" letter-spacing="0.9" fill="#4d475b">WHAT IT MUST BE GOOD AT</text><rect class="pv-band" x="6" y="322" width="850" height="126" rx="6" fill="#f6f4f9"/><text class="pv-heading" x="16" y="341" font-size="11" font-weight="700" letter-spacing="0.9" fill="#4d475b">WHO DOES WHAT</text><rect class="pv-band" x="6" y="494" width="850" height="94" rx="6" fill="#f6f4f9"/><text class="pv-heading" x="16" y="513" font-size="11" font-weight="700" letter-spacing="0.9" fill="#4d475b">WHAT IT NEEDS TO KNOW</text><rect class="pv-band" x="6" y="634" width="850" height="94" rx="6" fill="#f6f4f9"/><text class="pv-heading" x="16" y="653" font-size="11" font-weight="700" letter-spacing="0.9" fill="#4d475b">THE SOFTWARE</text><g class="pv-edge pv-new" data-a="n13" data-b="n11"><path d="M292.7,106.0 C292.7,129.5 110.0,129.5 110.0,106.0" fill="none" stroke="#2f7a1f" stroke-width="1.8" marker-end="url(#v0-new)"/><rect class="pv-label-bg" x="175.2" y="115.6" width="52.3" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="201.3" y="127.2" text-anchor="middle" font-size="10.5" fill="#2f7a1f">answers</text></g><g class="pv-edge pv-same" data-a="n6" data-b="n12"><path d="M569.3,196.0 C569.3,155.5 538.0,146.5 538.0,106.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="532.2" y="143.0" width="42.9" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="553.7" y="154.6" text-anchor="middle" font-size="10.5" fill="#4d475b">serves</text></g><g class="pv-edge pv-new" data-a="n6" data-b="n13"><path d="M506.7,196.0 C506.7,155.5 355.3,146.5 355.3,106.0" fill="none" stroke="#2f7a1f" stroke-width="1.8" marker-end="url(#v0-new)"/><rect class="pv-label-bg" x="409.6" y="143.0" width="42.9" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="431.0" y="154.6" text-anchor="middle" font-size="10.5" fill="#2f7a1f">serves</text></g><g class="pv-edge pv-same" data-a="n4" data-b="n6"><path d="M752.0,352.0 C752.0,304.3 538.0,293.7 538.0,246.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="625.3" y="291.0" width="39.4" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="645.0" y="302.6" text-anchor="middle" font-size="10.5" fill="#4d475b">needs</text></g><g class="pv-edge pv-same" data-a="n4" data-b="n14"><path d="M711.7,402.0 C711.7,424.3 569.3,424.3 569.3,402.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="616.2" y="410.7" width="48.7" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="640.5" y="422.3" text-anchor="middle" font-size="10.5" fill="#4d475b">done by</text></g><g class="pv-edge pv-same" data-a="n5" data-b="n7"><path d="M110.0,352.0 C110.0,311.5 110.0,302.5 110.0,262.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="90.3" y="299.0" width="39.4" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="110.0" y="310.6" text-anchor="middle" font-size="10.5" fill="#4d475b">needs</text></g><g class="pv-edge pv-new" data-a="n15" data-b="n5"><path d="M324.0,434.0 C324.0,460.1 53.6,428.1 53.6,402.0" fill="none" stroke="#2f7a1f" stroke-width="1.8" marker-end="url(#v0-new)"/><rect class="pv-label-bg" x="159.2" y="429.6" width="59.1" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="188.8" y="441.2" text-anchor="middle" font-size="10.5" fill="#2f7a1f">applies to</text></g><g class="pv-edge pv-same" data-a="n8" data-b="n4"><path d="M324.0,524.0 C324.0,469.1 684.9,456.9 684.9,402.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="480.1" y="455.0" width="48.7" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="504.4" y="466.6" text-anchor="middle" font-size="10.5" fill="#4d475b">used by</text></g><g class="pv-edge pv-same" data-a="n9" data-b="n4"><path d="M569.3,524.0 C569.3,469.1 738.6,456.9 738.6,402.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="629.6" y="455.0" width="48.7" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="654.0" y="466.6" text-anchor="middle" font-size="10.5" fill="#4d475b">used by</text></g><g class="pv-edge pv-same" data-a="n9" data-b="n5"><path d="M506.7,524.0 C506.7,469.1 128.8,456.9 128.8,402.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="293.4" y="455.0" width="48.7" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="317.7" y="466.6" text-anchor="middle" font-size="10.5" fill="#4d475b">used by</text></g><g class="pv-edge pv-new" data-a="n10" data-b="n4"><path d="M752.0,524.0 C752.0,469.1 792.3,456.9 792.3,402.0" fill="none" stroke="#2f7a1f" stroke-width="1.8" marker-end="url(#v0-new)"/><rect class="pv-label-bg" x="747.8" y="455.0" width="48.7" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="772.1" y="466.6" text-anchor="middle" font-size="10.5" fill="#2f7a1f">used by</text></g><g class="pv-edge pv-same" data-a="n1" data-b="n4"><path d="M538.0,664.0 C538.0,546.1 765.4,519.9 765.4,402.0" fill="none" stroke="#8b8499" stroke-width="1.2" marker-end="url(#v0-same)"/><rect class="pv-label-bg" x="689.0" y="485.0" width="42.9" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="710.5" y="496.6" text-anchor="middle" font-size="10.5" fill="#4d475b">serves</text></g><g class="pv-edge pv-new" data-a="n2" data-b="n4"><path d="M752.0,664.0 C752.0,546.1 819.1,519.9 819.1,402.0" fill="none" stroke="#2f7a1f" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#v0-new)"/><rect class="pv-label-bg" x="781.5" y="485.0" width="42.9" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="802.9" y="496.6" text-anchor="middle" font-size="10.5" fill="#2f7a1f">serves</text></g><g class="pv-edge pv-new" data-a="n3" data-b="n5"><path d="M324.0,664.0 C324.0,546.1 91.2,519.9 91.2,402.0" fill="none" stroke="#2f7a1f" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#v0-new)"/><rect class="pv-label-bg" x="268.8" y="584.4" width="42.9" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="290.2" y="596.0" text-anchor="middle" font-size="10.5" fill="#2f7a1f">serves</text></g><g class="pv-edge pv-removed" data-a="n5" data-b="n14"><path d="M166.4,402.0 C166.4,430.2 506.7,430.2 506.7,402.0" fill="none" stroke="#b3261e" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#v0-removed)"/><rect class="pv-label-bg" x="432.9" y="409.4" width="48.7" height="16" rx="3" fill="#ffffff"/><text class="pv-label" x="457.3" y="421.0" text-anchor="middle" font-size="10.5" fill="#b3261e">done by</text></g><g class="pv-node pv-same pv-q6" data-k="n1" tabindex="0" role="button" aria-label="The workshop diary, software"><title>The workshop diary</title><rect class="pv-box" x="444.0" y="664.0" width="188" height="50.0" rx="4" fill="#f1eff5" stroke="#b0aabd" stroke-width="1.2"/><text class="pv-kind" x="456.0" y="682.0" font-size="10" letter-spacing="0.7" fill="#756e86">SOFTWARE</text><text class="pv-name" x="456.0" y="701.0" font-size="13" font-weight="600" fill="#1d1a24">The workshop diary</text></g><g class="pv-node pv-new pv-q6" data-k="n2" tabindex="0" role="button" aria-label="new, The booking page, software"><title>The booking page</title><rect class="pv-box" x="658.0" y="664.0" width="188" height="50.0" rx="4" fill="#e2f3da" stroke="#2f7a1f" stroke-width="1.8"/><text class="pv-kind" x="670.0" y="682.0" font-size="10" letter-spacing="0.7" fill="#756e86">SOFTWARE</text><rect class="pv-tag-bg" x="804.1" y="657.0" width="33.8" height="14" rx="7" fill="#2f7a1f"/><text class="pv-tag" x="821.1" y="667.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">NEW</text><text class="pv-name" x="670.0" y="701.0" font-size="13" font-weight="600" fill="#1d1a24">The booking page</text></g><g class="pv-node pv-new pv-q6" data-k="n3" tabindex="0" role="button" aria-label="new, The text sender, software"><title>The text sender</title><rect class="pv-box" x="230.0" y="664.0" width="188" height="50.0" rx="4" fill="#e2f3da" stroke="#2f7a1f" stroke-width="1.8"/><text class="pv-kind" x="242.0" y="682.0" font-size="10" letter-spacing="0.7" fill="#756e86">SOFTWARE</text><rect class="pv-tag-bg" x="376.1" y="657.0" width="33.8" height="14" rx="7" fill="#2f7a1f"/><text class="pv-tag" x="393.1" y="667.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">NEW</text><text class="pv-name" x="242.0" y="701.0" font-size="13" font-weight="600" fill="#1d1a24">The text sender</text></g><g class="pv-node pv-changed pv-q4" data-k="n4" tabindex="0" role="button" aria-label="changed, Repair booking, service"><title>Repair booking</title><rect class="pv-box" x="658.0" y="352.0" width="188" height="50.0" rx="4" fill="#fdefc9" stroke="#8f5b00" stroke-width="1.8"/><text class="pv-kind" x="670.0" y="370.0" font-size="10" letter-spacing="0.7" fill="#756e86">SERVICE</text><rect class="pv-tag-bg" x="779.5" y="345.0" width="58.6" height="14" rx="7" fill="#8f5b00"/><text class="pv-tag" x="808.7" y="355.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">CHANGED</text><text class="pv-name" x="670.0" y="389.0" font-size="13" font-weight="600" fill="#1d1a24">Repair booking</text></g><g class="pv-node pv-changed pv-q4" data-k="n5" tabindex="0" role="button" aria-label="changed, Pick-up notice, service"><title>Pick-up notice</title><rect class="pv-box" x="16.0" y="352.0" width="188" height="50.0" rx="4" fill="#fdefc9" stroke="#8f5b00" stroke-width="1.8"/><text class="pv-kind" x="28.0" y="370.0" font-size="10" letter-spacing="0.7" fill="#756e86">SERVICE</text><rect class="pv-tag-bg" x="137.4" y="345.0" width="58.6" height="14" rx="7" fill="#8f5b00"/><text class="pv-tag" x="166.7" y="355.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">CHANGED</text><text class="pv-name" x="28.0" y="389.0" font-size="13" font-weight="600" fill="#1d1a24">Pick-up notice</text></g><g class="pv-node pv-same pv-q3" data-k="n6" tabindex="0" role="button" aria-label="Taking bookings, ability"><title>Taking bookings</title><rect class="pv-box" x="444.0" y="196.0" width="188" height="50.0" rx="4" fill="#f1eff5" stroke="#b0aabd" stroke-width="1.2"/><text class="pv-kind" x="456.0" y="214.0" font-size="10" letter-spacing="0.7" fill="#756e86">ABILITY</text><text class="pv-name" x="456.0" y="233.0" font-size="13" font-weight="600" fill="#1d1a24">Taking bookings</text></g><g class="pv-node pv-same pv-q3" data-k="n7" tabindex="0" role="button" aria-label="Keeping customers informed, ability"><title>Keeping customers informed</title><rect class="pv-box" x="16.0" y="196.0" width="188" height="66.0" rx="4" fill="#f1eff5" stroke="#b0aabd" stroke-width="1.2"/><text class="pv-kind" x="28.0" y="214.0" font-size="10" letter-spacing="0.7" fill="#756e86">ABILITY</text><text class="pv-name" x="28.0" y="233.0" font-size="13" font-weight="600" fill="#1d1a24">Keeping customers</text><text class="pv-name" x="28.0" y="249.0" font-size="13" font-weight="600" fill="#1d1a24">informed</text></g><g class="pv-node pv-same pv-q5" data-k="n8" tabindex="0" role="button" aria-label="Booking, information"><title>Booking</title><rect class="pv-box" x="230.0" y="524.0" width="188" height="50.0" rx="4" fill="#f1eff5" stroke="#b0aabd" stroke-width="1.2"/><text class="pv-kind" x="242.0" y="542.0" font-size="10" letter-spacing="0.7" fill="#756e86">INFORMATION</text><text class="pv-name" x="242.0" y="561.0" font-size="13" font-weight="600" fill="#1d1a24">Booking</text></g><g class="pv-node pv-changed pv-q5" data-k="n9" tabindex="0" role="button" aria-label="changed, Customer, information"><title>Customer</title><rect class="pv-box" x="444.0" y="524.0" width="188" height="50.0" rx="4" fill="#fdefc9" stroke="#8f5b00" stroke-width="1.8"/><text class="pv-kind" x="456.0" y="542.0" font-size="10" letter-spacing="0.7" fill="#756e86">INFORMATION</text><rect class="pv-tag-bg" x="565.5" y="517.0" width="58.6" height="14" rx="7" fill="#8f5b00"/><text class="pv-tag" x="594.7" y="527.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">CHANGED</text><text class="pv-name" x="456.0" y="561.0" font-size="13" font-weight="600" fill="#1d1a24">Customer</text></g><g class="pv-node pv-new pv-q5" data-k="n10" tabindex="0" role="button" aria-label="new, Free slots, information"><title>Free slots</title><rect class="pv-box" x="658.0" y="524.0" width="188" height="50.0" rx="4" fill="#e2f3da" stroke="#2f7a1f" stroke-width="1.8"/><text class="pv-kind" x="670.0" y="542.0" font-size="10" letter-spacing="0.7" fill="#756e86">INFORMATION</text><rect class="pv-tag-bg" x="804.1" y="517.0" width="33.8" height="14" rx="7" fill="#2f7a1f"/><text class="pv-tag" x="821.1" y="527.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">NEW</text><text class="pv-name" x="670.0" y="561.0" font-size="13" font-weight="600" fill="#1d1a24">Free slots</text></g><g class="pv-node pv-new pv-q2" data-k="n11" tabindex="0" role="button" aria-label="new, People try to book when the shop is shut, pressure"><title>People try to book when the shop is shut</title><rect class="pv-box" x="16.0" y="40.0" width="188" height="66.0" rx="4" fill="#e2f3da" stroke="#2f7a1f" stroke-width="1.8"/><text class="pv-kind" x="28.0" y="58.0" font-size="10" letter-spacing="0.7" fill="#756e86">PRESSURE</text><rect class="pv-tag-bg" x="162.2" y="33.0" width="33.8" height="14" rx="7" fill="#2f7a1f"/><text class="pv-tag" x="179.1" y="43.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">NEW</text><text class="pv-name" x="28.0" y="77.0" font-size="13" font-weight="600" fill="#1d1a24">People try to book when</text><text class="pv-name" x="28.0" y="93.0" font-size="13" font-weight="600" fill="#1d1a24">the shop is shut</text></g><g class="pv-node pv-same pv-q2" data-k="n12" tabindex="0" role="button" aria-label="Nobody waits on the phone, goal"><title>Nobody waits on the phone</title><rect class="pv-box" x="444.0" y="40.0" width="188" height="66.0" rx="4" fill="#f1eff5" stroke="#b0aabd" stroke-width="1.2"/><text class="pv-kind" x="456.0" y="58.0" font-size="10" letter-spacing="0.7" fill="#756e86">GOAL</text><text class="pv-name" x="456.0" y="77.0" font-size="13" font-weight="600" fill="#1d1a24">Nobody waits on the</text><text class="pv-name" x="456.0" y="93.0" font-size="13" font-weight="600" fill="#1d1a24">phone</text></g><g class="pv-node pv-new pv-q2" data-k="n13" tabindex="0" role="button" aria-label="new, A customer can book without calling, goal"><title>A customer can book without calling</title><rect class="pv-box" x="230.0" y="40.0" width="188" height="66.0" rx="4" fill="#e2f3da" stroke="#2f7a1f" stroke-width="1.8"/><text class="pv-kind" x="242.0" y="58.0" font-size="10" letter-spacing="0.7" fill="#756e86">GOAL</text><rect class="pv-tag-bg" x="376.1" y="33.0" width="33.8" height="14" rx="7" fill="#2f7a1f"/><text class="pv-tag" x="393.1" y="43.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">NEW</text><text class="pv-name" x="242.0" y="77.0" font-size="13" font-weight="600" fill="#1d1a24">A customer can book</text><text class="pv-name" x="242.0" y="93.0" font-size="13" font-weight="600" fill="#1d1a24">without calling</text></g><g class="pv-node pv-same pv-q4" data-k="n14" tabindex="0" role="button" aria-label="Front desk, role"><title>Front desk</title><rect class="pv-box" x="444.0" y="352.0" width="188" height="50.0" rx="4" fill="#f1eff5" stroke="#b0aabd" stroke-width="1.2"/><text class="pv-kind" x="456.0" y="370.0" font-size="10" letter-spacing="0.7" fill="#756e86">ROLE</text><text class="pv-name" x="456.0" y="389.0" font-size="13" font-weight="600" fill="#1d1a24">Front desk</text></g><g class="pv-node pv-new pv-q4" data-k="n15" tabindex="0" role="button" aria-label="new, A text is sent only to a customer who agreed to it, rule"><title>A text is sent only to a customer who agreed to it</title><rect class="pv-box" x="230.0" y="352.0" width="188" height="82.0" rx="4" fill="#e2f3da" stroke="#2f7a1f" stroke-width="1.8"/><text class="pv-kind" x="242.0" y="370.0" font-size="10" letter-spacing="0.7" fill="#756e86">RULE</text><rect class="pv-tag-bg" x="376.1" y="345.0" width="33.8" height="14" rx="7" fill="#2f7a1f"/><text class="pv-tag" x="393.1" y="355.2" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="0.5" fill="#ffffff">NEW</text><text class="pv-name" x="242.0" y="389.0" font-size="13" font-weight="600" fill="#1d1a24">A text is sent only to a</text><text class="pv-name" x="242.0" y="405.0" font-size="13" font-weight="600" fill="#1d1a24">customer who agreed to</text><text class="pv-name" x="242.0" y="421.0" font-size="13" font-weight="600" fill="#1d1a24">it</text></g></svg></div>
+<figcaption>6 new, 3 changed. 6 new connections, 1 taken away. Select anything in the drawing to read it.</figcaption>
+</figure>
+</div><aside class="reading" id="pv-reading" aria-live="polite"></aside></div>
+<div class="lists">
+<section><h2>New · 6</h2><ul>
+<li><strong>A customer can book without calling</strong> <span class="kind">goal</span><p>Because: Half the people who want a slot try when the shop is shut</p></li>
+<li><strong>A text is sent only to a customer who agreed to it</strong> <span class="kind">rule</span></li>
+<li><strong>Free slots</strong> <span class="kind">information</span><p>Holds: The times the workshop can still take a bike</p></li>
+<li><strong>People try to book when the shop is shut</strong> <span class="kind">pressure</span><p>Seen as: Missed calls every evening and every Sunday</p></li>
+<li><strong>The booking page</strong> <span class="kind">software</span><p>Specification: Pending — future initiative</p><p>Realized by: Pending — future initiative</p></li>
+<li><strong>The text sender</strong> <span class="kind">software</span><p>Specification: Pending — future initiative</p><p>Realized by: Pending — future initiative</p></li>
+</ul></section>
+<section><h2>Changed · 3</h2><ul>
+<li><strong>Customer</strong> <span class="kind">information</span><p>Holds: <span class="was">Name and phone number</span> → Name, phone number, and whether they agreed to be texted</p></li>
+<li><strong>Pick-up notice</strong> <span class="kind">service</span><p>What the customer gets: <span class="was">A phone call from the front desk when the bike is ready</span> → A text message when the bike is ready</p></li>
+<li><strong>Repair booking</strong> <span class="kind">service</span><p>What the customer gets: <span class="was">A slot in the workshop, booked by phone or at the counter</span> → A slot in the workshop, booked online, by phone or at the counter</p></li>
+</ul></section>
+</div>
+<section class="calls"><h2>Calls taken for you</h2><ul>
+<li><strong>A text is sent only to a customer who agreed to it</strong> — the request did not say whether every customer is texted, so only those who agreed are</li>
+</ul></section>
+<section class="ask">
+<h2>One question</h2><p>Can a customer cancel a booking online, or only by phone?</p>
+<ol>
+<li>Online, up to the day before</li>
+<li>Only by phone <span class="mine">— what was assumed</span></li>
+</ol>
+<p class="how">Answer in the conversation, in your own words if none of these fits.</p>
+</section>
+<footer>This page is one reading of the branch, made to be confirmed and then thrown away. The repository stays the record: when something here is wrong, the files change first and the page is made again from them.</footer>
+</div>
+<script type="application/json" id="pv-data">{"mode": "change", "nodes": {"n1": {"name": "The workshop diary", "kind": "software", "where": "The software", "status": "same", "was": "", "detail": [["Specification", "The owner's notes", "", false], ["Realized by", "A shared spreadsheet on the shop computer", "", false]], "links": [{"to": "n4", "name": "Repair booking", "word": "serves", "out": true, "status": "same"}]}, "n2": {"name": "The booking page", "kind": "software", "where": "The software", "status": "new", "was": "", "detail": [["Specification", "Pending — future initiative", "", false], ["Realized by", "Pending — future initiative", "", false]], "links": [{"to": "n4", "name": "Repair booking", "word": "serves", "out": true, "status": "new"}]}, "n3": {"name": "The text sender", "kind": "software", "where": "The software", "status": "new", "was": "", "detail": [["Specification", "Pending — future initiative", "", false], ["Realized by", "Pending — future initiative", "", false]], "links": [{"to": "n5", "name": "Pick-up notice", "word": "serves", "out": true, "status": "new"}]}, "n4": {"name": "Repair booking", "kind": "service", "where": "Who does what", "status": "changed", "was": "", "detail": [["What the customer gets", "A slot in the workshop, booked online, by phone or at the counter", "A slot in the workshop, booked by phone or at the counter", true]], "links": [{"to": "n6", "name": "Taking bookings", "word": "needs", "out": true, "status": "same"}, {"to": "n14", "name": "Front desk", "word": "done by", "out": true, "status": "same"}, {"to": "n8", "name": "Booking", "word": "used by", "out": false, "status": "same"}, {"to": "n9", "name": "Customer", "word": "used by", "out": false, "status": "same"}, {"to": "n10", "name": "Free slots", "word": "used by", "out": false, "status": "new"}, {"to": "n1", "name": "The workshop diary", "word": "serves", "out": false, "status": "same"}, {"to": "n2", "name": "The booking page", "word": "serves", "out": false, "status": "new"}]}, "n5": {"name": "Pick-up notice", "kind": "service", "where": "Who does what", "status": "changed", "was": "", "detail": [["What the customer gets", "A text message when the bike is ready", "A phone call from the front desk when the bike is ready", true]], "links": [{"to": "n7", "name": "Keeping customers informed", "word": "needs", "out": true, "status": "same"}, {"to": "n15", "name": "A text is sent only to a customer who agreed to it", "word": "applies to", "out": false, "status": "new"}, {"to": "n9", "name": "Customer", "word": "used by", "out": false, "status": "same"}, {"to": "n3", "name": "The text sender", "word": "serves", "out": false, "status": "new"}, {"to": "n14", "name": "Front desk", "word": "done by", "out": true, "status": "removed"}]}, "n6": {"name": "Taking bookings", "kind": "ability", "where": "What it must be good at", "status": "same", "was": "", "detail": [], "links": [{"to": "n12", "name": "Nobody waits on the phone", "word": "serves", "out": true, "status": "same"}, {"to": "n13", "name": "A customer can book without calling", "word": "serves", "out": true, "status": "new"}, {"to": "n4", "name": "Repair booking", "word": "needs", "out": false, "status": "same"}]}, "n7": {"name": "Keeping customers informed", "kind": "ability", "where": "What it must be good at", "status": "same", "was": "", "detail": [], "links": [{"to": "n5", "name": "Pick-up notice", "word": "needs", "out": false, "status": "same"}]}, "n8": {"name": "Booking", "kind": "information", "where": "What it needs to know", "status": "same", "was": "", "detail": [["Holds", "The bike, the fault and the day promised", "", false]], "links": [{"to": "n4", "name": "Repair booking", "word": "used by", "out": true, "status": "same"}]}, "n9": {"name": "Customer", "kind": "information", "where": "What it needs to know", "status": "changed", "was": "", "detail": [["Holds", "Name, phone number, and whether they agreed to be texted", "Name and phone number", true]], "links": [{"to": "n4", "name": "Repair booking", "word": "used by", "out": true, "status": "same"}, {"to": "n5", "name": "Pick-up notice", "word": "used by", "out": true, "status": "same"}]}, "n10": {"name": "Free slots", "kind": "information", "where": "What it needs to know", "status": "new", "was": "", "detail": [["Holds", "The times the workshop can still take a bike", "", false]], "links": [{"to": "n4", "name": "Repair booking", "word": "used by", "out": true, "status": "new"}]}, "n11": {"name": "People try to book when the shop is shut", "kind": "pressure", "where": "Why it exists", "status": "new", "was": "", "detail": [["Seen as", "Missed calls every evening and every Sunday", "", false]], "links": [{"to": "n13", "name": "A customer can book without calling", "word": "answers", "out": false, "status": "new"}]}, "n12": {"name": "Nobody waits on the phone", "kind": "goal", "where": "Why it exists", "status": "same", "was": "", "detail": [["Because", "The person who answers is also the person at the till", "", false]], "links": [{"to": "n6", "name": "Taking bookings", "word": "serves", "out": false, "status": "same"}]}, "n13": {"name": "A customer can book without calling", "kind": "goal", "where": "Why it exists", "status": "new", "was": "", "detail": [["Because", "Half the people who want a slot try when the shop is shut", "", false]], "links": [{"to": "n11", "name": "People try to book when the shop is shut", "word": "answers", "out": true, "status": "new"}, {"to": "n6", "name": "Taking bookings", "word": "serves", "out": false, "status": "new"}]}, "n14": {"name": "Front desk", "kind": "role", "where": "Who does what", "status": "same", "was": "", "detail": [["Does", "Takes bookings, takes payment, hands bikes back", "", false]], "links": [{"to": "n4", "name": "Repair booking", "word": "done by", "out": false, "status": "same"}, {"to": "n5", "name": "Pick-up notice", "word": "done by", "out": false, "status": "removed"}]}, "n15": {"name": "A text is sent only to a customer who agreed to it", "kind": "rule", "where": "Who does what", "status": "new", "was": "", "detail": [], "links": [{"to": "n5", "name": "Pick-up notice", "word": "applies to", "out": true, "status": "new"}]}}, "start": "n11", "first": {}, "words": {"new": "new", "changed": "changed", "removed": "removed", "new_long": "New in this change.", "changed_long": "Changed by this change.", "removed_long": "Removed by this change.", "same_long": "Not changed. Shown because it touches something that is.", "was": "Was", "touches": "What it touches", "added": "added"}}</script>
+<script>
+(function(){
+  var data = JSON.parse(document.getElementById('pv-data').textContent);
+  var reading = document.getElementById('pv-reading');
+  var words = data.words;
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+  function show(key, from){
+    var n = data.nodes[key]; if(!n) return;
+    document.querySelectorAll('svg.pv').forEach(function(s){
+      var here = s.querySelector('.pv-node[data-k="'+key+'"]');
+      s.classList.toggle('picked', !!here && from==='user');
+      s.querySelectorAll('.pv-node').forEach(function(g){ g.classList.remove('on','near'); });
+      s.querySelectorAll('.pv-edge').forEach(function(g){
+        var on = g.getAttribute('data-a')===key || g.getAttribute('data-b')===key;
+        g.classList.toggle('on', on);
+        if(on){ var o = g.getAttribute('data-a')===key ? g.getAttribute('data-b') : g.getAttribute('data-a');
+          var og = s.querySelector('.pv-node[data-k="'+o+'"]'); if(og) og.classList.add('near'); }
+      });
+      if(here) here.classList.add('on');
+    });
+    if(!reading) return;
+    reading.textContent='';
+    reading.appendChild(el('p','kind', n.kind + (n.where ? ' · ' + n.where : '')));
+    reading.appendChild(el('h3', null, n.name));
+    if(n.status && n.status!=='same'){
+      var st = el('p','state'); var pill = el('span','pill '+n.status, words[n.status]); st.appendChild(pill);
+      st.appendChild(document.createTextNode(n.status==='changed' && n.was ? words.was + ' \u201c' + n.was + '\u201d' : words[n.status+'_long']));
+      reading.appendChild(st);
+    } else if(data.mode==='change'){ reading.appendChild(el('p','state', words.same_long)); }
+    if(n.detail && n.detail.length){
+      var dl = el('dl');
+      n.detail.forEach(function(d){ if(d[0]) dl.appendChild(el('dt',null,d[0])); var dd=el('dd');
+        if(d[3]){ dd.appendChild(el('span','pill changed', d[2] ? words.changed : words.added)); }
+        if(d[2]){ dd.appendChild(el('span','was',d[2])); dd.appendChild(document.createTextNode(' \u2192 ')); }
+        dd.appendChild(document.createTextNode(d[1])); dl.appendChild(dd); });
+      reading.appendChild(dl);
+    }
+    if(n.links && n.links.length){
+      reading.appendChild(el('h2', null, words.touches));
+      var ul = el('ul');
+      n.links.forEach(function(l){ var li=el('li'); var b=el('button'); b.type='button';
+        b.appendChild(el('span','word', l.out ? l.word + ' \u2192' : '\u2190 ' + l.word));
+        b.appendChild(el('span', null, data.nodes[l.to] ? data.nodes[l.to].name : l.name));
+        if(l.status && l.status!=='same') b.appendChild(el('span','pill '+l.status, words[l.status]));
+        b.addEventListener('click', function(){ jump(l.to); }); li.appendChild(b); ul.appendChild(li); });
+      reading.appendChild(ul);
+    }
+    if(from==='user' && window.matchMedia('(max-width:900px)').matches) reading.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+  function jump(key){
+    var n = data.nodes[key]; if(!n) return;
+    if(n.tab && typeof window.pvTab==='function') window.pvTab(n.tab);
+    show(key,'user');
+  }
+  document.querySelectorAll('.pv-node').forEach(function(g){
+    g.addEventListener('click', function(){ show(g.getAttribute('data-k'),'user'); });
+    g.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); show(g.getAttribute('data-k'),'user'); } });
+  });
+  var tabs = document.querySelectorAll('.tabs button');
+  window.pvTab = function(id){
+    tabs.forEach(function(b){ b.setAttribute('aria-selected', b.getAttribute('data-tab')===id ? 'true':'false'); });
+    document.querySelectorAll('.view[data-tab]').forEach(function(v){ v.hidden = v.getAttribute('data-tab')!==id; });
+  };
+  tabs.forEach(function(b){ b.addEventListener('click', function(){ window.pvTab(b.getAttribute('data-tab')); if(data.first[b.getAttribute('data-tab')]) show(data.first[b.getAttribute('data-tab')]); }); });
+  if(data.start) show(data.start);
+})();
+</script>
