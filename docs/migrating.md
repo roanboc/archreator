@@ -1,4 +1,4 @@
-# Crossing versions — for a project on 0.2 through 0.7
+# Crossing versions — for a project on 0.2 through 0.8
 
 _[← Repository README](../README.md) · [Adopting archreator](./adopting.md)_
 
@@ -9,6 +9,16 @@ that introduced it.
 
 The plugin itself updates the ordinary way — see
 [keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
+
+## A preview comes with its picture (0.9)
+
+Nothing in a project has to change. The preview the Requester confirms now
+carries views generated from the branch by `build_preview.py`, which runs
+from the plugin like the other reading tools.
+
+- **Add the command to `AGENTS.md`**, beside `build_brief.py`, so the next
+  agent finds it: `build_preview.py --project .`.
+- **`.archreator/` is already ignored**, and the previews land under it.
 
 ## The technical description is declared, and a validated register is whole (0.8)
 

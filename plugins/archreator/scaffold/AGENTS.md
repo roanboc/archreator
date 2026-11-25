@@ -158,6 +158,7 @@ model.py --project . names src/x.py  # which elements name this path — is a ch
 model.py --project . health          # how much is validated, and whether a merged pull request moved a status line
 model.py --project . portal          # the model as a website, for a reader outside the repo
 build_brief.py --project . --element BSVC1 --focus impact
+build_preview.py --project .         # what this branch changes, for the Requester to confirm
 ```
 
 Everything they generate lands under `.archreator/`, which is gitignored.

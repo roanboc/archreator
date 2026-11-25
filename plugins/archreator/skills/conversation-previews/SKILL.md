@@ -51,8 +51,9 @@ subject that was not before, and what did you decide for me?* It holds:
 1. **One sentence of why** — the goal or driver the change serves, in the
    subject's words.
 2. **What changes**, as before and after, or as the new rows only — never the
-   whole catalogue. Where a picture says it faster, one small diagram of who
-   hands what to whom.
+   whole catalogue — and **the view of it**: the changed elements and what
+   they touch, drawn from the branch and grouped by the question each one
+   answers.
 3. **The calls the agent took**, one line each: every row sourced
    `adopted — <the call>` on the branch. These are what the Requester is
    least likely to have noticed and most likely to disagree with, so they
@@ -75,6 +76,26 @@ the preview names that branch and its revision. A preview written from memory
 becomes a second model that drifts from the first. When the Requester changes
 something in answer, the file changes first and the preview is shown again
 from it.
+
+**The views are generated, never drawn by hand.** The plugin's
+`build_preview.py` — it ships beside the skills and reads the project through
+`--project` — compares the branch with the commit it left the default branch
+at and writes the views into `.archreator/work/previews/`: a page, a picture,
+and Markdown carrying the diagram's source.
+
+```bash
+python3 <plugin>/scripts/build_preview.py --project .
+python3 <plugin>/scripts/build_preview.py --project . --about why \
+    --question "<the one question>" --option "<an answer>" --option "<another>" --default 1
+```
+
+It names every element as its document names it and leaves the identifiers
+and glyphs out, so what it writes is shown as it is. The one sentence of why
+is the scope document's opening paragraph. The question is the agent's:
+`--question`, the answers the model allows as `--option`, and `--default` for
+the one the agent assumed. A change too large for one screen is drawn one
+question at a time, and `--about` narrows the preview to the group a
+discovery has just finished.
 
 ### When a preview is due
 
@@ -114,11 +135,18 @@ one about a state that does not exist yet.
 | In the conversation with the agent | The conversation itself, in the richest form it renders | Their reply |
 | Reached at a meeting, never in the conversation | A one-page session pack of the same content, exported from the branch | The session's notes, filed under `architecture/reference/` (`architecture-document-style` § Reference documents) |
 
-In the conversation, a table always works. Show a diagram rendered where the
-conversation can display one, and as its source or a link where it cannot.
-Where a preview would leave the conversation — published as a page, sent as a
-file outside the repository's own readers — that is publishing, and the
-Authorization stop applies before it is sent.
+**Show the richest form the conversation renders, and never send the
+Requester to the pull request to find out what changed.** In order: the page,
+where the host can show one beside the conversation; the picture, where it
+shows images; the Markdown, where it draws a diagram from its source; and
+the tables as text, which always work, with the path of the page so it opens
+in a browser.
+
+**A page only the Requester can open is still the conversation.** A host that
+shows the page to the person the agent is talking to, private to them, has
+shown them a preview. Anything that lets somebody else open it — a public
+link, a share, a file sent outside the repository's own readers — is
+publishing, and the Authorization stop applies before it happens.
 
 ### A confirmation validates, and the merge records it
 
@@ -163,7 +191,9 @@ work, not a confirmation of the claims.
 - Burying the agent's own calls among the rest of the change.
 - Asking "does this look right?" rather than a question tied to one row.
 - A preview with an identifier, a glyph or a layer number in it.
-- A preview written from memory rather than generated from the branch.
+- A preview written from memory rather than generated from the branch, or a
+  view drawn by hand.
+- Telling the Requester to read the pull request to see what changed.
 - Drafting the next discovery group before this one is confirmed.
 - Moving a document to `●` because its pull request merged, with no
   confirmation behind it.
@@ -172,7 +202,9 @@ work, not a confirmation of the claims.
 
 ## ☑ Done when
 
-- Every preview due was shown, to the person who decides, where they are.
+- Every preview due was shown, to the person who decides, where they are,
+  with its views generated from the branch in the richest form the
+  conversation renders.
 - Every answer is written into the document it concerns before anything is
   built on it.
 - Every `●` in the change names who confirmed it and when.
