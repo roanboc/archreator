@@ -89,6 +89,7 @@ which are the exceptions.
 
 | archreator | Established | Verdict | Named in the skill | Note |
 | ---------- | ----------- | ------- | ----------------- | ---- |
+| **The seven sections of the technical description** — context, building blocks, interfaces, runtime, deployment, quality attributes, decisions | **arc42**; the views of ISO/IEC/IEEE 42010 | Adopted | — | arc42's section names, used as a checklist of what a delivery framework owes back. The method declares where each is written and writes none of them. arc42's introduction and constraints are the model's own layers 1 and 2, and its glossary the business layer's, so they are not asked for twice |
 | **`record-decision`** | **ADR** — Architecture Decision Record (Nygard); MADR | Cite | yes | Its sections parallel MADR's. Not naming the pattern costs it every reader who already knows it |
 | **`run-retrospective`** | Retrospective; blameless post-mortem | Cite | yes | |
 | **The canvases** | Osterwalder — Business Model Canvas, Value Proposition Canvas | Adopted | yes | |

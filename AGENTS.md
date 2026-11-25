@@ -91,6 +91,7 @@ model.py --project . health         # how much is validated, and whether a merge
 model.py --project . portal         # a stock MkDocs config in .archreator/work/portal/
 model.py --project . export         # .model/model.json, which nothing here reads back
 build_brief.py --project . --element CAP1 --focus impact
+build_brief.py --project . --focus end-to-end   # one line per component, from its goal to where it runs
 export_pdf.py --project . --config architecture/export/board.yml
 ```
 

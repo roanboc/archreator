@@ -122,6 +122,48 @@ The realization register in `4_application/` links each component to its
 specification there. With no framework named, the scope documents are the
 specification.
 
+### The technical description, end to end
+
+The model does not hold the design, and it still has to be possible to say
+that the design is whole. So `AGENTS.md` § Delivery carries one table: seven
+sections that describe a system end to end, and where this project writes
+each. The names are [arc42](https://arc42.org)'s.
+
+| Section | The question it answers |
+| ------- | ----------------------- |
+| Context | What does the system talk to, and who uses it? |
+| Building blocks | What are the parts, and how do they divide the work? |
+| Interfaces | What does each part offer and expect? |
+| Runtime | How do the parts act together on the scenarios that matter? |
+| Deployment | Where does each part run? |
+| Quality attributes | What does it have to be good at, and how is that measured? |
+| Decisions | Which consequential calls were taken, and why? |
+
+**A framework that specifies one change at a time covers the middle and not
+the edges.** Spec Kit, OpenSpec and Kiro write a design per feature or per
+change: building blocks, interfaces and runtime for that change. Context,
+deployment and quality attributes belong to the system as a whole, and
+usually need one standing document beside the framework — an arc42 or C4
+document under `docs/`, or the framework's own steering files where it has
+them. BMAD's architect workflow writes one architecture document for the
+whole system; its earlier brief and requirements steps restate what layers 1
+and 2 already hold, so a project starts it from the scope document instead.
+Where each framework puts its files changes between versions, so the table
+names this project's real paths, never a framework's defaults from memory.
+
+Once the register in `architecture/4_application/` is validated,
+`check_model.py` fails two things: a register row with a blank cell that
+does not say `Pending`, and a declaration with a row missing or still a
+placeholder. It proves the description is declared and reachable, not that
+it is good. Reading a framework's documents would take one parser per
+framework.
+
+The whole line on one page — the goal, the capability, the service, the
+component, its specification and where it runs — is a brief:
+`build_brief.py --project . --focus end-to-end`. The
+[PDF export](#an-audience-gets-a-pdf) carries it to a reader outside the
+repository.
+
 ## Keeping a project in sync with the method
 
 A project on an earlier method has a crossing to make first — a confirmation

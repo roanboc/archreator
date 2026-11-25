@@ -44,8 +44,8 @@ It is generated under `.archreator/work/briefs/` and never committed.
 
 - Pick the focus from the question yourself. Never hand the reader a menu of
   the method's options, and never ask them to choose ArchiMate layers.
-- Use exactly one focus: `business`, `information`, `solution`, `impact` or
-  `decision`. Combined viewpoints are separate briefs.
+- Use exactly one focus: `business`, `information`, `solution`, `impact`,
+  `end-to-end` or `decision`. Combined viewpoints are separate briefs.
 - Resolve the anchor against the model. Suggest actual names and identifiers
   when the request is ambiguous; never invent an identifier.
 - Pass the chosen focus to the plugin's `build_brief.py` — it ships beside the
@@ -67,6 +67,7 @@ one clause, and move on:
 | `information` | Information and data | Information, ownership, use, flow and the applications managing it |
 | `solution` | Solution and technology | Applications, integrations, components, platforms and deployment |
 | `impact` | End-to-end impact | One topic or change traced through every connected layer |
+| `end-to-end` | From why to where it runs | The technical architecture as a whole: one line per application component, with its goal, what it serves, its specification and its platform |
 | `decision` | Decision overview | The reason, affected capabilities, key impacts and transition |
 
 Default to `impact` for a change unless the request clearly centres another

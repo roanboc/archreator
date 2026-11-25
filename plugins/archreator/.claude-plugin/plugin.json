@@ -1,6 +1,6 @@
 {
   "name": "archreator",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Enterprise-architecture-first development: model an organization or an application through numbered ArchiMate layers, build directly from the request, and record it in a scope document. The agent stops only for a contradiction, an ambiguity, or something needing authorization, shows you what the change claims in the conversation, and your confirmation is what validates it.",
   "author": {
     "name": "roanboc",

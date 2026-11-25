@@ -60,6 +60,50 @@ principles reach it through that framework's standing file — its
 constitution or steering file — carried in their own words with a link back,
 never as a second copy of the model.
 
+### Where the method sits beside a delivery framework
+
+archreator is at both ends of a change and designs nothing in between. It
+hands the intent down, the delivery framework owes a technical description
+back, and the validators and the brief read the result.
+
+```mermaid
+flowchart TB
+  subgraph model["archreator — the model"]
+    direction TB
+    intent["Layers 0–3: business design, strategy, business, information"]
+    register["Layers 4–5: the register — component, what it serves, specification, code, platform"]
+    intent --> register
+  end
+
+  subgraph delivery["The delivery framework — one per project"]
+    direction TB
+    choice["Spec Kit · OpenSpec · Kiro · BMAD from its architect step · arc42 or C4"]
+    description["The technical description: context, building blocks, interfaces, runtime, deployment, quality attributes, decisions"]
+    choice --> description
+  end
+
+  build["A coding agent and the repository: code, tests, pipeline, deployment"]
+
+  subgraph checks["archreator — checks and readers"]
+    direction TB
+    validators["check_links · check_model · check_prose"]
+    brief["The end-to-end brief, and its PDF for a reader outside the repository"]
+  end
+
+  model -->|"hands over the scope document, and the principles into the standing file"| delivery
+  delivery -->|"owes back a specification per component, and where each section is written"| register
+  delivery -->|builds| build
+  build -->|"pull request"| checks
+  checks -->|"the model still describes today"| model
+```
+
+The frameworks are alternatives, not a chain: a project names one in
+`AGENTS.md` § Delivery. A framework that also writes requirements or a
+strategy restates layers 1 and 2, so a project starts it after those steps,
+from the scope document.
+[Pairing it with a delivery framework](./adopting.md#pairing-it-with-a-delivery-framework)
+has the seven sections and what the validator holds.
+
 Layer 0 is the odd one out — it holds no ArchiMate elements, only the
 Value Proposition and Business Model canvases the architecture is derived
 from. It is filled only when the initiative is modeling an organization.
