@@ -210,7 +210,10 @@ where its specification lives, and the code that realizes it.
 `5_technology/` holds a platform only where a business fact depends on where
 something runs. How the software is designed, its interfaces and its
 deployment belong to the delivery framework `AGENTS.md` § Delivery names,
-and a register row links to them rather than restating them.
+and a register row links to them rather than restating them. Once the
+register is validated, no cell of a row is blank — it names something or
+says `Pending` — and `AGENTS.md` § Delivery says where each of the seven
+sections of the technical description is written.
 
 ### Relationships are declared, never only drawn
 

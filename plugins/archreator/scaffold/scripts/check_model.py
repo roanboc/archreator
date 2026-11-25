@@ -15,7 +15,7 @@ this one silently. What stayed here is the judgement — the checks below
 and the exit code. Nothing is persisted: validation needs a parse, not a
 store, so this script still builds the graph, checks it and exits.
 
-Nine things are checked, per project:
+Eleven things are checked, per project:
 
 - **Dangling references** — every referenced ID resolves to a definition.
   A qualified reference (`SALES.BSVC3`) resolves inside that domain's
@@ -66,6 +66,20 @@ Nine things are checked, per project:
   is no longer a scaffold. A `TEMPLATE` marker means its notation or layer
   view still describes a hypothetical subject instead of the model's subject.
 
+- **A validated register with a blank cell** - a document in
+  `4_application/` that declares itself validated says, for every component,
+  what it serves, where it is specified and what realizes it, or says
+  `Pending`. A blank cell there is a component the model registers and nobody
+  described. Read from the shape of the row, never from a header, so it holds
+  in any language.
+- **A technical description nobody declared** - once the register is
+  validated, the project's `AGENTS.md` says where each of the seven sections
+  of the technical description is written: the table after the
+  `<!-- archreator:technical-description -->` marker, one row per section,
+  no cell left blank or still a placeholder. The check proves the declaration
+  is whole, not that the description is good: judging content would take one
+  parser per delivery framework.
+
 An ID can carry two dot-separated qualifiers and they mean different things,
 so the parser reads outwards from the type prefix: upper-case segments
 *before* it are the domain path (`SALES.BSVC3`), numeric segments *after* it
@@ -111,14 +125,18 @@ from pathlib import Path
 import re
 
 from model_graph import (
+    CELL_ID_RE,
     FEDERATION_DOC,
     IMPORTS_DOC,
     MODEL_DIR,
+    PENDING_MARKERS,
     REPO_ROOT,
+    _table_blocks,
     domain_of,
     federation_id_of,
     find_projects,
     imports_of,
+    layer_of,
     parent_of,
     parse_project,
     project_key,
@@ -262,6 +280,85 @@ def check_foreign(project: Path, parsed, known: dict) -> list[str]:
                 f"{rel}: `{reference}` names a model outside this repository and "
                 f"is not declared in {MODEL_DIR}/{IMPORTS_DOC}. Nothing here can "
                 f"see it, so a reference to it has to be a stated dependency"
+            )
+    return errors
+
+
+# The marker that opens the technical-description declaration in a project's
+# `AGENTS.md`. A comment rather than a heading, so the section around it can be
+# written in any language and the check still finds the table.
+DESCRIPTION_MARKER = "<!-- archreator:technical-description -->"
+# Context, building blocks, interfaces, runtime, deployment, quality
+# attributes, decisions - arc42's sections, counted and never named here.
+DESCRIPTION_SECTIONS = 7
+REGISTER_LAYER = "4"
+
+
+def _blank(cell: str) -> bool:
+    """A cell that says nothing: empty, a lone dash, or a placeholder left in."""
+    text = cell.replace("\\", "").replace("`", "").replace("_", "").replace("*", "").strip()
+    return not text or text in {"-", "\u2013", "\u2014"} or (text.startswith("<") and text.endswith(">"))
+
+
+def check_register(project: Path, parsed) -> list[str]:
+    """A validated register names every cell, and its description is declared."""
+    errors: list[str] = []
+    model_root = project / MODEL_DIR
+    validated: list[Path] = []
+    for path in sorted(set(parsed.defined.values())):
+        if layer_of(path, model_root)[0] != REGISTER_LAYER:
+            continue
+        doc = str(path.relative_to(REPO_ROOT)).replace("\\", "/")
+        if parsed.statuses.get(doc, ("", 0))[0] != "validated":
+            continue
+        validated.append(path)
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        for _, _, _, rows in _table_blocks(text):
+            for cells in rows:
+                found = CELL_ID_RE.match(cells[0]) if cells else None
+                if not found or parsed.defined.get(found.group(1)) != path:
+                    continue
+                if any(marker in " ".join(cells).lower() for marker in PENDING_MARKERS):
+                    continue
+                if any(_blank(cell) for cell in cells[1:]):
+                    errors.append(
+                        f"{doc}: `{found.group(1)}` sits in a validated register "
+                        f"with a blank cell. Say what it serves, where it is "
+                        f"specified and what realizes it, or write `Pending`"
+                    )
+    if not validated:
+        return errors
+
+    entry = project / "AGENTS.md"
+    rel = entry.relative_to(REPO_ROOT) if entry.is_relative_to(REPO_ROOT) else entry
+    try:
+        text = entry.read_text(encoding="utf-8")
+    except OSError:
+        text = ""
+    at = text.find(DESCRIPTION_MARKER)
+    if at < 0:
+        errors.append(
+            f"{rel}: the register is validated and nothing declares where the "
+            f"technical description is written. Add the table of "
+            f"{DESCRIPTION_SECTIONS} sections after `{DESCRIPTION_MARKER}`"
+        )
+        return errors
+    blocks = _table_blocks(text[at:])
+    rows = blocks[0][3] if blocks else []
+    if len(rows) < DESCRIPTION_SECTIONS:
+        errors.append(
+            f"{rel}: the technical description declares {len(rows)} section(s) "
+            f"of {DESCRIPTION_SECTIONS}"
+        )
+    for cells in rows:
+        if len(cells) < 2 or any(_blank(cell) for cell in cells[1:2]):
+            errors.append(
+                f"{rel}: the technical description leaves "
+                f"\"{cells[0] if cells else ''}\" undeclared. Name the file "
+                f"that holds it, or say why this project has none"
             )
     return errors
 
@@ -457,6 +554,7 @@ def check_project(project: Path, known: dict | None = None) -> tuple[list[str], 
         )
 
     errors.extend(check_foreign(project, parsed, known or {}))
+    errors.extend(check_register(project, parsed))
 
     return errors, len(parsed.defined), parsed.skipped
 

@@ -10,6 +10,7 @@ a scope, get a document.
     build_brief.py --project . --domain SALES
     build_brief.py --project . --layer Application --type "Application Component"
     build_brief.py --project . --element DOBJ4 --focus information
+    build_brief.py --project . --focus end-to-end
 
 The tool lives in the plugin and reads a project named with `--project`.
 
@@ -177,6 +178,16 @@ FOCUS_PRESETS = {
         "deemphasized": "elements outside the requested traversal",
         "heading": "How this reaches across the layers",
     },
+    "end-to-end": {
+        "label": "End to end, from why to where it runs",
+        "primary": set(LAYER_ORDER),
+        "support": set(),
+        "emphasis": "one line per application component: what it is for, what it "
+                    "serves, where it is specified and where it runs",
+        "deemphasized": "nothing in scope; the design itself stays in the delivery "
+                        "framework's documents",
+        "heading": "How this reaches across the layers",
+    },
     "decision": {
         "label": "Decision overview",
         "primary": {"Motivation", "Strategy", "Business", "Implementation & Migration"},
@@ -315,7 +326,7 @@ def apply_focus(store: "Store", rows: list[dict], focus: str | None,
     survives and acts as primary context even when its layer is not primary
     for the chosen viewpoint.
     """
-    if not focus or focus == "impact":
+    if not focus or focus in ("impact", "end-to-end"):
         return rows, []
 
     preset = FOCUS_PRESETS[focus]
@@ -460,6 +471,78 @@ def motivation_view(rows: list[dict], edges: list[dict]) -> str:
     return "\n".join(lines)
 
 
+ABOVE = ("Motivation", "Strategy", "Business")
+
+
+def _is_id_list(value: str) -> bool:
+    """A cell holding identifiers and nothing else - already drawn as an edge."""
+    return not re.sub(r"`[^`]+`", "", value).strip(" ,;/\u00b7+&\u2014\u2013-")
+
+
+def chain_table(rows: list[dict], edges: list[dict]) -> list[str]:
+    """One row per application component, from why it exists to where it runs.
+
+    The register says what a component serves and where it is specified; the
+    layers above say why. No document puts the two on one line, because each
+    diagrams its own layer. Cells carry what the model wrote, verbatim: an
+    identifier with its name, or the register's own cell under its own header.
+    """
+    by_id = {gid(row): row for row in rows}
+    near: dict[str, set[str]] = defaultdict(set)
+    for edge in edges:
+        near[edge["s"]].add(edge["d"])
+        near[edge["d"]].add(edge["s"])
+    components = sorted(
+        (row for row in rows
+         if row["type"] == "Application Component" and not row["retired"]),
+        key=lambda r: r["id"],
+    )
+    if not components:
+        return []
+
+    def named(ids: set[str], groups: tuple[str, ...]) -> str:
+        hits = sorted(i for i in ids if by_id[i]["layer_group"] in groups)
+        return ", ".join(f"`{by_id[i]['id']}` {by_id[i]['name']}".strip() for i in hits) or "\u2014"
+
+    headers: list[str] = []
+    for row in components:
+        for header, value in (row["attrs"] or {}).items():
+            if value and header.lower() != "name" and not _is_id_list(value) and header not in headers:
+                headers.append(header)
+    # The catalogue's own name column repeats the first cell of every line.
+    headers = [
+        h for h in headers
+        if not all((r["name"] or "\0") in ((r["attrs"] or {}).get(h) or "") for r in components
+                   if (r["attrs"] or {}).get(h))
+    ]
+
+    out = ["## From why to where it runs", "",
+           "One line per application component. The columns between the business "
+           "and the platform are the register's own, under their own headers; a "
+           "link in them is relative to the register, not to this brief.", "",
+           "| Component | Why | Serves | Information | " + "".join(f"{h} | " for h in headers) + "Runs on |",
+           "| --- | --- | --- | --- | " + "--- | " * len(headers) + "--- |"]
+    for row in components:
+        me = gid(row)
+        direct = near[me]
+        # Upward only through the layers above: the business elements it
+        # serves, then what those are for.
+        above, frontier = set(), {i for i in direct if by_id[i]["layer_group"] in ABOVE}
+        for _ in range(3):
+            above |= frontier
+            frontier = {j for i in frontier for j in near[i]
+                        if by_id[j]["layer_group"] in ABOVE} - above
+        attrs = row["attrs"] or {}
+        out.append(
+            f"| `{row['id']}` {row['name']} | {named(above, ('Motivation', 'Strategy'))} | "
+            f"{named(direct, ('Business',))} | {named(direct, ('Information',))} | "
+            + "".join(f"{attrs.get(h) or chr(0x2014)} | " for h in headers)
+            + f"{named(direct, ('Technology',))} |"
+        )
+    out.append("")
+    return out
+
+
 def brief(store: "Store", rows, scope, dropped, focus_dropped, args) -> str:
     ids = {gid(r) for r in rows}
     edges = edges_within(store, ids)
@@ -531,6 +614,9 @@ def brief(store: "Store", rows, scope, dropped, focus_dropped, args) -> str:
                 "`--layer`, to see the chain down.",
                 "",
             ]
+
+    if args.focus == "end-to-end":
+        out += chain_table(rows, edges)
 
     by_layer = defaultdict(list)
     for row in rows:
@@ -627,12 +713,15 @@ def main() -> int:
                         help="the project to read (default: the working directory)")
     parser.add_argument("--scope", help="only models whose path contains this")
     parser.add_argument("--focus", choices=FOCUS_PRESETS,
-                        help="reader viewpoint: business, information, solution, impact or decision")
+                        help="reader viewpoint: business, information, solution, impact, end-to-end or decision")
     parser.add_argument("--to", type=Path, default=DERIVED, help="where to write the brief")
     parser.add_argument("--stdout", action="store_true", help="print it instead of writing it")
     args = parser.parse_args()
 
-    if not any((args.element, args.domain, args.layer, args.type, args.scope)):
+    # The end-to-end focus is a question about the whole model, so it is the
+    # one focus that may be asked with no scope named.
+    whole = args.focus == "end-to-end"
+    if not whole and not any((args.element, args.domain, args.layer, args.type, args.scope)):
         parser.error("name a scope: --element, --domain, --layer, --type or --scope")
 
     store = read_model()
@@ -656,7 +745,7 @@ def main() -> int:
         print(body)
         return 0
     slug = re.sub(r"\W+", "-", (args.element or args.domain or args.layer or
-                                args.type or args.scope)).strip("-").lower()
+                                args.type or args.scope or "model")).strip("-").lower()
     if args.focus:
         slug += f"-{args.focus}"
     args.to.mkdir(parents=True, exist_ok=True)

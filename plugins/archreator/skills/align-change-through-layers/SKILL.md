@@ -275,13 +275,14 @@ here is presented for approval first.
 
 ### 5 — Hand the realization over
 
-The model says *what* realizes the business, not *how* it is built. Two things
-change here, and nothing else:
+The model says *what* realizes the business, not *how* it is built. Three
+things can change here, and nothing else:
 
 | Where | What changes |
 | ----- | ------------ |
 | `architecture/4_application/` and `architecture/5_technology/` | The realization register: a row per application component the change adds or re-relates — the business services and processes it serves, where its specification lives, and the code that realizes it — and a platform row only where a business fact depends on where something runs. No design, no interface contract, no deployment pipeline |
 | The delivery framework's standing file | The principles and business rules this change touches, carried in their own words with a link back to the model — the file `AGENTS.md` § Delivery names: a constitution, a steering file, a principles section. It holds the model's intent; it never becomes a second copy of the model |
+| `AGENTS.md` § Delivery, the technical description | Only when the change moves where a section is written, or fills one the project had left open. The seven rows say where context, building blocks, interfaces, runtime, deployment, quality attributes and decisions live; the model never holds their content |
 
 The design, the stack, the interface contracts and the build sequence are the
 delivery framework's documents, and the scope document links to them rather
@@ -291,6 +292,10 @@ record it with `record-decision`.
 Where `AGENTS.md` names no delivery framework, the scope document's work
 packages are the specification, and the register's specification cell names
 them.
+
+**A validated register leaves no cell blank.** A component whose
+specification or code cannot be named yet says `Pending`, and
+`check_model.py` fails a blank one.
 
 As in Step 2, a layer filled for the first time gets its README from the
 plugin's assets — `assets/layers/4_application/`, `assets/layers/5_technology/`.

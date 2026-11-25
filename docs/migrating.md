@@ -1,4 +1,4 @@
-# Crossing versions — for a project on 0.2 through 0.6
+# Crossing versions — for a project on 0.2 through 0.7
 
 _[← Repository README](../README.md) · [Adopting archreator](./adopting.md)_
 
@@ -9,6 +9,30 @@ that introduced it.
 
 The plugin itself updates the ordinary way — see
 [keeping a project in sync](./adopting.md#keeping-a-project-in-sync-with-the-method).
+
+## The technical description is declared, and a validated register is whole (0.8)
+
+One change, and it moves no element. The delivery framework still designs and
+builds the software; what is new is that the project says where that design
+is written, and the validator holds it.
+
+- **Add the table of seven sections to `AGENTS.md` § Delivery** — copy it
+  from the scaffold, marker comment included, and name the file or folder
+  that holds each section. A project on no framework names its scope
+  documents or its own design notes; a section the project has none of says
+  why. See [pairing it with a delivery framework](./adopting.md#pairing-it-with-a-delivery-framework).
+- **Copy the validators across**, the whole bundle as always. `check_model.py`
+  now fails a validated document in `4_application/` whose row leaves a cell
+  blank, and a validated register with no complete declaration beside it.
+- **Fill or mark the blanks.** A component with no specification yet says
+  `Pending — future initiative`. A register still `◐` owes nothing until it
+  is confirmed.
+- **Existing layer 4 documents from before 0.7 are held to the same rule**
+  once they are `●`: a blank cell in a catalogue row is filled, marked
+  `Pending`, or the document is collapsed into the register.
+
+A reader who wants the whole line on one page asks for it:
+`build_brief.py --project . --focus end-to-end`.
 
 ## A confirmation validates, and layers 4 and 5 are a register (0.7)
 

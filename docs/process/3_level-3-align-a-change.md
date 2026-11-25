@@ -39,7 +39,7 @@ flowchart TD
 | `BPROC2.1.2` | Assess the strategy layer against the change | The depth is stated | One of four verdicts, stated and recorded |
 | `BPROC2.1.3` | Align business and information | The verdict is "aligned" and the change reaches the model | Changed `2_business/` and `3_information/`, or explicit "no change" verdicts |
 | `BPROC2.1.4` | Draft the scope document | The layers are aligned | The next numbered document in `architecture/scope/`, indexed |
-| `BPROC2.1.5` | Hand the realization over | The layers are aligned and no stop is open | The realization register in `4_application/` and `5_technology/` updated, and the principles this change touches carried into the delivery framework's standing file |
+| `BPROC2.1.5` | Hand the realization over | The layers are aligned and no stop is open | The realization register in `4_application/` and `5_technology/` updated, and the principles this change touches carried into the delivery framework's standing file; `AGENTS.md` § Delivery still saying where each section of the technical description is written |
 
 Every edge leaving a rhombus is a verdict the agent **states and records** — a "no
 change" on a layer, an "inside an element, no scope document", a call the agent took and

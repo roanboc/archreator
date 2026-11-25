@@ -61,6 +61,24 @@ principles reach it through its standing file: \<the framework, and the path
 of its constitution, steering or principles file>. With none named, the scope
 documents are the specification.
 
+**The technical description is written there, and found from here.** Seven
+sections describe a system end to end, whichever framework writes them. Each
+row names the file or folder that holds that section for this project, or
+says why the project has none. `check_model.py` holds the table whole once
+the register in `architecture/4_application/` is validated.
+
+<!-- archreator:technical-description -->
+
+| Section | Where it is written |
+| ------- | ------------------- |
+| Context — what the system talks to, and who uses it | \<path> |
+| Building blocks — the parts and how they divide the work | \<path> |
+| Interfaces — what each part offers and expects | \<path> |
+| Runtime — how the parts act together on the scenarios that matter | \<path> |
+| Deployment — where each part runs | \<path> |
+| Quality attributes — what it has to be good at, and how that is measured | \<path> |
+| Decisions — the consequential calls and why | \<path> |
+
 ## The skills
 
 Three archreator skills surface on their own — `align-change-through-layers`

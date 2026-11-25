@@ -291,6 +291,96 @@ class ProjectToolTests(unittest.TestCase):
             )
 
 
+REGISTER = """\
+# Realization register — Probe
+
+**ArchiMate viewpoint:** Application usage.
+
+**Status:** ● Validated — confirmed by the owner, in a probe.
+
+## Components
+
+```mermaid
+flowchart LR
+  app["⊞ Enquiry inbox [ACMP1]"]
+```
+
+| ID | Application component | Serves | Specification | Realized by |
+| -- | --------------------- | ------ | ------------- | ----------- |
+| `ACMP1` | Enquiry inbox | `BSVC1` | specs/inbox/design.md | `src/inbox/` |
+"""
+
+
+class RegisterAndDescriptionTests(unittest.TestCase):
+    """A validated register is whole, and so is the declaration beside it."""
+
+    def _probe(self, root: Path, register: str = REGISTER) -> Path:
+        probe = root / "probe"
+        shutil.copytree(SCAFFOLD, probe, ignore=shutil.ignore_patterns("__pycache__"))
+        for layer, name, body in (
+            ("2_business", "README.md", BUSINESS),
+            ("4_application", "1_realization-register.md", register),
+        ):
+            folder = probe / "architecture" / layer
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / name).write_text(body, encoding="utf-8")
+        return probe
+
+    def _declare(self, probe: Path, value: str = "docs/architecture.md") -> None:
+        entry = probe / "AGENTS.md"
+        entry.write_text(
+            entry.read_text(encoding="utf-8").replace("\\<path>", value), encoding="utf-8")
+
+    def _check(self, probe: Path):
+        result = run(probe / "scripts" / "check_model.py", cwd=probe)
+        return result.returncode, result.stdout + result.stderr
+
+    def test_a_validated_register_with_a_declared_description_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            probe = self._probe(Path(tmp))
+            self._declare(probe)
+            code, said = self._check(probe)
+            self.assertEqual(code, 0, said)
+
+    def test_a_placeholder_left_in_the_declaration_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, said = self._check(self._probe(Path(tmp)))
+            self.assertNotEqual(code, 0, said)
+            self.assertIn("undeclared", said)
+            self.assertEqual(said.count("undeclared. Name"), 7, said)
+
+    def test_a_project_with_no_declaration_at_all_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            probe = self._probe(Path(tmp))
+            entry = probe / "AGENTS.md"
+            entry.write_text(entry.read_text(encoding="utf-8").replace(
+                "<!-- archreator:technical-description -->", ""), encoding="utf-8")
+            code, said = self._check(probe)
+            self.assertNotEqual(code, 0, said)
+            self.assertIn("nothing declares where the technical description", said)
+
+    def test_a_blank_specification_fails_and_pending_does_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            blank = REGISTER.replace("specs/inbox/design.md", "")
+            probe = self._probe(Path(tmp), blank)
+            self._declare(probe)
+            code, said = self._check(probe)
+            self.assertNotEqual(code, 0, said)
+            self.assertIn("`ACMP1` sits in a validated register with a blank cell", said)
+            (probe / "architecture" / "4_application" / "1_realization-register.md").write_text(
+                REGISTER.replace("specs/inbox/design.md", "Pending — future initiative"),
+                encoding="utf-8")
+            code, said = self._check(probe)
+            self.assertEqual(code, 0, said)
+
+    def test_a_draft_register_owes_nothing_yet(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            draft = REGISTER.replace("● Validated", "◐ Draft catalogue").replace(
+                "specs/inbox/design.md", "")
+            code, said = self._check(self._probe(Path(tmp), draft))
+            self.assertEqual(code, 0, said)
+
+
 if __name__ == "__main__":
     unittest.main()
 

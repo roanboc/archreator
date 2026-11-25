@@ -12,6 +12,7 @@ business service and process, and where each one is specified.
   exists, *what* it serves and *where* it is specified; the specification
   says how it is built. A row whose code cannot be named is marked
   "Pending — future initiative", or "Pending — not located" in a sweep.
+  Once this document is validated, `check_model.py` fails a blank cell.
 -->
 
 ## Components

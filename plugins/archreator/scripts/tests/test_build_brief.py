@@ -74,6 +74,30 @@ class FocusSelectionTests(unittest.TestCase):
             self.assertEqual(kept, {r["id"] for r in self.rows})
             self.assertEqual(dropped, set())
 
+    def test_end_to_end_keeps_the_full_scope(self):
+        kept, dropped = self.ids_for("end-to-end")
+        self.assertEqual(kept, {r["id"] for r in self.rows})
+        self.assertEqual(dropped, set())
+
+    def test_the_chain_puts_why_what_and_where_on_one_line(self):
+        rows = [dict(r) for r in self.rows]
+        for r in rows:
+            if r["id"] == "ACMP1":
+                r["attrs"] = {"Serves": "`BSVC1`", "Specification": "specs/inbox/design.md"}
+        edges = [
+            {"s": f"model::{s}", "d": f"model::{d}", "rel": "relates"}
+            for s, d in [("G1", "CAP1"), ("CAP1", "BSVC1"), ("ACMP1", "BSVC1"),
+                         ("ACMP1", "DOBJ1"), ("NODE1", "ACMP1")]
+        ]
+        table = "\n".join(build_brief.chain_table(rows, edges))
+        line = next(l for l in table.splitlines() if l.startswith("| `ACMP1`"))
+        for expected in ("`G1`", "`CAP1`", "`BSVC1`", "`DOBJ1`", "specs/inbox/design.md", "`NODE1`"):
+            self.assertIn(expected, line)
+        # a column of identifiers is already an edge, and is not repeated
+        self.assertNotIn("| Serves | Information | Serves", table)
+        # a component nothing is known about still gets its line
+        self.assertIn("| `ACMP2`", table)
+
     def test_anchor_is_never_removed_and_can_pull_direct_support(self):
         kept, _ = self.ids_for("business", "NODE1")
         self.assertIn("NODE1", kept)
