@@ -1,0 +1,49 @@
+{
+  "_comment": "The film's words. Every line is spoken, shown as a caption and timed against. `say` respells a word for the voice only: the caption keeps the spelling people read.",
+  "voice": {
+    "voice": "af_heart",
+    "lang": "en-us",
+    "speed": 0.95,
+    "say": [["\\bArChreator\\b", "Arcreator"]]
+  },
+  "pace": { "lead_in": 0.9, "after_line": 0.4, "after_scene": 1.0, "lead_out": 2.6 },
+  "scenes": [
+    { "id": "gap", "lines": [
+      { "id": "1", "text": "An AI agent can build almost anything you ask for." },
+      { "id": "2", "text": "But it only knows what you told it. Where you left a gap, it fills it with a guess, and keeps going." },
+      { "id": "3", "text": "So you get a working version of the wrong thing." }
+    ] },
+    { "id": "fix", "lines": [
+      { "id": "1", "text": "ArChreator closes that gap first." },
+      { "id": "2", "text": "It turns your idea into a picture of your business that you can check, before anything is built." }
+    ] },
+    { "id": "loop", "lines": [
+      { "id": "1", "text": "Here is how it goes. You say the idea, in your own words." },
+      { "id": "2", "text": "ArChreator works out what it means for your business: why you want it, who does what, and what you need to know." },
+      { "id": "3", "text": "Then it shows you a picture of what changes, and asks one question at a time." },
+      { "id": "4", "text": "You answer, or you correct it. Round and round, until it reads true." },
+      { "id": "5", "text": "Then you confirm. Your confirmation is what makes it true." },
+      { "id": "6", "text": "Now it hands over: a short note of the change, the software that is needed, and your rules." },
+      { "id": "7", "text": "Your own delivery framework designs the software. A coding agent builds it, and tests it." },
+      { "id": "8", "text": "If the design, or a test, shows that you meant something else, that comes back to you. It is not settled in the code." },
+      { "id": "9", "text": "Checks confirm the picture still matches what was built. You review once, and merge." },
+      { "id": "10", "text": "You end up with two things: the software, and a description of your business that you confirmed. That second one lasts." }
+    ] },
+    { "id": "repo", "lines": [
+      { "id": "1", "text": "All of it lives in your repository, as plain text." },
+      { "id": "2", "text": "One file is the front door. Every agent reads it first." },
+      { "id": "3", "text": "The architecture folder holds the picture, in numbered folders, in the order the questions are asked." },
+      { "id": "4a", "text": "One: why the business exists.", "gap": 0.2 },
+      { "id": "4b", "text": "Two: who does what.", "gap": 0.2 },
+      { "id": "4c", "text": "Three: what it needs to know.", "gap": 0.2 },
+      { "id": "4d", "text": "Four: what software does it.", "gap": 0.2 },
+      { "id": "4e", "text": "Five: where it runs." },
+      { "id": "5", "text": "Beside them, one short note for every change: what changed, why, and who confirmed it." },
+      { "id": "6", "text": "Three small checks keep it honest." },
+      { "id": "7", "text": "Previews and briefs are made when you ask, and thrown away." }
+    ] },
+    { "id": "end", "lines": [
+      { "id": "1", "text": "ArChreator is free and open source. Install it in your coding agent, and say your first idea." }
+    ] }
+  ]
+}

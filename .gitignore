@@ -27,3 +27,6 @@ __pycache__/
 
 # Everything the method generates against this repository's own scaffold.
 .archreator/
+
+# The film: voiced lines, frames and the voice model are rebuilt, never committed
+film/build/
