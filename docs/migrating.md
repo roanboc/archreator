@@ -16,8 +16,9 @@ Nothing in a project has to change. The preview the Requester confirms now
 carries views generated from the branch by `build_preview.py`, which runs
 from the plugin like the other reading tools.
 
-- **Add the command to `AGENTS.md`**, beside `build_brief.py`, so the next
-  agent finds it: `build_preview.py --project .`.
+- **Add the commands to `AGENTS.md`**, beside `build_brief.py`, so the next
+  agent finds them: `build_preview.py --project .`, and
+  `build_overview.py --project .` for the whole model on one page.
 - **`.archreator/` is already ignored**, and the previews land under it.
 
 ## The technical description is declared, and a validated register is whole (0.8)

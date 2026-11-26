@@ -29,7 +29,9 @@ class SiteExampleTests(unittest.TestCase):
         cls._tmp = tempfile.TemporaryDirectory()
         root = Path(cls._tmp.name).resolve()
         cls.out = root / "out"
-        cls.made = shop.preview(shop.build(root), "--name", "preview", "--to", str(cls.out))
+        repo = shop.build(root)
+        cls.made = shop.preview(repo, "--name", "preview", "--to", str(cls.out))
+        cls.whole = shop.overview(repo, "--name", "overview", "--to", str(cls.out))
 
     @classmethod
     def tearDownClass(cls):
@@ -37,7 +39,8 @@ class SiteExampleTests(unittest.TestCase):
 
     def test_the_example_page_and_picture_are_the_tools_own_output(self):
         self.assertEqual(self.made.returncode, 0, self.made.stdout + self.made.stderr)
-        for name in ("preview.html", "preview.svg"):
+        self.assertEqual(self.whole.returncode, 0, self.whole.stdout + self.whole.stderr)
+        for name in ("preview.html", "preview.svg", "overview.html"):
             self.assertEqual(
                 (SITE / "demo" / name).read_text(encoding="utf-8"),
                 (self.out / name).read_text(encoding="utf-8"),

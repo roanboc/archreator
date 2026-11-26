@@ -663,6 +663,7 @@ PAGE_JS = """
       st.appendChild(document.createTextNode(n.status==='changed' && n.was ? words.was + ' \\u201c' + n.was + '\\u201d' : words[n.status+'_long']));
       reading.appendChild(st);
     } else if(data.mode==='change'){ reading.appendChild(el('p','state', words.same_long)); }
+    if(n.draft){ reading.appendChild(el('p','state', words.draft)); }
     if(n.detail && n.detail.length){
       var dl = el('dl');
       n.detail.forEach(function(d){ if(d[0]) dl.appendChild(el('dt',null,d[0])); var dd=el('dd');
@@ -698,6 +699,7 @@ PAGE_JS = """
     document.querySelectorAll('.view[data-tab]').forEach(function(v){ v.hidden = v.getAttribute('data-tab')!==id; });
   };
   tabs.forEach(function(b){ b.addEventListener('click', function(){ window.pvTab(b.getAttribute('data-tab')); if(data.first[b.getAttribute('data-tab')]) show(data.first[b.getAttribute('data-tab')]); }); });
+  if(tabs.length) window.pvTab(data.tab || tabs[0].getAttribute('data-tab'));
   if(data.start) show(data.start);
 })();
 """
@@ -708,6 +710,7 @@ WORDS = {
     "removed_long": "Removed by this change.",
     "same_long": "Not changed. Shown because it touches something that is.",
     "was": "Was", "touches": "What it touches", "added": "added",
+    "draft": "Written down, and not confirmed by anybody yet.",
 }
 
 

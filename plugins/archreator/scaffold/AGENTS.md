@@ -159,6 +159,7 @@ model.py --project . health          # how much is validated, and whether a merg
 model.py --project . portal          # the model as a website, for a reader outside the repo
 build_brief.py --project . --element BSVC1 --focus impact
 build_preview.py --project .         # what this branch changes, for the Requester to confirm
+build_overview.py --project .        # the whole model on one page, for somebody who will not open the repo
 ```
 
 Everything they generate lands under `.archreator/`, which is gitignored.
