@@ -148,7 +148,10 @@ change, not a restart.
 request directly, through the layers, then **shows you a preview** — what
 changes about your business, every call it took on your behalf, and one
 question if it has one — where you are: in the conversation, or as a one-page
-pack for a meeting. **Your confirmation is what validates the model**, and
+pack for a meeting. The preview comes with a picture, drawn from the branch:
+what is new, what changed and what was taken away, and what each of them
+touches, in your own words and grouped by the question each answers. You
+should not have to open the pull request to know what it says. **Your confirmation is what validates the model**, and
 the pull request merging lands it. A merge nobody confirmed validates
 nothing.
 

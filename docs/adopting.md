@@ -211,6 +211,42 @@ rule refinement) are welcome. See [`CONTRIBUTING.md`](../CONTRIBUTING.md)
 in the root — the method itself governs how it evolves, so a proposal is
 built and merged the same way it makes you build and merge.
 
+## Seeing a change before it lands
+
+Before a change's pull request opens, the agent shows you what it claims
+about your business. The picture that goes with it is generated, by
+`build_preview.py`, from the branch itself:
+
+```bash
+build_preview.py --project .                 # the page, the picture and the Markdown
+build_preview.py --project . --stdout        # the Markdown, straight into a conversation
+build_preview.py --project . --about why     # one question at a time, after a discovery
+```
+
+It compares the branch with the commit it left the default branch at, and
+draws the difference: what is new, what changed, what was taken away, and
+what each of them touches. Every element is named as its document names it.
+No identifier, no notation, no layer number reaches the page, because the
+person confirming it is confirming their business, not the model of it.
+Under the picture: each change as before and after, every call the agent
+took for you, and the one question it has, if it has one.
+
+Three files land in `.archreator/work/previews/`, and the agent shows the
+richest one your conversation can render:
+
+| Where the conversation happens | What you are shown |
+| ------------------------------ | ------------------ |
+| A host that shows a page beside the conversation | The page: the picture, and a reading column that answers a click. In Claude Code and the Claude apps the agent publishes it as an artifact, private to you until you share it |
+| A chat that shows images, or draws a diagram from its source | The picture, or the Markdown with its diagram, and the tables under it |
+| A terminal | The tables as text, and the path of the page, which opens in any browser |
+
+Which chat renders what changes from one version of a host to the next, so
+the agent tries the richest form first and falls back. The page is one
+self-contained file: no network, no account, nothing to install.
+
+**A page only you can open is part of the conversation.** Sharing it with
+anybody else is publishing, and the agent asks before it does.
+
 ## Reaching a reader who will not open the repository
 
 Three ways, and none of them is a second copy of the model.

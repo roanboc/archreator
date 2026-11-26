@@ -92,6 +92,7 @@ model.py --project . portal         # a stock MkDocs config in .archreator/work/
 model.py --project . export         # .model/model.json, which nothing here reads back
 build_brief.py --project . --element CAP1 --focus impact
 build_brief.py --project . --focus end-to-end   # one line per component, from its goal to where it runs
+build_preview.py --project .        # what this branch changes, as a page, a picture and Markdown for the Requester
 export_pdf.py --project . --config architecture/export/board.yml
 ```
 
@@ -99,6 +100,14 @@ export_pdf.py --project . --config architecture/export/board.yml
 `.archreator/work/briefs/` — the elements that matter, generated ArchiMate
 views of how they depend on each other, and the paragraphs the documents
 already write. Disposable, never committed, stamped with its revision.
+
+`build_preview.py` compares the branch with the commit it left the default
+branch at and writes what changed into `.archreator/work/previews/`, in the
+subject's own words: no identifier, no glyph, no layer number. It draws with
+`plain_view.py`, which reads no model and so is tested with none.
+[`tests/example_project.py`](./plugins/archreator/scripts/tests/example_project.py)
+holds the made-up shop the tests read; it is an illustration, not a worked
+model.
 
 `export_pdf.py` names an audience — an explicit, ordered list of paths
 (globs allowed) a human wrote down — and writes one `.pdf` into

@@ -40,6 +40,18 @@ layers — grouped into three questions — built directly from what you said. Y
 see what it changes, in the conversation you are already having, and it lands
 as one pull request.
 
+![How ArChreator works: you state an idea, refine the strategic and business definition with ArChreator over as many rounds as it takes, confirm it, and a delivery framework and a coding agent design, build and test from it](./docs/assets/how-archreator-works.drawio.svg)
+
+**Two things come out, and the first is the one that lasts**: your strategic
+and business definition, confirmed by you and kept true on every change, and
+the implemented, tested solution built from it. The rounds in the middle are
+the work. A question from the design, or something the build and its tests
+taught you, comes back to the definition instead of being settled in code.
+The picture opens in [draw.io](https://www.drawio.com) for editing: its
+source travels inside the file.
+
+The same walk, as the three questions the layers are grouped into:
+
 ```mermaid
 flowchart LR
   req(["A requirement"]):::human
