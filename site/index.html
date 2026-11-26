@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>archreator — model your business, then let AI build it</title>
-  <meta name="description" content="A free, open-source method that turns what you know about your business into an architecture an AI agent can build from, with you confirming what it claims in the conversation. Ships as a plugin for Claude Code, GitHub Copilot and Codex." />
-  <meta property="og:title" content="archreator" />
-  <meta property="og:description" content="Model your business, then let AI build it. Free, open source, no accounts." />
+  <title>ArChreator — see what your idea means before an agent builds it</title>
+  <meta name="description" content="A free, open-source method that turns what you know about your business into a picture you can check, before an AI agent builds from it. Runs inside Claude Code, GitHub Copilot, Codex and Gemini CLI." />
+  <meta property="og:title" content="ArChreator" />
+  <meta property="og:description" content="Your AI can build anything. It still can't know what you meant. See what your idea changes about your business, confirm it, then let it be built." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='4' rx='1.5' fill='%237e57c2'/%3E%3Crect x='6' y='12' width='20' height='4' rx='1.5' fill='%23c8a24a'/%3E%3Crect x='6' y='18' width='20' height='4' rx='1.5' fill='%230288d1'/%3E%3Crect x='6' y='24' width='20' height='4' rx='1.5' fill='%23558b2f'/%3E%3C/svg%3E" />
+  <link rel="preload" href="./assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -22,116 +23,370 @@
         <rect x="6" y="18" width="20" height="4" rx="1.5" fill="#0288d1" />
         <rect x="6" y="24" width="20" height="4" rx="1.5" fill="#558b2f" />
       </svg>
-      archreator
+      ArChreator
     </a>
+    <nav class="site-nav" aria-label="On this page">
+      <a href="#how">How it works</a>
+      <a href="#see">An example</a>
+      <a href="#where">The repository</a>
+      <a class="btn btn-primary" href="./start.html">Get started</a>
+    </nav>
   </div>
 </header>
 
 <main>
-  <div class="wrap">
 
-    <div class="stripes" aria-hidden="true">
-      <span style="background:#7e57c2"></span>
-      <span style="background:#c8a24a"></span>
-      <span style="background:#0288d1"></span>
-      <span style="background:#558b2f"></span>
-    </div>
-
-    <h1>Model your business, then let AI build it.</h1>
-
-    <p class="lede">
-      archreator is a free, open-source method that turns what you know about
-      your business into an architecture an AI agent can build from — shown
-      back to you in the conversation for you to confirm, in plain markdown, in
-      your own repository.
-    </p>
-
-    <div class="actions">
-      <a class="btn btn-primary" href="./start.html">Get started</a>
-      <a class="btn btn-ghost" href="https://github.com/roanboc/archreator">Get it on GitHub</a>
-      <a class="btn btn-ghost" href="https://github.com/roanboc/architecture-archreator">See it in use</a>
-    </div>
-
-    <h2>Why it exists</h2>
-    <p>
-      Building software was hard, and slow. That was the visible problem, and
-      it covered for everything behind it — requirements nobody had pinned
-      down, business context that lived in one person's head. AI took that
-      delay away faster than anyone planned for, and what it was covering is
-      now the whole problem: vague requirements and missing context no longer
-      slow a project down, they get built. Understanding the problem, and
-      which solution actually fits it, is the part that stays human.
-    </p>
-    <p>
-      So the thing worth building now is not a faster way to produce software.
-      It is a way to get your own assumptions written down where people can
-      disagree with them, early, while disagreeing is still cheap.
-    </p>
-    <p>
-      archreator makes the understanding the deliverable. Before any code is
-      written, the strategy, the business and the information are aligned in
-      a shape both a human and an agent can read. The agent shows you what
-      changed and every call it took for you, in the conversation you are
-      already having; your confirmation is what makes the model true. How the
-      software is designed and built stays with the delivery framework you
-      already use.
-    </p>
-
-    <h2>Two ways in, one model</h2>
-    <div class="routes">
-      <div class="route">
-        <h3>The independent builder</h3>
-        <p>Explain the business. Get only the architecture you need. The agent asks what your project is and takes it from there — you are never asked to learn a notation to answer a question about your own business.</p>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="label">Free and open source · runs inside your coding agent</span>
+        <h1>Your AI can build anything. It still can’t know <em>what you meant</em>.</h1>
+        <p class="lede">
+          ArChreator turns what you know about your business into a picture
+          you can check, before an agent builds from it. You say the idea.
+          You see what it changes. You confirm it. Then it gets built.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#how">See how it works</a>
+          <a class="btn btn-ghost" href="./start.html">Get started</a>
+        </div>
       </div>
-      <div class="route">
-        <h3>The enterprise architect</h3>
-        <p>Navigate the structure directly. Follow every relationship. The model is a standard layered structure in plain files, in the order you already know, with nothing between you and it.</p>
+
+      <div class="chat" aria-label="An example conversation">
+        <div class="said">
+          <span class="who">You</span>
+          <p>Let customers book a repair online, and text them when their bike is ready.</p>
+        </div>
+        <div class="shown">
+          <span class="who">ArChreator shows you what that changes</span>
+          <div class="sheet">
+            <div class="picture" id="hero-picture" data-src="./demo/preview.svg">
+              <img src="./demo/preview.svg" width="856" height="738"
+                   alt="A drawing of a bike shop’s business in five bands: why it exists, what it must be good at, who does what, what it needs to know, and the software. New things are marked new, changed things changed." />
+            </div>
+            <ul class="tally" aria-label="What the change does">
+              <li class="chip new">6 new</li>
+              <li class="chip changed">3 changed</li>
+              <li class="chip gone">1 connection taken away</li>
+              <li class="chip ask">1 question for you</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    <p>One source serves both. An agent is helpful, never the only doorway.</p>
+  </section>
 
-    <h2>What you get</h2>
-    <ul>
-      <li><strong>Previews, not gates</strong> — one screen of what changed about your business and of every call the agent took for you, with one question when it has one. You answer where you are: in the chat, or at a meeting.</li>
-      <li><strong>Seventeen skills</strong> that make an AI agent follow the method faithfully, from starting a new project to writing the pull request.</li>
-      <li><strong>Thirteen files on your first commit</strong>, and every one of them is used. No empty folders standing in for a plan: your model's front page says, per layer, whether it is here, somewhere else, out of scope, or a gap.</li>
-      <li><strong>AI actors as first-class citizens</strong> — every actor in your model carries a kind (human, AI, or hybrid) and every AI carries an autonomy level, decision rights, and an escalation path.</li>
-      <li><strong>Nothing to operate</strong> — no database, no server, no cache to rebuild. Markdown in git is the model, and every tool reads it fresh.</li>
-    </ul>
-
-    <h2>Get started</h2>
-    <p>
-      archreator ships as a plugin for Claude Code, GitHub Copilot and Codex,
-      and as skills for Gemini CLI. In Claude Code that is two slash commands:
-    </p>
-    <pre><code>/plugin marketplace add roanboc/archreator
-/plugin install archreator@archreator</code></pre>
-    <p>
-      Then <code>/archreator:establish-project</code> takes it from there — it
-      asks what the project is, picks a modeling depth, and writes thirteen
-      files into your repository.
-    </p>
-    <div class="actions">
-      <a class="btn btn-primary" href="./start.html">Installing on every agent →</a>
+  <section class="turn" id="why">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>What goes wrong without it?</h2></div>
+      <p class="a">
+        An agent that is missing something fills the gap with a guess and
+        keeps going. You find out when the wrong thing is already working.
+      </p>
+      <div class="roads">
+        <div class="road without">
+          <div class="name">Straight to code</div>
+          <div class="stop">An idea, half said</div>
+          <div class="stop">The agent guesses the rest</div>
+          <div class="stop">Built in an afternoon</div>
+          <div class="stop end">The wrong thing, working</div>
+        </div>
+        <div class="road with">
+          <div class="name">With ArChreator</div>
+          <div class="stop">The same idea</div>
+          <div class="stop">A picture of what it changes, which you correct</div>
+          <div class="stop">You confirm it</div>
+          <div class="stop end">What you meant, built</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <hr />
+  <section class="turn" id="how">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>So how does it work?</h2></div>
+      <p class="a">
+        Six steps. You are in three of them, and they are the short ones.
+        Choose a step, along the top of the drawing or underneath it.
+      </p>
+      <div class="loop-controls">
+        <button class="btn btn-ghost" type="button" id="loop-play">Play the six steps</button>
+        <p class="loop-caption" id="loop-caption" aria-live="polite">Thick violet lines are you and ArChreator going round until it reads true. Dashed red lines are the ways back to that conversation.</p>
+      </div>
+      <div class="loop-frame" id="loop"></div>
+      <ol class="steps">
+        <li><button type="button" aria-pressed="false">
+          <h3>You say the idea</h3>
+          <p>A requirement or a problem, in your own words. A specification is not needed.</p>
+        </button></li>
+        <li><button type="button" aria-pressed="false">
+          <h3>It becomes a picture you can correct</h3>
+          <p>ArChreator works out what the idea means for your business and shows you. You answer one question at a time, or correct what you see, until it reads true. Then you confirm.</p>
+        </button></li>
+        <li><button type="button" aria-pressed="false">
+          <h3>It hands over</h3>
+          <p>A short note of what changed and why, the software that is needed, and your rules, in the words of the delivery framework you already use.</p>
+        </button></li>
+        <li><button type="button" aria-pressed="false">
+          <h3>Your framework designs</h3>
+          <p>The technical design is its job. A design question that changes what you meant comes back to you.</p>
+        </button></li>
+        <li><button type="button" aria-pressed="false">
+          <h3>An agent builds and tests</h3>
+          <p>From that design. What building teaches you about your business goes back into the definition as well as into the code.</p>
+        </button></li>
+        <li><button type="button" aria-pressed="false">
+          <h3>It is checked, and you merge</h3>
+          <p>Checks prove the definition still describes what was built. You review once and merge.</p>
+        </button></li>
+      </ol>
+    </div>
+  </section>
 
-    <h2>Two repositories</h2>
-    <ul>
-      <li><strong><a href="https://github.com/roanboc/archreator">archreator</a></strong> — the method: the skills, the scaffold, the plugin package. What ships to your project.</li>
-      <li><strong><a href="https://github.com/roanboc/architecture-archreator">architecture-archreator</a></strong> — worked models: archreator applied to a real organization and to itself, so you can see what a filled-in model looks like.</li>
-    </ul>
+  <section class="turn" id="see">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>What do I actually see?</h2></div>
+      <p class="a">
+        This. A made-up bike repair shop asks for online booking, and this is
+        the page its owner is shown before anything is built: what is new,
+        what changed, the one decision that was taken for them, and the one
+        question that is still theirs. <strong>Select anything in the drawing.</strong>
+      </p>
+      <p class="a">
+        In Claude it opens beside the conversation as a page only you can
+        see. In any other agent you get the picture or the same thing as a
+        table, and the page opens in your browser.
+      </p>
+      <div class="window">
+        <div class="window-bar">
+          <span>Shown to the shop’s owner, in the conversation</span>
+          <a href="./demo/preview.html">Open it on its own</a>
+        </div>
+        <iframe id="example" src="./demo/preview.html" title="An example preview: a bike shop adds online booking" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
 
-  </div>
+  <section class="turn" id="keep">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>What do I end up with?</h2></div>
+      <div class="keeps">
+        <div class="keep first">
+          <span class="label">The part that lasts</span>
+          <h3>Your business, written down and confirmed by you</h3>
+          <p>
+            Plain text files in your own repository, readable by people and
+            by any AI agent. Every change keeps them true, so the next idea
+            starts from what you already decided.
+          </p>
+          <ul class="layers">
+            <li class="why"><b>Why it exists</b> Goals, pressures, the principles you will not break</li>
+            <li class="good"><b>What it must be good at</b> The abilities the business depends on</li>
+            <li class="does"><b>Who does what</b> What you offer, the roles, the steps, the rules</li>
+            <li class="knows"><b>What it needs to know</b> The information, and who owns it</li>
+            <li class="soft"><b>The software</b> What is needed, and where each piece is specified</li>
+            <li class="runs"><b>Where it runs</b> Only where the business cares</li>
+          </ul>
+        </div>
+        <div class="keep">
+          <span class="label">And</span>
+          <h3>The software, built and tested</h3>
+          <p>
+            Built by your coding agent, from a design your own delivery
+            framework wrote, with your rules carried into it. Afterwards
+            ArChreator checks that what was built is what you confirmed.
+          </p>
+          <ul class="checks">
+            <li>Every link leads somewhere</li>
+            <li>Every reference names something real</li>
+            <li>Every page talks about your business</li>
+            <li>Every piece of software says where it is specified</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="turn" id="where">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>Where does it all live?</h2></div>
+      <p class="a">
+        In your repository, in folders numbered in the order the questions
+        are asked. A folder appears when there is something to put in it.
+        Pick one.
+      </p>
+      <div class="repo">
+        <ul class="tree" aria-label="The folders of a project">
+          <li class="root">your-project/</li>
+          <li><ul>
+            <li><button type="button" data-for="at-agents"><span class="dot you"></span>AGENTS.md</button></li>
+            <li><button type="button" data-for="at-front"><span class="dot"></span>architecture/</button>
+              <ul>
+                <li><button type="button" data-for="at-design"><span class="dot none"></span>0_business-design/</button></li>
+                <li><button type="button" data-for="at-strategy"><span class="dot why"></span>1_strategy/</button></li>
+                <li><button type="button" data-for="at-business"><span class="dot does"></span>2_business/</button></li>
+                <li><button type="button" data-for="at-information"><span class="dot knows"></span>3_information/</button></li>
+                <li><button type="button" data-for="at-application"><span class="dot soft"></span>4_application/</button></li>
+                <li><button type="button" data-for="at-technology"><span class="dot runs"></span>5_technology/</button></li>
+                <li><button type="button" data-for="at-scope"><span class="dot"></span>scope/</button></li>
+                <li><button type="button" data-for="at-decisions"><span class="dot"></span>decisions/</button></li>
+                <li><button type="button" data-for="at-relationships"><span class="dot"></span>relationships.md</button></li>
+              </ul>
+            </li>
+            <li><button type="button" data-for="at-scripts"><span class="dot"></span>scripts/</button></li>
+            <li><button type="button" data-for="at-work"><span class="dot none"></span>.archreator/work/</button></li>
+          </ul></li>
+        </ul>
+
+        <div class="shelf" aria-live="polite">
+          <article id="at-agents">
+            <p class="path">AGENTS.md</p>
+            <h3>The front door for any agent</h3>
+            <p>Every coding agent reads this file first. It says who decides, how much of the business is described, and which delivery framework builds the software.</p>
+            <p class="eg"><span class="label">In the bike shop</span>The owner decides. The shop is described as one small business. No delivery framework yet.</p>
+          </article>
+          <article id="at-front">
+            <p class="path">architecture/README.md</p>
+            <h3>The front page of your business</h3>
+            <p>One line per folder below: filled in, kept somewhere else, left out on purpose, or a gap you know about. Nothing is silently missing.</p>
+            <p class="eg"><span class="label">In the bike shop</span>Strategy, business and information are filled in. Where it runs is left out: nothing depends on it.</p>
+          </article>
+          <article id="at-design">
+            <p class="path">architecture/0_business-design/</p>
+            <h3>Who it is for, and how it pays its way</h3>
+            <p>Two one-page canvases: your customers and what you offer them, and how the business works as a whole. Used when you describe a whole business, skipped for a single application.</p>
+            <p class="eg"><span class="label">In the bike shop</span>People who ride to work and cannot be without their bike for long.</p>
+          </article>
+          <article id="at-strategy">
+            <p class="path">architecture/1_strategy/</p>
+            <h3>Why it exists</h3>
+            <p>Your goals, what presses on you, the principles you will not break, and what the business must be good at. Every later change is judged against this.</p>
+            <p class="eg"><span class="label">In the bike shop</span>Nobody waits on the phone. A customer is asked for their details once.</p>
+          </article>
+          <article id="at-business">
+            <p class="path">architecture/2_business/</p>
+            <h3>Who does what</h3>
+            <p>What you offer, who does the work, in which steps, under which rules. The people who use an AI agent and the agents themselves are both written down, with what each may decide alone.</p>
+            <p class="eg"><span class="label">In the bike shop</span>Repair booking, done by the front desk. A text is sent only to a customer who agreed to it.</p>
+          </article>
+          <article id="at-information">
+            <p class="path">architecture/3_information/</p>
+            <h3>What it needs to know</h3>
+            <p>The information the business runs on, what each piece holds, and who uses it.</p>
+            <p class="eg"><span class="label">In the bike shop</span>Customer: name, phone number, and whether they agreed to be texted.</p>
+          </article>
+          <article id="at-application">
+            <p class="path">architecture/4_application/</p>
+            <h3>What software does it</h3>
+            <p>A list, one line per piece of software: what it serves, where it is specified, which code it is. The design itself belongs to your delivery framework, and this line points to it.</p>
+            <p class="eg"><span class="label">In the bike shop</span>The booking page serves Repair booking. Not built yet, and it says so.</p>
+          </article>
+          <article id="at-technology">
+            <p class="path">architecture/5_technology/</p>
+            <h3>Where it runs</h3>
+            <p>Only where the business cares: a law about where data is kept, a hosting contract, who pays.</p>
+            <p class="eg"><span class="label">In the bike shop</span>Empty. Nothing about the shop depends on where its software runs.</p>
+          </article>
+          <article id="at-scope">
+            <p class="path">architecture/scope/</p>
+            <h3>One short note per change</h3>
+            <p>What changed, why, what was left out on purpose, and who confirmed it. Numbered in order, so the history of your decisions reads like a diary.</p>
+            <p class="eg"><span class="label">In the bike shop</span>1. Book a repair online.</p>
+          </article>
+          <article id="at-decisions">
+            <p class="path">architecture/decisions/</p>
+            <h3>A single call, written down</h3>
+            <p>One decision that matters but is smaller than a change, kept so nobody argues it again. Most often it is how much an AI agent may decide by itself.</p>
+            <p class="eg"><span class="label">In the bike shop</span>The text sender may text a customer without asking the front desk.</p>
+          </article>
+          <article id="at-relationships">
+            <p class="path">architecture/relationships.md</p>
+            <h3>What connects to what</h3>
+            <p>Every connection between two things, written once. It is what lets a tool answer the question that matters before a change: what else does this touch?</p>
+            <p class="eg"><span class="label">In the bike shop</span>The booking page serves Repair booking.</p>
+          </article>
+          <article id="at-scripts">
+            <p class="path">scripts/</p>
+            <h3>Three checks you can run yourself</h3>
+            <p>They need nothing installed and no network. Every link leads somewhere, every reference names something real, and every page talks about your business.</p>
+            <p class="eg"><span class="label">On every change</span>All three run before anything is merged.</p>
+          </article>
+          <article id="at-work">
+            <p class="path">.archreator/work/</p>
+            <h3>Throwaway pages</h3>
+            <p>Previews of a change, a brief that answers one question, a PDF for somebody who will never open the repository. Made on request and never saved. Delete the folder and nothing is lost.</p>
+            <p class="eg"><span class="label">In the bike shop</span>The preview page above was written here.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="turn" id="with">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>Does it replace the tools I use?</h2></div>
+      <p class="a">
+        No. It runs inside your coding agent and hands over to your delivery
+        framework. It designs no software and builds none.
+      </p>
+      <div class="pairs">
+        <div class="pair">
+          <h3>It runs inside</h3>
+          <ul><li>Claude Code</li><li>GitHub Copilot</li><li>Codex CLI</li><li>Gemini CLI</li></ul>
+          <p>One method, the same in each. A person can follow the same steps by hand: an agent helps, and is never the only way in.</p>
+        </div>
+        <div class="pair">
+          <h3>It hands over to</h3>
+          <ul><li>Spec Kit</li><li>OpenSpec</li><li>Kiro</li><li>BMAD</li><li>arc42 or C4</li><li>your own design notes</li></ul>
+          <p>Whichever you use writes the technical design. ArChreator keeps the list of where each part of it is written, and checks that the list is whole.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="turn" id="start">
+    <div class="wrap">
+      <div class="q"><span class="who">You ask</span><h2>How do I start?</h2></div>
+      <div class="start">
+        <div>
+          <p class="a">In Claude Code, two commands install it and a third sets up your project.</p>
+          <div class="cmd">
+            <pre><code id="install">/plugin marketplace add roanboc/archreator
+/plugin install archreator@archreator
+/archreator:establish-project</code></pre>
+            <button class="copy" type="button" data-copy="install">Copy</button>
+          </div>
+        </div>
+        <div>
+          <ol>
+            <li>Install it in your agent. Copilot, Codex and Gemini have their own steps.</li>
+            <li>Say what the project is. It asks, you answer, and thirteen small files land in your repository.</li>
+            <li>Say your first idea.</li>
+          </ol>
+          <div class="actions" style="margin-top:1.4rem">
+            <a class="btn btn-primary" href="./start.html">Steps for every agent</a>
+            <a class="btn btn-ghost" href="https://github.com/roanboc/archreator">The code on GitHub</a>
+            <a class="btn btn-ghost" href="https://github.com/roanboc/architecture-archreator">Real models to read</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
   <div class="wrap">
-    Free and open source · MIT licensed ·
-    <a href="https://github.com/roanboc/archreator">source on GitHub</a>
+    <p>ArChreator is free and open source, under the MIT licence. No accounts and nothing to operate.</p>
+    <p>
+      <a href="https://github.com/roanboc/archreator">GitHub</a> ·
+      <a href="https://github.com/roanboc/archreator/blob/main/docs/method.md">The method in plain English</a> ·
+      <a href="./assets/fonts/LICENCES.txt">Font licences</a>
+    </p>
   </div>
 </footer>
 
+<script src="./loop.js"></script>
+<script src="./site.js"></script>
 </body>
 </html>

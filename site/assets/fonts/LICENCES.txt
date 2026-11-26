@@ -1,0 +1,22 @@
+The fonts in this folder are not part of ArChreator's own MIT-licensed work.
+Each is redistributed, unmodified, under the SIL Open Font License, Version 1.1
+(https://openfontlicense.org), as packaged by Fontsource (https://fontsource.org).
+
+archivo.woff2
+  Archivo, variable (weight and width), Latin subset.
+  Copyright 2020 The Archivo Project Authors (https://github.com/Omnibus-Type/Archivo)
+
+atkinson-next.woff2
+  Atkinson Hyperlegible Next, variable (weight), Latin subset.
+  Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors
+  (https://github.com/googlefonts/atkinson-hyperlegible-next)
+
+atkinson-mono-400.woff2, atkinson-mono-600.woff2
+  Atkinson Hyperlegible Mono, Latin subset.
+  Copyright 2020-2024 The Atkinson Hyperlegible Mono Project Authors
+  (https://github.com/googlefonts/atkinson-hyperlegible-next-mono)
+
+The licence permits use, study, modification and redistribution, free of charge,
+provided the fonts are not sold by themselves and keep this notice. The fonts
+are provided "as is", without warranty of any kind. The full text of the licence
+is at https://openfontlicense.org/open-font-license-official-text/
